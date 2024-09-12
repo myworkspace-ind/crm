@@ -1,0 +1,5 @@
+@charset "UTF-8";
+
+.nav-link-expand i.fa-expand {
+    font-size: 18px; /* Điều chỉnh kích thước icon */
+}
