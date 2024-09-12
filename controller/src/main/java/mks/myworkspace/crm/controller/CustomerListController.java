@@ -68,4 +68,17 @@ public class CustomerListController extends BaseController {
 
 		return mav;
 	}
+    
+    @GetMapping("/headerCRMCustomerList")
+	public ModelAndView displayHeaderCRMCustomerList(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("headerCRMCustomerList");
+
+		initSession(request, httpSession);
+		log.debug("Header of Customer List Controller is running....");
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
 }
