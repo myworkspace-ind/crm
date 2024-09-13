@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+.nav-link-expand i.fa-expand:before {
+    font-size: 18px;
+    margin-top: 1.5px; /* Điều chỉnh kích thước icon */
+    display: block;
+}
+
+.nav-link-expand i.fa-expand:after {
+    font-size: 18px;
+    margin-top: 1.5px;
+    display: none;
+}
+
+.nav-link.nav-link-compress i.fa-compress:before {
+    display: none;
+}
+
+.nav-link.nav-link-compress i.fa-compress:after {
+	font-size: 18px;
+/*     margin-top: 1.5px; */
+    display: block;
+    visibility: visible;
+    z-index: 100;
+}
+
+
+
+.nav-link-search i.fa-magnifying-glass{
+	font-size: 18px;
+    margin-top: 1.5px;
+}
+
+.nav-link-label i.fa-bell{
+	font-size: 18px;
+	margin-top: 1.5px;
+}
+
+.nav-link-label i.fa-envelope{
+	font-size: 18px;
+	margin-top: 1.5px;
+}
