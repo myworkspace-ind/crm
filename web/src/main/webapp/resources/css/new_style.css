@@ -47,15 +47,16 @@ nav-link-expand i.fa-compress:before {
 	font-size: 18px;
 	margin-top: 1.5px;
 }
-
-.nav-item.active .menu-item {
-  background-color: green; /* Bạn có thể thay đổi màu xanh lá theo ý muốn */
-  color: white; /* Để chữ nổi bật trên nền xanh lá */
+.nav-item123 a{
+	color: #000;
+	background-color: transparent;
+	padding: 10px;
+	display: block;
+	text-decoration: none;
 }
 
-/* .nav-item.selected > a {
-  background-color: #FFD700; Màu vàng cho nền
-  color: #000; Màu chữ, tùy chỉnh theo nhu cầu
-  font-weight: bold; Làm chữ đậm
-  border-right: 4px solid #FFBF00; Đường viền phải màu vàng
-} */
+.nav-item123.active a{
+	background-color: #c0c0c0;
+	color: #fff;
+}
+

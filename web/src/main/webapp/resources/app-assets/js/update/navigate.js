@@ -13,7 +13,33 @@ document.addEventListener('DOMContentLoaded', (event) =>{
 	});
 });
 
-document.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('DOMContentLoaded', function () {
+  const navItems = document.querySelectorAll('.nav-item123');
+
+  navItems.forEach(item => {
+    const link = item.querySelector('a');
+
+    link.addEventListener('click', function () {
+      // Remove 'active' class from all items before adding it to the clicked one
+      navItems.forEach(nav => nav.classList.remove('active'));
+      item.classList.add('active');
+	  
+	  // Chuyển hướng đến link href
+	  window.location.href = link.href;
+
+	  // Không ngăn việc điều hướng mặc định
+	  event.preventDefault();
+    });
+
+    if (link.pathname === window.location.pathname) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+});
+
+/*document.addEventListener('DOMContentLoaded', function () {
   // Lấy tất cả các thẻ a trong menu
   var menuItems = document.querySelectorAll('.nav-item .menu-item');
 
@@ -32,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
-
+*/
 
 /*document.addEventListener('DOMContentLoaded', function() {
   // Lấy tất cả các nav-item
