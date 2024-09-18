@@ -23,15 +23,37 @@ nav-link-expand i.fa-compress:before {
     display: none !important;
 } 
 
-/* .nav-link-expand.compress i.fa-compress:after {
-	font-size: 18px;
-    margin-top: 1.5px;
-    display: block;
-    visibility: visible;
-    z-index: 100;
-} */
+.logo-company {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	bottom: 0;
+	top: -18px;
+	width: 100%;
+	text-align: center;
+	padding: 10px;
+	font-weight: bold; /* Làm chữ đậm */
+}
 
+.logo-company img{
+	width: 40%;
+	height: 40%;
+	display: block;
+	margin: 0 auto;
+}
 
+.logo-company .name-company::before{
+	content: "";
+	position: absolute;
+	left: 10px;
+	height: 20px;
+	width: 3px;
+	background-color: #18d26e;
+	bottom: 12px;
+}
 
 .nav-link-search i.fa-magnifying-glass{
 	font-size: 18px;
@@ -53,6 +75,7 @@ nav-link-expand i.fa-compress:before {
 	padding: 10px;
 	display: block;
 	text-decoration: none;
+	margin-bottom: 20px;
 }
 
 .nav-item123.active a{

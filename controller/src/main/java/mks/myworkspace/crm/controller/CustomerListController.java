@@ -94,4 +94,56 @@ public class CustomerListController extends BaseController {
 
 		return mav;
 	}
+    
+    @GetMapping("/kpiScreen")
+	public ModelAndView displayKPIScreen(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("kpiScreen");
+
+		initSession(request, httpSession);
+		log.debug("KPI Controller is running....");
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
+    
+    @GetMapping("/workScreen")
+	public ModelAndView displayWorkScreen(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("workScreen");
+
+		initSession(request, httpSession);
+		log.debug("Work Controller is running....");
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
+    
+    @GetMapping("/takeCareCustomerScreen")
+	public ModelAndView displayTakeCareCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("takeCareCustomerScreen");
+
+		initSession(request, httpSession);
+		log.debug("Take Care Customer Controller is running....");
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
+    
+    @GetMapping("/reportScreen")
+   	public ModelAndView displayReportScreen(HttpServletRequest request, HttpSession httpSession) {
+   		ModelAndView mav = new ModelAndView("reportScreen");
+
+   		initSession(request, httpSession);
+   		log.debug("Report Controller is running....");
+   		
+   		mav.addObject("currentSiteId", getCurrentSiteId());
+   		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+   		return mav;
+   	}
 }
