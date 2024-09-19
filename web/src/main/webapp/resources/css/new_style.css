@@ -1,6 +1,143 @@
 @charset "UTF-8";
 
+.card .card-title {
+    font-weight: bold;
+}
 
+.card-status{
+	display: flex;
+	gap: 10px;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.status-button{
+	/* background-color: #007bff; */
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 1s ease;
+}
+
+.status-button:hover{
+	filter: brightness(1.05); /* Làm màu nền của nút đậm hơn khi hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Hiệu ứng đổ bóng cho nút khi hover */; 
+}
+
+.status-button.new{
+	background-color: #ff62ff;
+}
+
+.status-button.not-started {
+    background-color: #3BAFDA ; 
+}
+
+.status-button.postponed {
+    background-color: #0080ff; 
+}
+
+.status-button.in-progress {
+    background-color: #967ADC;
+}
+
+.status-button.completed {
+    background-color: #DA4453; /* Màu xanh nước biển cho nút 'HOÀN THÀNH' */
+}
+
+.status-button.canceled {
+    background-color: #808080; /* Màu đỏ cho nút 'HỦY' */
+}
+
+.status-button.finalized {
+    background-color: #37BC9B; 
+}
+
+
+.nav-item123 .menu-content123 {
+    display: none;
+    width: 280px; /* Đặt chiều rộng tối thiểu để đảm bảo hiển thị đầy đủ */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    padding: 5px;
+}
+
+
+.nav-item123:hover .menu-content123 {
+ 	position: fixed; 
+   	display: block !important;
+   	left: 100%;
+    /* padding-top: 10%; */
+    white-space: nowrap;
+    float: right;
+}
+
+.nav-item123 .menu-content123 li {
+    padding: 5px 10px;
+}
+
+.nav-item123 .menu-content123 li a {
+    color: #333;
+    text-decoration: none;
+    width: 90%;
+    margin-left: 10px;
+/*     display: block;
+    padding: 5px; */
+}
+
+.nav-item123 .menu-content123 li a:hover {
+    background-color: #f0f0f0;
+}
+
+.main-menu.menu-light .navigation {
+    background: #d5c9eb;
+}
+
+.main-menu.menu-light{
+	background: #d5c9eb;
+}
+
+.logo-company {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	bottom: 0;
+	top: -18px;
+	width: 100%;
+	text-align: center;
+	padding: 10px;
+	font-weight: bold; /* Làm chữ đậm */
+}
+
+.logo-company img{
+	width: 40%;
+	height: 40%;
+	display: block;
+	margin: 0 auto;
+}
+
+.logo-company .name-company{
+	color: #5C6BC0;
+}
+
+a:hover .name-company {
+  color: #1A237E; /* Color change on hover */
+}
+
+.logo-company .name-company::before{
+	content: "";
+	position: absolute;
+	left: 10px;
+	height: 20px;
+	width: 3px;
+	background-color: #18d26e;
+	bottom: 12px;
+}
 
 .nav-link-expand i.fa-expand:before {
     font-size:18px;
@@ -8,30 +145,11 @@
     display: block;
 }
 
-
-
-/* .nav-link-expand i.fa-expand:after {
-    font-size: 18px;
-    margin-top: 1.5px;
-    display: none;
-} */
-
-
 nav-link-expand i.fa-compress:before {
 	font-size: 18px;
     margin-top: 1.5px;
     display: none !important;
 } 
-
-/* .nav-link-expand.compress i.fa-compress:after {
-	font-size: 18px;
-    margin-top: 1.5px;
-    display: block;
-    visibility: visible;
-    z-index: 100;
-} */
-
-
 
 .nav-link-search i.fa-magnifying-glass{
 	font-size: 18px;
@@ -47,3 +165,23 @@ nav-link-expand i.fa-compress:before {
 	font-size: 18px;
 	margin-top: 1.5px;
 }
+.nav-item123 a{
+	color: #000;
+	background-color: transparent;
+	padding: 10px;
+	display: block;
+	text-decoration: none;
+	margin-bottom: 20px;
+	transition: background-color 2s ease, transform 2s ease;
+}
+
+.nav-item123.active a{
+	background-color: #FFD54F;
+	color: black;
+}
+
+.nav-item123.hover a{
+	background-color: #FFECB3;
+	transform: scale(1.1);
+}
+
