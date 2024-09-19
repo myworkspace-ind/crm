@@ -39,6 +39,16 @@ window.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+document.querySelectorAll('.nav-item123').forEach(item => {
+    item.addEventListener('mouseenter', function() {
+        const submenu = this.querySelector('.menu-content123');
+        const rect = this.getBoundingClientRect();
+        
+        // Calculate the top position relative to the page's scroll position
+        submenu.style.top = (rect.top + window.scrollY - 70) + 'px';
+    });
+});
+
 /*document.addEventListener('DOMContentLoaded', function () {
   // Lấy tất cả các thẻ a trong menu
   var menuItems = document.querySelectorAll('.nav-item .menu-item');

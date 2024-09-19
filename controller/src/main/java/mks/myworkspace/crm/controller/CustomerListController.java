@@ -27,7 +27,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.ModelAndView;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -36,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class CustomerListController extends BaseController {
- 
+	// Tạo logger cho class này 
 	   /**
      * This method is called when binding the HTTP parameter to bean (or model).
      * 
@@ -82,8 +81,21 @@ public class CustomerListController extends BaseController {
 		return mav;
 	}
     
+    @GetMapping("/customerCRMScreen")
+   	public ModelAndView displayCustomerCRMScreen(HttpServletRequest request, HttpSession httpSession) {
+   		ModelAndView mav = new ModelAndView("customerCRMScreen");
+
+   		initSession(request, httpSession);
+   		log.debug("Customer CRM Screen Controller is running....");
+   		
+   		mav.addObject("currentSiteId", getCurrentSiteId());
+   		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+   		return mav;
+   	}
+    
     @GetMapping("/customerListCRMScreen")
-	public ModelAndView displayContentCRMCustomerList(HttpServletRequest request, HttpSession httpSession) {
+	public ModelAndView displayCustomerListCRMScreen(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("customerListCRMScreen");
 
 		initSession(request, httpSession);

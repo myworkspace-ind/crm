@@ -1,5 +1,96 @@
 @charset "UTF-8";
 
+.card .card-title {
+    font-weight: bold;
+}
+
+.card-status{
+	display: flex;
+	gap: 10px;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.status-button{
+	/* background-color: #007bff; */
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 1s ease;
+}
+
+.status-button:hover{
+	filter: brightness(1.05); /* Làm màu nền của nút đậm hơn khi hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Hiệu ứng đổ bóng cho nút khi hover */; 
+}
+
+.status-button.new{
+	background-color: #ff62ff;
+}
+
+.status-button.not-started {
+    background-color: #3BAFDA ; 
+}
+
+.status-button.postponed {
+    background-color: #0080ff; 
+}
+
+.status-button.in-progress {
+    background-color: #967ADC;
+}
+
+.status-button.completed {
+    background-color: #DA4453; /* Màu xanh nước biển cho nút 'HOÀN THÀNH' */
+}
+
+.status-button.canceled {
+    background-color: #808080; /* Màu đỏ cho nút 'HỦY' */
+}
+
+.status-button.finalized {
+    background-color: #37BC9B; 
+}
+
+
+.nav-item123 .menu-content123 {
+    display: none;
+    width: 280px; /* Đặt chiều rộng tối thiểu để đảm bảo hiển thị đầy đủ */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    padding: 5px;
+}
+
+
+.nav-item123:hover .menu-content123 {
+ 	position: fixed; 
+   	display: block !important;
+   	left: 100%;
+    /* padding-top: 10%; */
+    white-space: nowrap;
+    float: right;
+}
+
+.nav-item123 .menu-content123 li {
+    padding: 5px 10px;
+}
+
+.nav-item123 .menu-content123 li a {
+    color: #333;
+    text-decoration: none;
+    width: 90%;
+    margin-left: 10px;
+/*     display: block;
+    padding: 5px; */
+}
+
+.nav-item123 .menu-content123 li a:hover {
+    background-color: #f0f0f0;
+}
+
 .main-menu.menu-light .navigation {
     background: #d5c9eb;
 }
