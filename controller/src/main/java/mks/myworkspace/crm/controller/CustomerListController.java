@@ -158,4 +158,17 @@ public class CustomerListController extends BaseController {
 
    		return mav;
    	}
+    
+    @GetMapping("/customerDetail")
+   	public ModelAndView displaycustomerDetailScreen(HttpServletRequest request, HttpSession httpSession) {
+   		ModelAndView mav = new ModelAndView("customerDetail");
+
+   		initSession(request, httpSession);
+   		log.debug("Customer Detail is running....");
+   		
+   		mav.addObject("currentSiteId", getCurrentSiteId());
+   		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+   		return mav;
+   	}
 }
