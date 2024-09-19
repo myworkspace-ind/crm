@@ -15,10 +15,9 @@
    <!--  PHẦN BỔ SUNG -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="resources/app-assets/css/components_new.min.css">
-    
    <!--  <link rel="stylesheet" href="<c:url value='/assets/css/new_style.css' />"> -->
     <link rel="stylesheet" type="text/css" href="resources/css/new_style.css">
+    <link rel="stylesheet" type="text/css" href="resources/app-assets/css/components_new.min.css">
     
     <!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
     <!-- ICON -->
@@ -362,13 +361,15 @@
 	<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
       <div class="main-menu-content ps-container ps-theme-dark ps-active-y" data-ps-id="cbbe64e1-7bf9-4bd7-9765-10b55ff5c397">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-          <li class="nav-item has-sub123"><a href="index.html"><i class="icon-home"></i><span class="menu-title" data-i18n="nav.dash.main">Trang chủ</span></a>
-            
-          </li>
-          <li class="nav-item has-sub"><a href="#"><i class="fa-solid fa-users"></i><span class="menu-title" data-i18n="nav.templates.main">Khách hàng</span></a>
+          <li class="nav-item123 has-sub" data-page="crm-web/headerCRMCustomerList"><a href="/crm-web/headerCRMCustomerList"><i class="fa-solid fa-house"></i><span class="menu-title" data-i18n="nav.dash.main">Trang chủ</span></a>
            
           </li>
-          <li class="nav-item has-sub"><a href="#"><i class="fas fa-business-time"></i><span class="menu-title" data-i18n="nav.layouts.temp">KPI</span></a>
+          
+          <li class="nav-item123 has-sub" data-page="crm-web/contentCRMCustomerList"><a class="menu-item" href="/crm-web/contentCRMCustomerList"><i class="fa-solid fa-users"></i><span class="menu-title" data-i18n="nav.templates.main">Khách hàng</span></a>
+           
+          </li>
+          
+          <li class="nav-item123 has-sub" data-page="crm-web/kpiScreen"><a href="/crm-web/kpiScreen"><i class="fas fa-business-time"></i><span class="menu-title" data-i18n="nav.layouts.temp">KPI</span></a>
             <ul class="menu-content" style="">
               <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.page_layouts.main">Page layouts</a>
                 <ul class="menu-content">
@@ -547,7 +548,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-sub"><a href="#"><i class="fas fa-briefcase"></i><span class="menu-title" data-i18n="nav.category.general">Công việc</span></a>
+          <li class="nav-item123 has-sub" data-page="crm-web/workScreen"><a href="/crm-web/workScreen"><i class="fas fa-briefcase"></i><span class="menu-title" data-i18n="nav.category.general">Công việc</span></a>
             <ul class="menu-content" style="">
               <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.color_palette.main">Color Palette</a>
                 <ul class="menu-content">
@@ -683,7 +684,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-sub"><a href="#"><i class="fas fa-phone-volume"></i><span class="menu-title" data-i18n="nav.category.pages">CSKH</span></a>
+          <li class="nav-item123 has-sub" data-page="crm-web/takeCareCustomerScreen"><a href="/crm-web/takeCareCustomerScreen"><i class="fas fa-phone-volume"></i><span class="menu-title" data-i18n="nav.category.pages">CSKH</span></a>
             <ul class="menu-content" style="">
               <li><a class="menu-item" href="email-application.html" data-i18n="nav.email-application.main">Email Application</a>
               </li>
@@ -833,7 +834,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-sub"><a href="#"><i class="fa-solid fa-file-excel"></i><span class="menu-title" data-i18n="nav.category.ui">Báo cáo</span></a>
+          <li class="nav-item123 has-sub" data-page="crm-web/reportScreen"><a href="/crm-web/reportScreen"><i class="fa-solid fa-file-excel"></i><span class="menu-title" data-i18n="nav.category.ui">Báo cáo</span></a>
             <ul class="menu-content" style="">
               <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.cards.main">Cards</a>
                 <ul class="menu-content">
@@ -979,14 +980,27 @@
               </li>
             </ul>
           </li>
-         
+          
+          <a href="https://mekongsolution.com/" target="_blank">
+	          <div class = "logo-company">
+	          	<img alt="logo-company" src="resources/app-assets/images/logo/logoMKS.png">
+	          	<span class="name-company">MKS Company</span>
+	          </div>
+          </a>
+          
       <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: -301px;">
       	<div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
       </div>
+     <div class="ps-scrollbar-y-rail" style="top: 304px; height: 0px; right: 3px;">
+      	<div class="ps-scrollbar-y" tabindex="0" style="top: 53px; height: 29px;"></div>
+      </div> 
     </div>
 	<!--  /////////////////////////////////END LEFT MENU NAVIGATION ///////////////////////////////////////////  -->
 	 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
+	
 	 <!-- BEGIN VENDOR JS-->
     <script src="resources/app-assets/vendors/js/vendors.min.js"></script>
     <!-- END VENDOR JS-->

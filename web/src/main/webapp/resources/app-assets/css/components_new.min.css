@@ -266,8 +266,8 @@ footer.footer-dark {
 }
 
 .main-menu.menu-light {
-    color: #55595C;
-    background: #FFF;
+    color: black;
+    /* background: #FFF; */
     border-right: 1px solid #E4E7ED
 }
 
@@ -285,9 +285,9 @@ footer.footer-dark {
     border-color: #D9D9D9
 }
 
-.main-menu.menu-light .navigation {
+/* .main-menu.menu-light .navigation {
     background: #FFF
-}
+} */
 
 .main-menu.menu-light .navigation .navigation-header {
     color: #55595C;
@@ -300,7 +300,8 @@ footer.footer-dark {
 }
 
 .main-menu.menu-light .navigation li a {
-    color: #55595C;
+    /* color: #55595C; */
+    color: black;
     -webkit-transition: all .2s ease;
     -o-transition: all .2s ease;
     -moz-transition: all .2s ease;
@@ -328,11 +329,11 @@ footer.footer-dark {
     color: #A1A6A9
 }
 
-.main-menu.menu-light .navigation li.active>a,
+/* .main-menu.menu-light .navigation li.active>a,
 .main-menu.menu-light .navigation li.hover>a,
 .main-menu.menu-light .navigation li.open>a {
     color: #FFF
-}
+} */
 
 .main-menu.menu-light .navigation>li {
     padding: 0
@@ -360,12 +361,12 @@ footer.footer-dark {
     background: #F0F0F0
 }
 
-.main-menu.menu-light .navigation>li.active>a,
+/* .main-menu.menu-light .navigation>li.active>a,
 .main-menu.menu-light .navigation>li.hover>a,
 .main-menu.menu-light .navigation>li:hover>a {
     color: #3D3F41;
     background-color: #f5f5f5
-}
+} */
 
 .main-menu.menu-light .navigation>li.active>a.mm-next,
 .main-menu.menu-light .navigation>li.hover>a.mm-next,

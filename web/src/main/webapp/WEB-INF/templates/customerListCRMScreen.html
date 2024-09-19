@@ -361,15 +361,26 @@
 	<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
       <div class="main-menu-content ps-container ps-theme-dark ps-active-y" data-ps-id="cbbe64e1-7bf9-4bd7-9765-10b55ff5c397">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-          <li class="nav-item123 has-sub" data-page="index.html"><a href="index.html"><i class="icon-home"></i><span class="menu-title" data-i18n="nav.dash.main">Trang chủ</span></a>
-           
+          <li class="nav-item123 has-sub" data-page="crm-web/homeCRMScreen"><a href="/crm-web/homeCRMScreen"><i class="fa-solid fa-house"></i><span class="menu-title" data-i18n="nav.dash.main">Trang chủ</span></a>
+          	
           </li>
           
-          <li class="nav-item has-sub" data-page="crm-web/contentCRMCustomerList"><a class="menu-item" href="/crm-web/contentCRMCustomerList"><i class="fa-solid fa-users"></i><span class="menu-title" data-i18n="nav.templates.main">Khách hàng</span></a>
-           
+          <li class="nav-item123 has-sub" data-page="crm-web/customerListCRMScreen"><a class="menu-item" href="/crm-web/customerListCRMScreen"><i class="fa-solid fa-users"></i><span class="menu-title" data-i18n="nav.templates.main">Khách hàng</span></a>
+           <ul class="menu-content123" style="">
+              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.page_layouts.main">Danh sách khách hàng</a>
+                
+              </li>
+              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.navbars.main">Hành trình khách hàng</a>
+                
+              </li>
+              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.vertical_nav.main">Tỷ lệ chuyển đổi</a>
+                
+              </li>
+              
+            </ul>
           </li>
           
-          <li class="nav-item has-sub"><a href="#"><i class="fas fa-business-time"></i><span class="menu-title" data-i18n="nav.layouts.temp">KPI</span></a>
+          <li class="nav-item123 has-sub" data-page="crm-web/kpiCRMScreen"><a href="/crm-web/kpiCRMScreen"><i class="fas fa-business-time"></i><span class="menu-title" data-i18n="nav.layouts.temp">KPI</span></a>
             <ul class="menu-content" style="">
               <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.page_layouts.main">Page layouts</a>
                 <ul class="menu-content">
@@ -548,7 +559,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-sub"><a href="#"><i class="fas fa-briefcase"></i><span class="menu-title" data-i18n="nav.category.general">Công việc</span></a>
+          <li class="nav-item123 has-sub" data-page="crm-web/workCRMScreen"><a href="/crm-web/workCRMScreen"><i class="fas fa-briefcase"></i><span class="menu-title" data-i18n="nav.category.general">Công việc</span></a>
             <ul class="menu-content" style="">
               <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.color_palette.main">Color Palette</a>
                 <ul class="menu-content">
@@ -684,7 +695,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-sub"><a href="#"><i class="fas fa-phone-volume"></i><span class="menu-title" data-i18n="nav.category.pages">CSKH</span></a>
+          <li class="nav-item123 has-sub" data-page="crm-web/takeCareCustomerCRMScreen"><a href="/crm-web/takeCareCustomerCRMScreen"><i class="fas fa-phone-volume"></i><span class="menu-title" data-i18n="nav.category.pages">CSKH</span></a>
             <ul class="menu-content" style="">
               <li><a class="menu-item" href="email-application.html" data-i18n="nav.email-application.main">Email Application</a>
               </li>
@@ -834,7 +845,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-sub"><a href="#"><i class="fa-solid fa-file-excel"></i><span class="menu-title" data-i18n="nav.category.ui">Báo cáo</span></a>
+          <li class="nav-item123 has-sub" data-page="crm-web/reportCRMScreen"><a href="/crm-web/reportCRMScreen"><i class="fa-solid fa-file-excel"></i><span class="menu-title" data-i18n="nav.category.ui">Báo cáo</span></a>
             <ul class="menu-content" style="">
               <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.cards.main">Cards</a>
                 <ul class="menu-content">
@@ -980,442 +991,460 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-sub"><a href="#"><i class="icon-note"></i><span class="menu-title" data-i18n="nav.category.forms">Forms</span></a>
-            <ul class="menu-content" style="">
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.form_elements.main">Form Elements</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="form-inputs.html" data-i18n="nav.form_elements.form_inputs">Form Inputs</a>
-                  </li>
-                  <li><a class="menu-item" href="form-input-groups.html" data-i18n="nav.form_elements.form_input_groups">Input Groups</a>
-                  </li>
-                  <li><a class="menu-item" href="form-input-grid.html" data-i18n="nav.form_elements.form_input_grid">Input Grid</a>
-                  </li>
-                  <li><a class="menu-item" href="form-extended-inputs.html" data-i18n="nav.form_elements.form_extended_inputs">Extended Inputs</a>
-                  </li>
-                  <li><a class="menu-item" href="form-checkboxes-radios.html" data-i18n="nav.form_elements.form_checkboxes_radios">Checkboxes &amp; Radios</a>
-                  </li>
-                  <li><a class="menu-item" href="form-switch.html" data-i18n="nav.form_elements.form_switch">Switch</a>
-                  </li>
-                  <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.form_elements.form_select.main">Select</a>
-                    <ul class="menu-content">
-                      <li><a class="menu-item" href="form-select2.html" data-i18n="nav.form_elements.form_select.form_select2">Select2</a>
-                      </li>
-                      <li><a class="menu-item" href="form-selectize.html" data-i18n="nav.form_elements.form_select.form_selectize">Selectize</a>
-                      </li>
-                      <li><a class="menu-item" href="form-selectivity.html" data-i18n="nav.form_elements.form_select.form_selectivity">Selectivity</a>
-                      </li>
-                      <li><a class="menu-item" href="form-select-box-it.html" data-i18n="nav.form_elements.form_select.form_select_box_it">Select Box It</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="menu-item" href="form-dual-listbox.html" data-i18n="nav.form_elements.form_dual_listbox">Dual Listbox</a>
-                  </li>
-                  <li><a class="menu-item" href="form-tags-input.html" data-i18n="nav.form_elements.form_tags_input">Tags Input</a>
-                  </li>
-                  <li><a class="menu-item" href="form-validation.html" data-i18n="nav.form_elements.form_validation">Validation</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.form_layouts.main">Form Layouts</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="form-layout-basic.html" data-i18n="nav.form_layouts.form_layout_basic">Basic Forms</a>
-                  </li>
-                  <li><a class="menu-item" href="form-layout-horizontal.html" data-i18n="nav.form_layouts.form_layout_horizontal">Horizontal Forms</a>
-                  </li>
-                  <li><a class="menu-item" href="form-layout-hidden-labels.html" data-i18n="nav.form_layouts.form_layout_hidden_labels">Hidden Labels</a>
-                  </li>
-                  <li><a class="menu-item" href="form-layout-form-actions.html" data-i18n="nav.form_layouts.form_layout_form_actions">Form Actions</a>
-                  </li>
-                  <li><a class="menu-item" href="form-layout-row-separator.html" data-i18n="nav.form_layouts.form_layout_row_separator">Row Separator</a>
-                  </li>
-                  <li><a class="menu-item" href="form-layout-bordered.html" data-i18n="nav.form_layouts.form_layout_bordered">Bordered</a>
-                  </li>
-                  <li><a class="menu-item" href="form-layout-striped-rows.html" data-i18n="nav.form_layouts.form_layout_striped_rows">Striped Rows</a>
-                  </li>
-                  <li><a class="menu-item" href="form-layout-striped-labels.html" data-i18n="nav.form_layouts.form_layout_striped_labels">Striped Labels</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.form_wizard.main">Form Wizard</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="form-wizard-circle-style.html" data-i18n="nav.form_wizard.form_wizard_circle_style">Circle Style</a>
-                  </li>
-                  <li><a class="menu-item" href="form-wizard-notification-style.html" data-i18n="nav.form_wizard.form_wizard_notification_style">Notification Style</a>
-                  </li>
-                </ul>
-              </li>
-              <li><a class="menu-item" href="form-repeater.html" data-i18n="nav.form_repeater.main">Form Repeater</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-sub"><a href="#"><i class="icon-grid"></i><span class="menu-title" data-i18n="nav.category.tables">Tables</span></a>
-            <ul class="menu-content" style="">
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.bootstrap_tables.main">Bootstrap Tables</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="table-basic.html" data-i18n="nav.bootstrap_tables.table_basic">Basic Tables</a>
-                  </li>
-                  <li><a class="menu-item" href="table-border.html" data-i18n="nav.bootstrap_tables.table_border">Table Border</a>
-                  </li>
-                  <li><a class="menu-item" href="table-sizing.html" data-i18n="nav.bootstrap_tables.table_sizing">Table Sizing</a>
-                  </li>
-                  <li><a class="menu-item" href="table-styling.html" data-i18n="nav.bootstrap_tables.table_styling">Table Styling</a>
-                  </li>
-                  <li><a class="menu-item" href="table-components.html" data-i18n="nav.bootstrap_tables.table_components">Table Components</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.data_tables.main">DataTables</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="dt-basic-initialization.html" data-i18n="nav.data_tables.dt_basic_initialization">Basic Initialisation</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-advanced-initialization.html" data-i18n="nav.data_tables.dt_advanced_initialization">Advanced initialisation</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-styling.html" data-i18n="nav.data_tables.dt_styling">Styling</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-data-sources.html" data-i18n="nav.data_tables.dt_data_sources">Data Sources</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-api.html" data-i18n="nav.data_tables.dt_api">API</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.datatable_extensions.main">DataTables Ext.</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="dt-extensions-autofill.html" data-i18n="nav.datatable_extensions.dt_extensions_autofill">AutoFill</a>
-                  </li>
-                  <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.datatable_extensions.datatable_buttons.main">Buttons</a>
-                    <ul class="menu-content">
-                      <li><a class="menu-item" href="dt-extensions-buttons-basic.html" data-i18n="nav.datatable_extensions.datatable_buttons.dt_extensions_buttons_basic">Basic Buttons</a>
-                      </li>
-                      <li><a class="menu-item" href="dt-extensions-buttons-html-5-data-export.html" data-i18n="nav.datatable_extensions.datatable_buttons.dt_extensions_buttons_html_5_data_export">HTML 5 Data Export</a>
-                      </li>
-                      <li><a class="menu-item" href="dt-extensions-buttons-flash-data-export.html" data-i18n="nav.datatable_extensions.datatable_buttons.dt_extensions_buttons_flash_data_export">Flash Data Export</a>
-                      </li>
-                      <li><a class="menu-item" href="dt-extensions-buttons-column-visibility.html" data-i18n="nav.datatable_extensions.datatable_buttons.dt_extensions_buttons_column_visibility">Column Visibility</a>
-                      </li>
-                      <li><a class="menu-item" href="dt-extensions-buttons-print.html" data-i18n="nav.datatable_extensions.datatable_buttons.dt_extensions_buttons_print">Print</a>
-                      </li>
-                      <li><a class="menu-item" href="dt-extensions-buttons-api.html" data-i18n="nav.datatable_extensions.datatable_buttons.dt_extensions_buttons_api">API</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="menu-item" href="dt-extensions-column-reorder.html" data-i18n="nav.datatable_extensions.dt_extensions_column_reorder">Column Reorder</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-extensions-fixed-columns.html" data-i18n="nav.datatable_extensions.dt_extensions_fixed_columns">Fixed Columns</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-extensions-key-table.html" data-i18n="nav.datatable_extensions.dt_extensions_key_table">Key Table</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-extensions-row-reorder.html" data-i18n="nav.datatable_extensions.dt_extensions_row_reorder">Row Reorder</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-extensions-select.html" data-i18n="nav.datatable_extensions.dt_extensions_select">Select</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-extensions-fix-header.html" data-i18n="nav.datatable_extensions.dt_extensions_fix_header">Fix Header</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-extensions-responsive.html" data-i18n="nav.datatable_extensions.dt_extensions_responsive">Responsive</a>
-                  </li>
-                  <li><a class="menu-item" href="dt-extensions-column-visibility.html" data-i18n="nav.datatable_extensions.dt_extensions_column_visibility">Column Visibility</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.handson_table.main">Handson Table</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="handson-table-appearance.html" data-i18n="nav.handson_table.handson_table_appearance">Appearance</a>
-                  </li>
-                  <li><a class="menu-item" href="handson-table-rows-columns.html" data-i18n="nav.handson_table.handson_table_rows_columns">Rows Columns</a>
-                  </li>
-                  <li><a class="menu-item" href="handson-table-rows-only.html" data-i18n="nav.handson_table.handson_table_rows_only">Rows Only</a>
-                  </li>
-                  <li><a class="menu-item" href="handson-table-columns-only.html" data-i18n="nav.handson_table.handson_table_columns_only">Columns Only</a>
-                  </li>
-                  <li><a class="menu-item" href="handson-table-data-operations.html" data-i18n="nav.handson_table.handson_table_data_operations">Data Operations</a>
-                  </li>
-                  <li><a class="menu-item" href="handson-table-cell-features.html" data-i18n="nav.handson_table.handson_table_cell_features">Cell Features</a>
-                  </li>
-                  <li><a class="menu-item" href="handson-table-cell-types.html" data-i18n="nav.handson_table.handson_table_cell_types">Cell Types</a>
-                  </li>
-                  <li><a class="menu-item" href="handson-table-integrations.html" data-i18n="nav.handson_table.handson_table_integrations">Integrations</a>
-                  </li>
-                  <li><a class="menu-item" href="handson-table-utilities.html" data-i18n="nav.handson_table.handson_table_utilities">Utilities</a>
-                  </li>
-                </ul>
-              </li>
-              <li><a class="menu-item" href="table-jsgrid.html" data-i18n="nav.table_jsgrid.main">jsGrid</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-sub"><a href="#"><i class="icon-plus"></i><span class="menu-title" data-i18n="nav.category.addons">Add Ons</span></a>
-            <ul class="menu-content" style="">
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.editors.main">Editors</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="editor-quill.html" data-i18n="nav.editors.editor_quill">Quill</a>
-                  </li>
-                  <li><a class="menu-item" href="editor-ckeditor.html" data-i18n="nav.editors.editor_ckeditor">CKEditor</a>
-                  </li>
-                  <li><a class="menu-item" href="editor-summernote.html" data-i18n="nav.editors.editor_summernote">Summernote</a>
-                  </li>
-                  <li><a class="menu-item" href="editor-tinymce.html" data-i18n="nav.editors.editor_tinymce">TinyMCE</a>
-                  </li>
-                  <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.editors.code_editor_codemirror.main">Code Editor</a>
-                    <ul class="menu-content">
-                      <li><a class="menu-item" href="code-editor-codemirror.html" data-i18n="nav.editors.code_editor_codemirror.code_editor_codemirror">CodeMirror</a>
-                      </li>
-                      <li><a class="menu-item" href="code-editor-ace.html" data-i18n="nav.editors.code_editor_codemirror.code_editor_ace">Ace</a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.pickers.main">Pickers</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="pickers-date-&amp;-time-picker.html" data-i18n="nav.pickers.pickers_date_time_picker">Date &amp; Time Picker</a>
-                  </li>
-                  <li><a class="menu-item" href="pickers-color-picker.html" data-i18n="nav.pickers.pickers_color_picker">Color Picker</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.jquery_ui.main">jQuery UI</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="jquery-ui-interactions.html" data-i18n="nav.jquery_ui.jquery_ui_interactions">Interactions</a>
-                  </li>
-                  <li><a class="menu-item" href="jquery-ui-navigations.html" data-i18n="nav.jquery_ui.jquery_ui_navigations">Navigations</a>
-                  </li>
-                  <li><a class="menu-item" href="jquery-ui-date-pickers.html" data-i18n="nav.jquery_ui.jquery_ui_date_pickers">Date Pickers</a>
-                  </li>
-                  <li><a class="menu-item" href="jquery-ui-autocomplete.html" data-i18n="nav.jquery_ui.jquery_ui_autocomplete">Autocomplete</a>
-                  </li>
-                  <li><a class="menu-item" href="jquery-ui-buttons-select.html" data-i18n="nav.jquery_ui.jquery_ui_buttons_select">Buttons &amp; Select</a>
-                  </li>
-                  <li><a class="menu-item" href="jquery-ui-slider-spinner.html" data-i18n="nav.jquery_ui.jquery_ui_slider_spinner">Slider &amp; Spinner</a>
-                  </li>
-                  <li><a class="menu-item" href="jquery-ui-dialog-tooltip.html" data-i18n="nav.jquery_ui.jquery_ui_dialog_tooltip">Dialog &amp; Tooltip</a>
-                  </li>
-                </ul>
-              </li>
-              <li><a class="menu-item" href="add-on-block-ui.html" data-i18n="nav.add_on_block_ui.main">Block UI</a>
-              </li>
-              <li><a class="menu-item" href="add-on-image-cropper.html" data-i18n="nav.add_on_image_cropper.main">Image Cropper</a>
-              </li>
-              <li><a class="menu-item" href="add-on-drag-drop.html" data-i18n="nav.add_on_drag_drop.main">Drag &amp; Drop</a>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.file_uploaders.main">File Uploader</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="file-uploader-dropzone.html" data-i18n="nav.file_uploaders.file_uploader_dropzone">Dropzone</a>
-                  </li>
-                  <li><a class="menu-item" href="file-uploader-jquery.html" data-i18n="nav.file_uploaders.file_uploader_jquery">jQuery File Upload</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.event_calendars.main">Event Calendars</a>
-                <ul class="menu-content">
-                  <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.event_calendars.full_calender.main">Full Calendar</a>
-                    <ul class="menu-content">
-                      <li><a class="menu-item" href="full-calender-basic.html" data-i18n="nav.event_calendars.full_calender.full_calender_basic">Basic</a>
-                      </li>
-                      <li><a class="menu-item" href="full-calender-events.html" data-i18n="nav.event_calendars.full_calender.full_calender_events">Events</a>
-                      </li>
-                      <li><a class="menu-item" href="full-calender-advance.html" data-i18n="nav.event_calendars.full_calender.full_calender_advance">Advance</a>
-                      </li>
-                      <li><a class="menu-item" href="full-calender-extra.html" data-i18n="nav.event_calendars.full_calender.full_calender_extra">Extra</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="menu-item" href="calendars-clndr.html" data-i18n="nav.event_calendars.calendars_clndr">CLNDR</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.internationalization.main">Internationalization</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="i18n-resources.html" data-i18n="nav.internationalization.i18n_resources">Resources</a>
-                  </li>
-                  <li><a class="menu-item" href="i18n-xhr-backend.html" data-i18n="nav.internationalization.i18n_xhr_backend">XHR Backend</a>
-                  </li>
-                  <li><a class="menu-item" href="i18n-query-string.html?lng=en" data-i18n="nav.internationalization.i18n_query_string">Query String</a>
-                  </li>
-                  <li><a class="menu-item" href="i18n-on-init.html" data-i18n="nav.internationalization.i18n_on_init">On Init</a>
-                  </li>
-                  <li><a class="menu-item" href="i18n-after-init.html" data-i18n="nav.internationalization.i18n_after_init">After Init</a>
-                  </li>
-                  <li><a class="menu-item" href="i18n-fallback.html" data-i18n="nav.internationalization.i18n_fallback">Fallback</a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-sub"><a href="#"><i class="icon-graph"></i><span class="menu-title" data-i18n="nav.category.charts_maps">Charts &amp; Maps</span></a>
-            <ul class="menu-content">
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.google_charts.main">google Charts</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="google-bar-charts.html" data-i18n="nav.google_charts.google_bar_charts">Bar charts</a>
-                  </li>
-                  <li><a class="menu-item" href="google-line-charts.html" data-i18n="nav.google_charts.google_line_charts">Line charts</a>
-                  </li>
-                  <li><a class="menu-item" href="google-pie-charts.html" data-i18n="nav.google_charts.google_pie_charts">Pie charts</a>
-                  </li>
-                  <li><a class="menu-item" href="google-scatter-charts.html" data-i18n="nav.google_charts.google_scatter_charts">Scatter charts</a>
-                  </li>
-                  <li><a class="menu-item" href="google-bubble-charts.html" data-i18n="nav.google_charts.google_bubble_charts">Bubble charts</a>
-                  </li>
-                  <li><a class="menu-item" href="google-other-charts.html" data-i18n="nav.google_charts.google_other_charts">Other charts</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.echarts.main">Echarts</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="echarts-line-area-charts.html" data-i18n="nav.echarts.echarts_line_area_charts">Line &amp; Area charts</a>
-                  </li>
-                  <li><a class="menu-item" href="echarts-bar-column-charts.html" data-i18n="nav.echarts.echarts_bar_column_charts">Bar &amp; Column charts</a>
-                  </li>
-                  <li><a class="menu-item" href="echarts-pie-doughnut-charts.html" data-i18n="nav.echarts.echarts_pie_doughnut_charts">Pie &amp; Doughnut charts</a>
-                  </li>
-                  <li><a class="menu-item" href="echarts-scatter-charts.html" data-i18n="nav.echarts.echarts_scatter_charts">Scatter charts</a>
-                  </li>
-                  <li><a class="menu-item" href="echarts-radar-chord-charts.html" data-i18n="nav.echarts.echarts_radar_chord_charts">Radar &amp; Chord charts</a>
-                  </li>
-                  <li><a class="menu-item" href="echarts-funnel-gauges-charts.html" data-i18n="nav.echarts.echarts_funnel_gauges_charts">Funnel &amp; Gauges charts</a>
-                  </li>
-                  <li><a class="menu-item" href="echarts-combination-charts.html" data-i18n="nav.echarts.echarts_combination_charts">Combination charts</a>
-                  </li>
-                  <li><a class="menu-item" href="echarts-advance-charts.html" data-i18n="nav.echarts.echarts_advance_charts">Advance charts</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.chartjs.main">Chartjs</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="chartjs-line-charts.html" data-i18n="nav.chartjs.chartjs_line_charts">Line charts</a>
-                  </li>
-                  <li><a class="menu-item" href="chartjs-bar-charts.html" data-i18n="nav.chartjs.chartjs_bar_charts">Bar charts</a>
-                  </li>
-                  <li><a class="menu-item" href="chartjs-pie-doughnut-charts.html" data-i18n="nav.chartjs.chartjs_pie_doughnut_charts">Pie &amp; Doughnut charts</a>
-                  </li>
-                  <li><a class="menu-item" href="chartjs-scatter-charts.html" data-i18n="nav.chartjs.chartjs_scatter_charts">Scatter charts</a>
-                  </li>
-                  <li><a class="menu-item" href="chartjs-polar-radar-charts.html" data-i18n="nav.chartjs.chartjs_polar_radar_charts">Polar &amp; Radar charts</a>
-                  </li>
-                  <li><a class="menu-item" href="chartjs-advance-charts.html" data-i18n="nav.chartjs.chartjs_advance_charts">Advance charts</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.d3_charts.main">D3 Charts</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="d3-line-chart.html" data-i18n="nav.d3_charts.d3_line_chart">Line Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="d3-bar-chart.html" data-i18n="nav.d3_charts.d3_bar_chart">Bar Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="d3-pie-chart.html" data-i18n="nav.d3_charts.d3_pie_chart">Pie Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="d3-circle-diagrams.html" data-i18n="nav.d3_charts.d3_circle_diagrams">Circle Diagrams</a>
-                  </li>
-                  <li><a class="menu-item" href="d3-tree-chart.html" data-i18n="nav.d3_charts.d3_tree_chart">Tree Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="d3-other-charts.html" data-i18n="nav.d3_charts.d3_other_charts">Other Charts</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.c3_charts.main">C3 Charts</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="c3-line-chart.html" data-i18n="nav.c3_charts.c3_line_chart">Line Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="c3-bar-pie-chart.html" data-i18n="nav.c3_charts.c3_bar_pie_chart">Bar &amp; Pie Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="c3-axis-chart.html" data-i18n="nav.c3_charts.c3_axis_chart">Axis Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="c3-data-chart.html" data-i18n="nav.c3_charts.c3_data_chart">Data Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="c3-grid-chart.html" data-i18n="nav.c3_charts.c3_grid_chart">Grid Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="c3-transform-chart.html" data-i18n="nav.c3_charts.c3_transform_chart">Transform Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="c3-other-charts.html" data-i18n="nav.c3_charts.c3_other_charts">Other Charts</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.chartist.main">Chartist</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="chartist-line-charts.html" data-i18n="nav.chartist.chartist_line_charts">Line charts</a>
-                  </li>
-                  <li><a class="menu-item" href="chartist-bar-charts.html" data-i18n="nav.chartist.chartist_bar_charts">Bar charts</a>
-                  </li>
-                  <li><a class="menu-item" href="chartist-pie-charts.html" data-i18n="nav.chartist.chartist_pie_charts">Pie charts</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.dimple_charts.main">Dimple Charts</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="dimple-line-area-chart.html" data-i18n="nav.dimple_charts.dimple_line_area_chart">Line &amp; Area Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="dimple-bar-column-chart.html" data-i18n="nav.dimple_charts.dimple_bar_column_chart">Bar &amp; Column Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="dimple-pie-ring-chart.html" data-i18n="nav.dimple_charts.dimple_pie_ring_chart">Pie &amp; Ring Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="dimple-step-chart.html" data-i18n="nav.dimple_charts.dimple_step_chart">Step Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="dimple-scatter-chart.html" data-i18n="nav.dimple_charts.dimple_scatter_chart">Scatter Chart</a>
-                  </li>
-                  <li><a class="menu-item" href="dimple-bubble-chart.html" data-i18n="nav.dimple_charts.dimple_bubble_chart">Bubble Chart</a>
-                  </li>
-                </ul>
-              </li>
-              <li><a class="menu-item" href="morris-charts.html" data-i18n="nav.morris_charts.main">Morris Charts</a>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.flot_charts.main">Flot Charts</a>
-                <ul class="menu-content">
-                  <li><a class="menu-item" href="flot-line-charts.html" data-i18n="nav.flot_charts.flot_line_charts">Line charts</a>
-                  </li>
-                  <li><a class="menu-item" href="flot-bar-charts.html" data-i18n="nav.flot_charts.flot_bar_charts">Bar charts</a>
-                  </li>
-                  <li><a class="menu-item" href="flot-pie-charts.html" data-i18n="nav.flot_charts.flot_pie_charts">Pie charts</a>
-                  </li>
-                </ul>
-              </li>
-              <li><a class="menu-item" href="rickshaw-charts.html" data-i18n="nav.rickshaw_charts.main">Rickshaw Charts</a>
-              </li>
-              <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.maps.main">Maps</a>
-                <ul class="menu-content">
-                  <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.maps.google_maps.main">google Maps</a>
-                    <ul class="menu-content">
-                      <li><a class="menu-item" href="gmaps-basic-maps.html" data-i18n="nav.maps.google_maps.gmaps_basic_maps">Maps</a>
-                      </li>
-                      <li><a class="menu-item" href="gmaps-services.html" data-i18n="nav.maps.google_maps.gmaps_services">Services</a>
-                      </li>
-                      <li><a class="menu-item" href="gmaps-overlays.html" data-i18n="nav.maps.google_maps.gmaps_overlays">Overlays</a>
-                      </li>
-                      <li><a class="menu-item" href="gmaps-routes.html" data-i18n="nav.maps.google_maps.gmaps_routes">Routes</a>
-                      </li>
-                      <li><a class="menu-item" href="gmaps-utils.html" data-i18n="nav.maps.google_maps.gmaps_utils">Utils</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.maps.vector_maps.main">Vector Maps</a>
-                    <ul class="menu-content">
-                      <li class="has-sub"><a class="menu-item" href="#" data-i18n="nav.maps.vector_maps.jquery_mapael.main">jQuery Mapael</a>
-                        <ul class="menu-content">
-                          <li><a class="menu-item" href="vector-maps-mapael-basic.html" data-i18n="nav.maps.vector_maps.jquery_mapael.vector_maps_mapael_basic">Basic Maps</a>
-                          </li>
-                          <li><a class="menu-item" href="vector-maps-mapael-advance.html" data-i18n="nav.maps.vector_maps.jquery_mapael.vector_maps_mapael_advance">Advance Maps</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="menu-item" href="vector-maps-jvector.html" data-i18n="nav.maps.vector_maps.jvector_maps">jVector Map</a>
-                      </li>
-                      <li><a class="menu-item" href="vector-maps-jqv.html" data-i18n="nav.maps.vector_maps.vector_maps_jqv">JQV Map</a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-sub"><a href="#"><i class="icon-support"></i><span class="menu-title" data-i18n="nav.category.support">Support</span></a>
-            <ul class="menu-content">
-              <li><a class="menu-item" href="http://support.pixinvent.com/" data-i18n="nav.support_raise_support.main">Raise Support</a>
-              </li>
-              <li><a class="menu-item" href="https://demos.pixinvent.com/robust-html-admin-template/documentation" data-i18n="nav.support_documentation.main">Documentation</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: -301px;"><div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 304px; height: 170px; right: 3px;"><div class="ps-scrollbar-y" tabindex="0" style="top: 53px; height: 29px;"></div></div></div>
+          
+          <a href="https://mekongsolution.com/" target="_blank">
+	          <div class = "logo-company">
+	          	<img alt="logo-company" src="resources/app-assets/images/logo/logoMKS.png">
+	          	<span class="name-company">MKS Company</span>
+	          </div>
+          </a>
+          
+      <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: -301px;">
+      	<div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+      </div>
+     <div class="ps-scrollbar-y-rail" style="top: 304px; height: 0px; right: 3px;">
+      	<div class="ps-scrollbar-y" tabindex="0" style="top: 53px; height: 29px;"></div>
+      </div> 
     </div>
+	</div>
 	<!--  /////////////////////////////////END LEFT MENU NAVIGATION ///////////////////////////////////////////  -->
+	 
+	<!--  BEGIN CONTENT -->
+	<div class="app-content content">
+      <div class="content-wrapper">
+        <div class="content-header row">
+          <div class="content-header-left col-md-6 col-12 mb-2">
+            <h3 class="content-header-title">Khách hàng</h3>
+            <div class="row breadcrumbs-top">
+              <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Khách hàng</a>
+                  </li>
+                  <li class="breadcrumb-item active">Danh sách khách hàng
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div class="content-header-right col-md-6 col-12">
+            <fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
+              <input class="form-control" id="iconLeft" type="text" placeholder="Tìm kiếm khách hàng..." fdprocessedid="66aqzo">
+              <div class="form-control-position"><i class="fa fa-search"></i></div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="content-body"><section class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+            	<h4 class="card-title">Danh sách khách hàng</h4>
+            	<a class="heading-elements-toggle"><i class="ft-ellipsis-h font-medium-3"></i></a>
+        		<div class="heading-elements">
+            		<button class="btn btn-primary btn-sm" fdprocessedid="q9g77z"><i class="fa-solid fa-plus"></i> Add New Customers</button>
+        			
+                </div>
+            </div>
+            
+            <div class="card-status">
+            	<button class="status-button new">MỚI</button>
+			    <button class="status-button not-started">CHƯA BẮT ĐẦU</button>
+			    <button class="status-button postponed">HOÃN LẠI</button>
+			    <button class="status-button in-progress">ĐANG TRONG TIẾN TRÌNH</button>
+			    <button class="status-button completed">HOÀN THÀNH</button>
+			    <button class="status-button canceled">HỦY</button>
+			    <button class="status-button finalized">CHỐT</button>
+            </div>
+            
+            
+            
+            <div class="card-content">
+                <div class="card-body">
+	                <!-- Task List table -->
+	                <div class="table-responsive">
+		                <div id="project-task-list_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="project-task-list_length"><label>Show <select name="project-task-list_length" aria-controls="project-task-list" class="custom-select custom-select-sm form-control form-control-sm select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true"><option value="10" data-select2-id="3">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2" style="width: 55.5px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-project-task-list_length-2t-container"><span class="select2-selection__rendered" id="select2-project-task-list_length-2t-container" role="textbox" aria-readonly="true" title="10">10</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="project-task-list_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="project-task-list"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="project-task-list" class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle dataTable" role="grid" aria-describedby="project-task-list_info" style="position: relative;">
+					        <thead>
+					            <tr role="row"><th class="reorder sorting_asc" tabindex="0" aria-controls="project-task-list" rowspan="1" colspan="1" aria-sort="ascending" aria-label=": activate to sort column descending"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Task">Task</th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Priority">Priority</th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Progress">Progress</th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Owner">Owner</th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Actions">Actions</th></tr>
+					        </thead>
+					        <tbody>
+					        	<!-- ABC Project -->
+					            
+					            
+					            
+					            
+					            <!-- ABC Project -->
+					            
+					            
+					            <!-- 2 Days Ago -->
+					            
+					            
+					            <!-- 3 Days Ago -->
+					            
+					            
+					            
+					            
+					            <!-- 4 Days Ago -->
+					            
+					            
+					            <!-- 5 Days Ago -->
+					            
+					            
+					            <!-- 6 Days Ago -->
+					            
+					            
+					            <!-- 7 Days Ago -->
+					            
+					            
+					            <!-- 8 Days Ago -->
+					            
+					            
+					            <!-- 9 Days Ago -->
+					            
+					            
+					            <!-- 10 Days Ago -->
+					            
+					            
+					            <!-- 11 Days Ago -->
+					            
+					            
+					        <tr class="group"><td colspan="8"><h6 class="mb-0">Basics Tasks &amp; Milestones in <span class="text-bold-600">ABC Project</span> on <em>30 Oct, 2017</em></h6></td></tr><tr role="row" class="odd">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">Complete the page header</a>
+					                	<p class="text-muted">Phasellus vel elit volutpat, egestas urna a, pharetra nibh.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-danger">Critical</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="82" aria-valuemax="100" class="progress-bar bg-gradient-x-success" role="progressbar" style="width:82%" aria-valuenow="82"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-busy">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-3.png" alt="avatar" data-toggle="tooltip" data-placement="right" title="John Doe"><i class=""></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="wo5yz"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop2" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr><tr role="row" class="even">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">Menu open issue on top</a>
+					                	<p class="text-muted">Proin varius libero at magna dignissim lacinia.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-primary">Medium</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="30" aria-valuemax="100" class="progress-bar bg-gradient-x-warning" role="progressbar" style="width:32%" aria-valuenow="32"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-online">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-5.png" alt="avatar" data-placement="right" title="Peater Doe"><i></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop3" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="om5fv9"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop3" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr><tr role="row" class="odd">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">Integrate ChartJS Page</a>
+					                	<p class="text-muted"> Curabitur tempor, quam vel pulvinar finibus.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-warning">High</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="20" aria-valuemax="100" class="progress-bar bg-gradient-x-danger" role="progressbar" style="width:20%" aria-valuenow="20"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-online">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-6.png" alt="avatar" data-placement="right" title="Nicole Barrett"><i></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="r5h2qb"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop4" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr><tr role="row" class="even">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">Support Charls Users</a>
+					                	<p class="text-muted"> Donec pulvinar nisi ac convallis porta.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-info">Low</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="30" aria-valuemax="100" class="progress-bar bg-gradient-x-info" role="progressbar" style="width:30%" aria-valuenow="30"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-off">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-7.png" alt="avatar" data-placement="right" title="Jason Robertson"><i></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop5" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="c3bv73"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop5" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr><tr class="group"><td colspan="8"><h6 class="mb-0">UI Tasks &amp; Support in <span class="text-bold-600">ABC Project</span> on <em>12 Nov, 2017</em></h6></td></tr><tr role="row" class="odd">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">UI/UX Design for the new Mobile APP</a>
+					                	<p class="text-muted">Phasellus vel elit volutpat, egestas urna a, pharetra nibh.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-success">Low</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="100" aria-valuemax="100" class="progress-bar bg-gradient-x-success" role="progressbar" style="width:100%" aria-valuenow="100"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-busy">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-7.png" alt="avatar" data-toggle="tooltip" data-placement="right" title="Willie Sanchez"><i class=""></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop6" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="5y10w2"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop6" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr><tr role="row" class="even">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">PSD Creation for the ABC APP</a>
+					                	<p class="text-muted">Phasellus vel elit volutpat, egestas urna a, pharetra nibh.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-primary">Medium</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="50" aria-valuemax="100" class="progress-bar bg-gradient-x-info" role="progressbar" style="width:50%" aria-valuenow="50"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-busy">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-8.png" alt="avatar" data-toggle="tooltip" data-placement="right" title="Mary Salazar"><i class=""></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop7" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="407k4"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop7" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr><tr class="group"><td colspan="8"><h6 class="mb-0">DFD &amp; Support Task in <span class="text-bold-600">ABC Project</span> on <em>15 Dec, 2017</em></h6></td></tr><tr role="row" class="odd">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">Fix bootstrap progress bar issue</a>
+					                	<p class="text-muted">Aliquam finibus tellus magna, eget viverra augue gravida eget.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-primary">Medium</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="35" aria-valuemax="100" class="progress-bar bg-gradient-x-warning" role="progressbar" style="width:35%" aria-valuenow="35"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-busy">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-9.png" alt="avatar" data-toggle="tooltip" data-placement="right" title="Jerry King"><i class=""></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop8" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="lqm27b"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop8" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr><tr role="row" class="even">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">Support Alib on form wizard</a>
+					                	<p class="text-muted"> Donec pulvinar nisi ac convallis porta.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-info">Low</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="30" aria-valuemax="100" class="progress-bar bg-gradient-x-info" role="progressbar" style="width:30%" aria-valuenow="30"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-off">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-11.png" alt="avatar" data-placement="right" title="Jason Robertson"><i></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop9" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="pwng7g"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop9" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr><tr class="group"><td colspan="8"><h6 class="mb-0">Frontend Task &amp; Testing Task in <span class="text-bold-600">ABC Project</span> on <em>18 Dec, 2017</em></h6></td></tr><tr role="row" class="odd">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">Integrate D3 JS Page</a>
+					                	<p class="text-muted"> Curabitur tempor, quam vel pulvinar finibus.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-warning">High</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="20" aria-valuemax="100" class="progress-bar bg-gradient-x-danger" role="progressbar" style="width:20%" aria-valuenow="20"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-online">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-6.png" alt="avatar" data-placement="right" title="Nicole Barrett"><i></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop10" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="in0fv7"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop10" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr><tr role="row" class="even">
+					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
+					                <td>
+					                	<a href="#" class="text-bold-600">Contact Charls for Vertical Menu issuea</a>
+					                	<p class="text-muted"> Donec pulvinar nisi ac convallis porta.</p>
+					                </td>
+					                
+					                <td><span class="badge badge-default badge-info">Low</span></td>				                
+					                <td>
+					                	<div class="progress progress-sm">
+					                		<div aria-valuemin="30" aria-valuemax="100" class="progress-bar bg-gradient-x-info" role="progressbar" style="width:30%" aria-valuenow="30"></div>
+					                	</div>
+					                </td>
+					                
+					                <td class="text-center">
+					                	<span class="avatar avatar-off">
+					                		<img src="../../../app-assets/images/portrait/small/avatar-s-7.png" alt="avatar" data-placement="right" title="Jason Robertson"><i></i>
+					                	</span>
+					                </td>
+					                <td>
+					                	<span class="dropdown">
+					                        <button id="btnSearchDrop11" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="319lap"><i class="fa fa-cog"></i></button>
+					                        <span aria-labelledby="btnSearchDrop11" class="dropdown-menu mt-1 dropdown-menu-right">
+					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
+					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
+					                            <div class="dropdown-divider"></div>
+					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
+					                        </span>
+					                    </span>
+					                </td>
+					            </tr></tbody>
+					        <tfoot>
+					            <tr><th class="reorder" rowspan="1" colspan="1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></th><th rowspan="1" colspan="1">Task</th><th rowspan="1" colspan="1">Priority</th><th rowspan="1" colspan="1">Progress</th><th rowspan="1" colspan="1">Owner</th><th rowspan="1" colspan="1">Actions</th></tr>
+					        </tfoot>
+						</table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="project-task-list_info" role="status" aria-live="polite">Showing 1 to 10 of 28 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="project-task-list_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="project-task-list_previous"><a href="#" aria-controls="project-task-list" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="project-task-list" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="project-task-list" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="project-task-list" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item next" id="project-task-list_next"><a href="#" aria-controls="project-task-list" data-dt-idx="4" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div>
+					</div>
+					<!--/ Task List table -->
+				</div>
+            </div>
+        </div>
+    </div>
+</section>
+        </div>
+      </div>
+    </div>	
+	<!-- END CONTENT -->
+	 
+	 
+	 
 	 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
@@ -1440,7 +1469,8 @@
     <script src="resources/app-assets/js/scripts/customizer.min.js"></script>
     <!-- END ROBUST JS-->
     <!-- BEGIN PAGE LEVEL JS-->
-    <script src="/resources/app-assets/js/scripts/pages/dashboard-fitness.min.js"></script>
+    <script src="resources/app-assets/js/scripts/pages/dashboard-fitness.min.js"></script>
+    <script src="resources/app-assets/js/scripts/pages/project-task-list.min.js"></script>
     <!-- END PAGE LEVEL JS-->
     
 

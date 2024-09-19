@@ -27,7 +27,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.ModelAndView;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -36,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class CustomerListController extends BaseController {
- 
+	// Tạo logger cho class này 
 	   /**
      * This method is called when binding the HTTP parameter to bean (or model).
      * 
@@ -69,12 +68,12 @@ public class CustomerListController extends BaseController {
 		return mav;
 	}
     
-    @GetMapping("/headerCRMCustomerList")
+    @GetMapping("/homeCRMScreen")
 	public ModelAndView displayHeaderCRMCustomerList(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("headerCRMCustomerList");
+		ModelAndView mav = new ModelAndView("homeCRMScreen");
 
 		initSession(request, httpSession);
-		log.debug("Header of Customer List Controller is running....");
+		log.debug("Home CRM Screen Controller is running....");
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
@@ -82,16 +81,81 @@ public class CustomerListController extends BaseController {
 		return mav;
 	}
     
-    @GetMapping("/contentCRMCustomerList")
-	public ModelAndView displayContentCRMCustomerList(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("contentCRMCustomerList");
+    @GetMapping("/customerCRMScreen")
+   	public ModelAndView displayCustomerCRMScreen(HttpServletRequest request, HttpSession httpSession) {
+   		ModelAndView mav = new ModelAndView("customerCRMScreen");
+
+   		initSession(request, httpSession);
+   		log.debug("Customer CRM Screen Controller is running....");
+   		
+   		mav.addObject("currentSiteId", getCurrentSiteId());
+   		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+   		return mav;
+   	}
+    
+    @GetMapping("/customerListCRMScreen")
+	public ModelAndView displayCustomerListCRMScreen(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("customerListCRMScreen");
 
 		initSession(request, httpSession);
-		log.debug("Content of Customer List Controller is running....");
+		log.debug("Customer List CRM Screen Controller is running....");
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 
 		return mav;
 	}
+    
+    @GetMapping("/kpiCRMScreen")
+	public ModelAndView displayKPIScreen(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("kpiCRMScreen");
+
+		initSession(request, httpSession);
+		log.debug("KPI CRM Controller is running....");
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
+    
+    @GetMapping("/workCRMScreen")
+	public ModelAndView displayWorkScreen(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("workCRMScreen");
+
+		initSession(request, httpSession);
+		log.debug("Work CRM Controller is running....");
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
+    
+    @GetMapping("/takeCareCustomerCRMScreen")
+	public ModelAndView displayTakeCareCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("takeCareCustomerCRMScreen");
+
+		initSession(request, httpSession);
+		log.debug("Take Care Customer Controller is running....");
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
+    
+    @GetMapping("/reportCRMScreen")
+   	public ModelAndView displayReportScreen(HttpServletRequest request, HttpSession httpSession) {
+   		ModelAndView mav = new ModelAndView("reportCRMScreen");
+
+   		initSession(request, httpSession);
+   		log.debug("Report Controller is running....");
+   		
+   		mav.addObject("currentSiteId", getCurrentSiteId());
+   		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+   		return mav;
+   	}
 }
