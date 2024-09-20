@@ -1,5 +1,75 @@
 @charset "UTF-8";
 
+#responsible-select, #company-name, #company-address{
+	display: none;
+	margin-bottom: 15px;
+}
+
+.hidden-select{
+	display: none;
+}
+
+
+.fa-filter{
+	font-size: 25px;
+}
+
+#filter-toggle {
+    width: 5%;
+    margin-bottom: 10px;
+}
+
+#filter-box {
+    display: none;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 20%;
+}
+
+#filter-box label {
+    display: flex; /* Sử dụng flex để checkbox và tên hiển thị ngang hàng */
+    align-items: center; /* Căn giữa checkbox và văn bản theo chiều dọc */
+    margin-bottom: 5px;
+}
+
+#filter-box input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+#filter-box button {
+    margin-right: 1px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* #filter-box input, #filter-box select {
+    display: block;
+    margin: 5px 0;
+} */
+
+.filter-hidden {
+    display: none;
+}
+
+.filter-visible {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Thêm khoảng cách giữa checkbox và tên */
+form label input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+
+
 .card .card-title {
     font-weight: bold;
 }
