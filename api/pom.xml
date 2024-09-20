@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>crm</artifactId>
 		<groupId>mks.myworkspace.crm</groupId>
-		<version>23.0</version>
+		<version>23.2</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 <!-- 	<groupId>mks.myworkspace.crm</groupId> -->
