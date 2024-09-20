@@ -1,3 +1,66 @@
+/*
+document.querySelectorAll('.filter-option').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const targets = this.getAttribute('data-target').split(', ');
+        targets.forEach(target => {
+            const element = document.querySelector(target);
+            if (this.checked) {
+                element.style.display = 'block'; // Hiển thị trường
+            } else {
+                element.style.display = 'none'; // Ẩn trường
+            }
+        });
+    });
+});
+
+document.querySelectorAll('.filter-option').forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+        const target = document.querySelector(this.dataset.target);
+        if (this.checked) {
+            target.classList.remove('hidden');
+        } else {
+            target.classList.add('hidden');
+        }
+    });
+});*/
+
+
+
+// Checkbox 2
+document.getElementById('filter-option-2').addEventListener('change', function() {
+    const targetCompanyName = document.getElementById('company-name');
+    const targetAddressName = document.getElementById('company-address');
+    
+    if (window.getComputedStyle(targetCompanyName).display === 'none') {
+        targetCompanyName.style.display = 'block';
+        targetAddressName.style.display = 'block';
+    } else {
+        targetCompanyName.style.display = 'none';
+        targetAddressName.style.display = 'none';
+    }
+});
+
+
+
+// Checkbox 1
+document.getElementById('filter-option-1').addEventListener('change', function() {
+    const target = document.getElementById('responsible-select');
+    if (target.style.display === 'none' || target.style.display === '') {
+        target.style.display = 'block';
+    } else {
+        target.style.display = 'none';
+    }
+});
+
+document.getElementById('filter-toggle').addEventListener('click', function(){
+	const filterBox = document.getElementById('filter-box');
+	if (filterBox.style.display === 'none' || filterBox.style.display === '') {
+		filterBox.style.display = 'block';
+	} else {
+		filterBox.style.display = 'none';
+	}
+});
+
 document.addEventListener('DOMContentLoaded', (event) =>{
 	// Lấy tất cả các phần tử với class 'menu-item'
 	const menuItems = document.querySelectorAll('.menu-item');
