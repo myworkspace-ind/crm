@@ -22,8 +22,8 @@
 }
 
 .status-button:hover{
-	filter: brightness(1.05); /* Làm màu nền của nút đậm hơn khi hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Hiệu ứng đổ bóng cho nút khi hover */; 
+	filter: brightness(1.05); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .status-button.new{
@@ -43,11 +43,11 @@
 }
 
 .status-button.completed {
-    background-color: #DA4453; /* Màu xanh nước biển cho nút 'HOÀN THÀNH' */
+    background-color: #DA4453; 
 }
 
 .status-button.canceled {
-    background-color: #808080; /* Màu đỏ cho nút 'HỦY' */
+    background-color: #808080; 
 }
 
 .status-button.finalized {
@@ -57,7 +57,7 @@
 
 .nav-item123 .menu-content123 {
     display: none;
-    width: 280px; /* Đặt chiều rộng tối thiểu để đảm bảo hiển thị đầy đủ */
+    width: 280px; 
     background-color: #fff;
     border: 1px solid #ccc;
     z-index: 1000;
@@ -111,7 +111,7 @@
 	width: 100%;
 	text-align: center;
 	padding: 10px;
-	font-weight: bold; /* Làm chữ đậm */
+	font-weight: bold;
 }
 
 .logo-company img{
@@ -126,7 +126,7 @@
 }
 
 a:hover .name-company {
-  color: #1A237E; /* Color change on hover */
+  color: #1A237E; 
 }
 
 .logo-company .name-company::before{
@@ -141,7 +141,7 @@ a:hover .name-company {
 
 .nav-link-expand i.fa-expand:before {
     font-size:18px;
-    margin-top: 1.5px; /* Điều chỉnh kích thước icon */
+    margin-top: 1.5px; 
     display: block;
 }
 
