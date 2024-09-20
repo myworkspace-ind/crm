@@ -22,8 +22,8 @@
 }
 
 .status-button:hover{
-	filter: brightness(1.05); /* Làm màu nền của nút đậm hơn khi hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Hiệu ứng đổ bóng cho nút khi hover */; 
+	filter: brightness(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ; 
 }
 
 .status-button.new{
@@ -126,7 +126,7 @@
 }
 
 a:hover .name-company {
-  color: #1A237E; /* Color change on hover */
+  color: #1A237E; 
 }
 
 .logo-company .name-company::before{
