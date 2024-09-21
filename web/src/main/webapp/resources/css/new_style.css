@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-#responsible-select, #company-name, #company-address{
+#responsible-select, #company-name, #company-address, #representative-name{
 	display: none;
 	margin-bottom: 15px;
 }

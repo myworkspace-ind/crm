@@ -24,7 +24,16 @@ document.querySelectorAll('.filter-option').forEach(function(checkbox) {
     });
 });*/
 
-
+// Checkbox 3
+document.getElementById('filter-option-3').addEventListener('change', function() {
+    const targetRepresentativeName = document.getElementById('representative-name');
+    
+    if (window.getComputedStyle(targetRepresentativeName).display === 'none') {
+        targetRepresentativeName.style.display = 'block';
+    } else {
+        targetRepresentativeName.style.display = 'none';
+    }
+});
 
 // Checkbox 2
 document.getElementById('filter-option-2').addEventListener('change', function() {
