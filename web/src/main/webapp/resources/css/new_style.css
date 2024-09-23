@@ -1,6 +1,17 @@
 @charset "UTF-8";
 
-#responsible-select, #company-name, #company-address{
+#register-time, #finalized-time,
+#cancel-time, #complete-time {
+	margin-bottom: 15px;
+}
+
+
+span {
+    display: inline-block;
+}
+
+#responsible-select, #company-name, #company-address, #representative-name, 
+#email, #phone, #main-status-select, #sub-status-select, #time-filters {
 	display: none;
 	margin-bottom: 15px;
 }
@@ -81,133 +92,29 @@ form label input[type="checkbox"] {
 	flex-wrap: wrap;
 }
 
-.status-button{
-	/* background-color: #007bff; */
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 1s ease;
+.main-status, .sub-status {
+    margin-bottom: 20px; /* Space between main and sub status sections */
+    text-align: center; /* Center the title text */
 }
 
-.status-button:hover{
-	filter: brightness(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ; 
+.main-status {
+    border: 1px solid #ccc; /* Optional: Add a border to separate visually */
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }
 
-.status-button.new{
-	background-color: #ff62ff;
+.sub-status {
+    border: 1px solid #ccc; /* Optional: Add a border to separate visually */
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Optional: Different background for sub-status */
 }
 
-.status-button.not-started {
-    background-color: #3BAFDA ; 
+ .main-status p, .sub-status p {
+    font-weight: bold;
 }
-
-.status-button.postponed {
-    background-color: #0080ff; 
-}
-
-.status-button.in-progress {
-    background-color: #967ADC;
-}
-
-.status-button.completed {
-    background-color: #DA4453;
-}
-
-.status-button.canceled {
-    background-color: #808080; 
-}
-
-.status-button.finalized {
-    background-color: #37BC9B; 
-}
-
-
-.nav-item123 .menu-content123 {
-    display: none;
-    width: 280px; 
-    background-color: #fff;
-    border: 1px solid #ccc;
-    z-index: 1000;
-    padding: 5px;
-}
-
-
-.nav-item123:hover .menu-content123 {
- 	position: fixed; 
-   	display: block !important;
-   	left: 100%;
-    /* padding-top: 10%; */
-    white-space: nowrap;
-    float: right;
-}
-
-.nav-item123 .menu-content123 li {
-    padding: 5px 10px;
-}
-
-.nav-item123 .menu-content123 li a {
-    color: #333;
-    text-decoration: none;
-    width: 90%;
-    margin-left: 10px;
-/*     display: block;
-    padding: 5px; */
-}
-
-.nav-item123 .menu-content123 li a:hover {
-    background-color: #f0f0f0;
-}
-
-.main-menu.menu-light .navigation {
-    background: #d5c9eb;
-}
-
-.main-menu.menu-light{
-	background: #d5c9eb;
-}
-
-.logo-company {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
-	bottom: 0;
-	top: -18px;
-	width: 100%;
-	text-align: center;
-	padding: 10px;
-	font-weight: bold; 
-}
-
-.logo-company img{
-	width: 40%;
-	height: 40%;
-	display: block;
-	margin: 0 auto;
-}
-
-.logo-company .name-company{
-	color: #5C6BC0;
-}
-
-a:hover .name-company {
-  color: #1A237E; 
-}
-
-.logo-company .name-company::before{
-	content: "";
-	position: absolute;
-	left: 10px;
-	height: 20px;
-	width: 3px;
-	background-color: #18d26e;
-	bottom: 12px;
-}
+ 
 
 .status-button{
 	/* background-color: #007bff; */
@@ -251,6 +158,11 @@ a:hover .name-company {
 .status-button.finalized {
     background-color: #37BC9B; 
 }
+
+.status-button.new-update, .status-button.not-forget{
+	background-color: #ffac84; 
+}
+
 
 .nav-item123 .menu-content123 {
     display: none;
