@@ -1,6 +1,17 @@
 @charset "UTF-8";
 
-#responsible-select, #company-name, #company-address, #representative-name{
+#register-time, #finalized-time,
+#cancel-time, #complete-time {
+	margin-bottom: 15px;
+}
+
+
+span {
+    display: inline-block;
+}
+
+#responsible-select, #company-name, #company-address, #representative-name, 
+#email, #phone, #main-status-select, #sub-status-select, #time-filters {
 	display: none;
 	margin-bottom: 15px;
 }
@@ -81,6 +92,30 @@ form label input[type="checkbox"] {
 	flex-wrap: wrap;
 }
 
+.main-status, .sub-status {
+    margin-bottom: 20px; /* Space between main and sub status sections */
+    text-align: center; /* Center the title text */
+}
+
+.main-status {
+    border: 1px solid #ccc; /* Optional: Add a border to separate visually */
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.sub-status {
+    border: 1px solid #ccc; /* Optional: Add a border to separate visually */
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Optional: Different background for sub-status */
+}
+
+ .main-status p, .sub-status p {
+    font-weight: bold;
+}
+ 
+
 .status-button{
 	/* background-color: #007bff; */
 	color: white;
@@ -122,6 +157,10 @@ form label input[type="checkbox"] {
 
 .status-button.finalized {
     background-color: #37BC9B; 
+}
+
+.status-button.new-update, .status-button.not-forget{
+	background-color: #ffac84; 
 }
 
 

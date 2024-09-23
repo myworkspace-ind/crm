@@ -24,6 +24,55 @@ document.querySelectorAll('.filter-option').forEach(function(checkbox) {
     });
 });*/
 
+// Checkbox 7
+document.getElementById('filter-option-7').addEventListener('change', function() {
+    const timeFilters = document.getElementById('time-filters');
+    
+    // Toggle visibility of the datepickers
+    if (window.getComputedStyle(timeFilters).display === 'none') {
+        timeFilters.style.display = 'block';
+    } else {
+        timeFilters.style.display = 'none';
+    }
+});
+
+// Checkbox 6
+document.getElementById('filter-option-6').addEventListener('change', function() {
+    const targetMainStatus = document.getElementById('main-status-select');
+	const targetSubStatus = document.getElementById('sub-status-select');
+    
+    if (window.getComputedStyle(targetMainStatus).display === 'none') {
+        targetMainStatus.style.display = 'block';
+		targetSubStatus.style.display = 'block';
+    } else {
+        targetMainStatus.style.display = 'none';
+		targetSubStatus.style.display = 'none';
+    }
+});
+
+// Checkbox 5
+document.getElementById('filter-option-5').addEventListener('change', function() {
+    const targetPhone = document.getElementById('phone');
+    
+    if (window.getComputedStyle(targetPhone).display === 'none') {
+        targetPhone.style.display = 'block';
+    } else {
+        targetPhone.style.display = 'none';
+    }
+});
+
+// Checkbox 4
+document.getElementById('filter-option-4').addEventListener('change', function() {
+    const targetEmail = document.getElementById('email');
+    
+    if (window.getComputedStyle(targetEmail).display === 'none') {
+        targetEmail.style.display = 'block';
+    } else {
+        targetEmail.style.display = 'none';
+    }
+});
+
+
 // Checkbox 3
 document.getElementById('filter-option-3').addEventListener('change', function() {
     const targetRepresentativeName = document.getElementById('representative-name');

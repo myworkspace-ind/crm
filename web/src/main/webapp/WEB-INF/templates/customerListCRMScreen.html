@@ -1046,13 +1046,22 @@
             </div>
             
             <div class="card-status">
-            	<button class="status-button new">MỚI</button>
-			    <button class="status-button not-started">CHƯA BẮT ĐẦU</button>
-			    <button class="status-button postponed">HOÃN LẠI</button>
-			    <button class="status-button in-progress">ĐANG TRONG TIẾN TRÌNH</button>
-			    <button class="status-button completed">HOÀN THÀNH</button>
-			    <button class="status-button canceled">HỦY</button>
-			    <button class="status-button finalized">CHỐT</button>
+            	<div class="main-status">
+            		<p>Trạng thái chính</p>
+            		<button class="status-button new">MỚI</button>
+				    <button class="status-button not-started">CHƯA BẮT ĐẦU</button>
+				    <button class="status-button postponed">HOÃN LẠI</button>
+				    <button class="status-button in-progress">ĐANG TRONG TIẾN TRÌNH</button>
+				    <button class="status-button completed">HOÀN THÀNH</button>
+				    <button class="status-button canceled">HỦY</button>
+				    <button class="status-button finalized">CHỐT</button>
+            	</div>
+            	
+            	<div class="sub-status">
+            		<p>Trạng thái phụ</p>
+            		<button class="status-button new-update">Mới cập nhật</button>
+			      	<button class="status-button not-forget">Đừng quên</button>
+            	</div>
             </div>
             
             
@@ -1092,7 +1101,7 @@
 								                <option value="">Chọn người phụ trách</option>
 								                <option value="1">Lê Ngọc Thạch</option>
 								                <option value="2">Nguyễn Hoàng Phương Ngân</option>
-								                <option value="2">Nguyễn Thế Thành</option>
+								                <option value="3">Nguyễn Thế Thành</option>
 								            </select>
 								
 								            <label>
@@ -1107,17 +1116,56 @@
 								            <input id="representative-name" class="hidden-select" type="text" placeholder="Tìm kiếm tên người đại diện">
 								
 								            <label>
-								                <input type="checkbox"> Email
+								                <input type="checkbox" id="filter-option-4" data-target="#email"> Email công ty
 								            </label>
+								            <input id="email" class="hidden-select" type="text" placeholder="Tìm kiếm email công ty">
+								            
 								            <label>
-								                <input type="checkbox"> Điện thoại
+								                <input type="checkbox" id="filter-option-5" data-target="phone"> Điện thoại
 								            </label>
+								            <input id="phone" class="hidden-select" type="text" placeholder="Tìm kiếm SĐT công ty">
+								            
+								            
 								            <label>
-								                <input type="checkbox"> Trạng thái
+								                <input type="checkbox" id="filter-option-6" data-target="status"> Trạng thái
 								            </label>
+								            <select id="main-status-select" class="hidden-select">
+								                <option value="">Chọn trạng thái chính</option>
+								                <option value="1">MỚI</option>
+								                <option value="2">CHƯA BẮT ĐẦU</option>
+								                <option value="3">HOÃN LẠI</option>
+								                <option value="4">ĐANG TRONG TIẾN TRÌNH</option>
+								                <option value="5">HOÀN THÀNH</option>
+								                <option value="6">HỦY</option>
+								                <option value="7">CHỐT</option>
+								                
+								            </select>
+								            
+								            <select id="sub-status-select" class="hidden-select">
+								                <option value="">Chọn trạng thái phụ</option>
+								                <option value="1">Mới cập nhật</option>
+								                <option value="2">Đừng quên</option>
+								            </select>
+								            
+								            
 								            <label>
-								                <input type="checkbox"> Thời gian
+								                <input type="checkbox" id="filter-option-7" data-target="time"> Thời gian
 								            </label>
+								            <div id="time-filters" class="hidden-select">
+								            	<span>Thời gian đăng ký</span>
+								                <input type="date" id="register-time" placeholder="Thời gian đăng ký">
+								                								                
+								                <span>Thời gian chốt</span>
+								                <input type="date" id="finalized-time" placeholder="Thời gian chốt">
+								                
+								                <span>Thời gian hủy</span>
+								                <input type="date" id="cancel-time" placeholder="Thời gian hủy">
+								                
+								                <span>Thời gian hoàn thành</span>
+								                <input type="date" id="complete-time" placeholder="Thời gian hoàn thành">
+								            </div>
+								            
+								            
 								            <button>Áp dụng lọc</button>
 								            <button>Xóa bỏ</button>
 								        </form>
