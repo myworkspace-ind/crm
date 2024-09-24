@@ -1046,13 +1046,22 @@
             </div>
             
             <div class="card-status">
-            	<button class="status-button new">MỚI</button>
-			    <button class="status-button not-started">CHƯA BẮT ĐẦU</button>
-			    <button class="status-button postponed">HOÃN LẠI</button>
-			    <button class="status-button in-progress">ĐANG TRONG TIẾN TRÌNH</button>
-			    <button class="status-button completed">HOÀN THÀNH</button>
-			    <button class="status-button canceled">HỦY</button>
-			    <button class="status-button finalized">CHỐT</button>
+            	<div class="main-status">
+            		<p>Trạng thái chính</p>
+            		<button class="status-button new">MỚI</button>
+				    <button class="status-button not-started">CHƯA BẮT ĐẦU</button>
+				    <button class="status-button postponed">HOÃN LẠI</button>
+				    <button class="status-button in-progress">ĐANG TRONG TIẾN TRÌNH</button>
+				    <button class="status-button completed">HOÀN THÀNH</button>
+				    <button class="status-button canceled">HỦY</button>
+				    <button class="status-button finalized">CHỐT</button>
+            	</div>
+            	
+            	<div class="sub-status">
+            		<p>Trạng thái phụ</p>
+            		<button class="status-button new-update">Mới cập nhật</button>
+			      	<button class="status-button not-forget">Đừng quên</button>
+            	</div>
             </div>
             
             
@@ -1061,376 +1070,119 @@
                 <div class="card-body">
 	                <!-- Task List table -->
 	                <div class="table-responsive">
-		                <div id="project-task-list_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="project-task-list_length"><label>Show <select name="project-task-list_length" aria-controls="project-task-list" class="custom-select custom-select-sm form-control form-control-sm select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true"><option value="10" data-select2-id="3">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2" style="width: 55.5px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-project-task-list_length-2t-container"><span class="select2-selection__rendered" id="select2-project-task-list_length-2t-container" role="textbox" aria-readonly="true" title="10">10</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="project-task-list_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="project-task-list"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="project-task-list" class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle dataTable" role="grid" aria-describedby="project-task-list_info" style="position: relative;">
-					        <thead>
-					            <tr role="row"><th class="reorder sorting_asc" tabindex="0" aria-controls="project-task-list" rowspan="1" colspan="1" aria-sort="ascending" aria-label=": activate to sort column descending"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Task">Task</th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Priority">Priority</th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Progress">Progress</th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Owner">Owner</th><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="Actions">Actions</th></tr>
-					        </thead>
-					        <tbody>
-					        	<!-- ABC Project -->
-					            
-					            
-					            
-					            
-					            <!-- ABC Project -->
-					            
-					            
-					            <!-- 2 Days Ago -->
-					            
-					            
-					            <!-- 3 Days Ago -->
-					            
-					            
-					            
-					            
-					            <!-- 4 Days Ago -->
-					            
-					            
-					            <!-- 5 Days Ago -->
-					            
-					            
-					            <!-- 6 Days Ago -->
-					            
-					            
-					            <!-- 7 Days Ago -->
-					            
-					            
-					            <!-- 8 Days Ago -->
-					            
-					            
-					            <!-- 9 Days Ago -->
-					            
-					            
-					            <!-- 10 Days Ago -->
-					            
-					            
-					            <!-- 11 Days Ago -->
-					            
-					            
-					        <tr class="group"><td colspan="8"><h6 class="mb-0">Basics Tasks &amp; Milestones in <span class="text-bold-600">ABC Project</span> on <em>30 Oct, 2017</em></h6></td></tr><tr role="row" class="odd">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">Complete the page header</a>
-					                	<p class="text-muted">Phasellus vel elit volutpat, egestas urna a, pharetra nibh.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-danger">Critical</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="82" aria-valuemax="100" class="progress-bar bg-gradient-x-success" role="progressbar" style="width:82%" aria-valuenow="82"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-busy">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-3.png" alt="avatar" data-toggle="tooltip" data-placement="right" title="John Doe"><i class=""></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="wo5yz"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop2" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr><tr role="row" class="even">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">Menu open issue on top</a>
-					                	<p class="text-muted">Proin varius libero at magna dignissim lacinia.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-primary">Medium</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="30" aria-valuemax="100" class="progress-bar bg-gradient-x-warning" role="progressbar" style="width:32%" aria-valuenow="32"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-online">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-5.png" alt="avatar" data-placement="right" title="Peater Doe"><i></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop3" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="om5fv9"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop3" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr><tr role="row" class="odd">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">Integrate ChartJS Page</a>
-					                	<p class="text-muted"> Curabitur tempor, quam vel pulvinar finibus.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-warning">High</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="20" aria-valuemax="100" class="progress-bar bg-gradient-x-danger" role="progressbar" style="width:20%" aria-valuenow="20"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-online">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-6.png" alt="avatar" data-placement="right" title="Nicole Barrett"><i></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="r5h2qb"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop4" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr><tr role="row" class="even">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">Support Charls Users</a>
-					                	<p class="text-muted"> Donec pulvinar nisi ac convallis porta.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-info">Low</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="30" aria-valuemax="100" class="progress-bar bg-gradient-x-info" role="progressbar" style="width:30%" aria-valuenow="30"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-off">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-7.png" alt="avatar" data-placement="right" title="Jason Robertson"><i></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop5" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="c3bv73"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop5" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr><tr class="group"><td colspan="8"><h6 class="mb-0">UI Tasks &amp; Support in <span class="text-bold-600">ABC Project</span> on <em>12 Nov, 2017</em></h6></td></tr><tr role="row" class="odd">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">UI/UX Design for the new Mobile APP</a>
-					                	<p class="text-muted">Phasellus vel elit volutpat, egestas urna a, pharetra nibh.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-success">Low</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="100" aria-valuemax="100" class="progress-bar bg-gradient-x-success" role="progressbar" style="width:100%" aria-valuenow="100"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-busy">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-7.png" alt="avatar" data-toggle="tooltip" data-placement="right" title="Willie Sanchez"><i class=""></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop6" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="5y10w2"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop6" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr><tr role="row" class="even">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">PSD Creation for the ABC APP</a>
-					                	<p class="text-muted">Phasellus vel elit volutpat, egestas urna a, pharetra nibh.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-primary">Medium</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="50" aria-valuemax="100" class="progress-bar bg-gradient-x-info" role="progressbar" style="width:50%" aria-valuenow="50"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-busy">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-8.png" alt="avatar" data-toggle="tooltip" data-placement="right" title="Mary Salazar"><i class=""></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop7" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="407k4"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop7" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr><tr class="group"><td colspan="8"><h6 class="mb-0">DFD &amp; Support Task in <span class="text-bold-600">ABC Project</span> on <em>15 Dec, 2017</em></h6></td></tr><tr role="row" class="odd">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">Fix bootstrap progress bar issue</a>
-					                	<p class="text-muted">Aliquam finibus tellus magna, eget viverra augue gravida eget.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-primary">Medium</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="35" aria-valuemax="100" class="progress-bar bg-gradient-x-warning" role="progressbar" style="width:35%" aria-valuenow="35"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-busy">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-9.png" alt="avatar" data-toggle="tooltip" data-placement="right" title="Jerry King"><i class=""></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop8" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="lqm27b"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop8" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr><tr role="row" class="even">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">Support Alib on form wizard</a>
-					                	<p class="text-muted"> Donec pulvinar nisi ac convallis porta.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-info">Low</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="30" aria-valuemax="100" class="progress-bar bg-gradient-x-info" role="progressbar" style="width:30%" aria-valuenow="30"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-off">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-11.png" alt="avatar" data-placement="right" title="Jason Robertson"><i></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop9" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="pwng7g"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop9" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr><tr class="group"><td colspan="8"><h6 class="mb-0">Frontend Task &amp; Testing Task in <span class="text-bold-600">ABC Project</span> on <em>18 Dec, 2017</em></h6></td></tr><tr role="row" class="odd">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">Integrate D3 JS Page</a>
-					                	<p class="text-muted"> Curabitur tempor, quam vel pulvinar finibus.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-warning">High</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="20" aria-valuemax="100" class="progress-bar bg-gradient-x-danger" role="progressbar" style="width:20%" aria-valuenow="20"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-online">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-6.png" alt="avatar" data-placement="right" title="Nicole Barrett"><i></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop10" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="in0fv7"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop10" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr><tr role="row" class="even">
-					                <td class="reorder sorting_1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>
-					                <td>
-					                	<a href="#" class="text-bold-600">Contact Charls for Vertical Menu issuea</a>
-					                	<p class="text-muted"> Donec pulvinar nisi ac convallis porta.</p>
-					                </td>
-					                
-					                <td><span class="badge badge-default badge-info">Low</span></td>				                
-					                <td>
-					                	<div class="progress progress-sm">
-					                		<div aria-valuemin="30" aria-valuemax="100" class="progress-bar bg-gradient-x-info" role="progressbar" style="width:30%" aria-valuenow="30"></div>
-					                	</div>
-					                </td>
-					                
-					                <td class="text-center">
-					                	<span class="avatar avatar-off">
-					                		<img src="../../../app-assets/images/portrait/small/avatar-s-7.png" alt="avatar" data-placement="right" title="Jason Robertson"><i></i>
-					                	</span>
-					                </td>
-					                <td>
-					                	<span class="dropdown">
-					                        <button id="btnSearchDrop11" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle" fdprocessedid="319lap"><i class="fa fa-cog"></i></button>
-					                        <span aria-labelledby="btnSearchDrop11" class="dropdown-menu mt-1 dropdown-menu-right">
-					                            <a href="#" class="dropdown-item"><i class="ft-eye"></i> Open Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-edit-2"></i> Edit Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-check"></i> Complete Task</a>
-					                            <a href="#" class="dropdown-item"><i class="ft-upload"></i> Assign to</a>
-					                            <div class="dropdown-divider"></div>
-					                            <a href="#" class="dropdown-item"><i class="ft-trash"></i> Delete Task</a>
-					                        </span>
-					                    </span>
-					                </td>
-					            </tr></tbody>
-					        <tfoot>
-					            <tr><th class="reorder" rowspan="1" colspan="1"><div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" class="input-chk" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></th><th rowspan="1" colspan="1">Task</th><th rowspan="1" colspan="1">Priority</th><th rowspan="1" colspan="1">Progress</th><th rowspan="1" colspan="1">Owner</th><th rowspan="1" colspan="1">Actions</th></tr>
-					        </tfoot>
-						</table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="project-task-list_info" role="status" aria-live="polite">Showing 1 to 10 of 28 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="project-task-list_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="project-task-list_previous"><a href="#" aria-controls="project-task-list" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="project-task-list" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="project-task-list" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="project-task-list" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item next" id="project-task-list_next"><a href="#" aria-controls="project-task-list" data-dt-idx="4" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div>
+		                <div id="project-task-list_wrapper" class="dataTables_wrapper dt-bootstrap4">
+		                	<div class="row">
+		                		<div class="col-sm-12 col-md-6">
+		                			<div class="dataTables_length" id="project-task-list_length">
+		                				<label>Show 
+			                				<select name="project-task-list_length" aria-controls="project-task-list" class="custom-select custom-select-sm form-control form-control-sm select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true">
+				                				<option value="10" data-select2-id="3">10</option>
+				                				<option value="25">25</option>
+				                				<option value="50">50</option>
+				                				<option value="100">100</option>
+		                				</select>
+		                				<span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2" style="width: 55.5px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-project-task-list_length-2t-container"><span class="select2-selection__rendered" id="select2-project-task-list_length-2t-container" role="textbox" aria-readonly="true" title="10">10</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span> entries</label></div></div>
+		                		<div class="col-sm-12 col-md-6">
+		                		</div>
+		                	</div>
+		                	
+		                	<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
+		                	<div class="column">
+		                		<button id="filter-toggle"><i class="fa-solid fa-filter"></i></button>
+		                		
+		                		<!-- Khung lọc liên hệ theo, ban đầu ẩn -->
+		                		<div id="filter-box" class="filter-hidden">
+        							<input type="text" placeholder="Tìm kiếm">
+								        <form>
+								            <label>
+								               <input type="checkbox" id="filter-option-1" data-target="#responsible-select"> Người phụ trách 
+								            </label>
+								            <select id="responsible-select" class="hidden-select">
+								                <option value="">Chọn người phụ trách</option>
+								                <option value="1">Lê Ngọc Thạch</option>
+								                <option value="2">Nguyễn Hoàng Phương Ngân</option>
+								                <option value="3">Nguyễn Thế Thành</option>
+								            </select>
+								
+								            <label>
+								                <input type="checkbox" id="filter-option-2" data-target="#company-name, #company-address"> Thông tin công ty
+								            </label>
+								            <input id="company-name" class="hidden-select" type="text" placeholder="Tìm kiếm tên công ty">
+								            <input id="company-address" class="hidden-select" type="text" placeholder="Tìm kiếm địa chỉ công ty">
+								
+								            <label>
+								                <input type="checkbox" id="filter-option-3" data-target="#representative-name"> Tên người đại diện
+								            </label>
+								            <input id="representative-name" class="hidden-select" type="text" placeholder="Tìm kiếm tên người đại diện">
+								
+								            <label>
+								                <input type="checkbox" id="filter-option-4" data-target="#email"> Email công ty
+								            </label>
+								            <input id="email" class="hidden-select" type="text" placeholder="Tìm kiếm email công ty">
+								            
+								            <label>
+								                <input type="checkbox" id="filter-option-5" data-target="phone"> Điện thoại
+								            </label>
+								            <input id="phone" class="hidden-select" type="text" placeholder="Tìm kiếm SĐT công ty">
+								            
+								            
+								            <label>
+								                <input type="checkbox" id="filter-option-6" data-target="status"> Trạng thái
+								            </label>
+								            <select id="main-status-select" class="hidden-select">
+								                <option value="">Chọn trạng thái chính</option>
+								                <option value="1">MỚI</option>
+								                <option value="2">CHƯA BẮT ĐẦU</option>
+								                <option value="3">HOÃN LẠI</option>
+								                <option value="4">ĐANG TRONG TIẾN TRÌNH</option>
+								                <option value="5">HOÀN THÀNH</option>
+								                <option value="6">HỦY</option>
+								                <option value="7">CHỐT</option>
+								                
+								            </select>
+								            
+								            <select id="sub-status-select" class="hidden-select">
+								                <option value="">Chọn trạng thái phụ</option>
+								                <option value="1">Mới cập nhật</option>
+								                <option value="2">Đừng quên</option>
+								            </select>
+								            
+								            
+								            <label>
+								                <input type="checkbox" id="filter-option-7" data-target="time"> Thời gian
+								            </label>
+								            <div id="time-filters" class="hidden-select">
+								            	<span>Thời gian đăng ký</span>
+								                <input type="date" id="register-time" placeholder="Thời gian đăng ký">
+								                								                
+								                <span>Thời gian chốt</span>
+								                <input type="date" id="finalized-time" placeholder="Thời gian chốt">
+								                
+								                <span>Thời gian hủy</span>
+								                <input type="date" id="cancel-time" placeholder="Thời gian hủy">
+								                
+								                <span>Thời gian hoàn thành</span>
+								                <input type="date" id="complete-time" placeholder="Thời gian hoàn thành">
+								            </div>
+								            
+								            
+								            <button>Áp dụng lọc</button>
+								            <button>Xóa bỏ</button>
+								        </form>
+    						</div>
+		                </div>
+		                	
+		                	<!-- END BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
+		                	
+		                	
+		                	
+		                	
+		                	
+		                	
+		                	
+		                	
+		                				<div class="row"><div class="col-sm-12">
+		                </div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="project-task-list_info" role="status" aria-live="polite">Showing 1 to 10 of 28 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="project-task-list_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="project-task-list_previous"><a href="#" aria-controls="project-task-list" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="project-task-list" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="project-task-list" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="project-task-list" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item next" id="project-task-list_next"><a href="#" aria-controls="project-task-list" data-dt-idx="4" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div>
 					</div>
 					<!--/ Task List table -->
 				</div>

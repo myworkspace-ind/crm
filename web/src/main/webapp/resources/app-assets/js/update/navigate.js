@@ -1,3 +1,124 @@
+/*
+document.querySelectorAll('.filter-option').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const targets = this.getAttribute('data-target').split(', ');
+        targets.forEach(target => {
+            const element = document.querySelector(target);
+            if (this.checked) {
+                element.style.display = 'block'; // Hiển thị trường
+            } else {
+                element.style.display = 'none'; // Ẩn trường
+            }
+        });
+    });
+});
+
+document.querySelectorAll('.filter-option').forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+        const target = document.querySelector(this.dataset.target);
+        if (this.checked) {
+            target.classList.remove('hidden');
+        } else {
+            target.classList.add('hidden');
+        }
+    });
+});*/
+
+// Checkbox 7
+document.getElementById('filter-option-7').addEventListener('change', function() {
+    const timeFilters = document.getElementById('time-filters');
+    
+    // Toggle visibility of the datepickers
+    if (window.getComputedStyle(timeFilters).display === 'none') {
+        timeFilters.style.display = 'block';
+    } else {
+        timeFilters.style.display = 'none';
+    }
+});
+
+// Checkbox 6
+document.getElementById('filter-option-6').addEventListener('change', function() {
+    const targetMainStatus = document.getElementById('main-status-select');
+	const targetSubStatus = document.getElementById('sub-status-select');
+    
+    if (window.getComputedStyle(targetMainStatus).display === 'none') {
+        targetMainStatus.style.display = 'block';
+		targetSubStatus.style.display = 'block';
+    } else {
+        targetMainStatus.style.display = 'none';
+		targetSubStatus.style.display = 'none';
+    }
+});
+
+// Checkbox 5
+document.getElementById('filter-option-5').addEventListener('change', function() {
+    const targetPhone = document.getElementById('phone');
+    
+    if (window.getComputedStyle(targetPhone).display === 'none') {
+        targetPhone.style.display = 'block';
+    } else {
+        targetPhone.style.display = 'none';
+    }
+});
+
+// Checkbox 4
+document.getElementById('filter-option-4').addEventListener('change', function() {
+    const targetEmail = document.getElementById('email');
+    
+    if (window.getComputedStyle(targetEmail).display === 'none') {
+        targetEmail.style.display = 'block';
+    } else {
+        targetEmail.style.display = 'none';
+    }
+});
+
+
+// Checkbox 3
+document.getElementById('filter-option-3').addEventListener('change', function() {
+    const targetRepresentativeName = document.getElementById('representative-name');
+    
+    if (window.getComputedStyle(targetRepresentativeName).display === 'none') {
+        targetRepresentativeName.style.display = 'block';
+    } else {
+        targetRepresentativeName.style.display = 'none';
+    }
+});
+
+// Checkbox 2
+document.getElementById('filter-option-2').addEventListener('change', function() {
+    const targetCompanyName = document.getElementById('company-name');
+    const targetAddressName = document.getElementById('company-address');
+    
+    if (window.getComputedStyle(targetCompanyName).display === 'none') {
+        targetCompanyName.style.display = 'block';
+        targetAddressName.style.display = 'block';
+    } else {
+        targetCompanyName.style.display = 'none';
+        targetAddressName.style.display = 'none';
+    }
+});
+
+
+
+// Checkbox 1
+document.getElementById('filter-option-1').addEventListener('change', function() {
+    const target = document.getElementById('responsible-select');
+    if (target.style.display === 'none' || target.style.display === '') {
+        target.style.display = 'block';
+    } else {
+        target.style.display = 'none';
+    }
+});
+
+document.getElementById('filter-toggle').addEventListener('click', function(){
+	const filterBox = document.getElementById('filter-box');
+	if (filterBox.style.display === 'none' || filterBox.style.display === '') {
+		filterBox.style.display = 'block';
+	} else {
+		filterBox.style.display = 'none';
+	}
+});
+
 document.addEventListener('DOMContentLoaded', (event) =>{
 	// Lấy tất cả các phần tử với class 'menu-item'
 	const menuItems = document.querySelectorAll('.menu-item');
