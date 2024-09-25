@@ -55,9 +55,9 @@ public class CustomerListController extends BaseController {
 	 * Simply selects the home view to render by returning its name.
      * @return 
 	 */
-	@GetMapping("/customerlist")
+	@GetMapping("/new")
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("customerlist");
+		ModelAndView mav = new ModelAndView("new");
 
 		initSession(request, httpSession);
 		log.debug("Customer List Controller is running....");
