@@ -1204,12 +1204,12 @@
 										        	</div> -->
 										        </th>
 										        
-										        <th data-field="firstname" >Logo công ty</th>
-										        <th data-field="lastname" class="th3">Tên công ty</th>
-										        <th data-field="age"  class="th4">Địa chỉ công ty</th>
-										        <th data-field="city" class="th5">Tên người đại diện</th>
-										        <th data-field="country"  class="th6">Email</th>
-										        <th data-field="sex" class="th7">Điện thoại</th>
+										        <th data-field="logo_company" class="th2">Logo CTY</th>
+										        <th data-field="name_company" class="th3">Tên CTY</th>
+										        <th data-field="address_company"  class="th4">Địa chỉ CTY</th>
+										        <th data-field="name_representative" class="th5">Tên người đại diện</th>
+										        <th data-field="email_company"  class="th6">Email</th>
+										        <th data-field="phone_company" class="th7">Điện thoại</th>
 										        <th class="th8">Trạng thái chính </th>
 										        <th class="th9">Trạng thái phụ</th>
 										        <th class="th10">Người phụ trách</th>
@@ -1222,19 +1222,40 @@
 										    </thead>
 										    <tbody>
 										      <tr>
-										        <td class="">
+										        <td class="th1">
 										        	<input type="checkbox" name="customer" value="1" />
 										        </td>
 										        
-										        <td class="">image</td>
+										        <td>
+										        	<img src="resources/app-assets/images/logo/logo_ctyA.png" alt="Logo Công ty" style="width: 60px; height: auto;" />
+										        </td>
+										        
 										        <td>Công ty A</td>
 										        <td>123 Võ Văn Ngân, TP. Thủ Đức</td>
 										        <td>Nguyễn Văn A</td>
 										        <td>vana.nguyen123@gmail.com</td>
 										        <td>09878655541</td>
-										        <td>CHƯA BẮT ĐẦU</td>
+										        <td id="colorTd">
+										        	<select name="colorSelect" onchange="changeColor(this)">
+														<option value="moi" >MỚI</option>
+														<option value="chua bat dau">CHƯA BẮT ĐẦU</option>
+														<option value="hoan lai">HOÃN LẠI</option>
+														<option value="dang trong tien trinh">ĐANG TRONG TIẾN TRÌNH</option>
+														<option value="hoan thanh">HOÀN THÀNH</option>
+														<option value="huy">HỦY</option>
+														<option value="chot">CHỐT</option>
+													</select>	
+										        </td>
+										        
 										        <td>Mới cập nhật</td>
-										        <td>Nguyễn Hoàng Phương Ngân</td>
+										        <td id="colorTd">
+										<!-- 	        <select name="colorSelect" onchange="changeColor(this)">
+														<option value="red" >Nguyễn Hoàng Phương Ngân</option>
+														<option value="green">Nguyễn Văn A</option>
+														<option value="yellow">Trần Thị B</option>
+														<option value="blue">Lê Quốc Cường</option>
+													</select>		 -->
+												</td>
 										        <td></td>
 										        <td></td>
 										        <td></td>

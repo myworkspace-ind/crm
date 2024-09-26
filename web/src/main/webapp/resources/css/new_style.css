@@ -110,7 +110,26 @@ span {
     width: 80%;
 }
 
-.sticky-col {
+#table {
+    /* table-layout: fixed; */
+    width: 100%; /* Đảm bảo bảng luôn chiếm 100% chiều rộng */
+}
+
+th, td {
+  text-align: left; /* Đảm bảo căn trái dữ liệu trong ô */
+  padding: 8px; /* Khoảng cách giữa nội dung và viền ô */
+  border: 1px solid #ddd; /* Đường viền giữa các ô */
+}
+
+ #colorTd {
+  padding: 10px;
+   /* border: 1px solid #000; */
+ }
+
+
+
+
+/* .sticky-col {
     position: sticky;
     
     border-right: 1px solid #ddd;
@@ -121,15 +140,11 @@ span {
     border-right: 1px solid #ddd;
 }
 
-th.th1{
-	
-}
 
 .sticky-col-2 {
-    /* Dính cột Firstname vào sau cột # */
     position: sticky;
     border-right: 1px solid #ddd;
-}
+} */
 
 .checkbox-table-customer{
 	text-align: center !important;
