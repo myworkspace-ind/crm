@@ -1,29 +1,43 @@
-/*
-document.querySelectorAll('.filter-option').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const targets = this.getAttribute('data-target').split(', ');
-        targets.forEach(target => {
-            const element = document.querySelector(target);
-            if (this.checked) {
-                element.style.display = 'block'; // Hiển thị trường
-            } else {
-                element.style.display = 'none'; // Ẩn trường
-            }
+/*document.getElementById('select-all').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('input[name="customer"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
         });
-    });
-});
-
-document.querySelectorAll('.filter-option').forEach(function(checkbox) {
-    checkbox.addEventListener('change', function() {
-        const target = document.querySelector(this.dataset.target);
-        if (this.checked) {
-            target.classList.remove('hidden');
-        } else {
-            target.classList.add('hidden');
-        }
-    });
 });*/
 
+/*const resizables = document.querySelectorAll('.resizable');
+
+resizables.forEach(th => {
+    th.addEventListener('mousedown', initResize);
+
+    function initResize(e) {
+        const startWidth = th.offsetWidth;
+        let startX = e.clientX;
+
+        window.addEventListener('mousemove', resize);
+        window.addEventListener('mouseup', stopResize);
+
+        function resize(e) {
+            const newWidth = Math.max(startWidth + (e.clientX - startX), 50); // Giới hạn chiều rộng tối thiểu
+            th.style.width = `${newWidth}px`;
+            
+            requestAnimationFrame(() => {
+                const currentWidth = th.offsetWidth;
+                const diff = currentWidth - startWidth;
+                th.style.transform = `translateX(${diff}px)`;
+            });
+        }
+
+        function stopResize() {
+            window.removeEventListener('mousemove', resize);
+            window.removeEventListener('mouseup', stopResize);
+        }
+    }
+});
+
+*/
+
+	
 // Checkbox 7
 document.getElementById('filter-option-7').addEventListener('change', function() {
     const timeFilters = document.getElementById('time-filters');

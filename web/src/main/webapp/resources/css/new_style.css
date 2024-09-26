@@ -20,17 +20,49 @@ span {
 	display: none;
 }
 
+.form-control-position {
+	display: flex !important;
+	justify-content: center !important;
+    align-items: center !important;
+}
 
+.input-with-icon {
+    position: relative; /* Để tạo vị trí tương đối cho icon */
+}
+
+.input-with-icon .form-control {
+    padding-left: 35px !important; /* Tạo khoảng cách bên trái cho biểu tượng */
+    padding-right: 10px !important;
+}
+
+.input-with-icon .icon-container {
+    position: absolute;
+    left: 10px; /* Điều chỉnh vị trí icon nằm bên trong input */
+    top: 50%;
+    transform: translateY(-50%); /* Căn giữa icon theo chiều dọc */
+    color: #444444;
+}
+
+.input-with-icon .icon-container i {
+    pointer-events: none; /* Để icon không ảnh hưởng đến việc nhập text */
+}
 .fa-filter{
 	font-size: 25px;
 }
 
 #filter-toggle {
-    width: 5%;
+    width: 70px;
     margin-bottom: 10px;
 }
 
+#filter-box span{
+	margin-bottom: 10px;
+	font-weight: bold;
+	
+}
+
 #filter-box {
+	text-align: center;
     display: none;
     flex-direction: column;
     border: 1px solid #ccc;
@@ -54,10 +86,106 @@ span {
 #filter-box button {
     margin-right: 1px;
 }
+.container-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
 
+#filter-box {
+    flex: 1;
+    max-width: 300px; 
+    min-width: 200px; 
+}
+
+
+
+.table-container {
+    flex: 4;
+    min-width: 0;
+    margin-left: 20px;
+}
+
+.table-responsive{
+    width: 80%;
+}
+
+.sticky-col {
+    position: sticky;
+    
+    border-right: 1px solid #ddd;
+}
+
+.sticky-col-1 {
+   	left: 0;
+    border-right: 1px solid #ddd;
+}
+
+th.th1{
+	
+}
+
+.sticky-col-2 {
+    /* Dính cột Firstname vào sau cột # */
+    position: sticky;
+    border-right: 1px solid #ddd;
+}
+
+.checkbox-table-customer{
+	text-align: center !important;
+}
+
+.checkbox-table-customer label{
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+.checkbox-table-customer input[type="checkbox"]{
+	width: 20px; 
+    height: 20px; 
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.checkbox-table-customer input[type="checkbox"]:checked{
+	accent-color: #62ffb0;
+	color: white;
+}
+
+.checkbox-table-customer input[type="checkbox"]:not(:checked){
+	background-color: #f0f0f0; 
+    border: 2px solid #ccc; 
+    border-radius: 3px; 
+}
+
+.checkbox-table-customer input[type="checkbox"]:hover {
+    background-color: #80ff80 !important; 
+}
+
+/* .resizable {
+    position: relative; Cần thiết để định vị chuột kéo
+}
+
+.resizable::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 5px; Kích thước của vùng kéo
+    height: 100%;
+    cursor: ew-resize; Con trỏ chuột khi hover
+    z-index: 1; Đặt nó trên cùng để dễ dàng kéo
+} */
 .column {
     display: flex;
     flex-direction: column;
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: start; /* Aligns content at the start */
+    position: relative;
 }
 
 /* #filter-box input, #filter-box select {
