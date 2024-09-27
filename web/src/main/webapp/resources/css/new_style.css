@@ -125,6 +125,40 @@ th, td {
   padding: 10px;
    /* border: 1px solid #000; */
  }
+ 
+ .btnActions{
+ 	display: flex;
+ 	align-items: center;
+ 	margin-top: 15px;
+ }
+
+.btn-edit, .btn-delete {
+    display: flex !important; /* Hiển thị theo kiểu "inline" để không bị xuống dòng */
+    justify-content: center;
+    align-items: center;
+    background-color: #28a745; /* Màu cho nút edit (xanh lá) */
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 0 10px; /* Khoảng cách giữa hai nút */
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Màu cho nút delete (đỏ) */
+}
+
+.btn-edit i, .btn-delete i {
+    font-size: 16px; /* Kích thước biểu tượng */
+}
+
+.btn-edit i, .btn-delete i {
+    font-size: 16px; /* Kích thước biểu tượng */
+}
 
 
 
@@ -203,10 +237,14 @@ th, td {
     position: relative;
 }
 
+td#colorTd {
+    /* border: solid; */
+}
+
 /* #filter-box input, #filter-box select {
     display: block;
     margin: 5px 0;
-} */
+}  */
 
 .filter-hidden {
     display: none;
@@ -302,8 +340,12 @@ form label input[type="checkbox"] {
     background-color: #37BC9B; 
 }
 
-.status-button.new-update, .status-button.not-forget{
+.status-button.new-update{
 	background-color: #ffac84; 
+}
+
+.status-button.not-forget{
+	background-color: #ff8448;
 }
 
 
