@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resizable Bootstrap Table</title>
+
+    <!-- Bootstrap Table CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.4/dist/bootstrap-table.min.css">
+    
+    <!-- jQuery Resizable Columns CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- Bootstrap Table JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.4/dist/bootstrap-table.min.js"></script>
+    
+    <!-- jQuery Resizable Columns JS -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.js"></script>
+
+    <!-- Bootstrap Table Resizable Extension -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.4/dist/extensions/resizable/bootstrap-table-resizable.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-5">
+    <table id="table"
+           data-toggle="table"
+           data-resizable="true"
+           class="table table-bordered">
+        <thead>
+            <tr>
+                <th data-field="select" data-checkbox="true"></th>
+                <th data-field="firstname" data-resizable="true">Firstname</th>
+                <th data-field="lastname" data-resizable="true">Lastname</th>
+                <th data-field="age" data-resizable="true">Age</th>
+                <th data-field="city" data-resizable="true">City</th>
+                <th data-field="country" data-resizable="true">Country</th>
+                <th data-field="sex" data-resizable="true">Sex</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td>Anna</td>
+                <td>Pitt</td>
+                <td>35</td>
+                <td>New York</td>
+                <td>USA</td>
+                <td>Female</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>John</td>
+                <td>Doe</td>
+                <td>28</td>
+                <td>Los Angeles</td>
+                <td>USA</td>
+                <td>Male</td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Initialize the table with the resizable extension
+        $('#table').bootstrapTable({
+            // Other options can be added here as needed
+        });
+
+        // Enable resizable columns
+        $('#table').resizableColumns();
+    });
+</script>
+
+</body>
+</html>
