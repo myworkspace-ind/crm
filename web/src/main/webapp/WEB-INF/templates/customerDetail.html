@@ -890,209 +890,285 @@
 	 
 	<!--  BEGIN CONTENT -->
 	<div class="app-content content">
-      <div class="content-wrapper">
+    <div class="content-wrapper">
         <div class="content-header row">
-          <div class="content-header-left col-md-6 col-12 mb-2">
-            <h3 class="content-header-title">Khách hàng</h3>
-            <div class="row breadcrumbs-top">
-              <div class="breadcrumb-wrapper col-12">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Khách hàng</a>
-                  </li>
-                  <li class="breadcrumb-item active">Danh sách khách hàng
-                  </li>
-                </ol>
-              </div>
-            </div>
-          </div>
-          <div class="content-header-right col-md-6 col-12">
-            <fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-              <input class="form-control" id="iconLeft" type="text" placeholder="Tìm kiếm khách hàng..." fdprocessedid="66aqzo">
-              <div class="form-control-position"><i class="fa fa-search"></i></div>
-            </fieldset>
-          </div>
-        </div>
-        <div>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            display: flex;
-        }
-
-        .left-panel {
-            width: 30%;
-            border-right: 1px solid #ccc;
-            padding: 20px;
-        }
-
-        .right-panel {
-            width: 70%;
-            padding: 20px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background-color: #ccc;
-            margin-right: 10px;
-        }
-
-        .user-details {
-            line-height: 1.5;
-        }
-
-        .actions {
-            margin-top: 10px;
-        }
-
-        .actions button {
-            margin-right: 10px;
-        }
-
-        .relationship-section,
-        .person-in-charge,
-        .creation-info {
-            margin-top: 20px;
-        }
-
-        .comments-section {
-            margin-top: 20px;
-            border-top: 1px solid #ccc;
-        }
-
-        .comment {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .comment-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #ccc;
-            margin-right: 10px;
-        }
-
-        .comment-body {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-        }
-
-        .comment-header {
-            font-weight: bold;
-        }
-
-        .comment-time {
-            font-size: 0.8em;
-            color: #999;
-        }
-
-        .comment-input {
-            margin-top: 20px;
-        }
-
-        .comment-input textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            font-size: 14px;
-        }
-
-        .comment-input button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 14px;
-        }
-
-    </style>
-
-    <div class="container">
-        <!-- Left panel -->
-        <div class="left-panel">
-            <div class="user-info">
-                <div class="user-avatar"></div>
-                <div class="user-details">
-                    <h2>Công ty A</h2>
-                    <p>Nguyễn Văn A</p>
-                    <p>1 Phan Văn Trị, Gò Vấp, TPHCM</p>
-                    <p>0987465581</p>
-                    <p>vana.nguyen123@gmail.com</p>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button>Edit</button>
-                <button>Delete</button>
-            </div>
-
-            <div class="relationship-section">
-                <label for="relationship">Mối quan hệ:</label>
-                <select id="relationship">
-                    <option value="new">Mới</option>
-                    <option value="established">Đã thiết lập</option>
-                </select>
-            </div>
-
-            <div class="person-in-charge">
-                <label for="person-in-charge">Người phụ trách:</label>
-                <select id="person-in-charge">
-                    <option value="ngan">Nguyễn Hoàng Phương Ngân</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-
-            <div class="creation-info">
-                <p>Ngày tạo: 9/8/2024 9:00</p>
-                <p>Người tạo: Nguyễn Hoàng Phương Ngân</p>
-                <p>Đã mua: 0 lần</p>
-            </div>
-        </div>
-
-        <!-- Right panel -->
-        <div class="right-panel">
-            <div class="comments-section">
-                <h3>Trao đổi</h3>
-                <div class="comment">
-                    <div class="comment-avatar"></div>
-                    <div class="comment-body">
-                        <div class="comment-header">Nguyễn Thế Thành</div>
-                        <div class="comment-time">9/8/2024 10:00</div>
-                        <p>Hi Ngân, Mình đã xác nhận lại đơn hàng với khách</p>
-                    </div>
-                </div>
-                <div class="comment">
-                    <div class="comment-avatar"></div>
-                    <div class="comment-body">
-                        <div class="comment-header">Nguyễn Hoàng Phương Ngân</div>
-                        <div class="comment-time">9/8/2024 9:00</div>
-                        <p>Tạo mới khách hàng</p>
+            <div class="content-header-left col-md-6 col-12 mb-2">
+                <h3 class="content-header-title">Khách hàng</h3>
+                <div class="row breadcrumbs-top">
+                    <div class="breadcrumb-wrapper col-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Khách hàng</a></li>
+                            <li class="breadcrumb-item active">Chi tiết khách hàng</li>
+                        </ol>
                     </div>
                 </div>
             </div>
+            <div class="content-header-right col-md-6 col-12">
+                <fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
+                    <input class="form-control" id="iconLeft" type="text" placeholder="Tìm kiếm khách hàng..." />
+                    <div class="form-control-position">
+                        <i class="fa fa-search"></i>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
 
-            <div class="comment-input">
-                <h3>Thêm phản hồi</h3>
-                <textarea placeholder="Nhập phản hồi..."></textarea>
-                <button>Gửi</button>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+
+            .container {
+                display: flex;
+            }
+
+            .left-panel {
+                width: 30%;
+                padding: 20px;
+                background-color: #f5f5f5;
+            }
+
+            .right-panel {
+                width: 70%;
+                padding: 20px;
+                background-color: #ffffff;
+            }
+
+            .user-info {
+                display: flex;
+                align-items: center;
+            }
+
+            .user-avatar {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background-color: #cccccc;
+                margin-right: 10px;
+            }
+            
+            .user-avatar img {
+   				width: 80px; 
+			    height: 80px;
+			    border-radius: 50%; 
+			    object-fit: cover; 
+			}
+
+            .user-details h2 {
+                margin: 0;
+                font-size: 24px;
+                color: #5d5d5d;
+            }
+
+            .user-details p {
+                margin: 2px 0;
+                font-size: 14px;
+                color: #5d5d5d;
+            }
+
+            .actions {
+                margin-top: 20px;
+            }
+
+            .actions button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                margin-right: 10px;
+                border-radius: 5px;
+            }
+
+            .relationship-section select{
+            	background-color: #007bff;
+				color: white; 
+				border: none; 
+				padding: 10px 20px; 
+				border-radius: 5px; 
+				cursor: pointer;
+				margin-top: 20px;
+            }
+            
+            .relationship-section label{
+            	font-weight: bold;
+            }
+            
+            .person-in-charge {
+ 				margin-top:20px; 
+            }   
+            
+            .person-in-charge select{
+ 				margin-top:5px;
+ 				background-color: #007bff;
+				color: white; 
+				border: none; 
+				padding: 10px 20px; 
+				border-radius: 5px; 
+				cursor: pointer;  
+            }   
+            
+            .label-bold {
+    			font-weight: bold;
+			}
+			
+            .creation-info {
+                margin-top: 20px;
+            }
+
+            .comments-section {
+                margin-top: 30px;
+                border-top: 1px solid #ccc;
+            }
+
+            .comment {
+                display: flex;
+                align-items: center;
+                margin-top: 10px;
+            }
+
+            .comment-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: #ccc;
+                margin-right: 10px;
+            }
+            
+            .comment-avatar img {
+			    width: 40x;
+			    height: 40px;
+			    border-radius: 50%;
+			    object-fit: cover;
+			}
+
+            .comment-body {
+                background-color: #f9f9f9;
+                padding: 10px;
+                border-radius: 5px;
+                width: 100%;
+            }
+
+            .comment-header {
+                font-weight: bold;
+            }
+
+            .comment-time {
+                font-size: 0.8em;
+                color: #999;
+            }
+
+            .comment-input {
+                margin-top: 20px;
+            }
+
+            .comment-input textarea {
+                width: 100%;
+                height: 100px;
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .comment-input button {
+                margin-top: 10px;
+                padding: 10px 20px;
+                font-size: 14px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                float: right;
+            }
+        </style>
+
+        <div class="container">
+            <!-- Left panel -->
+            <div class="left-panel">
+                <div class="user-info">
+                    <div class="user-avatar">
+                    	 <img src="resources/app-assets/images/portrait/small/avatar-s-10.png" alt="User Avatar">	
+                    </div>
+                    <div class="user-details">
+                        <h2>Công ty A</h2>
+                        <p>Nguyễn Văn A</p>
+                        <p>1 Phan Văn Trị, Gò Vấp, TPHCM</p>
+                        <p>0987465581</p>
+                        <p>vana.nguyen123@gmail.com</p>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </div>
+
+                <div class="relationship-section">
+                    <label for="relationship">Mối quan hệ:</label>
+                    <select id="relationship">
+                        <option value="new">Mới</option>
+                        <option value="notstart">Chưa bắt đầu</option>
+                        <option value="postpone">Hoãn lại</option>
+                        <option value="inprogress">Đang trong tiến trình</option>
+                        <option value="finished">Hoàn thành</option>
+                        <option value="dancelled">Hủy</option>
+                        <option value="done">Chốt</option>
+                    </select>
+                </div>
+
+                <div class="person-in-charge">
+                    <label class ="label-bold" for="person-in-charge">Người phụ trách:</label>
+                    <select id="person-in-charge">
+                        <option value="ngan">Nguyễn Hoàng Phương Ngân</option>
+                        <option value="other">Khác</option>
+                    </select>
+                </div>
+
+                <div class="creation-info">
+                    <p><span class="label-bold">Ngày tạo:</span> 9/8/2024 9:00</p>
+				    <p><span class="label-bold">Người tạo:</span> Nguyễn Hoàng Phương Ngân</p>
+				    <p><span class="label-bold">Đã mua:</span> 0 lần</p>
+				</div>
+            </div>
+
+            <!-- Right panel -->
+            <div class="right-panel">
+                <div class="comments-section">
+                    <h3>Trao đổi</h3>
+                    
+                    <!--  Comment 1 -->
+                    <div class="comment">
+                        <div class="comment-avatar">
+                        	 <img src="resources/app-assets/images/portrait/small/avatar-s-10.png" alt="Comment Avatar">
+                        </div>
+                        <div class="comment-body">
+                            <div class="comment-header">Nguyễn Thế Thành</div>
+                            <div class="comment-time">9/8/2024 10:00</div>
+                            <p>Hi Ngân, Mình đã xác nhận lại đơn hàng với khách</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Comment 2 -->
+                    <div class="comment">
+                        <div class="comment-avatar">
+                        	 <img src="resources/app-assets/images/portrait/small/avatar-s-11.png" alt="Comment Avatar">
+                        </div>
+                        <div class="comment-body">
+                            <div class="comment-header">Nguyễn Hoàng Phương Ngân</div>
+                            <div class="comment-time">9/8/2024 9:00</div>
+                            <p>Tạo mới khách hàng</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comment-input">
+                    <h3>Thêm phản hồi</h3>
+                    <textarea placeholder="Nhập phản hồi..."></textarea>
+                    <button>Gửi</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-        
-      </div>
-    </div>	
+
 	<!-- END CONTENT -->
 	 
 	 
