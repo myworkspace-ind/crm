@@ -98,6 +98,57 @@ span {
     min-width: 200px; 
 }
 
+.table-container {
+  overflow-x: auto;
+}
+
+tr > th:nth-child(1),
+tr > td:nth-child(1) {
+  position: sticky;
+  left: 0;
+  z-index: 2; /* Cột đầu tiên nằm trên các cột khác */
+  background-color: white;
+}
+
+tr > th:nth-child(2),
+tr > td:nth-child(2) {
+  position: sticky;
+  left: 60px; /* Dịch sang phải bằng chiều rộng của cột đầu tiên */
+  z-index: 1;
+  background-color: white;
+}
+
+tr > th:nth-child(3),
+tr > td:nth-child(3) {
+  position: sticky;
+  left: 170px; /* Dịch sang phải bằng tổng chiều rộng của 2 cột đầu */
+  z-index: 1;
+  background-color: white;
+}
+
+/* Màu nền cho các hàng chẵn và lẻ */
+tr:nth-child(odd) td {
+  background-color: white; /* Màu nền cho hàng lẻ */
+}
+
+tr:nth-child(even) td {
+  background-color: #f8f9fa; /* Màu nền cho hàng chẵn */
+}
+
+/* Đảm bảo cột đầu tiên giữ đúng màu nền khi cuộn */
+tr:nth-child(odd) td:nth-child(1),
+tr:nth-child(odd) td:nth-child(2),
+tr:nth-child(odd) td:nth-child(3) {
+  background-color: white;
+}
+
+tr:nth-child(even) td:nth-child(1),
+tr:nth-child(even) td:nth-child(2),
+tr:nth-child(even) td:nth-child(3) {
+  background-color: #f8f9fa;
+}
+
+
 
 
 .table-container {
@@ -295,6 +346,8 @@ form label input[type="checkbox"] {
  .main-status p, .sub-status p {
     font-weight: bold;
 }
+
+
  
 
 .status-button{
