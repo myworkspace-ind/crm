@@ -1,5 +1,18 @@
 @charset "UTF-8";
 
+/* #colorSelect_row1 option[value="moi"]{
+	background-color: #ff62ff;
+	color: white;
+}
+ */
+ 
+option{
+	background-color: #d5c9eb;
+}
+
+
+
+
 #register-time, #finalized-time,
 #cancel-time, #complete-time {
 	margin-bottom: 15px;
@@ -212,25 +225,6 @@ th, td {
 }
 
 
-
-
-/* .sticky-col {
-    position: sticky;
-    
-    border-right: 1px solid #ddd;
-}
-
-.sticky-col-1 {
-   	left: 0;
-    border-right: 1px solid #ddd;
-}
-
-
-.sticky-col-2 {
-    position: sticky;
-    border-right: 1px solid #ddd;
-} */
-
 .checkbox-table-customer{
 	text-align: center !important;
 }
@@ -262,20 +256,6 @@ th, td {
     background-color: #80ff80 !important; 
 }
 
-/* .resizable {
-    position: relative; Cần thiết để định vị chuột kéo
-}
-
-.resizable::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 5px; Kích thước của vùng kéo
-    height: 100%;
-    cursor: ew-resize; Con trỏ chuột khi hover
-    z-index: 1; Đặt nó trên cùng để dễ dàng kéo
-} */
 .column {
     display: flex;
     flex-direction: column;
@@ -288,14 +268,6 @@ th, td {
     position: relative;
 }
 
-td#colorTd {
-    /* border: solid; */
-}
-
-/* #filter-box input, #filter-box select {
-    display: block;
-    margin: 5px 0;
-}  */
 
 .filter-hidden {
     display: none;
@@ -347,8 +319,6 @@ form label input[type="checkbox"] {
     font-weight: bold;
 }
 
-
- 
 
 .status-button{
 	/* background-color: #007bff; */
