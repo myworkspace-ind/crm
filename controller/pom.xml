@@ -24,6 +24,11 @@
             <artifactId>crm-common</artifactId>
             <version>${module.version}</version>
         </dependency>
+        <dependency>
+            <groupId>mks.myworkspace.crm</groupId>
+            <artifactId>crm-biz</artifactId>
+            <version>${module.version}</version>
+        </dependency>
 		<dependency>
             <groupId>mks.myworkspace.crm</groupId>
             <artifactId>crm-impl</artifactId>
