@@ -68,4 +68,51 @@
     </bean>
 
 	<context:component-scan base-package="mks.myworkspace.crm" />
+    
+	<!-- Datasource -->
+	<!-- Step 1 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${driverClassName@javax.sql.BaseDataSource}" />
+		<property name="url" value="${url@javax.sql.BaseDataSource}" />
+		<property name="username" value="${username@javax.sql.BaseDataSource}" />
+		<property name="password" value="${password@javax.sql.BaseDataSource}" />
+	</bean>
+	
+	<!-- Step 2 -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="mks.myworkspace.crm.entity" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="${auto.ddl}" />
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+<!-- 				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop> -->
+				<prop key="hibernate.globally_quoted_identifiers">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- Step 3 -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<jpa:repositories base-package="mks.myworkspace.crm.repository" />
+
+	<!-- Data source 0 for JdbcTemplate: This is used to save data on MyWorkspace Platform -->
+	<bean id="dataSource0" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${driverClassName@javax.sql.BaseDataSource}" />
+		<property name="url" value="${url@javax.sql.BaseDataSource}" />
+		<property name="username" value="${username@javax.sql.BaseDataSource}" />
+		<property name="password" value="${password@javax.sql.BaseDataSource}" />
+	</bean>
+	<bean id="jdbcTemplate0" primary="true" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource0"/>
+	</bean>
 </beans>
