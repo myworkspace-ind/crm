@@ -20,7 +20,6 @@
 package mks.myworkspace.crm.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -29,12 +28,14 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
+@Slf4j	
 public class HomeController extends BaseController {
  
 	   /**
@@ -58,13 +59,22 @@ public class HomeController extends BaseController {
 	 */
 	@RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("home");
+		ModelAndView mav = new ModelAndView("customerListCRMScreen");
 
 		initSession(request, httpSession);
+		log.debug("Customer List CRM Screen Controller is running....");
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 
 		return mav;
+//		ModelAndView mav = new ModelAndView("home");
+//
+//		initSession(request, httpSession);
+//		
+//		mav.addObject("currentSiteId", getCurrentSiteId());
+//		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+//
+//		return mav;
 	}
 }
