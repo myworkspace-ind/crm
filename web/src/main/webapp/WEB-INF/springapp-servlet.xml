@@ -99,9 +99,10 @@
 	</bean>
 	
 	<!-- Step 3 -->
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
+<!-- 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"> -->
+<!-- 		<property name="entityManagerFactory" ref="entityManagerFactory" /> -->
+<!-- 	</bean> -->
+    <import resource="jpa.xml"/>
 	
 	<jpa:repositories base-package="mks.myworkspace.crm.repository" />
 
