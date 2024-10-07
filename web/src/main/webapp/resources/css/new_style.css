@@ -140,16 +140,17 @@ tr > td:nth-child(3) {
 }
 
 /* Màu nền cho các hàng chẵn và lẻ */
-tr:nth-child(odd) td {
-  background-color: white; /* Màu nền cho hàng lẻ */
+/* tr:nth-child(odd) td {
+  background-color: white; 
 }
 
 tr:nth-child(even) td {
-  background-color: #f8f9fa; /* Màu nền cho hàng chẵn */
+  background-color: #f8f9fa; 
 }
-
+ */
+ 
 /* Đảm bảo cột đầu tiên giữ đúng màu nền khi cuộn */
-tr:nth-child(odd) td:nth-child(1),
+/* tr:nth-child(odd) td:nth-child(1),
 tr:nth-child(odd) td:nth-child(2),
 tr:nth-child(odd) td:nth-child(3) {
   background-color: white;
@@ -160,7 +161,7 @@ tr:nth-child(even) td:nth-child(2),
 tr:nth-child(even) td:nth-child(3) {
   background-color: #f8f9fa;
 }
-
+ */
 
 
 

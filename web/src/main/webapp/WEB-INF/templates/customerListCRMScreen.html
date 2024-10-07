@@ -1572,27 +1572,36 @@
 										        		<label for = "select-all">Select All</label>
 										        	</div> --></th>
 
-																	<th data-field="logo_company" class="th2">Logo CTY</th>
-																	<th data-field="name_company" class="th3">Tên CTY</th>
+																	<!-- <th data-field="logo_company" class="th2">Logo CTY</th> -->
+																	<th data-field="id_company" class="th2">ID</th>
+																	<th data-field="name_company" class="th3">Tên khách hàng</th>
 																	<th data-field="address_company" class="th4">Địa
-																		chỉ CTY</th>
-																	<th data-field="name_representative" class="th5">Tên
-																		người đại diện</th>
-																	<th data-field="email_company" class="th6">Email</th>
-																	<th data-field="phone_company" class="th7">Điện
+																		chỉ khách hàng</th>
+																	<!-- <th data-field="name_representative" class="th5">Tên
+																		người đại diện</th> -->
+																	<!-- <th data-field="email_company" class="th6">Email</th> -->
+																	<th data-field="phone_company" class="th7">Số điện
 																		thoại</th>
-																	<th class="th8">Trạng thái chính</th>
+																	<!-- <th class="th8">Trạng thái chính</th>
 																	<th class="th9">Trạng thái phụ</th>
 																	<th class="th10">Người phụ trách</th>
 																	<th class="th11">Thời gian đăng ký</th>
 																	<th class="th12">Thời gian đăng chốt</th>
 																	<th class="th13">Thời gian đăng hủy</th>
 																	<th class="th14">Thời gian đăng hoàn thành</th>
-																	<th class="th15">Hành động</th>
+																	<th class="th15">Hành động</th> -->
 																</tr>
 															</thead>
 															<tbody>
-																<tr id="row1">
+																<tr th:each="customer : ${customers}">
+																	<td class="th1"><input type="checkbox"
+																		name="customer" value="1" /></td>
+																	<td th:text="${customer.id}"></td>
+														            <td th:text="${customer.name}"></td>
+														            <td th:text="${customer.address}"></td>
+														            <td th:text="${customer.phone}"></td>
+																</tr>
+																<!-- <tr id="row1">
 																	<td class="th1"><input type="checkbox"
 																		name="customer" value="1" /></td>
 
@@ -1710,10 +1719,8 @@
 																			</button>
 																		</div>
 																	</td>
-																</tr>
-
-
-
+																</tr> -->
+															
 															</tbody>
 														</table>
 													</div>

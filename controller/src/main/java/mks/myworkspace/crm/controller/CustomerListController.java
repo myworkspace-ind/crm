@@ -80,32 +80,7 @@ public class CustomerListController extends BaseController {
 
 		return mav;
 	}
-    
-    @GetMapping("/customerCRMScreen")
-   	public ModelAndView displayCustomerCRMScreen(HttpServletRequest request, HttpSession httpSession) {
-   		ModelAndView mav = new ModelAndView("customerCRMScreen");
-
-   		initSession(request, httpSession);
-   		log.debug("Customer CRM Screen Controller is running....");
-   		
-   		mav.addObject("currentSiteId", getCurrentSiteId());
-   		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-
-   		return mav;
-   	}
-    
-    @GetMapping("/customerListCRMScreen")
-	public ModelAndView displayCustomerListCRMScreen(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("customerListCRMScreen");
-
-		initSession(request, httpSession);
-		log.debug("Customer List CRM Screen Controller is running....");
-		
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-
-		return mav;
-	}
+        
     
     @GetMapping("/kpiCRMScreen")
 	public ModelAndView displayKPIScreen(HttpServletRequest request, HttpSession httpSession) {

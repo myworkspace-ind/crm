@@ -26,17 +26,17 @@ public class Customer implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id; //system field
+	private Long id; // system field
 
 	@Column(name = "site_id", length = 99)
-	private String siteId; //system field
-	
+	private String siteId; // system field
+
 	@Column(length = 99)
 	private String name;
-	
+
 	@Column(length = 255)
 	private String address;
-	
+
 	@Column(length = 10)
 	private String phone;
 
@@ -44,8 +44,16 @@ public class Customer implements Serializable {
 		super();
 		this.id = id;
 		this.siteId = siteId;
+
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
 	}
+
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", siteId=" + siteId + ", name=" + name + ", address=" + address + ", phone="
+				+ phone + "]";
+	}
+
 }
