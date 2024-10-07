@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
-public class CustomerListController extends BaseController {
+public class OldVersion_CustomerListController extends BaseController {
 	// Tạo logger cho class này 
 	   /**
      * This method is called when binding the HTTP parameter to bean (or model).

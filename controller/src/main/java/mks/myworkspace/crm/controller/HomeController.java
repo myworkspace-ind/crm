@@ -68,13 +68,6 @@ public class HomeController extends BaseController {
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 
 		return mav;
-//		ModelAndView mav = new ModelAndView("home");
-//
-//		initSession(request, httpSession);
-//		
-//		mav.addObject("currentSiteId", getCurrentSiteId());
-//		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-//
-//		return mav;
+
 	}
 }

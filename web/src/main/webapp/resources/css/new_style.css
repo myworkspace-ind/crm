@@ -374,7 +374,7 @@ form label input[type="checkbox"] {
 
 
 .nav-item123 .menu-content123 {
-    display: none;
+    display: none!important;
     width: 280px; 
     background-color: #fff;
     border: 1px solid #ccc;
@@ -383,15 +383,16 @@ form label input[type="checkbox"] {
 }
 
 
-.nav-item123:hover .menu-content123 {
+.nav-item123:hover .menu-content123,
+.menu-content123:hover{
  	position: fixed; 
    	display: block !important;
    	left: 100%;
-    /* padding-top: 10%; */
+    padding-top: 10%;
     white-space: nowrap;
     float: right;
 }
-
+ 
 .nav-item123 .menu-content123 li {
     padding: 5px 10px;
 }
@@ -494,6 +495,11 @@ nav-link-expand i.fa-compress:before {
 }
 
 .nav-item123.active a{
+	background-color: #FFD54F;
+	color: black;
+}
+
+.nav-item123 .has-sub a{
 	background-color: #FFD54F;
 	color: black;
 }

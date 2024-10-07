@@ -32,7 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Handles requests for the application home page.
  */
 @Controller
-public class HomeCrmController extends BaseController {
+public class OldVersion_HomeCrmController extends BaseController {
  
 	   /**
      * This method is called when binding the HTTP parameter to bean (or model).
