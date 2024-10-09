@@ -25,6 +25,11 @@ public class CustomerServiceImpl implements CustomerService{
 	public List<Customer> getAllCustomers() {	
 		return repo.findAll();
 	}
+
+	@Override
+	public List<Customer> searchCustomers(String keyword) {
+		return repo.findByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(keyword, keyword, keyword);
+	}
 	
 
 }

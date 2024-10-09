@@ -9,5 +9,6 @@ public interface CustomerService {
 	CustomerRepository getRepo();
 	
 	List<Customer> getAllCustomers();
+	List<Customer> searchCustomers(String keyword);
 
 }

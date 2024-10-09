@@ -11,8 +11,6 @@ option{
 }
 
 
-
-
 #register-time, #finalized-time,
 #cancel-time, #complete-time {
 	margin-bottom: 15px;
@@ -66,6 +64,8 @@ span {
 #filter-toggle {
     width: 70px;
     margin-bottom: 10px;
+    background-color: bisque;
+    border: solid;
 }
 
 #filter-box span{
@@ -107,8 +107,7 @@ span {
 
 #filter-box {
     flex: 1;
-    max-width: 300px; 
-    min-width: 200px; 
+    width: auto;
 }
 
 .table-container {
@@ -264,8 +263,8 @@ th, td {
 
 .filter-container {
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    align-items: start; /* Aligns content at the start */
+    flex-direction: column; 
+    align-items: start; 
     position: relative;
 }
 
@@ -279,14 +278,13 @@ th, td {
     flex-direction: column;
 }
 
-/* Thêm khoảng cách giữa checkbox và tên */
 form label input[type="checkbox"] {
     margin-right: 10px;
 }
 
 
 
-.card .card-title {
+/* .card .card-title {
     font-weight: bold;
 }
 
@@ -298,22 +296,22 @@ form label input[type="checkbox"] {
 }
 
 .main-status, .sub-status {
-    margin-bottom: 20px; /* Space between main and sub status sections */
-    text-align: center; /* Center the title text */
+    margin-bottom: 20px; 
+    text-align: center; 
 }
 
 .main-status {
-    border: 1px solid #ccc; /* Optional: Add a border to separate visually */
+    border: 1px solid #ccc; 
     padding: 10px;
     border-radius: 5px;
     background-color: #f9f9f9;
 }
 
 .sub-status {
-    border: 1px solid #ccc; /* Optional: Add a border to separate visually */
+    border: 1px solid #ccc; 
     padding: 10px;
     border-radius: 5px;
-    background-color: #f9f9f9; /* Optional: Different background for sub-status */
+    background-color: #f9f9f9;
 }
 
  .main-status p, .sub-status p {
@@ -322,7 +320,6 @@ form label input[type="checkbox"] {
 
 
 .status-button{
-	/* background-color: #007bff; */
 	color: white;
 	border: none;
 	padding: 10px 20px;
@@ -371,7 +368,7 @@ form label input[type="checkbox"] {
 .status-button.not-forget{
 	background-color: #ff8448;
 }
-
+ */
 
 .nav-item123 .menu-content123 {
     display: none!important;

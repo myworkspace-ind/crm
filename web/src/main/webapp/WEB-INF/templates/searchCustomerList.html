@@ -35,48 +35,36 @@
 
 
 <!--  <link rel="stylesheet" href="<c:url value='/assets/css/new_style.css' />"> -->
-<link rel="stylesheet" type="text/css"
-	href="resources/css/new_style.css">
+<link rel="stylesheet" th:href="@{/resources/css/new_style.css}" />
 	
-<link rel="stylesheet" type="text/css"
-	href="resources/css/status.css">
-	
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/css/components_new.min.css">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/status.css}">
+
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/css/components_new.min.css}">
 
 <!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 <!-- ICON -->
-<link rel="apple-touch-icon"
-	href="resources/app-assets/images/ico/apple-icon-120.png">
-<link rel="shortcut icon" type="image/x-icon"
-	href="resources/app-assets/images/ico/favicon.ico">
+<link rel="apple-touch-icon" th:href="@{/resources/app-assets/images/ico/apple-icon-120.png}">
+<link rel="shortcut icon" type="image/x-icon" th:href="@{/resources/app-assets/images/ico/favicon.ico}">
+
 <!-- BEGIN VENDOR CSS -->
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/css/vendors.min.css">
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/vendors/css/forms/icheck/icheck.css">
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/vendors/css/forms/icheck/custom.css">
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/vendors/css/charts/morris.css">
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/vendors/css/extensions/unslider.css">
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/vendors/css/weather-icons/climacons.min.css">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/css/vendors.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/vendors/css/forms/icheck/icheck.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/vendors/css/forms/icheck/custom.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/vendors/css/charts/morris.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/vendors/css/extensions/unslider.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/vendors/css/weather-icons/climacons.min.css}">
+
 <!-- END VENDOR CSS -->
 <!-- BEGIN ROBUST CSS-->
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/css/app.min.css">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/css/app.min.css}">
 <!-- END ROBUST CSS-->
+
 <!-- BEGIN Page Level CSS-->
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/css/core/menu/menu-types/vertical-compact-menu.min.css">
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/css/core/colors/palette-gradient.min.css">
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/css/core/colors/palette-climacon.css">
-<link rel="stylesheet" type="text/css"
-	href="resources/app-assets/css/pages/users.min.css">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/css/core/menu/menu-types/vertical-compact-menu.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/css/core/colors/palette-gradient.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/css/core/colors/palette-climacon.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/app-assets/css/pages/users.min.css}">
+
 <!-- END Page Level CSS-->
 
 
@@ -130,7 +118,7 @@
 					<!-- <li class="nav-item"><a class="navbar-brand" href="../../../html/ltr/vertical-compact-menu-template/index.html"><img class="brand-logo" alt="robust admin logo" src="https://mksol.vn/themes/robust-admin/app-assets/images/logo/logo-light-sm.png"> -->
 					<li class="nav-item"><a class="navbar-brand" href="#"><img
 							class="brand-logo" alt="robust admin logo"
-							src="resources/app-assets/images/logo/logo-light-sm.png">
+							th:src="@{/resources/app-assets/images/logo/logo-light-sm.png}">
 							<h3 class="brand-text">CRM</h3></a></li>
 					<li class="nav-item d-md-none"><a
 						class="nav-link open-navbar-container" data-toggle="collapse"
@@ -397,7 +385,7 @@
 										<div class="media">
 											<div class="media-left">
 												<span class="avatar avatar-sm avatar-online rounded-circle"><img
-													src="resources/app-assets/images/portrait/small/avatar-s-1.png"
+													th:src="@{/resources/app-assets/images/portrait/small/avatar-s-1.png}"
 													alt="avatar"><i></i></span>
 											</div>
 											<div class="media-body">
@@ -412,7 +400,7 @@
 										<div class="media">
 											<div class="media-left">
 												<span class="avatar avatar-sm avatar-busy rounded-circle"><img
-													src="resources/app-assets/images/portrait/small/avatar-s-2.png"
+													th:src="@{/resources/app-assets/images/portrait/small/avatar-s-2.png}"
 													alt="avatar"><i></i></span>
 											</div>
 											<div class="media-body">
@@ -427,7 +415,7 @@
 										<div class="media">
 											<div class="media-left">
 												<span class="avatar avatar-sm avatar-online rounded-circle"><img
-													src="resources/app-assets/images/portrait/small/avatar-s-3.png"
+													th:src="@{/resources/app-assets/images/portrait/small/avatar-s-3.png}"
 													alt="avatar"><i></i></span>
 											</div>
 											<div class="media-body">
@@ -442,7 +430,7 @@
 										<div class="media">
 											<div class="media-left">
 												<span class="avatar avatar-sm avatar-away rounded-circle"><img
-													src="resources/app-assets/images/portrait/small/avatar-s-6.png"
+													th:src="@{/resources/app-assets/images/portrait/small/avatar-s-6.png}"
 													alt="avatar"><i></i></span>
 											</div>
 											<div class="media-body">
@@ -461,7 +449,7 @@
 						<li class="dropdown dropdown-user nav-item"><a
 							class="dropdown-toggle nav-link dropdown-user-link" href="#"
 							data-toggle="dropdown"><span class="avatar avatar-online"><img
-									src="resources/app-assets/images/portrait/small/avatar-s-9.png"
+									th:src="@{/resources/app-assets/images/portrait/small/avatar-s-9.png}"
 									alt="avatar"><i></i></span><span class="user-name">Phuong Ngan</span></a>
 							<div class="dropdown-menu dropdown-menu-right">
 								<a class="dropdown-item" href="user-profile.html"><i
@@ -1348,7 +1336,7 @@
 				<a href="https://mekongsolution.com/" target="_blank">
 					<div class="logo-company">
 						<img alt="logo-company"
-							src="resources/app-assets/images/logo/logoMKS.png"> <span
+							th:src="@{/resources/app-assets/images/logo/logoMKS.png}"> <span
 							class="name-company">MKS Company</span>
 					</div>
 				</a>
@@ -1792,44 +1780,44 @@
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
 	<script type="text/javascript"
-		src="resources/app-assets/js/update/navigate.js"></script>
+		th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
 	<script type="text/javascript"
-		src="resources/app-assets/js/update/status.js"></script>
+		th:src="@{/resources/app-assets/js/update/status.js}"></script>
 	<script type="text/javascript"
-		src="resources/app-assets/js/update/search.js"></script>
+		th:src="@{/resources/app-assets/js/update/search.js}"></script>
 
 	<script type="text/javascript"
-		src="resources/app-assets/js/update/customerList_JS.js"></script>
+		th:src="@{/resources/app-assets/js/update/customerList_JS.js}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.5/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js"></script>
 	
 
 	<!-- BEGIN VENDOR JS-->
-	<script src="resources/app-assets/vendors/js/vendors.min.js"></script>
+	<script th:src="@{/resources/app-assets/vendors/js/vendors.min.js}"></script>
 	<!-- END VENDOR JS-->
 	<!-- BEGIN PAGE VENDOR JS-->
 	<script
 		src="//maps.googleapis.com/maps/api/js?key=AIzaSyBDkKetQwosod2SZ7ZGCpxuJdxY3kxo5Po"></script>
-	<script src="resources/app-assets/vendors/js/charts/gmaps.min.js"></script>
+	<script th:src="@{/resources/app-assets/vendors/js/charts/gmaps.min.js}"></script>
 	<script
-		src="resources/app-assets/vendors/js/forms/icheck/icheck.min.js"></script>
+		th:src="@{/resources/app-assets/vendors/js/forms/icheck/icheck.min.js}"></script>
 	<script
-		src="resources/app-assets/vendors/js/extensions/jquery.knob.min.js"></script>
-	<script src="resources/app-assets/vendors/js/charts/raphael-min.js"></script>
-	<script src="resources/app-assets/vendors/js/charts/morris.min.js"></script>
+		th:src="@{/resources/app-assets/vendors/js/extensions/jquery.knob.min.js}"></script>
+	<script th:src="@{/resources/app-assets/vendors/js/charts/raphael-min.js}"></script>
+	<script th:src="@{/resources/app-assets/vendors/js/charts/morris.min.js}"></script>
 	<script
-		src="resources/app-assets/vendors/js/extensions/unslider-min.js"></script>
-	<script src="resources/app-assets/vendors/js/charts/echarts/echarts.js"></script>
+		th:src="@{/resources/app-assets/vendors/js/extensions/unslider-min.js}"></script>
+	<script th:src="@{/resources/app-assets/vendors/js/charts/echarts/echarts.js}"></script>
 	<!-- END PAGE VENDOR JS-->
 	<!-- BEGIN ROBUST JS-->
-	<script src="resources/app-assets/js/core/app-menu.min.js"></script>
-	<script src="resources/app-assets/js/core/app.min.js"></script>
-	<script src="resources/app-assets/js/scripts/customizer.min.js"></script>
+	<script th:src="@{/resources/app-assets/js/core/app-menu.min.js}"></script>
+	<script th:src="@{/resources/app-assets/js/core/app.min.js}"></script>
+	<script th:src="@{/resources/app-assets/js/scripts/customizer.min.js}"></script>
 	<!-- END ROBUST JS-->
 	<!-- BEGIN PAGE LEVEL JS-->
 	<script
-		src="resources/app-assets/js/scripts/pages/dashboard-fitness.min.js"></script>
+		th:src="@{/resources/app-assets/js/scripts/pages/dashboard-fitness.min.js}"></script>
 	<script
-		src="resources/app-assets/js/scripts/pages/project-task-list.min.js"></script>
+		th:src="@{/resources/app-assets/js/scripts/pages/project-task-list.min.js}"></script>
 	<!-- END PAGE LEVEL JS-->
 
 
