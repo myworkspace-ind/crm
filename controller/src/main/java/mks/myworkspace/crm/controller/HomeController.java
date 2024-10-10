@@ -57,12 +57,12 @@ public class HomeController extends BaseController {
 	 * Simply selects the home view to render by returning its name.
      * @return 
 	 */
-	@RequestMapping(value = {"/button-customize"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("buttonCustomize");
+		ModelAndView mav = new ModelAndView("homeCRMScreen");
 
 		initSession(request, httpSession);
-		log.debug("Button Customize Controller is running....");
+		log.debug("Home CRM Screen Controller is running....");
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
