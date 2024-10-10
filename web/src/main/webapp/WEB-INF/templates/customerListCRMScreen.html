@@ -1382,17 +1382,20 @@
 					</div>
 				</div>
 				<div class="content-header-right col-md-6 col-12">
-					<fieldset
-						class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-						<input class="form-control" 
-								id="iconLeft" 
-								type="text"
-								placeholder="Tìm kiếm thông tin..." 
-								onkeypress="handleKeyPress(event)">
-						<div class="form-control-position">
-							<i class="fa fa-search"></i>
-						</div>
-					</fieldset>
+                    <form id="frmSearchCustomer" action="customer-list" method="get">
+                        <fieldset
+                            class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
+                            <input class="form-control" name="keywork" 
+                                    id="iconLeft" 
+                                    type="text"
+                                    placeholder="Tìm kiếm thông tin..." 
+                                    onkeypress="handleKeyPress(event)">
+                            <div class="form-control-position">
+                                <i class="fa fa-search"></i>
+                            </div>
+                        </fieldset>
+                    </form>
+					
 					
 					<!-- Thêm thẻ div này để hiển thị kết quả tìm kiếm -->
 					<div id="searchResults"></div>
@@ -1795,8 +1798,7 @@
 		src="resources/app-assets/js/update/navigate.js"></script>
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/status.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/search.js"></script>
+	<script type="text/javascript" src="resources/app-assets/js/update/search.js"></script>
 
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/customerList_JS.js"></script>
