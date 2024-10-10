@@ -1,3 +1,6 @@
+
+//CÓ VẤN ĐỀ
+
 function handleKeyPress(event) {
     // Kiểm tra nếu phím nhấn là Enter (key code 13)
     if (event.key === 'Enter') {
