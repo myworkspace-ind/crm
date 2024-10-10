@@ -46,37 +46,35 @@ public class SearchController extends BaseController {
 	 * @return
 	 */
 
-	@Autowired
-	CustomerService customerService;
-	
-	@Autowired 
-	StatusService statusService;
-	
-	@RequestMapping(value = {"/customer/search"}, method = RequestMethod.GET)
-    public ModelAndView searchCustomers(@RequestParam String keyword, HttpServletRequest request, HttpSession httpSession) {
-        ModelAndView mav = new ModelAndView("searchCustomerList");
-        initSession(request, httpSession);
-        
-        mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-        
-        // Tìm kiếm khách hàng theo từ khóa
-        List<Customer> customers = customerService.searchCustomers(keyword);
-                
-        // Thêm vào ModelAndView
-        mav.addObject("customers", customers);
-        mav.addObject("searchKeyword", keyword); // Lưu từ khóa tìm kiếm để hiển thị nếu cần
-
-        for (Customer customer : customers) {
-            log.debug("Thông tin khách hàng tìm thấy: {}", customer);
-        }
-
-        if (customers.isEmpty()) {
-            log.debug("Không tìm thấy khách hàng nào với từ khóa: {}", keyword);
-        }
-
-        return mav;
-    }
+	/*
+	 * @Autowired CustomerService customerService;
+	 * 
+	 * @Autowired StatusService statusService;
+	 * 
+	 * @RequestMapping(value = {"/customer-list"}, method = RequestMethod.GET)
+	 * public ModelAndView searchCustomers(@RequestParam(value = "keyword", required
+	 * = false) String keyword, HttpServletRequest request, HttpSession httpSession)
+	 * { ModelAndView mav = new ModelAndView("customerListCRMScreen");
+	 * initSession(request, httpSession);
+	 * 
+	 * mav.addObject("currentSiteId", getCurrentSiteId());
+	 * mav.addObject("userDisplayName", getCurrentUserDisplayName());
+	 * 
+	 * // Tìm kiếm khách hàng theo từ khóa List<Customer> customers =
+	 * customerService.searchCustomers(keyword);
+	 * 
+	 * // Thêm vào ModelAndView mav.addObject("customers", customers);
+	 * mav.addObject("searchKeyword", keyword); // Lưu từ khóa tìm kiếm để hiển thị
+	 * nếu cần
+	 * 
+	 * for (Customer customer : customers) {
+	 * log.debug("Thông tin khách hàng tìm thấy: {}", customer); }
+	 * 
+	 * if (customers.isEmpty()) {
+	 * log.debug("Không tìm thấy khách hàng nào với từ khóa: {}", keyword); }
+	 * 
+	 * return mav; }
+	 */
 	
 	/*
 	 * @GetMapping("/search/customers") public void searchCustomers(@RequestParam

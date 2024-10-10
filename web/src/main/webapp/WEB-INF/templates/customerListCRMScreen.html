@@ -1375,8 +1375,8 @@
 			data-ps-id="ca971fad-a7d4-82d5-8aaf-c41e09145c20">
 			<ul class="navigation navigation-main" id="main-menu-navigation"
 				data-menu="menu-navigation">
-				<li class="nav-item has-sub" data-page="crm-web/home" style=""><a class="menu-item"
-					href="/crm-web/home"><i class="icon-home"></i><span
+				<li class="nav-item has-sub" data-page="crm-web/home" style=""><a
+					class="menu-item" href="/crm-web/home"><i class="icon-home"></i><span
 						class="menu-title" data-i18n="nav.dash.main">Trang chủ</span></a></li>
 
 				<li class="nav-item has-sub" style=""><a class="menu-item"
@@ -1386,8 +1386,8 @@
 					<ul class="menu-content" style="">
 						<li><a class="menu-item" href="/crm-web/customer"
 							data-i18n="nav.dash.fitness">Danh sách khách hàng</a></li>
-						<li><a class="menu-item" href="#" data-i18n="nav.dash.project">Hành
-								trình khách hàng</a></li>
+						<li><a class="menu-item" href="#"
+							data-i18n="nav.dash.project">Hành trình khách hàng</a></li>
 						<li><a class="menu-item" href="#"
 							data-i18n="nav.dash.ecommerce">Tỷ lệ chuyển đổi</a></li>
 					</ul></li>
@@ -1413,217 +1413,209 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="content-header-right col-md-6 col-12">
-					<form action="" class="" method="">
-						<input type="text" class="search-input" name="query"
-							placehoder="Tìm kiếm thông tin" required>
-						<button type="submit" class="search-button">Tìm kiếm</button>
-					</form>
-					<!-- <fieldset
-						class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-						<input class="form-control" 
-								id="iconLeft" 
-								type="text"
-								placeholder="Tìm kiếm thông tin..." 
+					<form id="frmSearchCustomer" action="customer-list" method="get">
+						<fieldset
+							class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
+							<input class="form-control" name="keyword" id="iconLeft"
+								type="text" placeholder="Tìm kiếm thông tin..."
 								onkeypress="handleKeyPress(event)">
-						<div class="form-control-position">
-							<i class="fa fa-search"></i>
-						</div>
-					</fieldset>
-					
-					<div id="searchResults"></div> -->
+							<div class="form-control-position">
+								<i class="fa fa-search"></i>
+							</div>
+						</fieldset>
+					</form>
+
+					<!-- Thêm thẻ div này để hiển thị kết quả tìm kiếm -->
+					<div id="searchResults"></div>
 				</div>
-
 			</div>
-			<div class="content-body">
-				<section class="row">
-					<div class="col-12">
-						<div class="card">
-							<div class="card-header">
-								<h4 class="card-title">Danh sách khách hàng</h4>
-								<a class="heading-elements-toggle"><i
-									class="ft-ellipsis-h font-medium-3"></i></a>
-								<div class="heading-elements">
-									<button class="btn btn-primary btn-sm" fdprocessedid="q9g77z">
-										<i class="fa-solid fa-plus"></i> Add New Customers
-									</button>
 
-								</div>
-							</div>
-
-							<div class="cover">
-								<button class="left" onclick="leftScroll()">
-									<i class="fas fa-angle-double-left"></i>
+		</div>
+		<div class="content-body">
+			<section class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Danh sách khách hàng</h4>
+							<a class="heading-elements-toggle"><i
+								class="ft-ellipsis-h font-medium-3"></i></a>
+							<div class="heading-elements">
+								<button class="btn btn-primary btn-sm" fdprocessedid="q9g77z">
+									<i class="fa-solid fa-plus"></i> Add New Customers
 								</button>
-								<div class="scroll-images">
 
-									<div th:each="status: ${statuses}" class="child"
-										th:style="'background-color:' + ${status.backgroundColor}">
-										<h4 th:text="${status.name}"></h4>
-									</div>
-
-								</div>
-								<button class="right" onclick="rightScroll()">
-									<i class="fas fa-angle-double-right"></i>
-								</button>
 							</div>
+						</div>
+
+						<div class="cover">
+							<button class="left" onclick="leftScroll()">
+								<i class="fas fa-angle-double-left"></i>
+							</button>
+							<div class="scroll-images">
+
+								<div th:each="status: ${statuses}" class="child"
+									th:style="'background-color:' + ${status.backgroundColor}">
+									<h4 th:text="${status.name}"></h4>
+								</div>
+
+							</div>
+							<button class="right" onclick="rightScroll()">
+								<i class="fas fa-angle-double-right"></i>
+							</button>
+						</div>
 
 
-							<div class="card-content">
-								<div class="card-body">
-									<!-- Task List table -->
-									<div class="table-responsive">
-										<div id="project-task-list_wrapper"
-											class="dataTables_wrapper dt-bootstrap4">
-											<div class="row">
-												<div class="col-sm-12 col-md-6">
-													<div class="dataTables_length"
-														id="project-task-list_length">
-														<label>Show <select
-															name="project-task-list_length"
-															aria-controls="project-task-list"
-															class="custom-select custom-select-sm form-control form-control-sm select2-hidden-accessible"
-															data-select2-id="1" tabindex="-1" aria-hidden="true">
-																<option value="10" data-select2-id="3">10</option>
-																<option value="25">25</option>
-																<option value="50">50</option>
-																<option value="100">100</option>
-														</select> <span
-															class="select2 select2-container select2-container--default"
-															dir="ltr" data-select2-id="2" style="width: 55.5px;"><span
-																class="selection"><span
-																	class="select2-selection select2-selection--single"
-																	role="combobox" aria-haspopup="true"
-																	aria-expanded="false" tabindex="0"
-																	aria-labelledby="select2-project-task-list_length-2t-container"><span
-																		class="select2-selection__rendered"
-																		id="select2-project-task-list_length-2t-container"
-																		role="textbox" aria-readonly="true" title="10">10</span><span
-																		class="select2-selection__arrow" role="presentation"><b
-																			role="presentation"></b></span></span></span><span
-																class="dropdown-wrapper" aria-hidden="true"></span></span>
-															entries
-														</label>
-													</div>
+						<div class="card-content">
+							<div class="card-body">
+								<!-- Task List table -->
+								<div class="table-responsive">
+									<div id="project-task-list_wrapper"
+										class="dataTables_wrapper dt-bootstrap4">
+										<div class="row">
+											<div class="col-sm-12 col-md-6">
+												<div class="dataTables_length" id="project-task-list_length">
+													<label>Show <select name="project-task-list_length"
+														aria-controls="project-task-list"
+														class="custom-select custom-select-sm form-control form-control-sm select2-hidden-accessible"
+														data-select2-id="1" tabindex="-1" aria-hidden="true">
+															<option value="10" data-select2-id="3">10</option>
+															<option value="25">25</option>
+															<option value="50">50</option>
+															<option value="100">100</option>
+													</select> <span
+														class="select2 select2-container select2-container--default"
+														dir="ltr" data-select2-id="2" style="width: 55.5px;"><span
+															class="selection"><span
+																class="select2-selection select2-selection--single"
+																role="combobox" aria-haspopup="true"
+																aria-expanded="false" tabindex="0"
+																aria-labelledby="select2-project-task-list_length-2t-container"><span
+																	class="select2-selection__rendered"
+																	id="select2-project-task-list_length-2t-container"
+																	role="textbox" aria-readonly="true" title="10">10</span><span
+																	class="select2-selection__arrow" role="presentation"><b
+																		role="presentation"></b></span></span></span><span class="dropdown-wrapper"
+															aria-hidden="true"></span></span> entries
+													</label>
 												</div>
-												<div class="col-sm-12 col-md-6"></div>
+											</div>
+											<div class="col-sm-12 col-md-6"></div>
+										</div>
+
+										<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
+										<div class="container-flex">
+											<div class="filter-container">
+												<button id="filter-toggle">
+													<i class="fa-solid fa-filter"></i>
+												</button>
+
+												<!-- Khung lọc liên hệ theo, ban đầu ẩn -->
+												<div id="filter-box" class="filter-hidden">
+													<span>Lọc liên hệ theo</span>
+													<div class="input-with-icon">
+														<input class="form-control" id="iconLeft" type="text"
+															placeholder="Tìm kiếm..." fdprocessedid="66aqzo">
+
+														<div class="icon-container">
+															<i class="fa fa-search"></i>
+														</div>
+													</div>
+													<!-- <input type="text" placeholder="Tìm kiếm..."> -->
+													<form>
+														<label> <input type="checkbox"
+															id="filter-option-1" data-target="#responsible-select">
+															Người phụ trách
+														</label> <select id="responsible-select" class="hidden-select">
+															<option value="">Chọn người phụ trách</option>
+															<option value="1">Lê Ngọc Thạch</option>
+															<option value="2">Nguyễn Hoàng Phương Ngân</option>
+															<option value="3">Nguyễn Thế Thành</option>
+														</select> <label> <input type="checkbox"
+															id="filter-option-2"
+															data-target="#company-name, #company-address">
+															Thông tin công ty
+														</label> <input id="company-name" class="hidden-select"
+															type="text" placeholder="Tìm kiếm tên công ty"> <input
+															id="company-address" class="hidden-select" type="text"
+															placeholder="Tìm kiếm địa chỉ công ty"> <label>
+															<input type="checkbox" id="filter-option-3"
+															data-target="#representative-name"> Tên người đại
+															diện
+														</label> <input id="representative-name" class="hidden-select"
+															type="text" placeholder="Tìm kiếm tên người đại diện">
+
+														<label> <input type="checkbox"
+															id="filter-option-4" data-target="#email"> Email
+															công ty
+														</label> <input id="email" class="hidden-select" type="text"
+															placeholder="Tìm kiếm email công ty"> <label>
+															<input type="checkbox" id="filter-option-5"
+															data-target="phone"> Điện thoại
+														</label> <input id="phone" class="hidden-select" type="text"
+															placeholder="Tìm kiếm SĐT công ty"> <label>
+															<input type="checkbox" id="filter-option-6"
+															data-target="status"> Trạng thái
+														</label> <select id="main-status-select" class="hidden-select">
+															<option value="">Chọn trạng thái</option>
+															<option value="1">MỚI</option>
+															<option value="2">CHƯA BẮT ĐẦU</option>
+															<option value="3">HOÃN LẠI</option>
+															<option value="4">ĐANG TRONG TIẾN TRÌNH</option>
+															<option value="5">HOÀN THÀNH</option>
+															<option value="6">HỦY</option>
+															<option value="7">CHỐT</option>
+
+														</select> <label> <input type="checkbox"
+															id="filter-option-7" data-target="time"> Thời
+															gian
+														</label>
+														<div id="time-filters" class="hidden-select">
+															<span>Thời gian đăng ký</span> <input type="date"
+																id="register-time" placeholder="Thời gian đăng ký">
+
+															<span>Thời gian chốt</span> <input type="date"
+																id="finalized-time" placeholder="Thời gian chốt">
+
+															<span>Thời gian hủy</span> <input type="date"
+																id="cancel-time" placeholder="Thời gian hủy"> <span>Thời
+																gian hoàn thành</span> <input type="date" id="complete-time"
+																placeholder="Thời gian hoàn thành">
+														</div>
+
+
+														<button>Áp dụng lọc</button>
+														<button>Xóa bỏ</button>
+													</form>
+												</div>
 											</div>
 
-											<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
-											<div class="container-flex">
-												<div class="filter-container">
-													<button id="filter-toggle">
-														<i class="fa-solid fa-filter"></i>
-													</button>
-
-													<!-- Khung lọc liên hệ theo, ban đầu ẩn -->
-													<div id="filter-box" class="filter-hidden">
-														<span>Lọc liên hệ theo</span>
-														<div class="input-with-icon">
-															<input class="form-control" id="iconLeft" type="text"
-																placeholder="Tìm kiếm..." fdprocessedid="66aqzo">
-
-															<div class="icon-container">
-																<i class="fa fa-search"></i>
-															</div>
-														</div>
-														<!-- <input type="text" placeholder="Tìm kiếm..."> -->
-														<form>
-															<label> <input type="checkbox"
-																id="filter-option-1" data-target="#responsible-select">
-																Người phụ trách
-															</label> <select id="responsible-select" class="hidden-select">
-																<option value="">Chọn người phụ trách</option>
-																<option value="1">Lê Ngọc Thạch</option>
-																<option value="2">Nguyễn Hoàng Phương Ngân</option>
-																<option value="3">Nguyễn Thế Thành</option>
-															</select> <label> <input type="checkbox"
-																id="filter-option-2"
-																data-target="#company-name, #company-address">
-																Thông tin công ty
-															</label> <input id="company-name" class="hidden-select"
-																type="text" placeholder="Tìm kiếm tên công ty">
-															<input id="company-address" class="hidden-select"
-																type="text" placeholder="Tìm kiếm địa chỉ công ty">
-
-															<label> <input type="checkbox"
-																id="filter-option-3" data-target="#representative-name">
-																Tên người đại diện
-															</label> <input id="representative-name" class="hidden-select"
-																type="text" placeholder="Tìm kiếm tên người đại diện">
-
-															<label> <input type="checkbox"
-																id="filter-option-4" data-target="#email"> Email
-																công ty
-															</label> <input id="email" class="hidden-select" type="text"
-																placeholder="Tìm kiếm email công ty"> <label>
-																<input type="checkbox" id="filter-option-5"
-																data-target="phone"> Điện thoại
-															</label> <input id="phone" class="hidden-select" type="text"
-																placeholder="Tìm kiếm SĐT công ty"> <label>
-																<input type="checkbox" id="filter-option-6"
-																data-target="status"> Trạng thái
-															</label> <select id="main-status-select" class="hidden-select">
-																<option value="">Chọn trạng thái</option>
-																<option value="1">MỚI</option>
-																<option value="2">CHƯA BẮT ĐẦU</option>
-																<option value="3">HOÃN LẠI</option>
-																<option value="4">ĐANG TRONG TIẾN TRÌNH</option>
-																<option value="5">HOÀN THÀNH</option>
-																<option value="6">HỦY</option>
-																<option value="7">CHỐT</option>
-
-															</select> <label> <input type="checkbox"
-																id="filter-option-7" data-target="time"> Thời
-																gian
-															</label>
-															<div id="time-filters" class="hidden-select">
-																<span>Thời gian đăng ký</span> <input type="date"
-																	id="register-time" placeholder="Thời gian đăng ký">
-
-																<span>Thời gian chốt</span> <input type="date"
-																	id="finalized-time" placeholder="Thời gian chốt">
-
-																<span>Thời gian hủy</span> <input type="date"
-																	id="cancel-time" placeholder="Thời gian hủy"> <span>Thời
-																	gian hoàn thành</span> <input type="date" id="complete-time"
-																	placeholder="Thời gian hoàn thành">
-															</div>
-
-
-															<button>Áp dụng lọc</button>
-															<button>Xóa bỏ</button>
-														</form>
-													</div>
-												</div>
-
-												<!-- BEGIN TABLE CUSTOMER LIST -->
-												<div class="table-container">
-													<div class="table-responsive">
-														<table id="table" class="table table-bordered">
-															<thead>
-																<tr>
-																	<th width="2%" data-field="select" class="th1"><input
-																		type="checkbox" id="select-all"
-																		class="d-flex align-items-center justify-content-center" />
-																		<!-- <div class="checkbox-table-customer d-flex align-items-center justify-content-center">
+											<!-- BEGIN TABLE CUSTOMER LIST -->
+											<div class="table-container">
+												<div class="table-responsive">
+													<table id="table" class="table table-bordered">
+														<thead>
+															<tr>
+																<th width="2%" data-field="select" class="th1"><input
+																	type="checkbox" id="select-all"
+																	class="d-flex align-items-center justify-content-center" />
+																	<!-- <div class="checkbox-table-customer d-flex align-items-center justify-content-center">
 										        		<input type="checkbox" id="select-all"/>
 										        		<label for = "select-all">Select All</label>
 										        	</div> --></th>
 
-																	<!-- <th data-field="logo_company" class="th2">Logo CTY</th> -->
-																	<th data-field="id_company" class="th2">ID</th>
-																	<th data-field="name_company" class="th3">Tên
-																		khách hàng</th>
-																	<th data-field="address_company" class="th4">Địa
-																		chỉ khách hàng</th>
-																	<!-- <th data-field="name_representative" class="th5">Tên
+																<!-- <th data-field="logo_company" class="th2">Logo CTY</th> -->
+																<th data-field="id_company" class="th2">ID</th>
+																<th data-field="name_company" class="th3">Tên khách
+																	hàng</th>
+																<th data-field="address_company" class="th4">Địa
+																	chỉ khách hàng</th>
+																<!-- <th data-field="name_representative" class="th5">Tên
 																		người đại diện</th> -->
-																	<!-- <th data-field="email_company" class="th6">Email</th> -->
-																	<th data-field="phone_company" class="th7">Số điện
-																		thoại</th>
-																	<!-- <th class="th8">Trạng thái chính</th>
+																<!-- <th data-field="email_company" class="th6">Email</th> -->
+																<th data-field="phone_company" class="th7">Số điện
+																	thoại</th>
+																<!-- <th class="th8">Trạng thái chính</th>
 																	<th class="th9">Trạng thái phụ</th>
 																	<th class="th10">Người phụ trách</th>
 																	<th class="th11">Thời gian đăng ký</th>
@@ -1631,18 +1623,18 @@
 																	<th class="th13">Thời gian đăng hủy</th>
 																	<th class="th14">Thời gian đăng hoàn thành</th>
 																	<th class="th15">Hành động</th> -->
-																</tr>
-															</thead>
-															<tbody>
-																<tr th:each="customer : ${customers}">
-																	<td class="th1"><input type="checkbox"
-																		name="customer" value="1" /></td>
-																	<td th:text="${customer.id}"></td>
-																	<td th:text="${customer.name}"></td>
-																	<td th:text="${customer.address}"></td>
-																	<td th:text="${customer.phone}"></td>
-																</tr>
-																<!-- <tr id="row1">
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="customer : ${customers}">
+																<td class="th1"><input type="checkbox"
+																	name="customer" value="1" /></td>
+																<td th:text="${customer.id}"></td>
+																<td th:text="${customer.name}"></td>
+																<td th:text="${customer.address}"></td>
+																<td th:text="${customer.phone}"></td>
+															</tr>
+															<!-- <tr id="row1">
 																	<td class="th1"><input type="checkbox"
 																		name="customer" value="1" /></td>
 
@@ -1762,67 +1754,67 @@
 																	</td>
 																</tr> -->
 
-															</tbody>
-														</table>
-													</div>
+														</tbody>
+													</table>
 												</div>
-												<!-- END TABLE CUSTOMER LIST -->
-
 											</div>
+											<!-- END TABLE CUSTOMER LIST -->
 
-											<!-- END BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
+										</div>
 
-
-
-
-
+										<!-- END BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
 
 
 
-											<div class="row">
-												<div class="col-sm-12"></div>
+
+
+
+
+
+										<div class="row">
+											<div class="col-sm-12"></div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12 col-md-5">
+												<div class="dataTables_info" id="project-task-list_info"
+													role="status" aria-live="polite">Showing 1 to 10 of
+													28 entries</div>
 											</div>
-											<div class="row">
-												<div class="col-sm-12 col-md-5">
-													<div class="dataTables_info" id="project-task-list_info"
-														role="status" aria-live="polite">Showing 1 to 10 of
-														28 entries</div>
-												</div>
-												<div class="col-sm-12 col-md-7">
-													<div class="dataTables_paginate paging_simple_numbers"
-														id="project-task-list_paginate">
-														<ul class="pagination">
-															<li class="paginate_button page-item previous disabled"
-																id="project-task-list_previous"><a href="#"
-																aria-controls="project-task-list" data-dt-idx="0"
-																tabindex="0" class="page-link">Previous</a></li>
-															<li class="paginate_button page-item active"><a
-																href="#" aria-controls="project-task-list"
-																data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-															<li class="paginate_button page-item "><a href="#"
-																aria-controls="project-task-list" data-dt-idx="2"
-																tabindex="0" class="page-link">2</a></li>
-															<li class="paginate_button page-item "><a href="#"
-																aria-controls="project-task-list" data-dt-idx="3"
-																tabindex="0" class="page-link">3</a></li>
-															<li class="paginate_button page-item next"
-																id="project-task-list_next"><a href="#"
-																aria-controls="project-task-list" data-dt-idx="4"
-																tabindex="0" class="page-link">Next</a></li>
-														</ul>
-													</div>
+											<div class="col-sm-12 col-md-7">
+												<div class="dataTables_paginate paging_simple_numbers"
+													id="project-task-list_paginate">
+													<ul class="pagination">
+														<li class="paginate_button page-item previous disabled"
+															id="project-task-list_previous"><a href="#"
+															aria-controls="project-task-list" data-dt-idx="0"
+															tabindex="0" class="page-link">Previous</a></li>
+														<li class="paginate_button page-item active"><a
+															href="#" aria-controls="project-task-list"
+															data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+														<li class="paginate_button page-item "><a href="#"
+															aria-controls="project-task-list" data-dt-idx="2"
+															tabindex="0" class="page-link">2</a></li>
+														<li class="paginate_button page-item "><a href="#"
+															aria-controls="project-task-list" data-dt-idx="3"
+															tabindex="0" class="page-link">3</a></li>
+														<li class="paginate_button page-item next"
+															id="project-task-list_next"><a href="#"
+															aria-controls="project-task-list" data-dt-idx="4"
+															tabindex="0" class="page-link">Next</a></li>
+													</ul>
 												</div>
 											</div>
 										</div>
 									</div>
-									<!--/ Task List table -->
 								</div>
+								<!--/ Task List table -->
 							</div>
 						</div>
 					</div>
-				</section>
-			</div>
+				</div>
+			</section>
 		</div>
+	</div>
 	</div>
 	<!-- END CONTENT -->
 

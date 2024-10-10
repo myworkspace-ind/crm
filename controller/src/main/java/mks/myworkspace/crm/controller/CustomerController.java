@@ -11,6 +11,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
@@ -48,34 +49,48 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	CustomerService customerService;
-	
-	@Autowired 
+
+	@Autowired
 	StatusService statusService;
-	
-	@RequestMapping(value = {"/customer", "/customer-list"}, method = RequestMethod.GET)
-	public ModelAndView displayCustomerListCRMScreen(HttpServletRequest request, HttpSession httpSession) {
+
+	@RequestMapping(value = { "/customer", "/customer-list" }, method = RequestMethod.GET)
+	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
+			HttpServletRequest request, HttpSession httpSession) {
+
+		log.debug("Display Cusomter list with keyword= {}", keyword);
 		ModelAndView mav = new ModelAndView("customerListCRMScreen");
 		initSession(request, httpSession);
 		/*
 		 * log.debug("Customer List CRM Screen Controller is running....");
-		 */		
+		 */
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		
-		List<Customer> customers = customerService.getAllCustomers();
+
+		List<Customer> customers;
+
+		if (keyword != null && !keyword.isEmpty()) {
+			// Tìm kiếm khách hàng dựa trên từ khóa
+			customers = customerService.searchCustomers(keyword);
+			mav.addObject("keyword", keyword);
+			log.debug("Searching customers with keyword: {}", keyword);
+		} else {
+			// Lấy toàn bộ danh sách khách hàng nếu không có từ khóa
+			customers = customerService.getAllCustomers();
+			log.debug("No keyword provided. Fetching all customers.");
+		}
+
 		List<Status> statuses = statusService.getAllStatuses();
-        mav.addObject("customers", customers);
-        mav.addObject("statuses", statuses);
-        
-        for (Customer customer : customers) {
-            log.debug("Thông tin khách hàng: {}", customer);
-        }
-        for (Status status : statuses) {
-            log.debug("Thông tin trạng thái KH: {}", status);
-        }
+		mav.addObject("customers", customers);
+		mav.addObject("statuses", statuses);
+
+		for (Customer customer : customers) {
+			log.debug("Thông tin khách hàng: {}", customer);
+		}
+		for (Status status : statuses) {
+			log.debug("Thông tin trạng thái KH: {}", status);
+		}
 
 		return mav;
 	}
-	
 
 }
