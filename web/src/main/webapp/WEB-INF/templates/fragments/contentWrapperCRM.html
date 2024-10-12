@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="content-wrapper">
+		<div class="content-header row">
+			<div class="content-header-left col-md-6 col-12 mb-2">
+				<h3 class="content-header-title">Khách hàng</h3>
+				<div class="row breadcrumbs-top">
+					<div class="breadcrumb-wrapper col-12">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="#">Khách hàng</a></li>
+							<li class="breadcrumb-item active">Danh sách khách hàng</li>
+						</ol>
+					</div>
+				</div>
+			</div>
+			<div class="content-header-right col-md-6 col-12">
+				<form id="frmSearchCustomer" action="customer-list" method="get">
+					<fieldset
+						class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
+						<input class="form-control" name="keyword" id="iconLeft"
+							type="text" placeholder="Tìm kiếm thông tin..."
+							onkeypress="handleKeyPress(event)">
+						<div class="form-control-position">
+							<i class="fa fa-search"></i>
+						</div>
+					</fieldset>
+				</form>
+				<!-- Thêm thẻ div này để hiển thị kết quả tìm kiếm -->
+				<div id="searchResults"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

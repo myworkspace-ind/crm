@@ -129,38 +129,13 @@
 
 	<!--  BEGIN CONTENT -->
 	<div class="app-content content">
-		<div class="content-wrapper">
-			<div class="content-header row">
-				<div class="content-header-left col-md-6 col-12 mb-2">
-					<h3 class="content-header-title">Khách hàng</h3>
-					<div class="row breadcrumbs-top">
-						<div class="breadcrumb-wrapper col-12">
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="#">Khách hàng</a></li>
-								<li class="breadcrumb-item active">Danh sách khách hàng</li>
-							</ol>
-						</div>
-					</div>
-				</div>
-				<div class="content-header-right col-md-6 col-12">
-					<form id="frmSearchCustomer" action="customer-list" method="get">
-						<fieldset
-							class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-							<input class="form-control" name="keyword" id="iconLeft"
-								type="text" placeholder="Tìm kiếm thông tin..."
-								onkeypress="handleKeyPress(event)">
-							<div class="form-control-position">
-								<i class="fa fa-search"></i>
-							</div>
-						</fieldset>
-					</form>
-
-					<!-- Thêm thẻ div này để hiển thị kết quả tìm kiếm -->
-					<div id="searchResults"></div>
-				</div>
-			</div>
-
-		</div>
+	
+	<!-- /////////////////////////////////BEGIN CONTENT WRAPPER/////////////////////////////////////////// -->
+	<th:block th:include="fragments/contentWrapperCRM"></th:block>
+	<!-- /////////////////////////////////END CONTENT WRAPPER/////////////////////////////////////////// -->
+		
+		
+		
 		<div class="content-body">
 			<section class="row">
 				<div class="col-12">
@@ -344,6 +319,7 @@
 																<!-- <th data-field="email_company" class="th6">Email</th> -->
 																<th data-field="phone_company" class="th7">Số điện
 																	thoại</th>
+																<th data-field="status_company" class="th8">Trạng thái</th>
 																<!-- <th class="th8">Trạng thái chính</th>
 																	<th class="th9">Trạng thái phụ</th>
 																	<th class="th10">Người phụ trách</th>
@@ -362,6 +338,7 @@
 																<td th:text="${customer.name}"></td>
 																<td th:text="${customer.address}"></td>
 																<td th:text="${customer.phone}"></td>
+																<td>Status</td>
 															</tr>
 															<!-- <tr id="row1">
 																	<td class="th1"><input type="checkbox"

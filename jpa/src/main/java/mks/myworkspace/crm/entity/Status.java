@@ -1,12 +1,15 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -19,7 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Status implements Serializable{
+public class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -28,12 +31,16 @@ public class Status implements Serializable{
 
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
-	
+
 	@Column(length = 99)
 	private String name;
-	
+
 	@Column(length = 99)
 	private String backgroundColor;
+
+	// Many-to-Many relationship with Customer
+	@ManyToMany(mappedBy = "statuses")
+	private Set<Customer> customers = new HashSet<>();
 
 	public Status(Long id, String siteId, String name, String backgroundColor) {
 		super();
@@ -49,7 +56,4 @@ public class Status implements Serializable{
 				+ "]";
 	}
 
-	
-	
-	
 }

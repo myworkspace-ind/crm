@@ -1,12 +1,17 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.JoinColumn;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -39,6 +44,15 @@ public class Customer implements Serializable {
 
 	@Column(length = 10)
 	private String phone;
+
+	// Many-to-Many relationship with Status
+	@ManyToMany
+	@JoinTable(name = "customer_status", // name of the join table
+			joinColumns = @JoinColumn(name = "customer_id"), // foreign key for Customer in the join table
+			inverseJoinColumns = @JoinColumn(name = "status_id") // foreign key for Status in the join table
+	)
+	
+	private Set<Status> statuses = new HashSet<>(); // a customer can have multiple statuses
 
 	public Customer(Long id, String siteId, String name, String address, String phone) {
 		super();
