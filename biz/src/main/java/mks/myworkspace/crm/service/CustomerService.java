@@ -10,5 +10,6 @@ public interface CustomerService {
 	
 	List<Customer> getAllCustomers();
 	List<Customer> searchCustomers(String keyword);
-
+	List<Customer> getAllCustomersWithStatuses();
+	List<Customer> findCustomersByStatus(Long statusId);
 }

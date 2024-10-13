@@ -42,18 +42,21 @@ public class Status implements Serializable {
 	@ManyToMany(mappedBy = "statuses")
 	private Set<Customer> customers = new HashSet<>();
 
-	public Status(Long id, String siteId, String name, String backgroundColor) {
+	public Status(Long id, String siteId, String name, String backgroundColor, Set<Customer> customers) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
 		this.backgroundColor = backgroundColor;
+		this.customers = customers;
 	}
 
 	@Override
 	public String toString() {
 		return "Status [id=" + id + ", siteId=" + siteId + ", name=" + name + ", backgroundColor=" + backgroundColor
-				+ "]";
+				+ ", customers=" + customers + "]";
 	}
+
+	
 
 }

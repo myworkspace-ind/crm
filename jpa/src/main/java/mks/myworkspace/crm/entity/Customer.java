@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.JoinColumn;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -46,6 +46,7 @@ public class Customer implements Serializable {
 	private String phone;
 
 	// Many-to-Many relationship with Status
+//	@ManyToMany(fetch = FetchType.EAGER)
 	@ManyToMany
 	@JoinTable(name = "customer_status", // name of the join table
 			joinColumns = @JoinColumn(name = "customer_id"), // foreign key for Customer in the join table
@@ -54,20 +55,22 @@ public class Customer implements Serializable {
 	
 	private Set<Status> statuses = new HashSet<>(); // a customer can have multiple statuses
 
-	public Customer(Long id, String siteId, String name, String address, String phone) {
+	public Customer(Long id, String siteId, String name, String address, String phone, Set<Status> statuses) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
-
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
+		this.statuses = statuses;
 	}
 
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", siteId=" + siteId + ", name=" + name + ", address=" + address + ", phone="
-				+ phone + "]";
+				+ phone + ", statuses=" + statuses + "]";
 	}
+
+	
 
 }

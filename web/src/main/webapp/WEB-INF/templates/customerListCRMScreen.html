@@ -129,13 +129,13 @@
 
 	<!--  BEGIN CONTENT -->
 	<div class="app-content content">
-	
-	<!-- /////////////////////////////////BEGIN CONTENT WRAPPER/////////////////////////////////////////// -->
-	<th:block th:include="fragments/contentWrapperCRM"></th:block>
-	<!-- /////////////////////////////////END CONTENT WRAPPER/////////////////////////////////////////// -->
-		
-		
-		
+
+		<!-- /////////////////////////////////BEGIN CONTENT WRAPPER/////////////////////////////////////////// -->
+		<th:block th:include="fragments/contentWrapperCRM"></th:block>
+		<!-- /////////////////////////////////END CONTENT WRAPPER/////////////////////////////////////////// -->
+
+
+
 		<div class="content-body">
 			<section class="row">
 				<div class="col-12">
@@ -153,21 +153,27 @@
 						</div>
 
 						<div class="cover">
-							<button class="left" onclick="leftScroll()">
-								<i class="fas fa-angle-double-left"></i>
-							</button>
-							<div class="scroll-images">
-
-								<div th:each="status: ${statuses}" class="child"
-									th:style="'background-color:' + ${status.backgroundColor}">
-									<h4 th:text="${status.name}"></h4>
+							<form id="frmScrollImages" action="customer-list" method="get"
+								name="scrollForm">
+								<button type="button" class="left" onclick="leftScroll()">
+									<i class="fas fa-angle-double-left"></i>
+								</button>
+								<div class="scroll-images">
+									<div th:each="status: ${statuses}" class="child"
+										th:style="'background-color:' + ${status.backgroundColor}"
+										th:onclick="'fetchCustomersByStatus(' + ${status.id} + ')'"
+										th:attr="data-status-id=${status.id}">
+										<h4 th:text="${status.name}"></h4>
+									</div>
 								</div>
-
-							</div>
-							<button class="right" onclick="rightScroll()">
-								<i class="fas fa-angle-double-right"></i>
-							</button>
+								<button type="button" class="right" onclick="rightScroll()">
+									<i class="fas fa-angle-double-right"></i>
+								</button>
+							</form>
+							<!-- Optional: Div for additional content -->
+							<div id="scrollResults"></div>
 						</div>
+
 
 
 						<div class="card-content">
@@ -319,7 +325,8 @@
 																<!-- <th data-field="email_company" class="th6">Email</th> -->
 																<th data-field="phone_company" class="th7">Số điện
 																	thoại</th>
-																<th data-field="status_company" class="th8">Trạng thái</th>
+																<th data-field="status_company" class="th8">Trạng
+																	thái</th>
 																<!-- <th class="th8">Trạng thái chính</th>
 																	<th class="th9">Trạng thái phụ</th>
 																	<th class="th10">Người phụ trách</th>
@@ -338,7 +345,13 @@
 																<td th:text="${customer.name}"></td>
 																<td th:text="${customer.address}"></td>
 																<td th:text="${customer.phone}"></td>
-																<td>Status</td>
+																<td>
+																	<ul>
+																		<!-- Lặp qua danh sách trạng thái -->
+																		<li th:each="status : ${customer.statuses}"
+																			th:text="${status.name}">Trạng thái</li>
+																	</ul>
+																</td>
 															</tr>
 															<!-- <tr id="row1">
 																	<td class="th1"><input type="checkbox"
@@ -1075,6 +1088,8 @@
 		src="resources/app-assets/js/update/status.js"></script>
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/search.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/fetchCustomersByStatus.js"></script>
 
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/customerList_JS.js"></script>
