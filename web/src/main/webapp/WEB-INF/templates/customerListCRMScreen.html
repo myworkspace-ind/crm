@@ -41,6 +41,8 @@
 
 <link rel="stylesheet" type="text/css" href="resources/css/status.css">
 
+<link rel="stylesheet" type="text/css" href="resources/css/buttonGroup.css">
+
 <link rel="stylesheet" type="text/css"
 	href="resources/app-assets/css/components_new.min.css">
 
@@ -191,6 +193,23 @@
 											<div class="col-sm-12 col-md-6"></div>
 										</div>
 
+
+										<div class="row row2">
+											<div class="btn-group" role="group" aria-label="Button group">
+												<p class="quantity-check">0</p>
+												<p class="check">Đã chọn</p>
+												<p class="quit">Bỏ chọn</p>
+												<button type="button" class="btn">Gửi Email</button>
+												<button type="button" class="btn">Gửi SMS</button>
+												<button type="button" class="btn">Tạo Cơ Hội</button>
+												<button type="button" class="btn">Tạo Công Việc</button>
+												<button type="button" class="btn">Mối Quan Hệ</button>
+												<button type="button" class="btn">Nhóm Khách Hàng</button>
+												<button type="button" class="btn">Nguồn Khách Hàng</button>
+												<button type="button" class="btn">Người Xem</button>
+												<button type="button" class="btn">Xóa Nhiều</button>
+											</div>
+										</div>
 										<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
 										<div class="container-flex">
 											<div class="filter-container">
@@ -294,8 +313,7 @@
 
 																<!-- <th data-field="logo_company" class="th2">Logo CTY</th> -->
 																<th data-field="id_company" class="th2">ID</th>
-																<th data-field="name_company" class="th3">Tên khách
-																	hàng</th>
+																<th data-field="name_company" class="th3">Tên khách hàng</th>
 																<th data-field="address_company" class="th4">Địa
 																	chỉ khách hàng</th>
 																<!-- <th data-field="name_representative" class="th5">Tên
@@ -318,11 +336,11 @@
 														<tbody>
 															<tr th:each="customer : ${customers}">
 																<td class="th1"><input type="checkbox"
-																	name="customer" value="1" /></td>
+																	name="customer" value="1" class="customer-checkbox"/></td>
 																<td th:text="${customer.id}"></td>
-																<td>
-																 	<a th:href="@{/customerDetail(id=${customer.id})}" th:text="${customer.name}"></a>
-																 </td>
+																<td><a
+																	th:href="@{/customerDetail(id=${customer.id})}"
+																	th:text="${customer.name}"></a></td>
 																<!-- <a th:href="@{/customer/detail/{id}(id=${customer.id})}" th:text="${customer.name}"></a> -->
 																<td th:text="${customer.address}"></td>
 																<td th:text="${customer.phone}"></td>
@@ -537,6 +555,8 @@
 		src="resources/app-assets/js/update/fetchCustomersByStatus.js"></script>
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/customerList_JS.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/toggleCheckboxActions.js"></script>
 
 </body>
 </html>

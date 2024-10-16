@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+.row .row2 {
+	display: none;
+	border: solid 2px;
+	width: fit-content;
+	margin-left: 90px;
+	height: 90px;
+	margin-bottom: 10px;
+	background-color: #2C3E9A;
+	padding: 10px;
+}
+
+.btn {
+	background-color: white;
+	border-radius: 10px;
+	color: #2C3E9A;
+	margin-right: 20px;
+	transition: all 0.3s ease;
+	height: fit-content;
+}
+
+.btn-group {
+	margin-top: 15px;
+}
+
+.btn:focus, .btn:hover {
+	color: #2C3E9A;
+	background-color: #E0E6FF;
+	font-weight: bold;
+	transition: all 0.3s ease;
+}
+
+.row .row2 p {
+	color: white;
+	font-size: 16px;
+	margin-right: 20px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	font-weight: bold;
+	width: 80px;
+}
+
+p.quit {
+	color: #bfbfff !important;
+	cursor: pointer;
+}
+
+p.quantity-check {
+	margin-right: 5px !important;
+	width: 25px !important;
+	height: 25px !important;
+	display: inline-flex;
+	line-height: 40px;
+	text-align: center;
+	border-radius: 50%;
+	background-color: #da4453;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+	justify-content: center;
+	align-items: center;
+	margin-top: -1px !important;
+}
