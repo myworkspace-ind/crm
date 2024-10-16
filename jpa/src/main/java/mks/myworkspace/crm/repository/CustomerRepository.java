@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
 	@Query("SELECT c FROM Customer c LEFT JOIN FETCH c.statuses s WHERE s.id =:statusId")
 	List<Customer> findByStatusId(@Param("statusId") Long statusId);
+	
+	@Query("SELECT c FROM Customer c LEFT JOIN FETCH c.statuses s WHERE c.id = :id")
+	Optional<Customer> findById(@Param("id") Long id);
 }

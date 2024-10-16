@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -53,11 +54,9 @@ public class CustomerController extends BaseController {
 	@Autowired
 	StatusService statusService;
 
-	@RequestMapping(value = { "/customer", "/customer-list"}, method = RequestMethod.GET)
-	public ModelAndView displayCustomerListCRMScreen(
-			@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "statusId", required = false) Long statusId,
-			HttpServletRequest request,
+	@RequestMapping(value = { "/customer-list" }, method = RequestMethod.GET)
+	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
 			HttpSession httpSession) {
 
 		log.debug("Display Cusomter list with keyword= {}", keyword);
@@ -76,12 +75,11 @@ public class CustomerController extends BaseController {
 			mav.addObject("statusId", statusId);
 			log.debug("Fetching customers for status ID: {}", statusId);
 
-			
 		} else if (keyword != null && !keyword.isEmpty()) {
 			customers = customerService.searchCustomers(keyword);
 			mav.addObject("keyword", keyword);
 			log.debug("Searching customers with keyword: {}", keyword);
-			
+
 		} else {
 			customers = customerService.getAllCustomersWithStatuses();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
@@ -110,18 +108,69 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 
-//	@RequestMapping(value = "/customer/status/{statusId}", method = RequestMethod.GET)
-//	public ModelAndView getCustomersByStatus(@PathVariable("statusId") Long statusId, HttpServletRequest request, HttpSession httpSession) {
-//	    log.debug("Fetching customers for status ID: {}", statusId);
-//	    
-//	    List<Customer> customers = customerService.findCustomersByStatus(statusId);
-//	    
-//	    ModelAndView mav = new ModelAndView("customerListCRMScreen");
+	@RequestMapping(value = { "/customerDetail" }, method = RequestMethod.GET)
+	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
+			HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("customerDetail");
+
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		log.debug("Customer Detail is running....");
+
+		Optional<Customer> customerOpt = customerService.findById(customerId);
+
+		// Check if the customer exists and add to model
+		customerOpt.ifPresentOrElse(customer -> {
+			mav.addObject("customer", customer);
+		}, () -> {
+			mav.addObject("errorMessage", "Customer not found.");
+		});
+
+		return mav;
+	}
+
+	/*
+	 * @RequestMapping(value = { "/customer" }, method = RequestMethod.GET) public
+	 * ModelAndView displayCustomerDetailCRMScreen(@RequestParam(value = "id",
+	 * required = false) Long id, HttpServletRequest request, HttpSession
+	 * httpSession) {
+	 * 
+	 * log.debug("CUSTOMER DETAIL IS RUNNING..."); ModelAndView mav = new
+	 * ModelAndView("customerListCRMScreen"); initSession(request, httpSession);
+	 * 
+	 * mav.addObject("currentSiteId", getCurrentSiteId());
+	 * mav.addObject("userDisplayName", getCurrentUserDisplayName());
+	 * 
+	 * Optional<Customer> customerOptional = customerService.findById(id);
+	 * mav.addObject("customerDetail", customerOptional);
+	 * 
+	 * 
+	 * return mav; }
+	 */
+
+//	@RequestMapping(value = { "/customer/detail" }, method = RequestMethod.GET)
+//	public ModelAndView displayCustomerDetailCRMScreen(HttpServletRequest request, HttpSession httpSession) {
+//
+//	    ModelAndView mav = new ModelAndView("customerDetail");
 //	    initSession(request, httpSession);
-//	    
-//	    // Cung cấp danh sách khách hàng vào model
-//	    mav.addObject("customers", customers);
-//	    mav.addObject("statuses", statusService.getAllStatuses());
+//
+//	    mav.addObject("currentSiteId", getCurrentSiteId());
+//	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+//
+//	    // Truyền id = 2 vào để lấy thông tin chi tiết của khách hàng có id = 2
+//	    Long customerId = 2L;  // Giả sử bạn muốn tìm khách hàng có id = 2
+//	    Optional<Customer> customerOptional = customerService.findById(customerId);
+//
+//	    if (customerOptional.isPresent()) {
+//	        Customer customer = customerOptional.get();
+//	        mav.addObject("customer", customer);
+//	        log.debug("Customer details: {}", customer.getName());
+//	        // Bạn có thể thêm customer vào ModelAndView để hiển thị trong view
+//	    } else {
+//	        log.debug("Customer with id {} not found.", customerId);
+//	        mav.addObject("message", "Customer not found");
+//	    }
 //
 //	    return mav;
 //	}

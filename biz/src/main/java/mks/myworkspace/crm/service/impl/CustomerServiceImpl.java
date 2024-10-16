@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,11 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public List<Customer> findCustomersByStatus(Long statusId) {
 		return repo.findByStatusId(statusId);
+	}
+
+	@Override
+	public Optional<Customer> findById(Long id) {
+		return repo.findById(id);
 	}
 
 	
