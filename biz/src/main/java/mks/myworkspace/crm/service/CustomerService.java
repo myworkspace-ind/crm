@@ -14,4 +14,6 @@ public interface CustomerService {
 	List<Customer> getAllCustomersWithStatuses();
 	List<Customer> findCustomersByStatus(Long statusId);
 	Optional<Customer> findById(Long id);
+	
+	Customer createCustomer(Customer customer);
 }

@@ -39,6 +39,8 @@
 <link rel="stylesheet" type="text/css"
 	href="resources/css/new_style.css">
 
+<link rel="stylesheet" type="text/css" href="resources/css/variable.css">
+
 <link rel="stylesheet" type="text/css" href="resources/css/status.css">
 
 <link rel="stylesheet" type="text/css"
@@ -81,8 +83,6 @@
 
 
 
-
-
 <!-- <link rel="apple-touch-icon" href="https://mksol.vn/themes/robust-admin/app-assets/images/ico/apple-icon-120.png">
     <link rel="shortcut icon" type="image/x-icon" href="https://mksol.vn/themes/robust-admin/app-assets/images/ico/favicon.ico"> -->
 
@@ -110,6 +110,14 @@
 
 <!-- BEGIN Custom CSS-->
 <!-- <link rel="stylesheet" type="text/css" href="https://mksol.vn/themes/robust-admin/assets/css/style.css"> -->
+
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </head>
 <body
@@ -141,12 +149,50 @@
 							<a class="heading-elements-toggle"><i
 								class="ft-ellipsis-h font-medium-3"></i></a>
 							<div class="heading-elements">
-								<button class="btn btn-primary btn-sm" fdprocessedid="q9g77z">
-									<i class="fa-solid fa-plus"></i> Add New Customers
+								<button class="btn btn-primary btn-sm" fdprocessedid="q9g77z"
+									data-toggle="modal" data-target="#addNewCustomerModal">
+									<i class="fa-solid fa-plus"></i> Thêm khách hàng mới
 								</button>
 
 							</div>
 						</div>
+
+						<!-- Modal cho Thêm Khách Hàng Mới -->
+						<div class="modal fade" id="addNewCustomerModal" tabindex="-1"
+							role="dialog" aria-labelledby="addNewCustomerModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="addNewCustomerModalLabel">Thêm
+											Khách Hàng Mới</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form id="addNewCustomerForm">
+											<div class="form-group">
+												<label for="name">Tên:</label> <input type="text"
+													class="form-control" id="name" name="name" required>
+											</div>
+											<div class="form-group">
+												<label for="address">Địa chỉ:</label> <input type="text"
+													class="form-control" id="address" name="address" required>
+											</div>
+											<div class="form-group">
+												<label for="phone">Số điện thoại:</label> <input style="display:block!important;" type="text"
+													class="form-control" id="phone" name="phone" required>
+											</div>
+											<button type="submit" class="btn btn-primary">Lưu
+												Khách Hàng</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
 
 						<!-- /////////////////////////////////BEGIN STATUS OF CUSTOMER/////////////////////////////////////////// -->
 						<th:block th:include="fragments/statusOfCustomer"></th:block>
@@ -284,7 +330,8 @@
 													<table id="table" class="table table-bordered">
 														<thead>
 															<tr>
-																<th width="2%" data-field="select" class="th1"><input
+																<th style="padding: 0 !important;" width="2%"
+																	data-field="select" class="th1"><input
 																	type="checkbox" id="select-all"
 																	class="d-flex align-items-center justify-content-center" />
 																	<!-- <div class="checkbox-table-customer d-flex align-items-center justify-content-center">
@@ -320,9 +367,9 @@
 																<td class="th1"><input type="checkbox"
 																	name="customer" value="1" /></td>
 																<td th:text="${customer.id}"></td>
-																<td>
-																 	<a th:href="@{/customerDetail(id=${customer.id})}" th:text="${customer.name}"></a>
-																 </td>
+																<td><a
+																	th:href="@{/customerDetail(id=${customer.id})}"
+																	th:text="${customer.name}"></a></td>
 																<!-- <a th:href="@{/customer/detail/{id}(id=${customer.id})}" th:text="${customer.name}"></a> -->
 																<td th:text="${customer.address}"></td>
 																<td th:text="${customer.phone}"></td>
@@ -537,6 +584,11 @@
 		src="resources/app-assets/js/update/fetchCustomersByStatus.js"></script>
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/customerList_JS.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/addCustomer.js"></script>
+	
 
 </body>
 </html>
+
+
