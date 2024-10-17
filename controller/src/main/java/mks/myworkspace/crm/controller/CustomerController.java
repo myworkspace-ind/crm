@@ -1,21 +1,29 @@
 package mks.myworkspace.crm.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
+
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.service.CustomerService;
@@ -95,7 +103,7 @@ public class CustomerController extends BaseController {
 		for (Status status : statuses) {
 			log.debug("Thông tin trạng thái KH: {}", status.getName());
 		}
-
+	
 		for (Customer customer : customers) {
 			log.debug("Customer: {} (ID: {})", customer.getName(), customer.getId());
 
@@ -129,7 +137,28 @@ public class CustomerController extends BaseController {
 
 		return mav;
 	}
+	
 
+	@PostMapping(value = "/api/addNewCustomers", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Customer> addNewCustomer(@RequestBody Customer customer) {
+	    System.out.println("Received customer data: " + customer);  
+	    try {
+	        // Lưu khách hàng vào cơ sở dữ liệu
+	        Customer savedCustomer = customerService.createCustomer(customer);
+	        
+	        // Trả về khách hàng đã lưu cùng với mã trạng thái 200 OK
+	        return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer); 
+	    } catch (Exception e) {
+	        e.printStackTrace();  // In ra stack trace để dễ dàng debug
+	        // Nếu có lỗi xảy ra, trả về mã trạng thái 500 Internal Server Error
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+
+	
+	
+	
 	/*
 	 * @RequestMapping(value = { "/customer" }, method = RequestMethod.GET) public
 	 * ModelAndView displayCustomerDetailCRMScreen(@RequestParam(value = "id",
