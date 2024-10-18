@@ -41,7 +41,8 @@
 
 <link rel="stylesheet" type="text/css" href="resources/css/status.css">
 
-<link rel="stylesheet" type="text/css" href="resources/css/buttonGroup.css">
+<link rel="stylesheet" type="text/css"
+	href="resources/css/buttonGroup.css">
 
 <link rel="stylesheet" type="text/css"
 	href="resources/app-assets/css/components_new.min.css">
@@ -143,9 +144,11 @@
 							<a class="heading-elements-toggle"><i
 								class="ft-ellipsis-h font-medium-3"></i></a>
 							<div class="heading-elements">
-								<button class="btn btn-primary btn-sm" fdprocessedid="q9g77z">
-									<i class="fa-solid fa-plus"></i> Add New Customers
-								</button>
+								<a href="/crm-web/add-customer">
+									<button class="btn btn-primary btn-sm">
+										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
+									</button>
+								</a>
 
 							</div>
 						</div>
@@ -313,7 +316,8 @@
 
 																<!-- <th data-field="logo_company" class="th2">Logo CTY</th> -->
 																<th data-field="id_company" class="th2">ID</th>
-																<th data-field="name_company" class="th3">Tên khách hàng</th>
+																<th data-field="name_company" class="th3">Tên khách
+																	hàng</th>
 																<th data-field="address_company" class="th4">Địa
 																	chỉ khách hàng</th>
 																<!-- <th data-field="name_representative" class="th5">Tên
@@ -336,7 +340,7 @@
 														<tbody>
 															<tr th:each="customer : ${customers}">
 																<td class="th1"><input type="checkbox"
-																	name="customer" value="1" class="customer-checkbox"/></td>
+																	name="customer" value="1" class="customer-checkbox" /></td>
 																<td th:text="${customer.id}"></td>
 																<td><a
 																	th:href="@{/customerDetail(id=${customer.id})}"
