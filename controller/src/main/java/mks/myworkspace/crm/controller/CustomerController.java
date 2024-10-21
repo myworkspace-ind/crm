@@ -13,9 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +29,7 @@ import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.StatusService;
+import mks.myworkspace.crm.service.StorageService;
 
 /**
  * Handles requests for Tasks.
@@ -58,6 +60,9 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired
+	StorageService storageService;
 
 	@Autowired
 	StatusService statusService;
@@ -139,69 +144,58 @@ public class CustomerController extends BaseController {
 	}
 	
 
-	@PostMapping(value = "/api/addNewCustomers", consumes = "application/json", produces = "application/json")
-	@ResponseBody
-	public ResponseEntity<Customer> addNewCustomer(@RequestBody Customer customer) {
-	    System.out.println("Received customer data: " + customer);  
-	    try {
-	        // Lưu khách hàng vào cơ sở dữ liệu
-	        Customer savedCustomer = customerService.createCustomer(customer);
-	        
-	        // Trả về khách hàng đã lưu cùng với mã trạng thái 200 OK
-	        return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer); 
-	    } catch (Exception e) {
-	        e.printStackTrace();  // In ra stack trace để dễ dàng debug
-	        // Nếu có lỗi xảy ra, trả về mã trạng thái 500 Internal Server Error
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-	    }
+	@RequestMapping(value = { "/add-customer" }, method = RequestMethod.GET)
+	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("createCustomer");
+		
+		mav.addObject("customer", new Customer());
+
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		
+		//Long newId = customerService.getNextCustomerId(); // Lấy ID tiếp theo
+	    //Customer customer = new Customer(); // Tạo đối tượng Customer mới
+	    //customer.setId(newId); // Thiết lập ID mới cho khách hàng
+	    //mav.addObject("customer", customer); // Thêm khách hàng vào model
+		return mav;
 	}
+	
+	@RequestMapping(value = { "/save-customer" }, method = RequestMethod.POST)
+	public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, HttpServletRequest request, HttpSession httpSession) {
+	    // Khởi tạo ModelAndView
+	    ModelAndView mav = new ModelAndView();
+
+	    // Lưu khách hàng bằng cách gọi tầng service
+	    storageService.saveOrUpdate(customer);
+
+	    // Điều hướng về trang danh sách khách hàng sau khi lưu thành công
+	    mav.setViewName("redirect:/customer-list"); // Giả sử bạn có trang danh sách khách hàng tại "/customers"
+
+	    // Cập nhật session và thêm các đối tượng cần thiết
+	    initSession(request, httpSession);
+	    mav.addObject("currentSiteId", getCurrentSiteId());
+	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+	    return mav;
+	}
+	
 
 	
-	
-	
-	/*
-	 * @RequestMapping(value = { "/customer" }, method = RequestMethod.GET) public
-	 * ModelAndView displayCustomerDetailCRMScreen(@RequestParam(value = "id",
-	 * required = false) Long id, HttpServletRequest request, HttpSession
-	 * httpSession) {
-	 * 
-	 * log.debug("CUSTOMER DETAIL IS RUNNING..."); ModelAndView mav = new
-	 * ModelAndView("customerListCRMScreen"); initSession(request, httpSession);
-	 * 
-	 * mav.addObject("currentSiteId", getCurrentSiteId());
-	 * mav.addObject("userDisplayName", getCurrentUserDisplayName());
-	 * 
-	 * Optional<Customer> customerOptional = customerService.findById(id);
-	 * mav.addObject("customerDetail", customerOptional);
-	 * 
-	 * 
-	 * return mav; }
-	 */
-
-//	@RequestMapping(value = { "/customer/detail" }, method = RequestMethod.GET)
-//	public ModelAndView displayCustomerDetailCRMScreen(HttpServletRequest request, HttpSession httpSession) {
+//	@PostMapping("/save-customer")
+//	public ModelAndView addCustomer(@ModelAttribute Customer customer) {
+//		try {
+//			customerService.createCustomer(customer);
 //
-//	    ModelAndView mav = new ModelAndView("customerDetail");
-//	    initSession(request, httpSession);
+//			ModelAndView mav = new ModelAndView("redirect:/customer-list");
+//			mav.addObject("successMessage", "Customer has been added successfully!");
+//			return mav;
 //
-//	    mav.addObject("currentSiteId", getCurrentSiteId());
-//	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
-//
-//	    // Truyền id = 2 vào để lấy thông tin chi tiết của khách hàng có id = 2
-//	    Long customerId = 2L;  // Giả sử bạn muốn tìm khách hàng có id = 2
-//	    Optional<Customer> customerOptional = customerService.findById(customerId);
-//
-//	    if (customerOptional.isPresent()) {
-//	        Customer customer = customerOptional.get();
-//	        mav.addObject("customer", customer);
-//	        log.debug("Customer details: {}", customer.getName());
-//	        // Bạn có thể thêm customer vào ModelAndView để hiển thị trong view
-//	    } else {
-//	        log.debug("Customer with id {} not found.", customerId);
-//	        mav.addObject("message", "Customer not found");
-//	    }
-//
-//	    return mav;
+//		} catch (Exception e) {
+//			ModelAndView mav = new ModelAndView("createCustomer");
+//			mav.addObject("errorMessage", "Error occurred while adding the customer.");
+//			return mav;
+//		}
 //	}
 
 }

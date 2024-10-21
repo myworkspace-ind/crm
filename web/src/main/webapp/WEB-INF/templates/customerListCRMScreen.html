@@ -44,6 +44,9 @@
 <link rel="stylesheet" type="text/css" href="resources/css/status.css">
 
 <link rel="stylesheet" type="text/css"
+	href="resources/css/buttonGroup.css">
+
+<link rel="stylesheet" type="text/css"
 	href="resources/app-assets/css/components_new.min.css">
 
 <!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
@@ -149,10 +152,11 @@
 							<a class="heading-elements-toggle"><i
 								class="ft-ellipsis-h font-medium-3"></i></a>
 							<div class="heading-elements">
-								<button class="btn btn-primary btn-sm" fdprocessedid="q9g77z"
-									data-toggle="modal" data-target="#addNewCustomerModal">
-									<i class="fa-solid fa-plus"></i> Thêm khách hàng mới
-								</button>
+								<a href="/crm-web/add-customer">
+									<button class="btn btn-primary btn-sm">
+										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
+									</button>
+								</a>
 
 							</div>
 						</div>
@@ -237,6 +241,23 @@
 											<div class="col-sm-12 col-md-6"></div>
 										</div>
 
+
+										<div class="row row2">
+											<div class="btn-group" role="group" aria-label="Button group">
+												<p class="quantity-check">0</p>
+												<p class="check">Đã chọn</p>
+												<p class="quit">Bỏ chọn</p>
+												<button type="button" class="btn">Gửi Email</button>
+												<button type="button" class="btn">Gửi SMS</button>
+												<button type="button" class="btn">Tạo Cơ Hội</button>
+												<button type="button" class="btn">Tạo Công Việc</button>
+												<button type="button" class="btn">Mối Quan Hệ</button>
+												<button type="button" class="btn">Nhóm Khách Hàng</button>
+												<button type="button" class="btn">Nguồn Khách Hàng</button>
+												<button type="button" class="btn">Người Xem</button>
+												<button type="button" class="btn">Xóa Nhiều</button>
+											</div>
+										</div>
 										<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
 										<div class="container-flex">
 											<div class="filter-container">
@@ -365,7 +386,7 @@
 														<tbody>
 															<tr th:each="customer : ${customers}">
 																<td class="th1"><input type="checkbox"
-																	name="customer" value="1" /></td>
+																	name="customer" value="1" class="customer-checkbox" /></td>
 																<td th:text="${customer.id}"></td>
 																<td><a
 																	th:href="@{/customerDetail(id=${customer.id})}"
@@ -585,8 +606,7 @@
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/customerList_JS.js"></script>
 	<script type="text/javascript"
-		src="resources/app-assets/js/update/addCustomer.js"></script>
-	
+		src="resources/app-assets/js/update/toggleCheckboxActions.js"></script>
 
 </body>
 </html>
