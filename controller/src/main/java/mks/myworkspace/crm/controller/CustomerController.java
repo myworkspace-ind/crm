@@ -80,7 +80,7 @@ public class CustomerController extends BaseController {
 		 */
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-
+		
 		List<Customer> customers;
 
 		if (statusId != null) {
@@ -163,14 +163,23 @@ public class CustomerController extends BaseController {
 	
 	@RequestMapping(value = { "/save-customer" }, method = RequestMethod.POST)
 	public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, HttpServletRequest request, HttpSession httpSession) {
-	    // Khởi tạo ModelAndView
 	    ModelAndView mav = new ModelAndView();
 
-	    // Lưu khách hàng bằng cách gọi tầng service
-	    storageService.saveOrUpdate(customer);
-
-	    // Điều hướng về trang danh sách khách hàng sau khi lưu thành công
-	    mav.setViewName("redirect:/customer-list"); // Giả sử bạn có trang danh sách khách hàng tại "/customers"
+	    try {
+		    
+		    //storageService.saveOrUpdate(customer);
+	    	customerService.createCustomer(customer);
+	       
+	     // Điều hướng về trang danh sách khách hàng sau khi lưu thành công
+	        mav.setViewName("redirect:/customer-list");
+	        //mav.addObject("successMessage", "Khách hàng đã được thêm thành công!");
+	    
+	    } catch (IllegalArgumentException e) {
+	    	//Nếu sđt đã tốn tại, trả về trang tạo khách hàng với thông báo lỗi
+	    	mav.setViewName("createCustomer");
+	    	mav.addObject("errorMessage", e.getMessage()); // Thông báo lỗi từ ngoại lệ
+	        mav.addObject("customer", customer); // Giữ lại thông tin khách hàng đã nhập để người dùng không phải nhập lại
+	    }
 
 	    // Cập nhật session và thêm các đối tượng cần thiết
 	    initSession(request, httpSession);

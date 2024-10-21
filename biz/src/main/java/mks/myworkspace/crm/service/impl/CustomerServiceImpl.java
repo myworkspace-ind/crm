@@ -3,8 +3,6 @@ package mks.myworkspace.crm.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +56,18 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional
 	@Override
 	public Customer createCustomer(Customer customer) {
+		//Kiem tra sdt ton tai hay chua (truong hop database da duoc kiem tra khong co sdt trung)
+		Optional<Customer> existingCustomer = repo.findByPhone(customer.getPhone());
+		if(existingCustomer.isPresent()) {
+			throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+		}
+		
+		//Dung cai nay trong truong hop database chua hoan toan chinh xac (truong hop da co so dien thoai trung lap trong db)
+//		List<Customer> existingCustomers = repo.findByPhone(customer.getPhone());
+//	    if (!existingCustomers.isEmpty()) {
+//	        throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+//	    }
+		
 		log.debug("Saving customer: " + customer.toString());
 		Customer savedCustomer = repo.save(customer);
 		log.debug("Customer saved with ID: " + savedCustomer.getId()); // Sau khi lưu
