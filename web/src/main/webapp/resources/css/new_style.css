@@ -507,3 +507,7 @@ nav-link-expand i.fa-compress:before {
 	transform: scale(1.1);
 }
 
+.table-bordered th, 
+.table-bordered td {
+    border: 1px solid #dee2e6;
+}

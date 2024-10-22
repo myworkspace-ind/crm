@@ -1,6 +1,6 @@
 package mks.myworkspace.crm.service.impl;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,19 +19,6 @@ public class StorageServiceImpl implements StorageService {
 	CustomerRepository customerRepo;
 
 	@Override
-	public List<Customer> saveOrUpdate(List<Customer> lstCustomers) {
-		List<Long> lstIds = appRepo.saveOrUpdate(lstCustomers);
-
-		// Update the Id of saved task
-		int len = (lstIds != null) ? lstIds.size() : 0;
-		for (int i = 0; i < len; i++) {
-			lstCustomers.get(i).setId(lstIds.get(i));
-		}
-
-		return lstCustomers;
-	}
-
-	@Override
 	public CustomerRepository getCustomerRepo() {
 		// TODO Auto-generated method stub
 		return null;
@@ -41,5 +28,21 @@ public class StorageServiceImpl implements StorageService {
 	public AppRepository getAppRepo() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Customer saveOrUpdate(Customer customer) {
+		// Kiểm tra số điện thoại đã tồn tại chưa
+	    Optional<Customer> existingCustomer = customerRepo.findByPhone(customer.getPhone());
+	    
+	    if (existingCustomer.isPresent()) {
+	        throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+	    }
+	    
+		Long id = appRepo.saveOrUpdate(customer);
+		if (id != null) {
+			customer.setId(id);
+		}
+		return customer;
 	}
 }

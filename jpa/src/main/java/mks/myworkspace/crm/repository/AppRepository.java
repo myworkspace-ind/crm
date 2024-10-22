@@ -1,8 +1,5 @@
 package mks.myworkspace.crm.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,25 +19,23 @@ public class AppRepository {
 	 * @param entities
 	 * @return
 	 */
-	public List<Long> saveOrUpdate(List<Customer> entities) {
-		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
-
-		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_customer")
-				.usingGeneratedKeyColumns("id");
-
+	public Long saveOrUpdate(Customer customer) {
 		Long id;
-		for (Customer e : entities) {
-			if (e.getId() == null) {
-				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
-			} else {
-				// Update
-				update(e);
-				id = e.getId();
-			}
 
-			ids.add(id);
-		}
-		return ids;
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
+                .withTableName("crm_customer")
+                .usingGeneratedKeyColumns("id");
+
+        if (customer.getId() == null) {
+            // Save new customer
+            id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(customer)).longValue();
+        } else {
+            // Update existing customer
+            update(customer);
+            id = customer.getId();
+        }
+
+        return id;
 	}
 	
 	private void update(Customer e) {

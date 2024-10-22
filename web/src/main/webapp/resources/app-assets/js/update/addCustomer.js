@@ -7,30 +7,36 @@ $(document).ready(function() {
 			address: $('#address').val(),
 			phone: $('#phone').val(),
 		};
+		console.log(customerData);
 
 		// Gửi yêu cầu POST tới API để lưu khách hàng
-		fetch('/crm-web/api/addNewCustomers', {
+		fetch('/crm-web/create-customer', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(customerData),
 		})
-			.then(response => response.json())
+			.then(response => {
+				if (!response.ok) {
+					return response.json().then(err => { throw new Error(err.errorMessage); });
+				}
+				return response.json();
+			})
 			.then(data => {
 				// Đóng modal và reset form sau khi lưu
 				$('#addNewCustomerModal').modal('hide');
 				$('#addNewCustomerForm')[0].reset();
 				alert('Khách hàng mới đã được thêm!');
+				location.reload(); // Reload lại trang để cập nhật danh sách khách hàng
 			})
 			.catch(error => {
 				console.error('Error:', error);
-				alert('Đã có lỗi xảy ra, vui lòng thử lại!');
+				$('#errorMessage').text(error.message).show();  // Hiển thị lỗi trong modal
+
+				setTimeout(function() {
+					$('#errorMessage').fadeOut(); // Ẩn thông báo
+				}, 3000);
 			});
 	});
 });
-
-
-//$(document).ready(function() {
-//    $('#addNewCustomerModal').modal('show');
-//});
