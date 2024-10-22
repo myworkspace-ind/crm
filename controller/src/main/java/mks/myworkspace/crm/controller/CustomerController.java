@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -143,52 +144,40 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 	
-
-	@RequestMapping(value = { "/add-customer" }, method = RequestMethod.GET)
-	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("createCustomer");
-		
-		mav.addObject("customer", new Customer());
-
-		initSession(request, httpSession);
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		
-		//Long newId = customerService.getNextCustomerId(); // Lấy ID tiếp theo
-	    //Customer customer = new Customer(); // Tạo đối tượng Customer mới
-	    //customer.setId(newId); // Thiết lập ID mới cho khách hàng
-	    //mav.addObject("customer", customer); // Thêm khách hàng vào model
-		return mav;
-	}
+//	@RequestMapping(value = { "/create-customer" }, method = RequestMethod.POST)
+//	public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, HttpServletRequest request, HttpSession httpSession) {
+//	    ModelAndView mav = new ModelAndView();
+//
+//	    try {
+//	    	storageService.saveOrUpdate(customer);
+//	    	
+//	     // Điều hướng về trang danh sách khách hàng sau khi lưu thành công
+//	        mav.setViewName("redirect:/customer-list");
+//	        //mav.addObject("successMessage", "Khách hàng đã được thêm thành công!");
+//	    
+//	    } catch (IllegalArgumentException e) {
+//	    	mav.setViewName("createCustomer");
+//	    	mav.addObject("errorMessage", e.getMessage()); 
+//	        mav.addObject("customer", customer); 
+//	    }
+//
+//	    initSession(request, httpSession);
+//	    mav.addObject("currentSiteId", getCurrentSiteId());
+//	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+//
+//	    return mav;
+//	}
 	
-	@RequestMapping(value = { "/save-customer" }, method = RequestMethod.POST)
-	public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, HttpServletRequest request, HttpSession httpSession) {
-	    ModelAndView mav = new ModelAndView();
-
+	@RequestMapping(value = "/create-customer", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseBody
+	public ResponseEntity<?> saveCustomer(@RequestBody Customer customer, HttpServletRequest request, HttpSession httpSession) {
 	    try {
-		    
-		    //storageService.saveOrUpdate(customer);
-	    	customerService.createCustomer(customer);
-	       
-	     // Điều hướng về trang danh sách khách hàng sau khi lưu thành công
-	        mav.setViewName("redirect:/customer-list");
-	        //mav.addObject("successMessage", "Khách hàng đã được thêm thành công!");
-	    
+	        storageService.saveOrUpdate(customer);
+	        return ResponseEntity.ok().body(Map.of("message", "Khách hàng mới đã được thêm!", "customer", customer));
 	    } catch (IllegalArgumentException e) {
-	    	//Nếu sđt đã tốn tại, trả về trang tạo khách hàng với thông báo lỗi
-	    	mav.setViewName("createCustomer");
-	    	mav.addObject("errorMessage", e.getMessage()); // Thông báo lỗi từ ngoại lệ
-	        mav.addObject("customer", customer); // Giữ lại thông tin khách hàng đã nhập để người dùng không phải nhập lại
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errorMessage", e.getMessage()));
 	    }
-
-	    // Cập nhật session và thêm các đối tượng cần thiết
-	    initSession(request, httpSession);
-	    mav.addObject("currentSiteId", getCurrentSiteId());
-	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
-
-	    return mav;
 	}
-	
 
 	
 //	@PostMapping("/save-customer")
@@ -205,6 +194,22 @@ public class CustomerController extends BaseController {
 //			mav.addObject("errorMessage", "Error occurred while adding the customer.");
 //			return mav;
 //		}
+//	}
+//	@RequestMapping(value = { "/add-customer" }, method = RequestMethod.GET)
+//	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
+//		ModelAndView mav = new ModelAndView("createCustomer");
+//		
+//		mav.addObject("customer", new Customer());
+//
+//		initSession(request, httpSession);
+//		mav.addObject("currentSiteId", getCurrentSiteId());
+//		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+//		
+//		//Long newId = customerService.getNextCustomerId(); // Lấy ID tiếp theo
+//	    //Customer customer = new Customer(); // Tạo đối tượng Customer mới
+//	    //customer.setId(newId); // Thiết lập ID mới cho khách hàng
+//	    //mav.addObject("customer", customer); // Thêm khách hàng vào model
+//		return mav;
 //	}
 
 }

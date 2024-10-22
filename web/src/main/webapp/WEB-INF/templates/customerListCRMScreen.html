@@ -151,50 +151,53 @@
 							<a class="heading-elements-toggle"><i
 								class="ft-ellipsis-h font-medium-3"></i></a>
 							<div class="heading-elements">
-								<a href="/crm-web/add-customer">
-									<button class="btn btn-primary btn-sm">
+<!-- 								<a href="/crm-web/add-customer"> -->
+									<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCustomerModal">
 										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
 									</button>
-								</a>
+<!-- 								</a> -->
 
 							</div>
 						</div>
 
-<!-- 						Modal cho Thêm Khách Hàng Mới -->
-<!-- 						<div class="modal fade" id="addNewCustomerModal" tabindex="-1" -->
-<!-- 							role="dialog" aria-labelledby="addNewCustomerModalLabel" -->
-<!-- 							aria-hidden="true"> -->
-<!-- 							<div class="modal-dialog" role="document"> -->
-<!-- 								<div class="modal-content"> -->
-<!-- 									<div class="modal-header"> -->
-<!-- 										<h5 class="modal-title" id="addNewCustomerModalLabel">Thêm -->
-<!-- 											Khách Hàng Mới</h5> -->
-<!-- 										<button type="button" class="close" data-dismiss="modal" -->
-<!-- 											aria-label="Close"> -->
-<!-- 											<span aria-hidden="true">&times;</span> -->
-<!-- 										</button> -->
-<!-- 									</div> -->
-<!-- 									<div class="modal-body"> -->
-<!-- 										<form id="addNewCustomerForm"> -->
-<!-- 											<div class="form-group"> -->
-<!-- 												<label for="name">Tên:</label> <input type="text" -->
-<!-- 													class="form-control" id="name" name="name" required> -->
-<!-- 											</div> -->
-<!-- 											<div class="form-group"> -->
-<!-- 												<label for="address">Địa chỉ:</label> <input type="text" -->
-<!-- 													class="form-control" id="address" name="address" required> -->
-<!-- 											</div> -->
-<!-- 											<div class="form-group"> -->
-<!-- 												<label for="phone">Số điện thoại:</label> <input style="display:block!important;" type="text" -->
-<!-- 													class="form-control" id="phone" name="phone" required> -->
-<!-- 											</div> -->
-<!-- 											<button type="submit" class="btn btn-primary">Lưu -->
-<!-- 												Khách Hàng</button> -->
-<!-- 										</form> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
+						Modal cho Thêm Khách Hàng Mới
+						<div class="modal fade" id="addNewCustomerModal" tabindex="-1"
+							role="dialog" aria-labelledby="addNewCustomerModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="addNewCustomerModalLabel">Thêm
+											Khách Hàng Mới</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form id="addNewCustomerForm">
+											<div id="errorMessage" class="alert alert-danger"
+												style="display: none;">
+											</div>
+											<div class="form-group">
+												<label for="name">Tên:</label> <input type="text"
+													class="form-control" id="name" name="name" required>
+											</div>
+											<div class="form-group">
+												<label for="address">Địa chỉ:</label> <input type="text"
+													class="form-control" id="address" name="address" required>
+											</div>
+											<div class="form-group">
+												<label for="phone">Số điện thoại:</label> <input style="display:block!important;" type="text"
+													class="form-control" id="phone" name="phone" required>
+											</div>
+											<button type="submit" class="btn btn-primary">Lưu
+												Khách Hàng</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
 
 
 						<!-- /////////////////////////////////BEGIN STATUS OF CUSTOMER/////////////////////////////////////////// -->
@@ -609,6 +612,8 @@
 		src="resources/app-assets/js/update/customerList_JS.js"></script>
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/toggleCheckboxActions.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/addCustomer.js"></script>
 
 </body>
 </html>
