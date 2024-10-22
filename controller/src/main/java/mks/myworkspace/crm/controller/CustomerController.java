@@ -176,6 +176,8 @@ public class CustomerController extends BaseController {
 	        return ResponseEntity.ok().body(Map.of("message", "Khách hàng mới đã được thêm!", "customer", customer));
 	    } catch (IllegalArgumentException e) {
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errorMessage", e.getMessage()));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
 	    }
 	}
 
