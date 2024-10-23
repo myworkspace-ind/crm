@@ -133,7 +133,7 @@ tr > td:nth-child(2) {
 tr > th:nth-child(3),
 tr > td:nth-child(3) {
   position: sticky;
-  left: 170px; /* Dịch sang phải bằng tổng chiều rộng của 2 cột đầu */
+  left: 100px; /* Dịch sang phải bằng tổng chiều rộng của 2 cột đầu */
   z-index: 1;
   background-color: white;
 }
