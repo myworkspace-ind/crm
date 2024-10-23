@@ -42,7 +42,7 @@
 <link rel="stylesheet" type="text/css" href="resources/css/status.css">
 
 <link rel="stylesheet" type="text/css"
-	href="resources/css/buttonGroup.css">
+	href="resources/css/buttonGroupFunction.css">
 
 <link rel="stylesheet" type="text/css"
 	href="resources/app-assets/css/components_new.min.css">
@@ -147,11 +147,12 @@
 							<a class="heading-elements-toggle"><i
 								class="ft-ellipsis-h font-medium-3"></i></a>
 							<div class="heading-elements">
-<!-- 								<a href="/crm-web/add-customer"> -->
-									<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCustomerModal">
-										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
-									</button>
-<!-- 								</a> -->
+								<!-- 								<a href="/crm-web/add-customer"> -->
+								<button class="btn btn-primary btn-sm" data-toggle="modal"
+									data-target="#addNewCustomerModal">
+									<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
+								</button>
+								<!-- 								</a> -->
 
 							</div>
 						</div>
@@ -173,8 +174,7 @@
 									<div class="modal-body">
 										<form id="addNewCustomerForm">
 											<div id="errorMessage" class="alert alert-danger"
-												style="display: none;">
-											</div>
+												style="display: none;"></div>
 											<div class="form-group">
 												<label for="name">Tên:</label> <input type="text"
 													class="form-control" id="name" name="name">
@@ -184,7 +184,8 @@
 													class="form-control" id="address" name="address">
 											</div>
 											<div class="form-group">
-												<label for="phone">Số điện thoại:</label> <input style="display:block!important;" type="text"
+												<label for="phone">Số điện thoại:</label> <input
+													style="display: block !important;" type="text"
 													class="form-control" id="phone" name="phone">
 											</div>
 											<button type="submit" class="btn btn-primary">Lưu
@@ -240,24 +241,10 @@
 										</div>
 
 
-										<div class="row row2">
-											<div class="btn-group" role="group" aria-label="Button group">
-												<p class="quantity-check">0</p>
-												<p class="check">Đã chọn</p>
-												<p class="quit">Bỏ chọn</p>
-												<button type="button" class="btn">Gửi Email</button>
-												<button type="button" class="btn">Gửi SMS</button>
-												<button type="button" class="btn">Tạo Cơ Hội</button>
-												<button type="button" class="btn">Tạo Công Việc</button>
-												<button type="button" class="btn">Mối Quan Hệ</button>
-												<button type="button" class="btn">Nhóm Khách Hàng</button>
-												<button type="button" class="btn">Nguồn Khách Hàng</button>
-												<button type="button" class="btn">Người Xem</button>
-												<button type="button" class="btn">Xóa Nhiều</button>
-											</div>
-										</div>
+										<!-- /////////////////////////////////BEGIN CONTENT WRAPPER/////////////////////////////////////////// -->
+										<th:block th:include="fragments/buttonGroupFunction"></th:block>
+										<!-- /////////////////////////////////END CONTENT WRAPPER/////////////////////////////////////////// -->
 
-										
 										<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
 										<div class="container-flex">
 											<div class="filter-container">
@@ -351,8 +338,7 @@
 													<table id="table" class="table table-bordered">
 														<thead>
 															<tr>
-																<th style ="width: 2%";
-																	data-field="select" class="th1"><input
+																<th style="width: 2%" data-field="select" class="th1"><input
 																	type="checkbox" id="select-all"
 																	class="d-flex align-items-center justify-content-center" />
 																	<!-- <div class="checkbox-table-customer d-flex align-items-center justify-content-center">
@@ -361,18 +347,19 @@
 										        	</div> --></th>
 
 																<!-- <th data-field="logo_company" class="th2">Logo CTY</th> -->
-																<th data-field="id_company" class="th2" style="width: 10%;">ID</th>
-																<th data-field="name_company" class="th3" style="width: 20%;">Tên khách
-																	hàng</th>
-																<th data-field="address_company" class="th4" style="width: 35%;">Địa
-																	chỉ khách hàng</th>
+																<th data-field="id_company" class="th2"
+																	style="width: 10%;">ID</th>
+																<th data-field="name_company" class="th3"
+																	style="width: 20%;">Tên khách hàng</th>
+																<th data-field="address_company" class="th4"
+																	style="width: 35%;">Địa chỉ khách hàng</th>
 																<!-- <th data-field="name_representative" class="th5">Tên
 																		người đại diện</th> -->
 																<!-- <th data-field="email_company" class="th6">Email</th> -->
-																<th data-field="phone_company" class="th7" style="width: 15%;">Số điện
-																	thoại</th>
-																<th data-field="status_company" class="th8" style="width: 15%;">Trạng
-																	thái</th>
+																<th data-field="phone_company" class="th7"
+																	style="width: 15%;">Số điện thoại</th>
+																<th data-field="status_company" class="th8"
+																	style="width: 15%;">Trạng thái</th>
 																<!-- <th class="th8">Trạng thái chính</th>
 																	<th class="th9">Trạng thái phụ</th>
 																	<th class="th10">Người phụ trách</th>
@@ -386,7 +373,8 @@
 														<tbody>
 															<tr th:each="customer : ${customers}">
 																<td class="th1"><input type="checkbox"
-																	name="customer" value="1" class="customer-checkbox" /></td>
+																	name="customer" th:value="${customer.id}"
+																	class="customer-checkbox" /></td>
 																<td th:text="${customer.id}"></td>
 																<td><a
 																	th:href="@{/customerDetail(id=${customer.id})}"
@@ -610,6 +598,8 @@
 		src="resources/app-assets/js/update/toggleCheckboxActions.js"></script>
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/addCustomer.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/buttonGroupFunction.js"></script>
 
 </body>
 </html>

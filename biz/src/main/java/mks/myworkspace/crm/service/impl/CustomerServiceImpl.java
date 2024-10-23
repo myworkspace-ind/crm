@@ -79,5 +79,18 @@ public class CustomerServiceImpl implements CustomerService {
 		Long maxId = repo.findMaxId();
 		return maxId + 1; // Trả về ID mới
 	}
+	
+	@Transactional
+	@Override
+	public void deleteCustomerById(Long id) {
+	    Optional<Customer> customer = repo.findById(id);
+	    if (customer.isPresent()) {
+	        log.debug("Deleting customer with ID: " + id);
+	        repo.deleteById(id);
+	        log.debug("Customer with ID: " + id + " has been deleted.");
+	    } else {
+	        throw new IllegalArgumentException("Không tìm thấy khách hàng với ID: " + id);
+	    }
+	}
 
 }

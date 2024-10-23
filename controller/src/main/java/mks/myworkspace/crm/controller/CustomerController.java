@@ -1,6 +1,5 @@
 package mks.myworkspace.crm.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
-
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.service.CustomerService;
@@ -61,7 +56,7 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	CustomerService customerService;
-	
+
 	@Autowired
 	StorageService storageService;
 
@@ -81,7 +76,7 @@ public class CustomerController extends BaseController {
 		 */
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		
+
 		List<Customer> customers;
 
 		if (statusId != null) {
@@ -109,7 +104,7 @@ public class CustomerController extends BaseController {
 		for (Status status : statuses) {
 			log.debug("Thông tin trạng thái KH: {}", status.getName());
 		}
-	
+
 		for (Customer customer : customers) {
 			log.debug("Customer: {} (ID: {})", customer.getName(), customer.getId());
 
@@ -143,7 +138,40 @@ public class CustomerController extends BaseController {
 
 		return mav;
 	}
-	
+
+	@RequestMapping(value = "/create-customer", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseBody
+	public ResponseEntity<?> saveCustomer(@RequestBody Customer customer, HttpServletRequest request,
+			HttpSession httpSession) {
+		try {
+			storageService.saveOrUpdate(customer);
+			return ResponseEntity.ok().body(Map.of("message", "Khách hàng mới đã được thêm!", "customer", customer));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
+		}
+	}
+
+	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
+	@ResponseBody	
+	public ResponseEntity<?> deleteCustomersByIds(@RequestBody List<Long> customerIds, HttpServletRequest request,
+			HttpSession httpSession) {
+		try {
+			for (Long customerId : customerIds) {
+				customerService.deleteCustomerById(customerId);
+			}
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Các khách hàng đã được xóa thành công!", "ids", customerIds));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
+		}
+	}
+
 //	@RequestMapping(value = { "/create-customer" }, method = RequestMethod.POST)
 //	public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, HttpServletRequest request, HttpSession httpSession) {
 //	    ModelAndView mav = new ModelAndView();
@@ -167,21 +195,7 @@ public class CustomerController extends BaseController {
 //
 //	    return mav;
 //	}
-	
-	@RequestMapping(value = "/create-customer", method = RequestMethod.POST, consumes = "application/json")
-	@ResponseBody
-	public ResponseEntity<?> saveCustomer(@RequestBody Customer customer, HttpServletRequest request, HttpSession httpSession) {
-	    try {
-	        storageService.saveOrUpdate(customer);
-	        return ResponseEntity.ok().body(Map.of("message", "Khách hàng mới đã được thêm!", "customer", customer));
-	    } catch (IllegalArgumentException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errorMessage", e.getMessage()));
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
-	    }
-	}
 
-	
 //	@PostMapping("/save-customer")
 //	public ModelAndView addCustomer(@ModelAttribute Customer customer) {
 //		try {
