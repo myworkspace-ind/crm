@@ -2,6 +2,25 @@ $(document).ready(function() {
 	$('#addNewCustomerForm').on('submit', function(event) {
 		event.preventDefault();
 
+		const name = $('#name').val().trim();
+		const address = $('#address').val().trim();
+		const phone = $('#phone').val().trim();
+
+		if (!name || !address || !phone) {
+			let errorMessage = 'Vui lòng điền đầy đủ thông tin:\n';
+
+			if (!name) errorMessage += '- Tên khách hàng\n';
+			if (!address) errorMessage += '- Địa chỉ\n';
+			if (!phone) errorMessage += '- Số điện thoại\n';
+
+			$('#errorMessage').text(errorMessage).show(); // Hiển thị thông báo lỗi
+			setTimeout(function() {
+				$('#errorMessage').fadeOut(); // Ẩn thông báo sau 3 giây
+			}, 3000);
+
+			return; // Ngăn không cho submit form nếu còn trường trống
+		}
+
 		const customerData = {
 			name: $('#name').val(),
 			address: $('#address').val(),

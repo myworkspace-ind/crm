@@ -39,6 +39,10 @@ public class StorageServiceImpl implements StorageService {
 	        throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
 	    }
 	    
+	    if (customer.getPhone().length() != 10) {
+	        throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
+	    }
+	    
 		Long id = appRepo.saveOrUpdate(customer);
 		if (id != null) {
 			customer.setId(id);
