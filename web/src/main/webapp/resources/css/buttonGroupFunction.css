@@ -77,7 +77,7 @@ p.quantity-check {
     z-index: 999; 
 }
 
-.modal-content {
+.modal-delete {
     background-color: white;
     padding: 20px;
     width: 300px!important;

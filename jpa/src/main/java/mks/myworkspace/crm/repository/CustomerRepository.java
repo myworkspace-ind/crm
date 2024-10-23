@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -40,7 +41,12 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query("SELECT c FROM Customer c WHERE c.phone = :phone")
 	//Database khong co sdt trung nhau
 	Optional<Customer> findByPhone(@Param("phone") String phone);
-	
+		
 	//Database co sdt trung lap
 	//List<Customer> findByPhone(@Param("phone") String phone);
+	@Modifying
+    @Query("DELETE FROM Customer c WHERE c.id IN :ids")
+	void deleteAllByIdInBatch(@Param("ids") Iterable<Long> ids);
+	
+	
 }

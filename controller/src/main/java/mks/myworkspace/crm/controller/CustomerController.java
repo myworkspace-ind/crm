@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -153,20 +154,27 @@ public class CustomerController extends BaseController {
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
 		}
 	}
-
+	
+	@Transactional
 	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
-	@ResponseBody	
+	@ResponseBody
 	public ResponseEntity<?> deleteCustomersByIds(@RequestBody List<Long> customerIds, HttpServletRequest request,
 			HttpSession httpSession) {
 		try {
-			for (Long customerId : customerIds) {
-				customerService.deleteCustomerById(customerId);
+			if (customerIds == null || customerIds.isEmpty()) {
+				return ResponseEntity.badRequest().body(Map.of("errorMessage", "Danh sách ID không được trống."));
 			}
+
+			// Gọi service để xóa danh sách khách hàng dựa trên ID
+			storageService.deleteCustomersByIds(customerIds);
+			//customerService.deleteCustomersByIds(customerIds);
+
 			return ResponseEntity.ok()
 					.body(Map.of("message", "Các khách hàng đã được xóa thành công!", "ids", customerIds));
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
 		} catch (Exception e) {
+			log.debug("Error while deleting customers with IDs: {}. Error: {}", customerIds, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
 		}

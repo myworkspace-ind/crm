@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,11 @@ public class StorageServiceImpl implements StorageService {
 			customer.setId(id);
 		}
 		return customer;
+	}
+
+	@Override
+	public void deleteCustomersByIds(List<Long> customerIds) {
+		appRepo.deleteCustomersByIds(customerIds);
+		
 	}
 }

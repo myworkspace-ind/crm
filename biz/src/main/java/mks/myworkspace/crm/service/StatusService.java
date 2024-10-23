@@ -9,4 +9,6 @@ public interface StatusService {
 	StatusRepository getRepo();
 	
 	List<Status> getAllStatuses();
+	
+	void deleteByCustomerIdIn(Iterable<Long> ids);
 }
