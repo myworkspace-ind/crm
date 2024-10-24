@@ -25,4 +25,5 @@ public class StatusServiceImpl implements StatusService{
 		return repo.findAll();
 	}
 
+
 }

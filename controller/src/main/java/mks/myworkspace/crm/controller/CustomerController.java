@@ -83,12 +83,12 @@ public class CustomerController extends BaseController {
 		if (statusId != null) {
 			customers = customerService.findCustomersByStatus(statusId);
 			mav.addObject("statusId", statusId);
-			log.debug("Fetching customers for status ID: {}", statusId);
+//			log.debug("Fetching customers for status ID: {}", statusId);
 
 		} else if (keyword != null && !keyword.isEmpty()) {
 			customers = customerService.searchCustomers(keyword);
 			mav.addObject("keyword", keyword);
-			log.debug("Searching customers with keyword: {}", keyword);
+//			log.debug("Searching customers with keyword: {}", keyword);
 
 		} else {
 			customers = customerService.getAllCustomersWithStatuses();
@@ -99,21 +99,21 @@ public class CustomerController extends BaseController {
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
 
-		for (Customer customer : customers) {
-			log.debug("Thông tin khách hàng: {}", customer.getName());
-		}
-		for (Status status : statuses) {
-			log.debug("Thông tin trạng thái KH: {}", status.getName());
-		}
-
-		for (Customer customer : customers) {
-			log.debug("Customer: {} (ID: {})", customer.getName(), customer.getId());
-
-			for (Status status : customer.getStatuses()) {
-				log.debug("  - Status: {}", status.getName());
-			}
-
-		}
+	//		for (Customer customer : customers) {
+	//			log.debug("Thông tin khách hàng: {}", customer.getName());
+	//		}
+	//		for (Status status : statuses) {
+	//			log.debug("Thông tin trạng thái KH: {}", status.getName());
+	//		}
+	//
+	//		for (Customer customer : customers) {
+	//			log.debug("Customer: {} (ID: {})", customer.getName(), customer.getId());
+	//
+	//			for (Status status : customer.getStatuses()) {
+	//				log.debug("  - Status: {}", status.getName());
+	//			}
+	//
+	//		}
 
 		return mav;
 	}
@@ -154,7 +154,7 @@ public class CustomerController extends BaseController {
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
 		}
 	}
-	
+
 	@Transactional
 	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
 	@ResponseBody
@@ -164,10 +164,11 @@ public class CustomerController extends BaseController {
 			if (customerIds == null || customerIds.isEmpty()) {
 				return ResponseEntity.badRequest().body(Map.of("errorMessage", "Danh sách ID không được trống."));
 			}
-
 			// Gọi service để xóa danh sách khách hàng dựa trên ID
-			storageService.deleteCustomersByIds(customerIds);
-			//customerService.deleteCustomersByIds(customerIds);
+			 storageService.deleteCustomersByIds(customerIds);
+			 
+			 //TODO: Cannot DELETE ONE OR MORE CUSTOMER BECAUSE OF ROLL BACK (CANNOT COMMIT)
+			 //customerService.deleteAllByIds(customerIds); 
 
 			return ResponseEntity.ok()
 					.body(Map.of("message", "Các khách hàng đã được xóa thành công!", "ids", customerIds));
@@ -176,7 +177,7 @@ public class CustomerController extends BaseController {
 		} catch (Exception e) {
 			log.debug("Error while deleting customers with IDs: {}. Error: {}", customerIds, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
 	}
 

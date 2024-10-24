@@ -10,5 +10,4 @@ public interface StatusService {
 	
 	List<Status> getAllStatuses();
 	
-	void deleteByCustomerIdIn(Iterable<Long> ids);
 }

@@ -9,24 +9,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
-import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.StatusRepository;
 import mks.myworkspace.crm.service.CustomerService;
 
-@Transactional
+
 @Service
+@Transactional
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private CustomerRepository repo;
-
-	@Autowired
-	private AppRepository apprepo;
 	
 	@Autowired
-	private StatusRepository statusrepo;
+	private StatusRepository statusRepo;
 
 	@Override
 	public CustomerRepository getRepo() {
@@ -81,11 +78,6 @@ public class CustomerServiceImpl implements CustomerService {
 		return savedCustomer;
 	}
 
-	@Override
-	public Long getNextCustomerId() {
-		Long maxId = repo.findMaxId();
-		return maxId + 1; // Trả về ID mới
-	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -95,9 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
 			throw new IllegalArgumentException("Danh sách ID không được trống.");
 		}
 
-		try {
-			statusrepo.deleteByCustomerIdIn(ids);
-			
+		try {			
 			log.debug("Deleting customers with IDs: {}", ids);
 			
 			repo.deleteAllByIdInBatch(ids);
@@ -107,6 +97,15 @@ public class CustomerServiceImpl implements CustomerService {
 			log.error("Error occurred while deleting customers with IDs: {}. Error: {}", ids, e.getMessage());
 			throw new RuntimeException("Có lỗi xảy ra trong quá trình xóa khách hàng.", e);
 		}
+	}
+	
+	@Transactional
+	@Override
+	public void deleteAllByIds(List<Long> customerIds) {
+		//Xóa các mối quan hệ trong bảng trung gian customer_status
+		statusRepo.deleteByCustomerIds(customerIds);
+		repo.deleteAllByIds(customerIds);
+		
 	}
 
 }

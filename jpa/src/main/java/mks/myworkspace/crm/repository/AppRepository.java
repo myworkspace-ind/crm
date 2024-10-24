@@ -53,17 +53,14 @@ public class AppRepository {
 			return; // Không làm gì nếu danh sách rỗng
 		}
 
-		String sql = "DELETE FROM customer_status WHERE customer_id IN (" + customerIds.stream().map(id -> "?") // Tạo
-																												// các
-																												// tham
-																												// số ?
+		String sql = "DELETE FROM customer_status WHERE customer_id IN (" + customerIds.stream().map(id -> "?") //Tạo các tham số
 				.collect(Collectors.joining(",")) + ")";
 
 		// Thực hiện câu lệnh xóa
 		jdbcTemplate0.update(sql, customerIds.toArray()); // Truyền mảng ID
 	}
 
-	// Sau đó gọi phương thức này trước khi xóa khách hàng
+	// gọi phương thức này trước khi xóa khách hàng
 	public void deleteCustomersByIds(List<Long> customerIds) {
 		deleteCustomerStatusByCustomerIds(customerIds); // Xóa trước các bản ghi liên quan
 		// Tiến hành xóa khách hàng

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import mks.myworkspace.crm.entity.Customer;
 
@@ -45,8 +46,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	//Database co sdt trung lap
 	//List<Customer> findByPhone(@Param("phone") String phone);
 	@Modifying
-    @Query("DELETE FROM Customer c WHERE c.id IN :ids")
-	void deleteAllByIdInBatch(@Param("ids") Iterable<Long> ids);
+	@Transactional
+    @Query("DELETE FROM Customer c WHERE c.id IN :customerIds")
+    void deleteAllByIds(@Param("customerIds") List<Long> customerIds);
 	
 	
 }
