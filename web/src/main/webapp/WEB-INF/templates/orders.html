@@ -11,6 +11,7 @@
 <th:block th:include="fragments/common_css"></th:block>
 <!-- END COMMON CSS -->
 
+<link rel="stylesheet" type="text/css" href="resources/css/ordersBtnHorizontalMenu.css">	
 <link rel="stylesheet" type="text/css" href="resources/css/new_style.css">
 </head>
 
@@ -29,7 +30,10 @@
 
 	<!--  BEGIN CONTENT -->
 	<div class="app-content content">
-		<div class="content-wrapper">
+	<!-- /////////////////////////////////BEGIN CONTENT WRAPPER/////////////////////////////////////////// -->
+		<th:block th:include="fragments/ordersContentWrapperCRM"></th:block>
+		<!-- /////////////////////////////////END CONTENT WRAPPER/////////////////////////////////////////// -->
+	
 			<div class="content-body">
 				<section class="row">
 					<div class="col-12">
@@ -40,8 +44,16 @@
 										<div id="project-task-list_wrapper"
 											class="dataTables_wrapper dt-bootstrap4">
 											<div class="container-flex">
-												<div class="content">
-													<h1>HOME PAGE</h1>
+												<div class="content-body">
+												<section class="row">
+													<div class="col-12">
+														<div class="card">
+															<div class="card-header">
+																<h4 class="card-title">Danh sách đơn hàng</h4>
+															</div>
+														</div>
+													</div>
+												</section>
 												</div>
 											</div>
 										</div>
@@ -52,7 +64,6 @@
 					</div>
 				</section>
 			</div>
-		</div>
 	</div>
 	<!-- END CONTENT -->
 	
@@ -66,6 +77,9 @@
 	
 	<!-- FILE JS BỔ SUNG -->
 	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
+	<!-- Screen Javascripts -->
+	<script type="text/javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+	<script type="text/javascript" th:src="@{/resources/js/orders/init.js}"></script>
 
 
 </body>
