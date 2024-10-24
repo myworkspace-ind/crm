@@ -147,11 +147,16 @@
 							<a class="heading-elements-toggle"><i
 								class="ft-ellipsis-h font-medium-3"></i></a>
 							<div class="heading-elements">
-<!-- 								<a href="/crm-web/add-customer"> -->
-									<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCustomerModal">
-										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
-									</button>
-<!-- 								</a> -->
+								<!-- 								<a href="/crm-web/add-customer"> -->
+								<button class="btn btn-primary btn-sm" data-toggle="modal"
+									data-target="#addNewCustomerModal">
+									<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
+								</button>
+								<a class="btn btn-primary btn-sm" 
+								th:href="@{/customer-management}">
+									<i class="fa-solid fa-plus"></i> Thêm nhanh khách hàng
+								</a>
+								<!-- 								</a> -->
 
 							</div>
 						</div>
@@ -173,8 +178,7 @@
 									<div class="modal-body">
 										<form id="addNewCustomerForm">
 											<div id="errorMessage" class="alert alert-danger"
-												style="display: none;">
-											</div>
+												style="display: none;"></div>
 											<div class="form-group">
 												<label for="name">Tên:</label> <input type="text"
 													class="form-control" id="name" name="name">
@@ -184,7 +188,8 @@
 													class="form-control" id="address" name="address">
 											</div>
 											<div class="form-group">
-												<label for="phone">Số điện thoại:</label> <input style="display:block!important;" type="text"
+												<label for="phone">Số điện thoại:</label> <input
+													style="display: block !important;" type="text"
 													class="form-control" id="phone" name="phone">
 											</div>
 											<button type="submit" class="btn btn-primary">Lưu
@@ -257,7 +262,7 @@
 											</div>
 										</div>
 
-										
+
 										<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
 										<div class="container-flex">
 											<div class="filter-container">
@@ -351,7 +356,8 @@
 													<table id="table" class="table table-bordered">
 														<thead>
 															<tr>
-																<th style ="width: 2%";
+																<th style="width: 2%"
+																	;
 																	data-field="select" class="th1"><input
 																	type="checkbox" id="select-all"
 																	class="d-flex align-items-center justify-content-center" />
@@ -361,18 +367,19 @@
 										        	</div> --></th>
 
 																<!-- <th data-field="logo_company" class="th2">Logo CTY</th> -->
-																<th data-field="id_company" class="th2" style="width: 10%;">ID</th>
-																<th data-field="name_company" class="th3" style="width: 20%;">Tên khách
-																	hàng</th>
-																<th data-field="address_company" class="th4" style="width: 35%;">Địa
-																	chỉ khách hàng</th>
+																<th data-field="id_company" class="th2"
+																	style="width: 10%;">ID</th>
+																<th data-field="name_company" class="th3"
+																	style="width: 20%;">Tên khách hàng</th>
+																<th data-field="address_company" class="th4"
+																	style="width: 35%;">Địa chỉ khách hàng</th>
 																<!-- <th data-field="name_representative" class="th5">Tên
 																		người đại diện</th> -->
 																<!-- <th data-field="email_company" class="th6">Email</th> -->
-																<th data-field="phone_company" class="th7" style="width: 15%;">Số điện
-																	thoại</th>
-																<th data-field="status_company" class="th8" style="width: 15%;">Trạng
-																	thái</th>
+																<th data-field="phone_company" class="th7"
+																	style="width: 15%;">Số điện thoại</th>
+																<th data-field="status_company" class="th8"
+																	style="width: 15%;">Trạng thái</th>
 																<!-- <th class="th8">Trạng thái chính</th>
 																	<th class="th9">Trạng thái phụ</th>
 																	<th class="th10">Người phụ trách</th>
