@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,18 @@ public class StorageServiceImpl implements StorageService {
 			customer.setId(id);
 		}
 		return customer;
+	}
+	
+	@Override
+	public List<Customer> saveOrUpdate(List<Customer> lstCustomer) {
+		List<Long> lstIds = appRepo.saveOrUpdate(lstCustomer);
+
+		// Update the Id of saved task
+		int len = (lstIds != null) ? lstIds.size() : 0;
+		for (int i = 0; i < len; i++) {
+			lstCustomer.get(i).setId(lstIds.get(i));
+		}
+
+		return lstCustomer;
 	}
 }
