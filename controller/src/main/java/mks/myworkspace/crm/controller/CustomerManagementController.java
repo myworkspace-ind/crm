@@ -43,7 +43,7 @@ public class CustomerManagementController extends BaseController {
 
 	@GetMapping("")
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("task");
+		ModelAndView mav = new ModelAndView("multicustomer");
 
 		initSession(request, httpSession);
 		return mav;
@@ -51,7 +51,7 @@ public class CustomerManagementController extends BaseController {
 
 	@GetMapping("/load")
 	@ResponseBody
-	public Object getTaskData() throws IOException {
+	public Object getCustomerData() throws IOException {
 		log.debug("Get sample data from configuration file.");
 //		String jsonCustomerTable = getDefaultTaskData();
 
