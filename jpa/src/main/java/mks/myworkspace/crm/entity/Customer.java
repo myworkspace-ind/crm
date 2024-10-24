@@ -71,6 +71,13 @@ public class Customer implements Serializable {
 				+ phone + ", statuses=" + statuses + "]";
 	}
 
-	
+	public Customer(Long id, String siteId, String name, String address, String phone) {
+		super();
+		this.id = id;
+		this.siteId = siteId;
+		this.name = name;
+		this.address = address;
+		this.phone = phone;
+	}
 
 }

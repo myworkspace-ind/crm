@@ -50,6 +50,19 @@ public class StorageServiceImpl implements StorageService {
 		}
 		return customer;
 	}
+	
+	@Override
+	public List<Customer> saveOrUpdate(List<Customer> lstCustomer) {
+		List<Long> lstIds = appRepo.saveOrUpdate(lstCustomer);
+
+		// Update the Id of saved task
+		int len = (lstIds != null) ? lstIds.size() : 0;
+		for (int i = 0; i < len; i++) {
+			lstCustomer.get(i).setId(lstIds.get(i));
+		}
+
+		return lstCustomer;
+	}
 
 	@Override
 	public void deleteCustomersByIds(List<Long> customerIds) {

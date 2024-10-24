@@ -11,7 +11,9 @@ public interface StorageService {
 	
 	CustomerRepository getCustomerRepo();
 	
-	Customer saveOrUpdate(Customer customer);
+	public Customer saveOrUpdate(Customer customer);
+	
+	List<Customer> saveOrUpdate(List<Customer> lstCustomers);
 	
 	void deleteCustomersByIds(List<Long> customerIds);
 

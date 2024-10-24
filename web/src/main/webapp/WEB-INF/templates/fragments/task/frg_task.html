@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <style>
+        /* Đảm bảo không có thuộc tính nào làm ẩn nút */
+        #tblTask {
+            height: 200px; /* Thay đổi chiều cao cho bảng */
+            margin-bottom: 20px; /* Tạo khoảng cách dưới bảng */
+        }
+    </style>
+</head>
+
+<body>
+    <form id="frmTask" th:action="@{/task/save}" method="post">
+        <div id="tblTask"></div>
+        <button type="submit" class="btn btn-primary" style="margin-top: 50px;">Save</button> <!-- Giảm margin-top -->
+        <!-- Message: auto hide -->
+        <div id="success-alert" class="alert alert-success" style="display: none">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>Success! </strong> Saved tasks.
+        </div>
+    </form>
+</body>
+</html>
