@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -35,7 +36,7 @@ public class OrderStatus implements Serializable {
 	@Column
 	private String name;
 	
-	@OneToMany(mappedBy = "orderStatus")
+	@OneToMany(mappedBy = "orderStatus", fetch = FetchType.EAGER)
 	private Set<Order> orders;
 	
 	public OrderStatus(String id, String siteId, String name) {

@@ -21,11 +21,15 @@ package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -34,10 +38,14 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
+import mks.myworkspace.crm.common.model.TableStructure;
+import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.service.StorageService;
+import mks.myworkspace.crm.transformer.JpaTransformer_Order;
 
 /**
  * Handles requests for the application home page.
@@ -68,18 +76,77 @@ public class OrderController extends BaseController {
 	 * @return
 	 */
 
-	@Value("classpath:task/task-demo.json")
-	private Resource resTaskDemo;
+	@Value("classpath:orders/orders-demo.json")
+	private Resource resOrderDemo;
 
 	@Autowired
 	StorageService storageService;
 
 	@GetMapping("")
-	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
+	public ModelAndView displayOrder(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersCRMScreen");
 
 		initSession(request, httpSession);
 		return mav;
+	}
+	
+	@GetMapping("/load")
+	@ResponseBody
+	public Object getOrderData() throws IOException {
+		log.debug("Get sample data from configuration file.");
+		int[] colWidths= {
+			120,
+	        120,
+	        150,
+	        160,
+	      	120,
+	        50
+		};
+		String[] colHeaders = {
+			 "Mã đơn hàng",
+		     "Ngày giao",
+		     "Loại hàng hóa",
+		     "Thông tin người gửi",
+		     "Phương tiện vận chuyển",
+		};
+		List<Object[]> tblData = new ArrayList<>();
+		Object[] data1 = new Object[] {"D123A54", "2024-10-24", "Máy móc", "Nguyễn Văn A", "Xe tải", "..."};
+		Object[] data2 = new Object[] {"M123543", "2024-10-25", "Thực phẩm", "Nguyễn Văn B", "Xe tải", "..."};
+		
+		tblData.add(data1);
+		tblData.add(data2);
+//		String jsonOrderTable = getDefaultOrderData();
+//
+//		List<Order> lstOrders = storageService.getOrderRepo().findAll();
+//
+//		if (lstOrders == null || lstOrders.isEmpty()) {
+//			return jsonOrderTable;
+//		} else {
+//			JSONObject jsonObjTableOrder = new JSONObject(jsonOrderTable);
+//
+//			JSONArray jsonObjColWidths = jsonObjTableOrder.getJSONArray("colWidths");
+//			int len = (jsonObjColWidths != null) ? jsonObjColWidths.length() : 0;
+//			int[] colWidths = new int[len];
+//			for (int i = 0; i < jsonObjColWidths.length(); i++) {
+//				colWidths[i] = jsonObjColWidths.getInt(i);
+//			}
+//
+//			JSONArray jsonObjColHeaders = jsonObjTableOrder.getJSONArray("colHeaders");
+//			len = (jsonObjColHeaders != null) ? jsonObjColHeaders.length() : 0;
+//			String[] colHeaders = new String[len];
+//			for (int i = 0; i < jsonObjColHeaders.length(); i++) {
+//				colHeaders[i] = jsonObjColHeaders.getString(i);
+//			}
+//
+//			List<Object[]> tblData = JpaTransformer_Order.convert2D(lstOrders);
+
+			TableStructure tblOrder = new TableStructure(colWidths, colHeaders, tblData);
+
+			return tblOrder;
+		}
+	
+	private String getDefaultOrderData() throws IOException {
+		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);
 	}
 
 //	@GetMapping("/load")
@@ -116,9 +183,4 @@ public class OrderController extends BaseController {
 //			return tblTask;
 //		}
 //	}
-	
-	private String getDefaultOrdersData() throws IOException {
-		return IOUtils.toString(resTaskDemo.getInputStream(), StandardCharsets.UTF_8);
-	}
-
 }

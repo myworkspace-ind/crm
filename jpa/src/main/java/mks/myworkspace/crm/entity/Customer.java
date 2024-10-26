@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,7 +57,7 @@ public class Customer implements Serializable {
 	
 	private Set<Status> statuses = new HashSet<>(); // a customer can have multiple statuses
 	
-	@OneToMany(mappedBy = "customer")
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
 	private Set<Order> orders;
 	
 	public Customer(Long id, String siteId, String name, String address, String phone, Set<Status> statuses,
