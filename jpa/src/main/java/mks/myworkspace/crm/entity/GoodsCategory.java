@@ -1,10 +1,12 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -32,17 +34,21 @@ public class GoodsCategory implements Serializable {
 
 	@Column
 	private String name;
-	
-	public GoodsCategory(String id, String siteId, String name) {
+
+	@OneToMany(mappedBy = "goodsCategory")
+	private Set<Order> orders;
+
+	public GoodsCategory(String id, String siteId, String name, Set<Order> orders) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
+		this.orders = orders;
 	}
 
 	@Override
 	public String toString() {
-		return "GoodsCategory [id=" + id + ", siteId=" + siteId + ", name=" + name + "]";
+		return "GoodsCategory [id=" + id + ", siteId=" + siteId + ", name=" + name + ", orders=" + orders + "]";
 	}
 	
 }

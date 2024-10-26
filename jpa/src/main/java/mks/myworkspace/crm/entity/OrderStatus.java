@@ -1,10 +1,12 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -32,6 +34,9 @@ public class OrderStatus implements Serializable {
 
 	@Column
 	private String name;
+	
+	@OneToMany(mappedBy = "orderStatus")
+	private Set<Order> orders;
 	
 	public OrderStatus(String id, String siteId, String name) {
 		super();

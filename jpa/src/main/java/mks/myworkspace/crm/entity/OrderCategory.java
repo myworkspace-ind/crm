@@ -37,17 +37,17 @@ public class OrderCategory implements Serializable {
 
 	@OneToMany(mappedBy = "orderCategory")
 	private Set<Order> orders;
-
-	@Override
-	public String toString() {
-		return "OrderCategory [id=" + id + ", siteId=" + siteId + ", name=" + name + ", orders=" + orders + "]";
-	}
-
+	
 	public OrderCategory(String id, String siteId, String name, Set<Order> orders) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
 		this.orders = orders;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderCategoryRepository [id=" + id + ", siteId=" + siteId + ", name=" + name + ", orders=" + orders + "]";
 	}
 }

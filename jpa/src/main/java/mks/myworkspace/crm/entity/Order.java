@@ -47,13 +47,29 @@ public class Order implements Serializable {
 	@Column(name = "customer_requirement")
 	private String customerRequirement;
 
-	// Relation 1-1 with OrderCategory
+	// Relation 1-1 with OrderCategoryRepository
 	@OneToOne
 	@JoinColumn(name = "order_category_id", referencedColumnName = "id")
 	private OrderCategory orderCategory;
 
+	// Relation 1-1 with GoodsCategory
+	@OneToOne
+	@JoinColumn(name = "goods_category_id", referencedColumnName = "id")
+	private GoodsCategory goodsCategory;
+
+	// Relation 1-1 with OrderStatus
+	@OneToOne
+	@JoinColumn(name = "order_status_id", referencedColumnName = "id")
+	private OrderStatus orderStatus;
+
+	// Relation 1-1 with Customer
+	@OneToOne
+	@JoinColumn(name = "customer_id", referencedColumnName = "id")
+	private Customer customer;
+
 	public Order(String id, String siteId, String name, Date deliveryDate, String transportationMethod,
-			String customerRequirement, OrderCategory orderCategory) {
+			String customerRequirement, OrderCategory orderCategory, GoodsCategory goodsCategory,
+			OrderStatus orderStatus) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -62,14 +78,20 @@ public class Order implements Serializable {
 		this.transportationMethod = transportationMethod;
 		this.customerRequirement = customerRequirement;
 		this.orderCategory = orderCategory;
+		this.goodsCategory = goodsCategory;
+		this.orderStatus = orderStatus;
 	}
 
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", siteId=" + siteId + ", name=" + name + ", deliveryDate=" + deliveryDate
 				+ ", transportationMethod=" + transportationMethod + ", customerRequirement=" + customerRequirement
-				+ ", orderCategory=" + orderCategory + "]";
+				+ ", orderCategory=" + orderCategory + ", goodsCategory=" + goodsCategory + ", orderStatus="
+				+ orderStatus + "]";
 	}
-	
-	
+
+	public Order(String orderId, Date deliveryDate2, GoodsCategory goodsCategory2, Customer customer2,
+			String transportationMethod2) {
+		// TODO Auto-generated constructor stub
+	}
 }
