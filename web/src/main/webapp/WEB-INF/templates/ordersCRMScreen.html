@@ -19,6 +19,7 @@
 
 <link rel="stylesheet" type="text/css" href="resources/css/ordersBtnHorizontalMenu.css">	
 <link rel="stylesheet" type="text/css" href="resources/css/new_style.css">
+<link rel="stylesheet" type="text/css" href="resources/css/order	.css">
 </head>
 
 <body
@@ -42,7 +43,83 @@
 		<th:block th:include="fragments/ordersContentWrapperCRM"></th:block>
 		<!-- /////////////////////////////////END CONTENT WRAPPER/////////////////////////////////////////// -->
 		
-		<h4 class="card-title">Danh sách đơn hàng</h4>
+		<div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Điều kiện tìm kiếm</h4>
+                    <a class="heading-elements-toggle"><i class="ft-ellipsis-h font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="fa-solid fa-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="fa-solid fa-rotate"></i></a></li>
+                            <li><a data-action="expand"><i class="fa-solid fa-expand"></i></a></li>
+                            <li><a data-action="close"><i class="fa-solid fa-xmark"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <fieldset class="text-center">
+                                    <h6>Left Icon</h6>
+                                    <button class="ui-button ui-widget ui-corner-all mb-2" fdprocessedid="949qyj"><span class="ui-icon ft-settings"></span>Left Icon</button>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <fieldset class="text-center">
+                                    <h6>Right Icon</h6>
+                                    <button class="ui-button ui-widget ui-corner-all mb-2" fdprocessedid="9oywxd">Right Icon<span class="ui-icon ft-settings"></span></button>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <fieldset class="text-center">
+                                    <h6>Top Icon</h6>
+                                    <button class="ui-button ui-widget ui-corner-all mb-2" fdprocessedid="crcoh"><span class="ui-icon ft-settings ui-widget-icon-block"></span>Top Icon</button>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <fieldset class="text-center">
+                                    <h6>Bottom Icon</h6>
+                                    <button class="ui-button ui-widget ui-corner-all mb-2" fdprocessedid="8ao62">Bottom Icon<span class="ui-icon ft-settings ui-widget-icon-block"></span></button>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <fieldset class="text-center">
+                                    <h6>Only Icon</h6>
+                                    <button class="ui-button ui-widget ui-corner-all mb-2" fdprocessedid="9xjpbc"><span class="ui-icon ft-disc"></span></button>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <fieldset class="text-center">
+                                    <h6>Both Icons With Text</h6>
+                                    <button class="ui-button ui-widget ui-corner-all mb-2" fdprocessedid="cybhc"><span class="ui-icon ft-wifi"></span>Both Icons<span class="ui-icon ft-airplay"></span></button>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <fieldset class="text-center">
+                                    <h6>Both Icons Without Text</h6>
+                                    <button class="ui-button ui-widget ui-corner-all mb-2" fdprocessedid="f3c8e"><span class="ui-icon ft-unlock"></span><span class="ui-icon ft-camera"></span></button>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <fieldset class="text-center">
+                                    <h6>Transparent Icon Anchor</h6>
+                                    <a class="ui-button ui-button-link ui-widget ui-corner-all mb-2" href="#"><span class="ui-icon ft-clock"></span></a>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+		
+		<h4 class="title">Danh sách đơn hàng</h4>
 		<th:block th:include="fragments/orders/frg_orders.html"></th:block>
 		
 	</div>

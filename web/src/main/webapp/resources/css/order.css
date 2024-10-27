@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+button.btn btn-primary btn-sm{
+	color: white;
+}
+button.btn.btn-primary.btn-sm.status {
+	background-color: #db970b!important;
+	border: #F6BB42;
+}
+
+button.btn.btn-primary.btn-sm.config {
+	background-color: #37BC9B !important;
+	border: #37BC9B;
+}
