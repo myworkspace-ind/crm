@@ -5,9 +5,15 @@
 <head>
 <!-- START COMMON META AND TITLE -->
 <th:block th:include="fragments/common_meta_title"></th:block>
+<th:block th:include="fragments/head"></th:block>
+<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+<script>console.log("Handsontable:", typeof Handsontable); // Kiểm tra xem Handsontable có sẵn không
+</script>
 <!-- END COMMON META AND TITLE -->
 
 <!-- START COMMON CSS -->
+
 <th:block th:include="fragments/common_css"></th:block>
 <!-- END COMMON CSS -->
 
@@ -23,6 +29,7 @@
 	<!-- /////////////////////////////////BEGIN HEADER /////////////////////////////////////////// -->
 	<th:block th:include="fragments/headerCRM"></th:block>
 	<!-- /////////////////////////////////END HEADER /////////////////////////////////////////// -->
+	
 
 	<!-- /////////////////////////////////BEGIN LEFT MENU NAVIGATION/////////////////////////////////////////// -->
 	<th:block th:include="fragments/leftNavCRM"></th:block>
@@ -30,42 +37,16 @@
 
 	<!--  BEGIN CONTENT -->
 	<div class="app-content content">
-	<!-- /////////////////////////////////BEGIN CONTENT WRAPPER/////////////////////////////////////////// -->
+	
+		<!-- /////////////////////////////////BEGIN CONTENT WRAPPER/////////////////////////////////////////// -->
 		<th:block th:include="fragments/ordersContentWrapperCRM"></th:block>
 		<!-- /////////////////////////////////END CONTENT WRAPPER/////////////////////////////////////////// -->
-	
-			<div class="content-body">
-				<section class="row">
-					<div class="col-12">
-						<div class="card">
-							<div class="card-content">
-								<div class="card-body">
-									<div class="table-responsive">
-										<div id="project-task-list_wrapper"
-											class="dataTables_wrapper dt-bootstrap4">
-											<div class="container-flex">
-												<div class="content-body">
-												<section class="row">
-													<div class="col-12">
-														<div class="card">
-															<div class="card-header">
-																<h4 class="card-title">Danh sách đơn hàng</h4>
-																<th:block th:include="fragments/task/frg_orders.html"></th:block>
-															</div>
-														</div>
-													</div>
-												</section>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
+		
+		<h4 class="card-title">Danh sách đơn hàng</h4>
+		<th:block th:include="fragments/orders/frg_orders.html"></th:block>
+		
 	</div>
+	
 	<!-- END CONTENT -->
 	
 	<!-- START CUSTOMIZE BUTTON -->
@@ -77,11 +58,12 @@
 	<!-- END COMMON JAVASCRIPT -->
 	
 	<!-- FILE JS BỔ SUNG -->
-	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
-	<!-- Screen Javascripts -->
-	<script type="text/javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+	
+	
 	<script type="text/javascript" th:src="@{/resources/js/orders/init.js}"></script>
-
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<!-- Screen Javascripts -->
+	
 
 </body>
 </html>

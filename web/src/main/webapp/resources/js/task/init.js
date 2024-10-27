@@ -32,7 +32,7 @@ function loadTableData() {
 }
 
 function initTable(colHeaders, colWidths, data) {
-    var container = document.getElementById('tblTask');
+    var container = document.getElementById('tblOrder');
     
     htTask = new Handsontable(container, {
         data: data,
