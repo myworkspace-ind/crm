@@ -95,11 +95,11 @@ public class OrderController extends BaseController {
 	public Object getOrderData() throws IOException {
 		log.debug("Get sample data from configuration file.");
 		int[] colWidths= {
-			120,
-	        120,
-	        150,
-	        160,
-	      	120,
+			200,
+	        200,
+	        200,
+	        200,
+	      	200,
 	        50
 		};
 		String[] colHeaders = {

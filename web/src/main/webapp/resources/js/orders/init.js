@@ -50,6 +50,7 @@ function initTable(colHeaders, colWidths, data) {
 	           ],
 	           rowHeaders: true,
 	           minRows: 8,
+			   height: 500,
 	           currentRowClassName: 'currentRow',
 	           currentColClassName: 'currentCol',
 	           manualColumnResize: true,

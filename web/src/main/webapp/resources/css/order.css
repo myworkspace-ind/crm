@@ -1,14 +1,71 @@
 @charset "UTF-8";
 
-button.btn btn-primary btn-sm{
+button.btn btn-primary btn-sm {
 	color: white;
 }
+
+button.btn.btn-primary {
+	margin-right: 50px;
+	margin-top: 10px;
+}
+
 button.btn.btn-primary.btn-sm.status {
-	background-color: #db970b!important;
+	background-color: #db970b !important;
 	border: #F6BB42;
 }
 
 button.btn.btn-primary.btn-sm.config {
 	background-color: #37BC9B !important;
 	border: #37BC9B;
+}
+
+h4.card-title.search-condition {
+	font-style: italic;
+}
+
+fieldset.text-left.ordercate-option,
+fieldset.text-left.delidate-option{
+	margin-top: 20px;
+}
+
+.card-body.search-condition {
+	margin-inline-start: 50px;
+}
+
+input.custom-checkbox {
+    color: black;
+    background-color: #c8c8fb;
+}
+
+fieldset.text-left.startdate-option,
+fieldset.text-left.delidate-option {
+    margin-left: 80px;
+}
+
+fieldset.text-left.order-status{
+	margin-left: 90px;
+}
+
+button.search-order {
+    height: 30%;
+    width: 30%;
+    background-color: #967ADC;
+    color: white;
+    border-radius: 2px;
+    border: 1px white;
+}
+.order-screen{
+	background-color: #efa50b42;
+}
+
+form#frmOrders {
+    margin-left: 75px;
+}
+
+h4.title.order-title {
+    margin-left: 30px;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-top: 20px;
 }
