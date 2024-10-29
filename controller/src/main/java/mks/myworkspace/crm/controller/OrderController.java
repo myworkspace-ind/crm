@@ -20,16 +20,12 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -43,9 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
-import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.service.StorageService;
-import mks.myworkspace.crm.transformer.JpaTransformer_Order;
 
 /**
  * Handles requests for the application home page.
@@ -145,9 +139,9 @@ public class OrderController extends BaseController {
 			return tblOrder;
 		}
 	
-	private String getDefaultOrderData() throws IOException {
-		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);
-	}
+//	private String getDefaultOrderData() throws IOException {
+//		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);
+//	}
 
 //	@GetMapping("/load")
 //	@ResponseBody

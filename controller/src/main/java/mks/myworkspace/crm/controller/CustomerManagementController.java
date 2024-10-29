@@ -106,23 +106,23 @@ public class CustomerManagementController extends BaseController {
 		return tblTask;
 	}
 
-	@PostMapping(value = "/save")
-	@ResponseBody
-	public TableStructure saveTask(@RequestBody TableStructure tableData) {
-		log.debug("saveCustomer...{}", tableData);
-
-		try {
-			List<Customer> lstCustomers = CustomerValidator.validateAndCleasing(tableData.getData());
-			lstCustomers = storageService.saveOrUpdate(lstCustomers);
-
-			List<Object[]> tblData = JpaTransformer.convert2D(lstCustomers);
-			tableData.setData(tblData);
-		} catch (Exception ex) {
-			log.error("Could not save task.", ex);
-		}
-
-		return tableData;
-	}
+//	@PostMapping(value = "/save")
+//	@ResponseBody
+//	public TableStructure saveTask(@RequestBody TableStructure tableData) {
+//		log.debug("saveCustomer...{}", tableData);
+//
+//		try {
+//			List<Customer> lstCustomers = CustomerValidator.validateAndCleasing(tableData.getData());
+//			lstCustomers = storageService.saveOrUpdate(lstCustomers);
+//
+//			List<Object[]> tblData = JpaTransformer.convert2D(lstCustomers);
+//			tableData.setData(tblData);
+//		} catch (Exception ex) {
+//			log.error("Could not save task.", ex);
+//		}
+//
+//		return tableData;
+//	}
 
 //	private String getDefaultTaskData() throws IOException {
 //		return IOUtils.toString(resTaskDemo.getInputStream(), StandardCharsets.UTF_8);
