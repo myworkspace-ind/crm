@@ -41,7 +41,7 @@
 			<artifactId>crm-jpa</artifactId>
 			<version>${module.version}</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -127,13 +127,7 @@
 			<artifactId>javax.persistence-api</artifactId>
 			<version>2.2</version> <!-- Example version -->
 		</dependency>
-
-
-		<dependency>
-			<groupId>mks.mws.tool.workingtime</groupId>
-			<artifactId>workingtime-biz</artifactId>
-			<version>23.2</version>
-		</dependency>
+		
 	</dependencies>
 	<build>
 		<!-- configure the build to use the standard maven structure -->

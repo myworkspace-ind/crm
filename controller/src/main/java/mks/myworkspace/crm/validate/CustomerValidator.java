@@ -1,14 +1,11 @@
 package mks.myworkspace.crm.validate;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import mks.myworkspace.crm.common.AppConst;
+import mks.myworkspace.crm.common.CommonUtil;
 import mks.myworkspace.crm.entity.Customer;
-import mksgroup.java.common.CommonUtil;
 
 public class CustomerValidator {
 
