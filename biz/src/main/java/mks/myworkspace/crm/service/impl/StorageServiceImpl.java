@@ -6,15 +6,22 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.Getter;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.repository.OrderRepository;
 import mks.myworkspace.crm.service.StorageService;
 
 @Service
 public class StorageServiceImpl implements StorageService {
 	@Autowired
+	@Getter
 	AppRepository appRepo;
+	
+	@Autowired
+	@Getter
+	OrderRepository orderRepo;
 
 	@Autowired
 	CustomerRepository customerRepo;

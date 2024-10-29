@@ -114,18 +114,18 @@ span {
   overflow-x: auto;
 }
 
-tr > th:nth-child(1),
+/* tr > th:nth-child(1),
 tr > td:nth-child(1) {
   position: sticky;
   left: 0;
-  z-index: 2; /* Cột đầu tiên nằm trên các cột khác */
+  z-index: 2; 
   background-color: white;
 }
 
 tr > th:nth-child(2),
 tr > td:nth-child(2) {
   position: sticky;
-  left: 60px; /* Dịch sang phải bằng chiều rộng của cột đầu tiên */
+  left: 60px; 
   z-index: 1;
   background-color: white;
 }
@@ -133,10 +133,10 @@ tr > td:nth-child(2) {
 tr > th:nth-child(3),
 tr > td:nth-child(3) {
   position: sticky;
-  left: 100px; /* Dịch sang phải bằng tổng chiều rộng của 2 cột đầu */
+  left: 100px; 
   z-index: 1;
   background-color: white;
-}
+} */
 
 /* Màu nền cho các hàng chẵn và lẻ */
 /* tr:nth-child(odd) td {
@@ -175,20 +175,18 @@ tr:nth-child(even) td:nth-child(3) {
 }
 
 #table {
-    /* table-layout: fixed; */
-    width: 100%; /* Đảm bảo bảng luôn chiếm 100% chiều rộng */
+    width: 100%; 
 }
 
 th, td {
-  text-align: left; /* Đảm bảo căn trái dữ liệu trong ô */
-  padding: 8px; /* Khoảng cách giữa nội dung và viền ô */
-  border: 1px solid #ddd; /* Đường viền giữa các ô */
+  text-align: left; 
+  padding: 8px; 
+  border: 1px solid #ddd; 
 }
 
 
  #colorTd {
   padding: 10px;
-   /* border: 1px solid #000; */
  }
  
  .btnActions{

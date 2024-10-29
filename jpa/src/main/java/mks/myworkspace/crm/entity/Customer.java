@@ -6,12 +6,14 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -54,8 +56,12 @@ public class Customer implements Serializable {
 	)
 	
 	private Set<Status> statuses = new HashSet<>(); // a customer can have multiple statuses
-
-	public Customer(Long id, String siteId, String name, String address, String phone, Set<Status> statuses) {
+	
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	private Set<Order> orders;
+	
+	public Customer(Long id, String siteId, String name, String address, String phone, Set<Status> statuses,
+			Set<Order> orders) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -63,14 +69,9 @@ public class Customer implements Serializable {
 		this.address = address;
 		this.phone = phone;
 		this.statuses = statuses;
+		this.orders = orders;
 	}
-
-	@Override
-	public String toString() {
-		return "Customer [id=" + id + ", siteId=" + siteId + ", name=" + name + ", address=" + address + ", phone="
-				+ phone + ", statuses=" + statuses + "]";
-	}
-
+	
 	public Customer(Long id, String siteId, String name, String address, String phone) {
 		super();
 		this.id = id;
@@ -78,6 +79,12 @@ public class Customer implements Serializable {
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", siteId=" + siteId + ", name=" + name + ", address=" + address + ", phone="
+				+ phone + ", statuses=" + statuses + ", orders=" + orders + "]";
 	}
 
 }
