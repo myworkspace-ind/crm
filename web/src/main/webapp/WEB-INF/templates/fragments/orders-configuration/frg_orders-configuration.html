@@ -1,0 +1,10 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<form id="frmOrdersConfiguration" th:action="@{/orders-configuration/load}" method="get">
+	<div id="tblOrderConfiguration"></div>
+	<button type="submit" class="btn btn-primary save-orders-configuration">Save</button>
+	<!-- Message: auto hide -->
+    <div id="success-alert" class="alert alert-success" style="display: none">
+       <button type="button" class="close" data-dismiss="alert">x</button>
+       <strong>Success! </strong> Saved.
+    </div>
+</form>

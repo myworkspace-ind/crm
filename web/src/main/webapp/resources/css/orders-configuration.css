@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+.navIntraTool li span a {
+    background: lightseagreen;
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.navIntraTool{
+	margin-left: 25px;
+}
+
+
+form#frmOrdersConfiguration {
+    margin-left: 75px;
+}
+
+button.btn.btn-primary.save-orders-configuration {
+	margin-left: 630px;
+	z-index: 100000;
+}
