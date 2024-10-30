@@ -16,7 +16,17 @@ form#frmOrdersConfiguration {
     margin-left: 75px;
 }
 
-button.btn.btn-primary.save-orders-configuration {
+button.btn.btn-primary.save-orders-configuration,
+button.btn.btn-primary.save-orders-configurations-statuses {
 	margin-left: 630px;
 	z-index: 100000;
 }
+
+div#tblOrderConfiguration{
+	height: 250px !important;
+} 
+
+form#frmOrdersConfigurationStatus {
+    margin-left: 74px;
+}
+

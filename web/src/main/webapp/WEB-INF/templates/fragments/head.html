@@ -1,4 +1,7 @@
-<!-- Common Javascripts -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">	
+	<!-- Common Javascripts -->
     <link rel="stylesheet" href="/library/webjars/bootstrap/5.2.0/css/bootstrap.min.css">
 
     <link rel="stylesheet" type="text/css" href="/library/skin/default-skin/tool.css">
@@ -13,5 +16,5 @@
     <script type="text/javascript" src="/library/js/headscripts.js"></script>
     
     <!-- Determine the root context of the application.  -->
-    <script th:inline="javascript"> var _ctx = /*[[@{/}]]*/ ''; 
-    </script>
+    <script th:inline="javascript"> var _ctx = /*[[@{/}]]*/ ''; </script>
+</head>
