@@ -94,7 +94,7 @@ public class OrderController extends BaseController {
 	        200,
 	        200,
 	      	200,
-	        50
+	      	200
 		};
 		String[] colHeaders = {
 			 "Mã đơn hàng",
@@ -102,10 +102,11 @@ public class OrderController extends BaseController {
 		     "Loại hàng hóa",
 		     "Thông tin người gửi",
 		     "Phương tiện vận chuyển",
+		     "Thao tác",
 		};
 		List<Object[]> tblData = new ArrayList<>();
-		Object[] data1 = new Object[] {"D123A54", "2024-10-24", "Máy móc", "Nguyễn Văn A", "Xe tải", "..."};
-		Object[] data2 = new Object[] {"M123543", "2024-10-25", "Thực phẩm", "Nguyễn Văn B", "Xe tải", "..."};
+		Object[] data1 = new Object[] {"D123A54", "2024-10-24", "Máy móc", "Nguyễn Văn A", "Xe tải", ""};
+		Object[] data2 = new Object[] {"M123543", "2024-10-25", "Thực phẩm", "Nguyễn Văn B", "Xe tải", ""};
 		
 		tblData.add(data1);
 		tblData.add(data2);

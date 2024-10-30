@@ -128,7 +128,23 @@
 			</div>
 		</div>
 	</div>
-
+	
+	<div id="statusModal">
+	    <h3>Cập nhật trạng thái đơn hàng được chọn</h3>
+	    <select id="statusSelect">
+	        <option value="1">Nhận đơn</option>
+	        <option value="2">Lưu kho</option>
+	        <option value="3">Vận chuyển</option>
+	        <option value="4">Lưu kho lạnh</option>
+	        <option value="5">Giao hàng</option>
+	    </select>
+	    <br><br>
+	    <button onclick="saveStatus()">Lưu</button>
+	    <button onclick="closeModal()">Đóng</button>
+	</div>
+	<div id="modalOverlay" onclick="closeModal()">
+	</div>
+	
 	</div>
 	
 	<!-- END CONTENT -->
