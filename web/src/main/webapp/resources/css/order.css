@@ -101,3 +101,38 @@ select#statusSelect {
     background-color: white;
     color: black;
 }
+.updateOrderModal{
+	display:none; 
+	position:fixed; 
+	top:50%; 
+	left:50%; 
+	transform:translate(-50%, -50%); 
+	background-color:white; 
+	padding:20px; 
+	border:1px solid #ccc; 
+	z-index:1000;
+	width: fit-content !important;
+	height: fit-content !important;
+}
+.updateOrderModal hr{
+    background-color: #000000;
+}
+.row1 {
+    display: flex;
+    margin-left: 60px;
+}
+input#orderCode,input#orderDate, select#orderStatus {
+    width: 300px;
+    margin-left: -15px;
+    background-color: white;
+    color: black;
+}
+/* input#orderDate, select#orderStatus{
+	margin-left: 5px;
+} */
+label.label-status, label.label-order-code {
+    margin-left: 50px;
+}
+label.label-status, label.label-order-code, label.label-estaday{
+	width: 15%;
+}
