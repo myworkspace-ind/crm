@@ -69,3 +69,70 @@ h4.title.order-title {
     margin-bottom: 20px;
     padding-top: 20px;
 }
+
+.handsontable a:hover {
+    color: #0b318a !important;
+}
+div#statusModal{
+	display:none; 
+	position:fixed; 
+	top:50%; 
+	left:50%; 
+	bottom:50%;
+	width: fit-content !important;
+	height: fit-content !important;
+	transform:translate(-50%, -50%); 
+	background-color:white; 
+	padding:20px; 
+	border:1px solid #ccc; 
+	z-index:1000;
+}
+div#modalOverlay{
+	display:none; 
+	position:fixed; 
+	top:0; 
+	left:0; 
+	width:100%; 
+	height:100%; 
+	background-color:rgba(0, 0, 0, 0.5); 
+	z-index:999;
+}
+select#statusSelect {
+    background-color: white;
+    color: black;
+}
+.updateOrderModal{
+	display:none; 
+	position:fixed; 
+	top:50%; 
+	left:50%; 
+	transform:translate(-50%, -50%); 
+	background-color:white; 
+	padding:20px; 
+	border:1px solid #ccc; 
+	z-index:1000;
+	width: fit-content !important;
+	height: fit-content !important;
+}
+.updateOrderModal hr{
+    background-color: #000000;
+}
+.row1 {
+    display: flex;
+    margin-left: 60px;
+}
+input#orderCode,input#orderDate, select#orderStatus {
+    width: 300px;
+    margin-left: -15px;
+    background-color: white;
+    color: black;
+}
+/* input#orderDate, select#orderStatus{
+	margin-left: 5px;
+} */
+label.label-status, label.label-order-code {
+    margin-left: 50px;
+}
+label.label-status, label.label-order-code, label.label-estaday{
+	width: 15%;
+}

@@ -14,7 +14,7 @@ $(document).ready(function() {
 function loadTableData() {
 
 	$.ajax({
-		url: _ctx + 'orders-configuration/load',
+		url: _ctx + 'orders-configuration/load-orders',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -48,7 +48,7 @@ function initTable(colHeaders, colWidths, data) {
 	           ],
 	           rowHeaders: true,
 	           minRows: 8,
-			   height: 500,
+			   height: 300,
 	           currentRowClassName: 'currentRow',
 	           currentColClassName: 'currentCol',
 	           manualColumnResize: true,

@@ -65,7 +65,7 @@ public class OrderConfigurationController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@GetMapping("")
+	@GetMapping("/orders")
 	public ModelAndView displayOrderConfiguration(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersConfigurationCRMScreen");
 
@@ -73,57 +73,77 @@ public class OrderConfigurationController extends BaseController {
 		return mav;
 	}
 	
-	@GetMapping("/load")
+	@GetMapping("/status")
+	public ModelAndView displayOrderConfigurationStatus(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("ordersConfiguration-StatusCRMScreen");
+
+		initSession(request, httpSession);
+		return mav;
+	}
+
+	@GetMapping("/load-orders")
 	@ResponseBody
 	public Object getOrderConfigurationData() throws IOException {
 		log.debug("Get sample data from configuration file.");
-		int[] colWidths= {
-			50,
-	        300,
-	        300,
-		};
-		String[] colHeaders = {
-			 "No",
-		     "Loại đơn hàng",
-		     "Ghi chú",
-		};
+		int[] colWidths = { 50, 300, 300, };
+		String[] colHeaders = { "No", "Loại đơn hàng", "Ghi chú", };
 		List<Object[]> tblData = new ArrayList<>();
-		Object[] data1 = new Object[] {"1", "Mặc định", ""};
-		Object[] data2 = new Object[] {"2", "Máy móc", ""};
-		Object[] data3 = new Object[] {"3", "Thực phẩm", ""};
+		Object[] data1 = new Object[] { "1", "Mặc định", "" };
+		Object[] data2 = new Object[] { "2", "Máy móc", "" };
+		Object[] data3 = new Object[] { "3", "Thực phẩm", "" };
 		tblData.add(data1);
 		tblData.add(data2);
 		tblData.add(data3);
-//		String jsonOrderTable = getDefaultOrderData();
-//
-//		List<Order> lstOrders = storageService.getOrderRepo().findAll();
-//
-//		if (lstOrders == null || lstOrders.isEmpty()) {
-//			return jsonOrderTable;
-//		} else {
-//			JSONObject jsonObjTableOrder = new JSONObject(jsonOrderTable);
-//
-//			JSONArray jsonObjColWidths = jsonObjTableOrder.getJSONArray("colWidths");
-//			int len = (jsonObjColWidths != null) ? jsonObjColWidths.length() : 0;
-//			int[] colWidths = new int[len];
-//			for (int i = 0; i < jsonObjColWidths.length(); i++) {
-//				colWidths[i] = jsonObjColWidths.getInt(i);
-//			}
-//
-//			JSONArray jsonObjColHeaders = jsonObjTableOrder.getJSONArray("colHeaders");
-//			len = (jsonObjColHeaders != null) ? jsonObjColHeaders.length() : 0;
-//			String[] colHeaders = new String[len];
-//			for (int i = 0; i < jsonObjColHeaders.length(); i++) {
-//				colHeaders[i] = jsonObjColHeaders.getString(i);
-//			}
-//
-//			List<Object[]> tblData = JpaTransformer_Order.convert2D(lstOrders);
 
-			TableStructure tblOrderConfiguration = new TableStructure(colWidths, colHeaders, tblData);
+		TableStructure tblOrderConfiguration = new TableStructure(colWidths, colHeaders, tblData);
 
-			return tblOrderConfiguration;
-		}
+		return tblOrderConfiguration;
+	}
 	
+	@GetMapping("/load-statuses")
+	@ResponseBody
+	public Object getOrderConfigurationStatusData() throws IOException {
+		log.debug("Get sample data from configuration file.");
+		int[] colWidths = { 50, 300, 300, };
+		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", };
+		List<Object[]> tblData = new ArrayList<>();
+		Object[] data1 = new Object[] { "1", "Mặc định", "Nhận đơn" };
+		Object[] data2 = new Object[] { "", "", "Đóng gói" };
+		Object[] data3 = new Object[] { "", "", "Vận chuyển" };
+		Object[] data4 = new Object[] { "", "", "Giao hàng" };
+		
+		Object[] data5 = new Object[] { "2", "Máy móc", "Nhận đơn" };
+		Object[] data6 = new Object[] { "", "", "Đóng gói" };
+		Object[] data7 = new Object[] { "", "", "Vận chuyển" };
+		Object[] data8 = new Object[] { "", "", "Lưu kho" };
+		Object[] data9 = new Object[] { "", "", "Giao hàng" };
+		
+		Object[] data10 = new Object[] { "3", "Thực phẩm", "Nhận đơn" };
+		Object[] data11 = new Object[] { "", "", "Đóng gói" };
+		Object[] data12 = new Object[] { "", "", "Vận chuyển" };
+		Object[] data13 = new Object[] { "", "", "Lưu kho lạnh" };
+		Object[] data14 = new Object[] { "", "", "Giao hàng" };
+		
+		tblData.add(data1);
+		tblData.add(data2);
+		tblData.add(data3);
+		tblData.add(data4);
+		tblData.add(data5);
+		tblData.add(data6);
+		tblData.add(data7);
+		tblData.add(data8);
+		tblData.add(data9);
+		tblData.add(data10);
+		tblData.add(data11);
+		tblData.add(data12);
+		tblData.add(data13);
+		tblData.add(data14);
+
+		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, tblData);
+
+		return tblOrderConfigurationStatus;
+	}
+
 //	private String getDefaultOrderData() throws IOException {
 //		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);
 //	}
