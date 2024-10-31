@@ -32,11 +32,7 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
         </dependency>
-        <dependency>
-        	<groupId>mks.assistant.codelearna</groupId>
-        	<artifactId>codelearna-jpa</artifactId>
-        	<version>23.2</version>
-        </dependency>
+        
 	</dependencies>
 	<build>
 		<!-- configure the build to use the standard maven structure -->

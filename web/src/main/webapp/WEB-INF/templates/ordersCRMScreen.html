@@ -128,7 +128,154 @@
 			</div>
 		</div>
 	</div>
-
+	
+	<div id="statusModal">
+	    <h3>Cập nhật trạng thái đơn hàng được chọn</h3>
+	    <select id="statusSelect">
+	        <option value="1">Nhận đơn</option>
+	        <option value="2">Lưu kho</option>
+	        <option value="3">Vận chuyển</option>
+	        <option value="4">Lưu kho lạnh</option>
+	        <option value="5">Giao hàng</option>
+	    </select>
+	    <br><br>
+	    <button onclick="saveStatus()">Lưu</button>
+	    <button onclick="closeModal()">Đóng</button>
+	</div>
+	<div id="modalOverlay" onclick="closeModal()">
+	</div>
+	
+	<div id="updateOrderModal">
+		<h3>Cập nhật đơn hàng</h3>
+		<hr>
+	    <form id="orderForm">
+		    <div class="form-row">
+			    <div class="form-group col-md-4">
+			      <label for="inputDate">Ngày tạo</label>
+			      <input type="date" class="form-control" id="orderDate" placeholder="dd/mm/yyyy" required>
+			    </div>
+			    <div class="form-group col-md-4">
+			      <label for="inputState">Trạng thái</label>
+			      <select id="inputState" class="form-control">
+			        <option selected>Chọn trạng thái...</option>
+			        <option value="1">Nhận đơn</option>
+			        <option value="2">Lưu kho</option>
+			        <option value="3">Vận chuyển</option>
+			        <option value="4">Lưu kho lạnh</option>
+			        <option value="5">Giao hàng</option>	
+			      </select>
+			    </div>
+			    <div class="form-group col-md-4">
+			      <label for="inputOrderCode">Mã đơn hàng</label>
+			      <input type="text" class="form-control" id="orderCode">
+			    </div>
+			</div>
+	    	<!-- <div class="row1">
+		        <label class="label-estaday">Ngày tạo</label>
+		        	<input class="input-row1" type="date" id="orderDate" value="">
+		        <label class="label-status">Trạng thái</label>
+		        <select id="orderStatus" class="input-row1">
+		            <option value="1">Nhận đơn</option>
+			        <option value="2">Lưu kho</option>
+			        <option value="3">Vận chuyển</option>
+			        <option value="4">Lưu kho lạnh</option>
+			        <option value="5">Giao hàng</option>	
+		        </select>
+		        <label class="label-order-code">Mã đơn hàng</label>
+		       		<input type="text" id="orderCode" placeholder="" class="input-row1">
+		    </div> -->
+		    
+		    <br/><div class="row2">
+		    	
+				    <div class="form-row">
+				        <div class="form-group col-md-6">
+				            <label for="goodsType">Loại hàng hóa</label>
+				            <input type="text" class="form-control" id="goodsType">
+				        </div>
+				        <div class="form-group col-md-6">
+				            <label for="transportMethod">Phương tiện vận chuyển</label>
+				            <input type="text" class="form-control" id="transportMethod">
+				        </div>
+				    </div>
+				
+		    </div>
+		    
+		    <div class="container">
+				<div class="column">
+			        <fieldset>
+			            <legend>Thông tin người gửi</legend>
+			            <table class="sender-table">
+			                <tr>
+			                    <td>Họ tên:</td>
+			                    <td><input type="text" class="input-container" /></td>
+			                </tr>
+			                <tr>
+			                    <td>SDT:</td>
+			                    <td><input type="text" class="input-container" placeholder="(+84) 1234567890" /></td>
+			                </tr>
+			                <tr>
+			                    <td>Email:</td>
+			                    <td><input type="email" class="input-container" /></td>
+			                </tr>
+			            </table>
+			        </fieldset>
+				</div>
+	
+				<div class="column col2">
+				        <fieldset>
+				            	<legend>Thông tin người nhận</legend>
+				            <table class="receiver-table">
+				                <tr>
+				                    <td>Họ tên:</td>
+				                    <td><input type="text" class="input-container" /></td>
+				                </tr>
+				                <tr>
+				                    <td>SDT:</td>
+				                    <td><input type="text" class="input-container" placeholder="(+84) 1234567890" /></td>
+				                </tr>
+				                <tr>
+				                    <td>Email:</td>
+				                    <td><input type="email" class="input-container" /></td>
+				                </tr>
+				            </table>
+				        </fieldset>
+				</div>
+		</div>
+	        
+	     
+	        <div class="row2">
+	        	<div class="form-row">
+				        <div class="form-group col-md-6">
+				            <label for="goodsType">Yêu cầu</label>
+				            <div data-mdb-input-init class="form-outline">
+								<textarea class="form-control" id="textAreaExample2" rows="8"></textarea>
+							</div>
+				        </div>
+				        <div class="form-group col-md-6">
+				            <label for="transportMethod">Địa chỉ</label>
+				            <div data-mdb-input-init class="form-outline">
+								<textarea class="form-control" id="textAreaExample2" rows="8"></textarea>
+							</div>
+				        </div>
+				    </div>
+	        </div>
+	
+	        <div class="row3">
+				<legend class="legent-row3">Tự động cập nhật qua các kênh</legend>
+				<label><input type="checkbox" id="emailUpdate" style="margin-left: 30px; background-color: gray; color: black;"> Email</label>
+				<br><label><input type="checkbox" id="zaloUpdate" style="margin-left: 30px; background-color: gray; color: black;"> Zalo</label><span> (+84) 0987654321</span>
+					<a href="#" style="color: #6942ca;"> Thay đổi</a>
+				<br><label><input type="checkbox" id="smsUpdate" style="margin-left: 30px; background-color: gray; color: black;"> SMS</label><span> (+84) 0987654321</span>
+					<a href="#" style="color: #6942ca;"> Thay đổi</a>
+			</div>
+		        
+			<div class="row4">
+				<button type="button" onclick="saveOrder()">Lưu</button>
+	        	<button type="button" onclick="closeModal()">Trở về</button>
+			</div>
+	    </form>
+	</div>
+	
 	</div>
 	
 	<!-- END CONTENT -->

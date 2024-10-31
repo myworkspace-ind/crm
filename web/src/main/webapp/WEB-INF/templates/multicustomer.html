@@ -5,21 +5,13 @@
 <th:block th:include="fragments/common_meta_title"></th:block>
 <!-- END COMMON META AND TITLE -->
 
-<th:block th:include="fragments/head"></th:block>
-<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
-<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
-
-<script>console.log("Handsontable:", typeof Handsontable); //Check Handsontable is available or not
-</script>
-
-
 <!-- START COMMON CSS -->
 <th:block th:include="fragments/common_css"></th:block>
 <!-- END COMMON CSS -->
 
-<link rel="stylesheet" type="text/css" th:href="@{resources/css/ordersBtnHorizontalMenu.css}">	
-<link rel="stylesheet" type="text/css" th:href="@{resources/css/new_style.css}">
-<link rel="stylesheet" type="text/css" th:href="@{resources/css/order.css}">
+<th:block th:include="fragments/head"></th:block>
+<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
 </head>
 
 
@@ -40,7 +32,6 @@
 	<div class="app-content content">
 		<!-- BEGIN CONTENT WRAPPER -->
 		<th:block th:include="fragments/contentWrapperCRM"></th:block>
-		<th:block th:include="fragments/task/frg_task.html"></th:block>
 		<!-- END CONTENT WRAPPER -->
 	</div>
 	<!-- END CONTENT -->
@@ -48,7 +39,7 @@
 		<!-- Screen Javascripts -->
 		<!-- <script type="text/javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script> -->
 
-	
+	<th:block th:include="fragments/task/frg_task.html"></th:block>
 
 	<script type="text/javascript" th:src="@{/resources/js/task/init.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/js/task/save.js}"></script>

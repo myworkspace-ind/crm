@@ -69,3 +69,157 @@ h4.title.order-title {
     margin-bottom: 20px;
     padding-top: 20px;
 }
+
+.handsontable a:hover {
+    color: #0b318a !important;
+}
+div#statusModal{
+	display:none; 
+	position:fixed; 
+	top:50%; 
+	left:50%; 
+	bottom:-10%;
+	width: fit-content !important;
+	height: fit-content !important;
+	transform:translate(-50%, -50%); 
+	background-color:white; 
+	padding:20px; 
+	border:1px solid #ccc; 
+	z-index:1000;
+}
+div#modalOverlay{
+	display:none; 
+	position:fixed; 
+	top:0; 
+	left:0; 
+	width:100%; 
+	height:100%; 
+	background-color:rgba(0, 0, 0, 0.5); 
+	z-index:999;
+}
+select#statusSelect {
+    background-color: white;
+    color: black;
+}
+div#updateOrderModal{
+	display: none; 
+	position:fixed; 
+	top:50%; 
+	left:50%; 
+	transform:translate(-50%, -50%); 
+	background-color:white; 
+	padding:20px; 
+	border:1px solid #e8868f; 
+	z-index:1000;
+	width: 100% !important;
+	max-height: 80vh;
+	overflow-y: auto;
+}
+div#updateOrderModal h3{
+	color: #DA4453;
+	font-weight: 600;
+}
+div#updateOrderModal hr{
+    background-color: red;
+}
+.form-row {
+    margin-left: 30px;
+    margin-top: 20px;
+    margin-bottom: -50px;
+}
+.row1 {
+    display: flex;
+    margin-left: 30px;
+}
+.row3{
+	margin-left: 30px;
+	margin-top: 50px;
+}
+input#orderCode,input#orderDate, select#orderStatus {
+    background-color: white;
+    color: black;
+}
+input#goodsType, input#transportMethod{
+	/* width: 30.5%; */
+	background-color: white;
+    color: black;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-top: 60px;
+}
+
+.column {
+    width: 45%; 
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.sender-table, table.receiver-table {
+    margin-left: 30px;
+    max-width: 500px;
+}
+
+table, td {
+    border: 1px solid #939393;
+    padding: 8px;
+}
+
+legend {
+    font-weight: 600;
+    font-size: 17px;
+}
+
+input[type="text"], input[type="email"] {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+    color: black;
+    border: 1px solid #D4D4D4;
+}
+
+.form-group{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+.form-container {
+    display: flex;
+    gap: 111px;
+}
+.form-control {
+	width: 100%;
+	min-width: 400px;
+	max-width: 800px;
+}
+textarea#textAreaExample2 {
+    width: 40%;
+}
+
+.row4 {
+    display: flex; 
+    justify-content: center; 
+    margin-top: 20px; 
+}
+
+.row4 button {
+    margin: 0 10px; 
+    padding: 10px 20px; 
+    background-color: #e16471; 
+    color: white; 
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+}
+
+.row4 button:hover {
+    background-color: #d77a7c; 
+}

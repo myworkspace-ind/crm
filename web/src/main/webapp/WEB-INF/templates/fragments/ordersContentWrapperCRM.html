@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -11,9 +11,13 @@
 				 <h3 class="content-header-title">Quản lý trạng thái đơn hàng</h3>
 				 <div class="row">
 				 	<div class="heading-elements">
-                        <button class="btn btn-primary btn-sm order" fdprocessedid="fzh15n"><i class="fas fa-box-open white"></i> Đơn hàng</button>
+				 		<a th:href="@{/orders}">
+                        	<button class="btn btn-primary btn-sm order" fdprocessedid="fzh15n"><i class="fas fa-box-open white"></i> Đơn hàng</button>
+            			</a>
             			<button class="btn btn-primary btn-sm status" fdprocessedid="fzh15n"><i class="fas fa-clipboard-check white"></i> Trạng thái</button>
-            			<button class="btn btn-primary btn-sm config" fdprocessedid="fzh15n"><i class="fas fa-cogs white"></i> Cấu hình</button>
+            			<a th:href="@{/orders-configuration/orders}">
+            				<button class="btn btn-primary btn-sm config" fdprocessedid="fzh15n"><i class="fas fa-cogs white"></i> Cấu hình</button>
+            			</a>
                 	</div>	
 				 </div>
 
