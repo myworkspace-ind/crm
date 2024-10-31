@@ -27,10 +27,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.tools.ant.taskdefs.Length;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import mks.myworkspace.crm.common.AppUtility;
+import mksgroup.java.common.CommonUtil;
 
 /**
  * An example Utility.
@@ -64,5 +66,24 @@ public class AppUtility {
         }
         
         return xmlDoc;
+    }
+    
+    /** 
+     * Kiem tra dinh dang cua so dien thoai. Check format of phone number
+     * Noi dung kiem tra gom: Conditions to check:
+     * - SDT phai co 10 chu so - Phone considers 10 digits
+     * - 
+     * @param phone (Khong bao gom ma vung Not include area code) 
+     * @return true neu phone thoa man dieu kien o tren if it satisfies the ahea.
+     * Nguoc lai, thi la false.
+     */
+    public static Boolean checkPhone(String phone) {
+    	//String newPhone = CommonUtil.parsePattern(phone, "\\d\\\\d\\\\d\\\\d\\\\d\\\\d\\\\d\\\\d\\\\d\\\\d");
+    	return phone != null && phone.length() == 10 && phone.chars().allMatch(Character::isDigit);
+    }
+    
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        String regex = "^\\d{10}$";
+        return phoneNumber.matches(regex);
     }
 }

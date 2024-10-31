@@ -21,6 +21,7 @@ package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +40,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
+import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.service.StorageService;
 
 /**
@@ -81,6 +83,12 @@ public class OrderController extends BaseController {
 		ModelAndView mav = new ModelAndView("ordersCRMScreen");
 
 		initSession(request, httpSession);
+		Order newOrder = new Order();
+		newOrder.setDeliveryDate(new Date());
+		//Giả định trong hệ thống có 1 loại đơn hàng thôi
+		//Load tất cả các trạng thái của đơn hàng này lên combobox
+		mav.addObject("order", newOrder);
+
 		return mav;
 	}
 	
