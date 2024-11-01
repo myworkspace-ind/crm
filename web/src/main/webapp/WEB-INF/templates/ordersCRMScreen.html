@@ -146,7 +146,10 @@
 	</div>
 	
 	<div id="updateOrderModal">
-		<h3>Cập nhật đơn hàng</h3>
+		<h3 id="title">Cập nhật đơn hàng</h3>
+		<div class="closeBtnDiv" style="text-align: right;">
+			<button onclick="closeModal()" class="closeBtn"><i class="fas fa-times"></i></button>
+		</div>
 		<hr>
 	    <form id="orderForm">
 		    <div class="form-row">
@@ -170,21 +173,7 @@
 			      <input type="text" class="form-control" id="orderCode">
 			    </div>
 			</div>
-	    	<!-- <div class="row1">
-		        <label class="label-estaday">Ngày tạo</label>
-		        	<input class="input-row1" type="date" id="orderDate" value="">
-		        <label class="label-status">Trạng thái</label>
-		        <select id="orderStatus" class="input-row1">
-		            <option value="1">Nhận đơn</option>
-			        <option value="2">Lưu kho</option>
-			        <option value="3">Vận chuyển</option>
-			        <option value="4">Lưu kho lạnh</option>
-			        <option value="5">Giao hàng</option>	
-		        </select>
-		        <label class="label-order-code">Mã đơn hàng</label>
-		       		<input type="text" id="orderCode" placeholder="" class="input-row1">
-		    </div> -->
-		    
+	    	
 		    <br/><div class="row2">
 		    	
 				    <div class="form-row">
@@ -197,7 +186,6 @@
 				            <input type="text" class="form-control" id="transportMethod">
 				        </div>
 				    </div>
-				
 		    </div>
 		    
 		    <div class="container">
@@ -242,7 +230,6 @@
 				</div>
 		</div>
 	        
-	     
 	        <div class="row2">
 	        	<div class="form-row">
 				        <div class="form-group col-md-6">
@@ -275,7 +262,6 @@
 			</div>
 	    </form>
 	</div>
-	
 	</div>
 	
 	<!-- END CONTENT -->
@@ -291,6 +277,7 @@
 	<!-- FILE JS BỔ SUNG -->
 	<script type="text/javascript" th:src="@{/resources/js/orders/init.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/createOrder.js}"></script>
 	<!-- Screen Javascripts -->
 
 </body>

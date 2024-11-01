@@ -97,8 +97,8 @@ public class OrderController extends BaseController {
 	public Object getOrderData() throws IOException {
 		log.debug("Get sample data from configuration file.");
 		int[] colWidths= {
-			200,
-	        200,
+			100,
+	        100,
 	        200,
 	        200,
 	      	200,
