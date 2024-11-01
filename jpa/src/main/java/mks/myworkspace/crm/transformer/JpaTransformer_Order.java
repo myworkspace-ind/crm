@@ -20,7 +20,7 @@ public class JpaTransformer_Order {
 			Object[] rowData = new Object[5];
 			rowData[0] = order.getId();// ma don hang
 			rowData[1] = formatDate(order.getDeliveryDate());// ngay giao
-			rowData[2] = order.getGoodsCategory();// loai hang hoa
+			//rowData[2] = order.getGoodsCategory();// loai hang hoa
 			rowData[3] = order.getCustomer();// thong tin nguoi gui
 			rowData[4] = order.getTransportationMethod();// phuong tien van chuyen
 			lstObject.add(rowData);

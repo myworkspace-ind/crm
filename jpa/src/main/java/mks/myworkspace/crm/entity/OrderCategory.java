@@ -6,7 +6,12 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -27,8 +32,8 @@ public class OrderCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(length = 99)
-	private String id; // system field
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id; // system field
 
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
@@ -39,16 +44,27 @@ public class OrderCategory implements Serializable {
 	@OneToMany(mappedBy = "orderCategory", fetch = FetchType.EAGER)	
 	private Set<Order> orders;
 	
-	public OrderCategory(String id, String siteId, String name, Set<Order> orders) {
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "order_category_status",
+			joinColumns = @JoinColumn(name = "order_category_id"),
+			inverseJoinColumns = @JoinColumn(name = "order_status_id")
+	)
+	 private Set<OrderStatus> orderStatuses;
+
+	public OrderCategory(Long id, String siteId, String name, Set<Order> orders, Set<OrderStatus> orderStatuses) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
 		this.orders = orders;
+		this.orderStatuses = orderStatuses;
 	}
 
 	@Override
 	public String toString() {
-		return "OrderCategoryRepository [id=" + id + ", siteId=" + siteId + ", name=" + name + ", orders=" + orders + "]";
+		return "OrderCategory [id=" + id + ", siteId=" + siteId + ", name=" + name + ", orders=" + orders
+				+ ", orderStatuses=" + orderStatuses + "]";
 	}
+	
 }

@@ -41,6 +41,8 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Order;
+import mks.myworkspace.crm.entity.OrderCategory;
+import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.StorageService;
 
 /**
@@ -77,6 +79,9 @@ public class OrderController extends BaseController {
 
 	@Autowired
 	StorageService storageService;
+	
+	@Autowired
+	OrderCategoryService orderCategoryService;
 
 	@GetMapping("")
 	public ModelAndView displayOrder(HttpServletRequest request, HttpSession httpSession) {
@@ -85,10 +90,15 @@ public class OrderController extends BaseController {
 		initSession(request, httpSession);
 		Order newOrder = new Order();
 		newOrder.setDeliveryDate(new Date());
+		
+		List<OrderCategory> orderCategories;
+		orderCategories = orderCategoryService.getAllOrderCategoriesWithOrderStatuses();
+		log.debug("Fetching all order's categories.");
 		//Giả định trong hệ thống có 1 loại đơn hàng thôi
 		//Load tất cả các trạng thái của đơn hàng này lên combobox
+		mav.addObject("orderCategories", orderCategories);
 		mav.addObject("order", newOrder);
-
+		
 		return mav;
 	}
 	

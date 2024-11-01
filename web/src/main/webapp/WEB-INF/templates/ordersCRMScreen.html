@@ -66,7 +66,6 @@
 	                            <fieldset class="text-left customer-option">
 	                                <h5>Khách hàng</h5>
 	                                <select style="background-color: white; color: black; width: 100%;">
-	                                    <option value="" disabled selected style="font-style: italic;">Chọn khách hàng</option>
 	                                    <option value="kh1">Khách hàng 1</option>
 	                                    <option value="kh2">Khách hàng 2</option>
 	                                    <option value="kh3">Khách hàng 3</option>
@@ -75,10 +74,9 @@
 	                            <fieldset class="text-left ordercate-option">
 	                                <h5>Loại đơn hàng</h5>
 	                                <select style="background-color: white; color: black; width: 100%;">
-	                                    <option value="" disabled selected style="font-style: italic;">Chọn loại đơn hàng</option>
-	                                    <option value="type1">Loại đơn hàng 1</option>
-	                                    <option value="type2">Loại đơn hàng 2</option>
-	                                    <option value="type3">Loại đơn hàng 3</option>
+									<th:block th:each = "orderCategory : ${orderCategories}">
+										<option th:value = "${orderCategory.id}" th:text = ${orderCategory.name}></option>
+									</th:block>
 	                                </select>
 	                            </fieldset>
 	                        </div>

@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -26,16 +28,19 @@ import lombok.Setter;
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
-	@Column(length = 99)
-	private String id; // system field
-
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id; // system field
+	
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
-
+	
 	@Column
 	private String name;
+	
+	@Column
+	private String code;
 
 	@Column(name = "delivery_date")
 	@Temporal(TemporalType.DATE)
@@ -49,49 +54,46 @@ public class Order implements Serializable {
 
 	// Relation 1-1 with OrderCategoryRepository
 	@OneToOne
-	@JoinColumn(name = "order_category_id", referencedColumnName = "id")
+	@JoinColumn(name = "order_cate_id", referencedColumnName = "id")
 	private OrderCategory orderCategory;
 
 	// Relation 1-1 with GoodsCategory
-	@OneToOne
-	@JoinColumn(name = "goods_category_id", referencedColumnName = "id")
-	private GoodsCategory goodsCategory;
+//	@OneToOne
+//	@JoinColumn(name = "goods_category_id", referencedColumnName = "id")
+//	private GoodsCategory goodsCategory;
 
 	// Relation 1-1 with OrderStatus
-	@OneToOne
-	@JoinColumn(name = "order_status_id", referencedColumnName = "id")
-	private OrderStatus orderStatus;
+//	@OneToOne
+//	@JoinColumn(name = "order_status_id", referencedColumnName = "id")
+//	private OrderStatus orderStatus;
 
 	// Relation 1-1 with Customer
 	@OneToOne
-	@JoinColumn(name = "customer_id", referencedColumnName = "id")
+	@JoinColumn(name = "cus_id", referencedColumnName = "id")
 	private Customer customer;
-
-	public Order(String id, String siteId, String name, Date deliveryDate, String transportationMethod,
-			String customerRequirement, OrderCategory orderCategory, GoodsCategory goodsCategory,
-			OrderStatus orderStatus) {
-		super();
-		this.id = id;
-		this.siteId = siteId;
-		this.name = name;
-		this.deliveryDate = deliveryDate;
-		this.transportationMethod = transportationMethod;
-		this.customerRequirement = customerRequirement;
-		this.orderCategory = orderCategory;
-		this.goodsCategory = goodsCategory;
-		this.orderStatus = orderStatus;
+	
+	public Order(Long orderId, Date deliveryDate2, GoodsCategory goodsCategory2, Customer customer2,
+			String transportationMethod2) {
 	}
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", siteId=" + siteId + ", name=" + name + ", deliveryDate=" + deliveryDate
+		return "Order [id=" + id + ", siteId=" + siteId + ", name=" + name + ", code=" + code + ", deliveryDate=" + deliveryDate
 				+ ", transportationMethod=" + transportationMethod + ", customerRequirement=" + customerRequirement
-				+ ", orderCategory=" + orderCategory + ", goodsCategory=" + goodsCategory + ", orderStatus="
-				+ orderStatus + "]";
+				+ ", orderCategory=" + orderCategory + ", customer=" + customer + "]";
 	}
 
-	public Order(String orderId, Date deliveryDate2, GoodsCategory goodsCategory2, Customer customer2,
-			String transportationMethod2) {
-		// TODO Auto-generated constructor stub
+	public Order(Long id, String siteId, String name, String code, Date deliveryDate, String transportationMethod,
+			String customerRequirement, OrderCategory orderCategory, Customer customer) {
+		super();
+		this.id = id;
+		this.siteId = siteId;
+		this.name = name;
+		this.code = code;
+		this.deliveryDate = deliveryDate;
+		this.transportationMethod = transportationMethod;
+		this.customerRequirement = customerRequirement;
+		this.orderCategory = orderCategory;
+		this.customer = customer;
 	}
 }
