@@ -232,3 +232,7 @@ button.closeBtn {
     transition: background-color 0.3s;
     text-align: right;
 }
+
+.checkbox-spacing {
+    margin-right: 8px; 
+}

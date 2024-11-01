@@ -73,30 +73,27 @@
 	                            </fieldset>
 	                            <fieldset class="text-left ordercate-option">
 	                                <h5>Loại đơn hàng</h5>
-	                                <select style="background-color: white; color: black; width: 100%;">
-									<th:block th:each = "orderCategory : ${orderCategories}">
-										<option th:value = "${orderCategory.id}" th:text = ${orderCategory.name}></option>
-									</th:block>
+	                                <select id="orderCategorySelect" onchange="loadOrderStatuses()" 
+	                                		style="background-color: white; color: black; width: 100%;">
+										<th:block th:each="orderCategory : ${orderCategories}">
+							                <option th:value="${orderCategory.id}" th:text="${orderCategory.name}"
+							                        th:selected="${orderCategory.id == selectedCategoryId}"></option>
+							            </th:block>
 	                                </select>
 	                            </fieldset>
 	                        </div>
 	                        
 	                        <div class="col-md-3 col-sm-12">
-	                            <fieldset class="text-left order-status">
-	                                <h5>Trạng thái đơn hàng</h5>
-	                                   <label>
-									        <input type="checkbox" name="orderStatus" value="all" class="custom-checkbox"> Tất cả
-									    </label><br>
-									    <label>
-									        <input type="checkbox" name="orderStatus" value="packing" class="custom-checkbox"> Đóng gói
-									    </label><br>
-									    <label>
-									        <input type="checkbox" name="orderStatus" value="shipping" class="custom-checkbox"> Vận chuyển
-									    </label><br>
-									    <label>
-									        <input type="checkbox" name="orderStatus" value="delivered" class="custom-checkbox"> Giao hàng
-									    </label>
-	                            </fieldset>
+		                        <div id="orderStatusContainer">
+		                            <fieldset class="text-left order-status">
+		                                <h5>Trạng thái đơn hàng</h5>
+		                                    <th:block th:each="orderStatus : ${orderStatuses}">
+									            <label>
+									                <input type="checkbox" name="orderStatus" th:value="${orderStatus.id}" class="custom-checkbox checkbox-spacing" th:text="${orderStatus.name}"/> 
+									            </label><br/>
+								        	</th:block>
+		                            </fieldset>
+		                        </div>
 	                        </div>
 	                        <div class="col-md-3 col-sm-12">
 	                            <fieldset class="text-left startdate-option">
@@ -276,6 +273,7 @@
 	<script type="text/javascript" th:src="@{/resources/js/orders/init.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/createOrder.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadOrderStatus.js}"></script>
 	<!-- Screen Javascripts -->
 
 </body>

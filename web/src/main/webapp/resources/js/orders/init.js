@@ -77,6 +77,9 @@ function initTable(colHeaders, colWidths, data) {
 		console.error("Container tblOrder không tồn tại.");
 	}
 }
+function changeTitle(newTitle){
+	document.getElementById("title").innerText = newTitle;
+}
 
 function viewDetail(row) {
 	console.log("Xem chi tiết cho hàng:", row);
@@ -84,6 +87,7 @@ function viewDetail(row) {
 }
 
 function edit(row) {
+	changeTitle('Cập nhật đơn hàng');
 	currentRow = row;  // Save current row to update
 	document.getElementById("updateOrderModal").style.display = "block";
 	document.getElementById("modalOverlay").style.display = "block";
