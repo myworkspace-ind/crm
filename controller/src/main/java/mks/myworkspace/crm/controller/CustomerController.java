@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
@@ -92,37 +93,12 @@ public class CustomerController extends BaseController {
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
 
-		//List<Status> statuses = statusService.getAllStatuses();
+		List<Status> statuses = statusService.getAllStatuses();
 		mav.addObject("customers", customers);
-		//mav.addObject("statuses", statuses);
+		mav.addObject("statuses", statuses);
 
 		return mav;
 	}
-	
-//	@RequestMapping(value = { "/customer-list" }, method = RequestMethod.GET)
-//	@ResponseBody
-//	public ResponseEntity<List<Customer>> displayCustomerListCRMScreen(
-//	        @RequestParam(value = "keyword", required = false) String keyword,
-//	        @RequestParam(value = "statusId", required = false) Long statusId,
-//	        HttpServletRequest request,
-//	        HttpSession httpSession) {
-//
-//	    log.debug("Display Customer list with keyword= {}", keyword);
-//	    initSession(request, httpSession);
-//
-//	    List<Customer> customers;
-//
-//	    if (statusId != null) {
-//	        customers = customerService.findCustomersByStatus(statusId);
-//	    } else if (keyword != null && !keyword.isEmpty()) {
-//	        customers = customerService.searchCustomers(keyword);
-//	    } else {
-//	        customers = customerService.getAllCustomersWithStatuses();
-//	        log.debug("No keyword or statusId provided. Fetching all customers.");
-//	    }
-//
-//	    return ResponseEntity.ok(customers);
-//	}
 
 	@RequestMapping(value = { "/customerDetail" }, method = RequestMethod.GET)
 	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
