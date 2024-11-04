@@ -46,4 +46,16 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Transactional
     @Query("DELETE FROM Customer c WHERE c.id IN :customerIds")
     void deleteAllByIds(@Param("customerIds") List<Long> customerIds);
+    
+    @Query("SELECT ms.id, COUNT(c.id) " +
+	       "FROM Customer c LEFT JOIN c.mainStatus ms " +
+	       "WHERE ms IS NOT NULL " +
+	       "GROUP BY ms.id")
+	List<Object[]> countCustomersByMainStatus();
+	
+	@Query("SELECT ss.id, COUNT(c.id) " +
+		       "FROM Customer c LEFT JOIN c.subStatus ss " +
+		       "WHERE ss IS NOT NULL " +
+		       "GROUP BY ss.id")
+	List<Object[]> countCustomersBySubStatus();
 }

@@ -17,6 +17,10 @@
 					th:onclick="'fetchCustomersByStatus(' + ${status.id} + ')'"
 					th:attr="data-status-id=${status.id}">
 					<h4 th:text="${status.name}"></h4>
+
+					<span class="count-badge"
+						th:text="${statusCounts != null && statusCounts[status.id] != null ? statusCounts[status.id] : 0}"></span>
+
 				</div>
 			</div>
 			<button type="button" class="right" onclick="rightScroll()">

@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -94,8 +95,17 @@ public class CustomerController extends BaseController {
 		}
 
 		List<Status> statuses = statusService.getAllStatuses();
+
+		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
+		
+		// Kiểm tra xem statusCountMap có null không
+	    if (statusCounts == null) {
+	        statusCounts = new HashMap<>(); // Khởi tạo nếu null
+	    }
+	    
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
+		mav.addObject("statusCounts", statusCounts);
 
 		return mav;
 	}

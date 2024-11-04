@@ -1,6 +1,8 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,4 +96,38 @@ public class CustomerServiceImpl implements CustomerService {
         statusRepo.deleteByCustomerIds(customerIds);
         repo.deleteAllByIds(customerIds);
     }
+    
+    @Override
+    public Map<Long, Long> getCustomerCountsByStatus() {
+        List<Object[]> mainStatusCounts = repo.countCustomersByMainStatus();
+        for (Object[] count : mainStatusCounts) {
+            System.out.println("Main Status ID: " + count[0] + ", Count: " + count[1]);
+        }
+        List<Object[]> subStatusCounts = repo.countCustomersBySubStatus();
+        for (Object[] count :subStatusCounts) {
+            System.out.println("Sub Status ID: " + count[0] + ", Count: " + count[1]);
+        }
+        
+        Map<Long, Long> statusCountMap = new HashMap<>();
+
+        // Thêm kết quả từ mainStatusCounts
+        for (Object[] row : mainStatusCounts) {
+            Long statusId = (Long) row[0];
+            Long count = (Long) row[1];
+            statusCountMap.put(statusId, count);
+        }
+
+        // Cộng kết quả từ subStatusCounts vào bản đồ đã có
+        for (Object[] row : subStatusCounts) {
+            Long statusId = (Long) row[0];
+            Long count = (Long) row[1];
+            statusCountMap.merge(statusId, count, Long::sum);
+        }
+        
+        // In ra bản đồ kết quả để kiểm tra
+        System.out.println("Final Status Count Map: " + statusCountMap);
+
+        return statusCountMap.isEmpty() ? new HashMap<>() : statusCountMap;
+    }
+
 }
