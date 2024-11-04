@@ -15,40 +15,35 @@ import mks.myworkspace.crm.entity.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-	List<Customer> findAll();
+    List<Customer> findAll();
 
-//	List<Customer> findByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(String name, String address, String phone);
+    @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE "
+            + "(LOWER(c.companyName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
+            + "LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
+            + "LOWER(c.phone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
+            + "LOWER(ms.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
+            + "LOWER(ss.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
+            + "LOWER(c.responsiblePerson) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
+            + "LOWER(c.note) LIKE LOWER(CONCAT('%', :keyword, '%')))") 
+    List<Customer> searchCustomers(@Param("keyword") String keyword);
 
-	@Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.statuses s WHERE "
-			+ "(LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%')) OR "
-			+ "LOWER(c.address) LIKE LOWER(CONCAT('%', :address, '%')) OR "
-			+ "LOWER(c.phone) LIKE LOWER(CONCAT('%', :phone, '%')) OR "
-			+ "LOWER(s.name) LIKE LOWER(CONCAT('%', :status, '%')))")
-	List<Customer> searchCustomers(@Param("name") String name, @Param("address") String address,
-			@Param("phone") String phone, @Param("status") String status);
+    @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss")
+    List<Customer> findAllWithStatuses();
 
-	@Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.statuses")
-	List<Customer> findAllWithStatuses();
-	
-	@Query("SELECT c FROM Customer c LEFT JOIN FETCH c.statuses s WHERE s.id =:statusId")
-	List<Customer> findByStatusId(@Param("statusId") Long statusId);
-	
-	@Query("SELECT c FROM Customer c LEFT JOIN FETCH c.statuses s WHERE c.id = :id")
-	Optional<Customer> findById(@Param("id") Long id);
-	
-	@Query("SELECT COALESCE(MAX(c.id), 0) FROM Customer c")
+    @Query("SELECT c FROM Customer c WHERE c.mainStatus.id = :statusId OR c.subStatus.id = :statusId")
+    List<Customer> findByStatusId(@Param("statusId") Long statusId);
+    
+    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE c.id = :id")
+    Optional<Customer> findById(@Param("id") Long id);
+    
+    @Query("SELECT COALESCE(MAX(c.id), 0) FROM Customer c")
     Long findMaxId();
-	
-	@Query("SELECT c FROM Customer c WHERE c.phone = :phone")
-	//Database khong co sdt trung nhau
-	Optional<Customer> findByPhone(@Param("phone") String phone);
-		
-	//Database co sdt trung lap
-	//List<Customer> findByPhone(@Param("phone") String phone);
-	@Modifying
-	@Transactional
+    
+    @Query("SELECT c FROM Customer c WHERE c.phone = :phone")
+    Optional<Customer> findByPhone(@Param("phone") String phone);
+    
+    @Modifying
+    @Transactional
     @Query("DELETE FROM Customer c WHERE c.id IN :customerIds")
     void deleteAllByIds(@Param("customerIds") List<Long> customerIds);
-	
-	
 }

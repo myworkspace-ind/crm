@@ -178,11 +178,11 @@ tr:nth-child(even) td:nth-child(3) {
     width: 100%; 
 }
 
-th, td {
-  text-align: left; 
-  padding: 8px; 
-  border: 1px solid #ddd; 
-}
+/* th, td { */
+/*   text-align: left;  */
+/*   padding: 8px;  */
+/*   border: 1px solid #ddd;  */
+/* } */
 
 
  #colorTd {
@@ -508,4 +508,18 @@ nav-link-expand i.fa-compress:before {
 .table-bordered th, 
 .table-bordered td {
     border: 1px solid #dee2e6;
+}
+
+.th {
+    background-color: #E9ECEF;
+    color: #1F2A37;
+    font: Roboto, sans-serif;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.status-cell {
+    color: white;
+    text-align: left;
+    vertical-align: middle;
 }

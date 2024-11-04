@@ -239,181 +239,64 @@
 													<table id="table" class="table table-bordered">
 														<thead>
 															<tr>
-																<th style="width: 2%" data-field="select" class="th1"><input
-																	type="checkbox" id="select-all"
+																<th style="width: 2%" data-field="select" class="th1">
+																	<input type="checkbox" id="select-all"
 																	class="d-flex align-items-center justify-content-center" />
-																	<!-- <div class="checkbox-table-customer d-flex align-items-center justify-content-center">
-										        		<input type="checkbox" id="select-all"/>
-										        		<label for = "select-all">Select All</label>
-										        	</div> --></th>
-
-																<!-- <th data-field="logo_company" class="th2">Logo CTY</th> -->
-																<th data-field="id_company" class="th2">ID</th>
-																<th data-field="name_company" class="th3">Tên khách hàng</th>
-																<th data-field="address_company" class="th4">Địa chỉ khách hàng</th>
-																
-																<!-- <th data-field="name_representative" class="th5">Tên
-																		người đại diện</th> -->
-																<!-- <th data-field="email_company" class="th6">Email</th> -->
-																<th data-field="phone_company" class="th7">Số điện thoại</th>
-																<th data-field="status_company" class="th8">Trạng thái</th>
-																
-																<!-- <th class="th8">Trạng thái chính</th>
-																	<th class="th9">Trạng thái phụ</th>
-																	<th class="th10">Người phụ trách</th>
-																	<th class="th11">Thời gian đăng ký</th>
-																	<th class="th12">Thời gian đăng chốt</th>
-																	<th class="th13">Thời gian đăng hủy</th>
-																	<th class="th14">Thời gian đăng hoàn thành</th>
-																	<th class="th15">Hành động</th> -->
+																</th>
+																<th data-field="number" class="th2">STT</th>
+																<th data-field="company_name" class="th3">Tên công
+																	ty</th>
+																<th data-field="contact_person" class="th4">Người
+																	liên hệ chính</th>
+																<th data-field="email" class="th5">Email</th>
+																<th data-field="phone" class="th6">Số điện thoại</th>
+																<th data-field="address" class="th7">Địa chỉ khách
+																	hàng</th>
+																<th data-field="profession" class="th8">Ngành nghề</th>
+																<th data-field="main_status" class="th9">Trạng thái
+																	chính</th>
+																<th data-field="sub_status" class="th10">Trạng thái
+																	phụ</th>
+																<th data-field="responsible_person" class="th11">Người
+																	phụ trách</th>
+																<th data-field="created_at" class="th12">Thời gian
+																	tạo</th>
+																<th data-field="note" class="th13">Ghi chú</th>
 															</tr>
 														</thead>
 														<tbody>
-															<tr th:each="customer : ${customers}">
+															<tr th:each="customer, iterStat : ${customers}">
 																<td class="th1"><input type="checkbox"
-
 																	name="customer" th:value="${customer.id}"
 																	class="customer-checkbox" /></td>
-																<td th:text="${customer.id}"></td>
+																<td th:text="${iterStat.index + 1}"></td>
 																<td><a
 																	th:href="@{customerDetail(id=${customer.id})}"
-																	th:text="${customer.name}"></a></td>
-																<!-- <a th:href="@{/customer/detail/{id}(id=${customer.id})}" th:text="${customer.name}"></a> -->
-																<td th:text="${customer.address}"></td>
+																	th:text="${customer.companyName}"></a></td>
+																<td th:text="${customer.contactPerson}"></td>
+																<td th:text="${customer.email}"></td>
 																<td th:text="${customer.phone}"></td>
-																<td>
-																	<ul>
-																		<!-- Lặp qua danh sách trạng thái -->
-																		<li th:each="status : ${customer.statuses}"
-																			th:text="${status.name}">Trạng thái</li>
-																	</ul>
+																<td th:text="${customer.address}"></td>
+																<td th:text="${customer.profession}"></td>
+																<td th:class="'status-cell main-status'" th:style="'background-color: ' + ${customer.mainStatus.backgroundColor} + '; color: white; text-align: center; vertical-align: middle;'">
+																	<span th:text="${customer.mainStatus.name}"></span>
 																</td>
+																<td th:class="'status-cell sub-status'" th:style="'background-color: ' + ${customer.subStatus.backgroundColor} + '; color: white; text-align: center; vertical-align: middle;'">
+																	<span th:text="${customer.subStatus.name}"></span>
+																</td>
+																<td th:text="${customer.responsiblePerson}"></td>
+
+																<td
+																	th:text="${#dates.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+																<td th:text="${customer.note}"></td>
 															</tr>
-															<!-- <tr id="row1">
-																	<td class="th1"><input type="checkbox"
-																		name="customer" value="1" /></td>
-
-																	<td><img
-																		src="resources/app-assets/images/logo/logo_ctyB.png"
-																		alt="Logo Công ty" style="width: 60px; height: auto;" />
-																	</td>
-
-																	<td>Công ty B</td>
-																	<td>123 Lê Văn Việt, TP. Thủ Đức</td>
-																	<td>Trần Quý B</td>
-																	<td>quyb.tran235@gmail.com</td>
-																	<td>0987654321</td>
-																	<td id="colorTd_row1"><select name="colorSelect"
-																		id="colorSelect_row1"
-																		onchange="changeColor(this, 'row1')">
-																			<option value="">Chọn trạng thái chính</option>
-																			<option value="moi">MỚI</option>
-																			<option value="chua bat dau">CHƯA BẮT ĐẦU</option>
-																			<option value="hoan lai">HOÃN LẠI</option>
-																			<option value="dang trong tien trinh">ĐANG
-																				TRONG TIẾN TRÌNH</option>
-																			<option value="hoan thanh">HOÀN THÀNH</option>
-																			<option value="huy">HỦY</option>
-																			<option value="chot">CHỐT</option>
-																	</select></td>
-
-																	<td id="newColor_row1"><select name="color" id="color_row1"
-																		onchange="adjustColor(this, 'row1')">
-																			<option value="">Chọn trạng thái phụ</option>
-																			<option value="moi cap nhat">Mới cập nhật</option>
-																			<option value="dung quen">Đừng quên</option>
-																	</select></td>
-
-
-																	<td id="newPerson"><select id="personSelect_row1"
-																		onchange="savePerson(this, 'row1')">
-																			<option value="0">Chọn người phụ trách</option>
-																			<option value="1">Lê Ngọc Thạch</option>
-																			<option value="2">Nguyễn Hoàng Phương Ngân</option>
-																			<option value="3">Nguyễn Thế Thành</option>
-																	</select></td>
-
-																	<td></td>
-																	<td></td>
-																	<td></td>
-																	<td></td>
-																	<td>
-																		<div class="btnActions">
-																			<button class="btn-edit" onclick="editRow(this)">
-																				<i class="fas fa-edit"></i>
-																			</button>
-																			<button class="btn-delete" onclick="deleteRow(this)">
-																				<i class="fas fa-trash-alt"></i>
-																			</button>
-																		</div>
-																	</td>
-																</tr>
-
-																<tr id="row2">
-																	<td class="th1"><input type="checkbox"
-																		name="customer" value="1" /></td>
-
-																	<td><img
-																		src="resources/app-assets/images/logo/logo_ctyA.png"
-																		alt="Logo Công ty" style="width: 60px; height: auto;" />
-																	</td>
-
-																	<td>Công ty A</td>
-																	<td>123 Võ Văn Ngân, TP. Thủ Đức</td>
-																	<td>Nguyễn Văn A</td>
-																	<td>vana.nguyen123@gmail.com</td>
-																	<td>09878655541</td>
-																	<td id="colorTd_row2"><select name="colorSelect"
-																		id="colorSelect_row2"
-																		onchange="changeColor(this, 'row2')">
-																			<option value="">Chọn trạng thái chính</option>
-																			<option value="moi">MỚI</option>
-																			<option value="chua bat dau">CHƯA BẮT ĐẦU</option>
-																			<option value="hoan lai">HOÃN LẠI</option>
-																			<option value="dang trong tien trinh">ĐANG
-																				TRONG TIẾN TRÌNH</option>
-																			<option value="hoan thanh">HOÀN THÀNH</option>
-																			<option value="huy">HỦY</option>
-																			<option value="chot">CHỐT</option>
-																	</select></td>
-
-																	<td id="newColor_row2"><select name="color" id="color_row2"
-																		onchange="adjustColor(this, 'row2')">
-																			<option value="">Chọn trạng thái phụ</option>
-																			<option value="moi cap nhat">Mới cập nhật</option>
-																			<option value="dung quen">Đừng quên</option>
-																	</select></td>
-
-
-																	<td id="newPerson"><select id="personSelect_row2"
-																		onchange="savePerson(this, 'row2')">
-																			<option value="0">Chọn người phụ trách</option>
-																			<option value="1">Lê Ngọc Thạch</option>
-																			<option value="2">Nguyễn Hoàng Phương Ngân</option>
-																			<option value="3">Nguyễn Thế Thành</option>
-																	</select></td>
-
-																	<td></td>
-																	<td></td>
-																	<td></td>
-																	<td></td>
-																	<td>
-																		<div class="btnActions">
-																			<button class="btn-edit" onclick="editRow(this)">
-																				<i class="fas fa-edit"></i>
-																			</button>
-																			<button class="btn-delete" onclick="deleteRow(this)">
-																				<i class="fas fa-trash-alt"></i>
-																			</button>
-																		</div>
-																	</td>
-																</tr> -->
-
 														</tbody>
 													</table>
 												</div>
 											</div>
 											<!-- END TABLE CUSTOMER LIST -->
+
+
 
 										</div>
 

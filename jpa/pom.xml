@@ -32,7 +32,7 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
         </dependency>
-        
+
 	</dependencies>
 	<build>
 		<!-- configure the build to use the standard maven structure -->
