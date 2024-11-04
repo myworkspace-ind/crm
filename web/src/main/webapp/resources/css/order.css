@@ -236,3 +236,10 @@ button.closeBtn {
 .checkbox-spacing {
     margin-right: 8px; 
 }
+
+:root.sakaiUserTheme-dark .table {
+    --bs-table-color: none!important;
+    --bs-table-striped-color: none!important;
+    --bs-table-striped-bg: none!important;
+    --bs-table-hover-color: none !important;
+}
