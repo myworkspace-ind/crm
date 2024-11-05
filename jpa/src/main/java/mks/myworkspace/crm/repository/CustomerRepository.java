@@ -58,4 +58,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 		       "WHERE ss IS NOT NULL " +
 		       "GROUP BY ss.id")
 	List<Object[]> countCustomersBySubStatus();
+	
+	@Query("SELECT COUNT(c) FROM Customer c")
+	long countAllCustomers();
 }

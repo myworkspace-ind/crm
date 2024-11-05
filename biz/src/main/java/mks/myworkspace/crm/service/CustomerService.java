@@ -27,4 +27,6 @@ public interface CustomerService {
 	void deleteAllByIds(List<Long> customerIds);
 	
 	Map<Long, Long> getCustomerCountsByStatus();
+	
+	long getTotalCustomerCount();
 }

@@ -1,26 +1,56 @@
 .cover {
     position: relative;
     padding: 0px 30px;
-    margin-top: 50px;
+    margin-top: 10px;
+}
+
+.left, .right {
+    position: absolute;
+    width: 40px; /* Đường kính của nút */
+    height: 40px; /* Đường kính của nút */
+    background-color: #967ADC; /* Màu nền của nút */
+    border-radius: 50%; /* Tạo hình dạng tròn */
+    display: flex; /* Để căn giữa nội dung */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    cursor: pointer; /* Thay đổi con trỏ khi hover */
+    color: white; /* Màu chữ */
+    font-size: 20px; /* Kích thước chữ */
+    border: none; /* Không có viền */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền khi hover */
+}
+
+.left::before {
+    content: '←'; /* Dấu mũi tên trái */
+    font-size: 20px; /* Kích thước mũi tên */
+}
+
+.right::before {
+    content: '→'; /* Dấu mũi tên phải */
+    font-size: 20px; /* Kích thước mũi tên */
+}
+
+.left:hover, .right:hover {
+    background-color: #8451C1; /* Thay đổi màu khi hover */
 }
 
 .left {
-    position: absolute;
-    left: 0;
-    top: 50%;
+    left: 0px;
+    top: 72%;
     transform: translateY(-50%);
+    z-index: 10;
 }
 
 .right {
-    position: absolute;
     right: 0;
-    top: 50%;
+    top: 72%;
     transform: translateY(-50%);
+    z-index: 10;
 }
 
 .scroll-images {
     position: relative;
-    width: 100%;
+    width: calc(100% - 25px);
     height: auto;
     display: flex;
     flex-wrap: nowrap;
@@ -28,6 +58,7 @@
     overflow-y: hidden;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    margin: 5px 10px;
 }
 
 .child {
@@ -36,8 +67,8 @@
     justify-content: space-between;
     color: white!important;
     align-items: center;
-    padding: 0px 15px;
-    margin: 1px 10px;
+    padding: 0px 10px;
+    margin: 1px 5px;
     border: 1px solid #f1f1f1;
     overflow: hidden;
     -webkit-box-shadow: 0px 0px 15px 2px rgb(0 0 0 / 10%);;
@@ -83,12 +114,18 @@ button {
 }
 
 .count-badge {
-    background-color: rgba(255, 255, 255, 0.2); /* Màu nền bán trong suốt */
-    color: white; /* Màu chữ trắng */
-    border-radius: 10px; /* Bo tròn viền */
-    padding: 2px 8px; /* Thêm khoảng cách cho số */
-    margin-left: 10px; /* Khoảng cách giữa chữ và số */
-    display: flex; /* Đảm bảo số lượng cũng được căn giữa */
-    align-items: center; /* Căn giữa theo chiều dọc trong badge */
-    justify-content: center; /* Căn giữa theo chiều ngang trong badge */
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 20px;
+    padding: 2px 8px;
+    margin-left: 10px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.all-customers-btn{
+	background-color: #967ADC;
+	width: fit-content;
+	margin: 5px 15px;
 }

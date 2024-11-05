@@ -171,7 +171,7 @@ tr:nth-child(even) td:nth-child(3) {
 }
 
 .table-responsive{
-    width: 80%;
+    width: 100%;
 }
 
 #table {
@@ -518,8 +518,34 @@ nav-link-expand i.fa-compress:before {
     text-align: left;
 }
 
-.status-cell {
-    color: white;
-    text-align: left;
+.bg {
+	background-color: #E9ECEF;
+    color: #1F2A37;
+    font: Roboto, sans-serif;
     vertical-align: middle;
+    text-align: left;
+}
+
+.status-cell_main-status {
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* .th2 { */
+/*     position: sticky; */
+/*     left: 0; Cố định bên trái */
+/*     z-index: 10; Để giữ cột ở trên cùng khi cuộn */
+/* } */
+
+/* .th3 { */
+/*     position: sticky; */
+/*     left: 100px; Cố định bên trái với khoảng cách 100px từ bên trái */
+/*     z-index: 10; Để giữ cột ở trên cùng khi cuộn */
+/* } */
+
+.header-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 7;
 }

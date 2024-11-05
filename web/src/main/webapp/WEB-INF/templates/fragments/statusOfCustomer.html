@@ -8,8 +8,14 @@
 	<div class="cover">
 		<form id="frmScrollImages" action="customer-list" method="get"
 			name="scrollForm">
+			
+			<div class="child all-customers-btn" onclick="showAllCustomers()">
+				<h4>Tất cả</h4>
+				<span class="count-badge" th:text="${totalCustomerCount}"></span>
+			</div>
+			
 			<button type="button" class="left" onclick="leftScroll()">
-				<i class="fas fa-angle-double-left"></i>
+<!-- 				<i class="fas fa-angle-double-left"></i> -->
 			</button>
 			<div class="scroll-images">
 				<div th:each="status: ${statuses}" class="child"
@@ -24,7 +30,7 @@
 				</div>
 			</div>
 			<button type="button" class="right" onclick="rightScroll()">
-				<i class="fas fa-angle-double-right"></i>
+<!-- 				<i class="fas fa-angle-double-right"></i> -->
 			</button>
 		</form>
 		<!-- Optional: Div for additional content -->

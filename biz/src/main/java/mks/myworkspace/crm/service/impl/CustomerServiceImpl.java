@@ -130,4 +130,7 @@ public class CustomerServiceImpl implements CustomerService {
         return statusCountMap.isEmpty() ? new HashMap<>() : statusCountMap;
     }
 
+    public long getTotalCustomerCount() {
+        return repo.countAllCustomers();
+    }
 }

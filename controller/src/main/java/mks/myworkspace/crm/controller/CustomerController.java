@@ -103,9 +103,12 @@ public class CustomerController extends BaseController {
 	        statusCounts = new HashMap<>(); // Khởi tạo nếu null
 	    }
 	    
+	    long totalCustomerCount = customerService.getTotalCustomerCount();
+	    
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
 		mav.addObject("statusCounts", statusCounts);
+		mav.addObject("totalCustomerCount", totalCustomerCount);
 
 		return mav;
 	}
