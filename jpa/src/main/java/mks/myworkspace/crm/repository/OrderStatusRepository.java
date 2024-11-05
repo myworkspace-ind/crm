@@ -13,4 +13,5 @@ import mks.myworkspace.crm.entity.OrderStatus;
 public interface OrderStatusRepository  extends JpaRepository<OrderStatus, Long>{
 	@Query("SELECT os FROM OrderStatus os JOIN os.orderCategories oc WHERE oc.id = :orderCategoryId")
 	List<OrderStatus> findByOrderCategoryId (@Param("orderCategoryId") Long orderCategoryId);
+	
 }

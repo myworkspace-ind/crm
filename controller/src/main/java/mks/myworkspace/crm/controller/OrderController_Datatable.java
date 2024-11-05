@@ -39,8 +39,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
+import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
+import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
@@ -82,6 +84,9 @@ public class OrderController_Datatable extends BaseController {
 	@Autowired
 	OrderStatusService orderStatusService;
 	
+	@Autowired
+	CustomerService customerService;
+	
 	@Value("classpath:orders/orders-demo.json")
 	private Resource resOrderDemo;
 	
@@ -110,7 +115,16 @@ public class OrderController_Datatable extends BaseController {
 	        mav.addObject("orderStatuses", orderStatuses);
 	        mav.addObject("selectedCategoryId", defaultCategoryId);
 	    }
-		
+	    
+	    List<OrderStatus> listOrderStatuses;
+	    listOrderStatuses = orderStatusService.findAllOrderStatuses();
+	    log.debug("Fetching all order's statuses: {}", listOrderStatuses);
+	    
+	    List<Customer> listCustomers;
+	    listCustomers = customerService.getAllCustomers();
+	    
+	    mav.addObject("listCustomers", listCustomers);
+	    mav.addObject("listOrderStatuses", listOrderStatuses);
 		mav.addObject("orderCategories", orderCategories);
 
 		return mav;

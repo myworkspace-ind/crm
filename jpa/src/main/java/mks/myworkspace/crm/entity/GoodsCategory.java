@@ -35,19 +35,20 @@ public class GoodsCategory implements Serializable {
 	@Column
 	private String name;
 
-//	@OneToMany(mappedBy = "goodsCategory", fetch = FetchType.EAGER)
-//	private Set<Order> orders;
-
-	@Override
-	public String toString() {
-		return "GoodsCategory [id=" + id + ", siteId=" + siteId + ", name=" + name + "]";
-	}
+//	// Relation Many-to-Many with Order
+//    @ManyToMany(mappedBy = "goodsCategories")
+//    private Set<Order> orders;
 
 	public GoodsCategory(Long id, String siteId, String name) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "GoodsCategory [id=" + id + ", siteId=" + siteId + ", name=" + name + "]";
 	}
 
 }

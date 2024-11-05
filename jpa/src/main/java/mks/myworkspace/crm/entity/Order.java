@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,20 +29,24 @@ import lombok.Setter;
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // system field
-	
+
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
-	
+
 	@Column
 	private String name;
-	
+
 	@Column
 	private String code;
-
+	
+	@Column(name = "create_date")
+	@Temporal(TemporalType.DATE)
+	private Date createDate;
+	
 	@Column(name = "delivery_date")
 	@Temporal(TemporalType.DATE)
 	private Date deliveryDate;
@@ -57,34 +62,39 @@ public class Order implements Serializable {
 	@JoinColumn(name = "order_cate_id", referencedColumnName = "id")
 	private OrderCategory orderCategory;
 
-	// Relation 1-1 with GoodsCategory
-//	@OneToOne
-//	@JoinColumn(name = "goods_category_id", referencedColumnName = "id")
-//	private GoodsCategory goodsCategory;
-
-	// Relation 1-1 with OrderStatus
-//	@OneToOne
-//	@JoinColumn(name = "order_status_id", referencedColumnName = "id")
-//	private OrderStatus orderStatus;
-
 	// Relation 1-1 with Customer
 	@OneToOne
 	@JoinColumn(name = "cus_id", referencedColumnName = "id")
 	private Customer customer;
+
+	// Relation Many-to-One with OrderStatus
+	@ManyToOne
+	@JoinColumn(name = "order_status_id")
+	private OrderStatus orderStatus;
 	
+//	 // Relation Many-to-Many with GoodsCategory
+//    @ManyToMany
+//    @JoinTable(
+//        name = "order_goodscategory",
+//        joinColumns = @JoinColumn(name = "order_id"),
+//        inverseJoinColumns = @JoinColumn(name = "goods_category_id")
+//    )
+//    private Set<GoodsCategory> goodsCategories;
+
 	public Order(Long orderId, Date deliveryDate2, GoodsCategory goodsCategory2, Customer customer2,
 			String transportationMethod2) {
 	}
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", siteId=" + siteId + ", name=" + name + ", code=" + code + ", deliveryDate=" + deliveryDate
-				+ ", transportationMethod=" + transportationMethod + ", customerRequirement=" + customerRequirement
-				+ ", orderCategory=" + orderCategory + ", customer=" + customer + "]";
+		return "Order [id=" + id + ", siteId=" + siteId + ", name=" + name + ", code=" + code + ", deliveryDate="
+				+ deliveryDate + ", transportationMethod=" + transportationMethod + ", customerRequirement="
+				+ customerRequirement + ", orderCategory=" + orderCategory + ", customer=" + customer + ", orderStatus="
+				+ orderStatus + "]";
 	}
 
 	public Order(Long id, String siteId, String name, String code, Date deliveryDate, String transportationMethod,
-			String customerRequirement, OrderCategory orderCategory, Customer customer) {
+			String customerRequirement, OrderCategory orderCategory, Customer customer, OrderStatus orderStatus) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -95,5 +105,8 @@ public class Order implements Serializable {
 		this.customerRequirement = customerRequirement;
 		this.orderCategory = orderCategory;
 		this.customer = customer;
+		this.orderStatus = orderStatus;
 	}
+	
+
 }

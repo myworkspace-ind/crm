@@ -9,4 +9,5 @@ public interface OrderStatusService {
 	OrderStatusRepository getRepo();
 	
 	List<OrderStatus> findByOrderCategories_Id(Long categoryId);
+	List<OrderStatus> findAllOrderStatuses ();
 }

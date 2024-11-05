@@ -12,7 +12,7 @@
 	});
 }*/
 
-function loadOrderStatuses() {
+function loadOrderStatuses_Handsontable() {
     const categoryId = document.getElementById("orderCategorySelect").value;
     window.location.href = _ctx + `/orders?categoryId=${categoryId}`;
 }

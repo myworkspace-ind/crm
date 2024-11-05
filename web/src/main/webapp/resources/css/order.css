@@ -243,3 +243,7 @@ button.closeBtn {
     --bs-table-striped-bg: none!important;
     --bs-table-hover-color: none !important;
 }
+/* Nút search của datatable */
+input[type="search"] {
+    color: black;
+}

@@ -39,9 +39,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
+import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
+import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
@@ -83,6 +85,9 @@ public class OrderController extends BaseController {
 
 	@Autowired
 	OrderStatusService orderStatusService;
+	
+	@Autowired
+	CustomerService customerService;
 
 	@GetMapping("")
 	public ModelAndView displayOrder(@RequestParam(value = "categoryId", required = false) Long categoryId, 
@@ -111,7 +116,16 @@ public class OrderController extends BaseController {
 	        mav.addObject("orderStatuses", orderStatuses);
 	        mav.addObject("selectedCategoryId", defaultCategoryId);
 	    }
-		
+	    
+	    List<OrderStatus> listOrderStatuses;
+	    listOrderStatuses = orderStatusService.findAllOrderStatuses();
+	    log.debug("Fetching all order's statuses: {}", listOrderStatuses);
+	    
+	    List<Customer> listCustomers;
+	    listCustomers = customerService.getAllCustomers();
+	    
+	    mav.addObject("listCustomers", listCustomers);
+	    mav.addObject("listOrderStatuses", listOrderStatuses);
 		mav.addObject("orderCategories", orderCategories);
 		mav.addObject("order", newOrder);
 
@@ -122,7 +136,7 @@ public class OrderController extends BaseController {
 	@ResponseBody
 	public Object getOrderData() throws IOException {
 		log.debug("Get sample data from configuration file.");
-		int[] colWidths = { 100, 100, 200, 200, 200, 200 };
+		int[] colWidths = { 100, 100, 300, 300, 300, 300 };
 		String[] colHeaders = { "Mã đơn hàng", "Ngày giao", "Loại hàng hóa", "Thông tin người gửi",
 				"Phương tiện vận chuyển", "Thao tác", };
 		List<Object[]> tblData = new ArrayList<>();
