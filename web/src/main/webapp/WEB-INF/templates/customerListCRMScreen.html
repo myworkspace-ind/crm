@@ -39,26 +39,9 @@
 			<section class="row">
 				<div class="col-12">
 					<div class="card">
-						<div class="card-header">
-							<h4 class="card-title">Danh sách khách hàng</h4>
-							<a class="heading-elements-toggle"><i
-								class="ft-ellipsis-h font-medium-3"></i></a>
-							<div class="heading-elements">
-								
-								<!--<a href="/crm-web/add-customer"> -->
-								<button class="btn btn-primary btn-sm" data-toggle="modal"
-									data-target="#addNewCustomerModal">
-									<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
-								</button>
-								<!--</a> -->
-
-								<a class="btn btn-primary btn-sm" 
-								th:href="@{/customer-management}">
-									<i class="fa-solid fa-plus"></i> Thêm nhanh khách hàng
-								</a>
-
-							</div>
-						</div>
+						<!-- BEGIN STATUS OF CUSTOMER -->
+						<th:block th:include="fragments/statusOfCustomer"></th:block>
+						<!-- END STATUS OF CUSTOMER -->
 
 						<!-- Modal cho Thêm Khách Hàng Mới -->
 						<div class="modal fade" id="addNewCustomerModal" tabindex="-1"
@@ -100,9 +83,7 @@
 							</div>
 						</div>
 
-						<!-- BEGIN STATUS OF CUSTOMER -->
-						<th:block th:include="fragments/statusOfCustomer"></th:block>
-						<!-- END STATUS OF CUSTOMER -->
+						
 
 
 
@@ -112,37 +93,7 @@
 								<div class="table-responsive">
 									<div id="project-task-list_wrapper"
 										class="dataTables_wrapper dt-bootstrap4">
-										<div class="row">
-											<div class="col-sm-12 col-md-6">
-												<div class="dataTables_length" id="project-task-list_length">
-													<label>Show <select name="project-task-list_length"
-														aria-controls="project-task-list"
-														class="custom-select custom-select-sm form-control form-control-sm select2-hidden-accessible"
-														data-select2-id="1" tabindex="-1" aria-hidden="true">
-															<option value="10" data-select2-id="3">10</option>
-															<option value="25">25</option>
-															<option value="50">50</option>
-															<option value="100">100</option>
-													</select> <span
-														class="select2 select2-container select2-container--default"
-														dir="ltr" data-select2-id="2" style="width: 55.5px;"><span
-															class="selection"><span
-																class="select2-selection select2-selection--single"
-																role="combobox" aria-haspopup="true"
-																aria-expanded="false" tabindex="0"
-																aria-labelledby="select2-project-task-list_length-2t-container"><span
-																	class="select2-selection__rendered"
-																	id="select2-project-task-list_length-2t-container"
-																	role="textbox" aria-readonly="true" title="10">10</span><span
-																	class="select2-selection__arrow" role="presentation"><b
-																		role="presentation"></b></span></span></span><span class="dropdown-wrapper"
-															aria-hidden="true"></span></span> entries
-													</label>
-												</div>
-											</div>
-											<div class="col-sm-12 col-md-6"></div>
-										</div>
-
+										
 										<!-- BEGIN CONTENT WRAPPER -->
 										<th:block th:include="fragments/buttonGroupFunction"></th:block>
 										<!-- END CONTENT WRAPPER -->
@@ -236,62 +187,68 @@
 											<!-- BEGIN TABLE CUSTOMER LIST -->
 											<div class="table-container">
 												<div class="table-responsive">
-													<table id="table" class="table table-bordered">
-														<thead>
-															<tr class="bg"> 
-																<th style="width: 2%" data-field="select" class="th1">
-																	<input type="checkbox" id="select-all"
-																	class="d-flex align-items-center justify-content-center" />
-																</th>
-																<th data-field="number" class="th2">STT</th>
-																<th data-field="company_name" class="th3">Tên công
-																	ty</th>
-																<th data-field="contact_person" class="th4">Người
-																	liên hệ chính</th>
-																<th data-field="email" class="th5">Email</th>
-																<th data-field="phone" class="th6">Số điện thoại</th>
-																<th data-field="address" class="th7">Địa chỉ khách
-																	hàng</th>
-																<th data-field="profession" class="th8">Ngành nghề</th>
-																<th data-field="main_status" class="th9">Trạng thái
-																	chính</th>
-																<th data-field="sub_status" class="th10">Trạng thái
-																	phụ</th>
-																<th data-field="responsible_person" class="th11">Người
-																	phụ trách</th>
-																<th data-field="created_at" class="th12">Thời gian
-																	tạo</th>
-																<th data-field="note" class="th13">Ghi chú</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr th:each="customer, iterStat : ${customers}">
-																<td class="th1"><input type="checkbox"
-																	name="customer" th:value="${customer.id}"
-																	class="customer-checkbox" /></td>
-																<td th:text="${iterStat.index + 1}"></td>
-																<td><a
-																	th:href="@{customerDetail(id=${customer.id})}"
-																	th:text="${customer.companyName}"></a></td>
-																<td th:text="${customer.contactPerson}"></td>
-																<td th:text="${customer.email}"></td>
-																<td th:text="${customer.phone}"></td>
-																<td th:text="${customer.address}"></td>
-																<td th:text="${customer.profession}"></td>
-																<td th:class="'status-cell main-status'" th:style="'background-color: ' + ${customer.mainStatus.backgroundColor} + '; color: white; text-align: center; vertical-align: middle;'">
-																	<span th:text="${customer.mainStatus.name}"></span>
-																</td>
-																<td th:class="'status-cell sub-status'" th:style="'background-color: ' + ${customer.subStatus.backgroundColor} + '; color: white; text-align: center; vertical-align: middle;'">
-																	<span th:text="${customer.subStatus.name}"></span>
-																</td>
-																<td th:text="${customer.responsiblePerson}"></td>
+													<div class="scrollable-table">
+														<table id="table" class="table table-bordered">
+															<thead class="thead">
+																<tr class="bg">
+																	<th style="width: 2%" data-field="select" class="th1">
+																		<input type="checkbox" id="select-all"
+																		class="d-flex align-items-center justify-content-center" />
+																	</th>
+																	<th data-field="number" class="th2">STT</th>
+																	<th data-field="company_name" class="th3">Tên công
+																		ty</th>
+																	<th data-field="contact_person" class="th4">Người
+																		liên hệ chính</th>
+																	<th data-field="email" class="th5">Email</th>
+																	<th data-field="phone" class="th6">Số điện thoại</th>
+																	<th data-field="address" class="th7">Địa chỉ khách
+																		hàng</th>
+																	<th data-field="profession" class="th8">Ngành nghề</th>
+																	<th data-field="main_status" class="th9">Trạng
+																		thái chính</th>
+																	<th data-field="sub_status" class="th10">Trạng
+																		thái phụ</th>
+																	<th data-field="responsible_person" class="th11">Người
+																		phụ trách</th>
+																	<th data-field="created_at" class="th12">Thời gian
+																		tạo</th>
+																	<th data-field="note" class="th13">Ghi chú</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr th:each="customer, iterStat : ${customers}">
+																	<td class="th1"><input type="checkbox"
+																		name="customer" th:value="${customer.id}"
+																		class="customer-checkbox" /></td>
+																	<td th:text="${iterStat.index + 1}"></td>
+																	<td><a
+																		th:href="@{customerDetail(id=${customer.id})}"
+																		th:text="${customer.companyName != null ? customer.companyName : ''}"></a></td>
+																	<td th:text="${customer.contactPerson != null ? customer.contactPerson : ''}"></td>
+																	<td th:text="${customer.email != null ? customer.email : ''}"></td>
+																	<td th:text="${customer.phone != null ? customer.phone : ''}"></td>
+																	<td th:text="${customer.address != null ? customer.address : ''}"></td>
+																	<td th:text="${customer.profession != null ? customer.profession : ''}"></td>
+																	<td th:class="'status-cell main-status'"
+																		th:style="${customer.mainStatus != null ? 'background-color: ' + customer.mainStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
+																		<span
+																		th:text="${customer.mainStatus != null ? customer.mainStatus.name : ''}"></span>
+																	</td>
+																	<td th:class="'status-cell sub-status'"
+																		th:style="${customer.subStatus != null ? 'background-color: ' + customer.subStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
+																		<span
+																		th:text="${customer.subStatus != null ? customer.subStatus.name : ''}"></span>
+																	</td>
+																	<td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson : ''}"></td>
 
-																<td
-																	th:text="${#dates.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-																<td th:text="${customer.note}"></td>
-															</tr>
-														</tbody>
-													</table>
+																	<td
+																		th:text="${customer.createdAt != null ? #dates.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td>
+																	<td th:text="${customer.note != null ? customer.note : ''}"></td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
 												</div>
 											</div>
 											<!-- END TABLE CUSTOMER LIST -->
@@ -370,7 +327,9 @@
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/customerList_JS.js"></script>
 	<script type="text/javascript"
-		src="resources/app-assets/js/update/customerList_js_2.js"></script>	
+		src="resources/app-assets/js/update/customerList_js_2.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/customerList_Pagination.js"></script>
 	<script type="text/javascript"
 		src="resources/app-assets/js/update/toggleCheckboxActions.js"></script>
 	<script type="text/javascript"

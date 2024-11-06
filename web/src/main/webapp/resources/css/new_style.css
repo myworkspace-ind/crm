@@ -110,10 +110,6 @@ span {
     width: auto;
 }
 
-.table-container {
-  overflow-x: auto;
-}
-
 /* tr > th:nth-child(1),
 tr > td:nth-child(1) {
   position: sticky;
@@ -168,12 +164,20 @@ tr:nth-child(even) td:nth-child(3) {
     flex: 4;
     min-width: 0;
     margin-left: 20px;
+	overflow-x: auto;
+	overflow-y: hidden;
 }
 
 .table-responsive{
     width: 100%;
+    overflow-x: auto;
 }
 
+.scrollable-table {
+    max-height: 700px; 
+    overflow-y: auto; 
+    overflow-x: auto; 
+}
 #table {
     width: 100%; 
 }
@@ -518,6 +522,11 @@ nav-link-expand i.fa-compress:before {
     text-align: left;
 }
 
+.thead {
+	position: sticky;
+    top: 0px;
+}
+
 .bg {
 	background-color: #E9ECEF;
     color: #1F2A37;
@@ -530,22 +539,4 @@ nav-link-expand i.fa-compress:before {
     color: white;
     text-align: center;
     vertical-align: middle;
-}
-
-/* .th2 { */
-/*     position: sticky; */
-/*     left: 0; Cố định bên trái */
-/*     z-index: 10; Để giữ cột ở trên cùng khi cuộn */
-/* } */
-
-/* .th3 { */
-/*     position: sticky; */
-/*     left: 100px; Cố định bên trái với khoảng cách 100px từ bên trái */
-/*     z-index: 10; Để giữ cột ở trên cùng khi cuộn */
-/* } */
-
-.header-sticky {
-    position: sticky;
-    top: 0;
-    z-index: 7;
 }

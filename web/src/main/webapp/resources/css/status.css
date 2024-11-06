@@ -42,7 +42,7 @@
 }
 
 .right {
-    right: 0;
+    right: 820px;
     top: 72%;
     transform: translateY(-50%);
     z-index: 10;
@@ -50,7 +50,7 @@
 
 .scroll-images {
     position: relative;
-    width: calc(100% - 25px);
+    width: calc(100vw - 1070px);
     height: auto;
     display: flex;
     flex-wrap: nowrap;
@@ -128,4 +128,11 @@ button {
 	background-color: #967ADC;
 	width: fit-content;
 	margin: 5px 15px;
+}
+
+.child.selected {
+/*     border: 3px solid #FFF; Viền đậm hơn cho trạng thái đã chọn */
+/*     box-shadow: 0px 0px 15px 2px rgba(255, 255, 255, 0.6); Thêm hiệu ứng đổ bóng */
+	border: 3px solid yellow;
+    box-shadow: 0px 0px 10px yellow;
 }
