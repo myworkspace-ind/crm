@@ -43,12 +43,6 @@ public class OrderStatus implements Serializable {
 	
 	@ManyToMany(mappedBy = "orderStatuses", fetch = FetchType.EAGER)
 	private Set<OrderCategory> orderCategories;
-	
-	@Override
-	public String toString() {
-		return "OrderStatus [id=" + id + ", siteId=" + siteId + ", name=" + name + ", orderCategories="
-				+ orderCategories + "]";
-	}
 
 	public OrderStatus(Long id, String siteId, String name, Set<OrderCategory> orderCategories) {
 		super();

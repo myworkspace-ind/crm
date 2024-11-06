@@ -49,7 +49,7 @@ public class Customer implements Serializable {
 
 	// Many-to-Many relationship with Status
 //	@ManyToMany(fetch = FetchType.EAGER)
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "customer_status", // name of the join table
 			joinColumns = @JoinColumn(name = "customer_id"), // foreign key for Customer in the join table
 			inverseJoinColumns = @JoinColumn(name = "status_id") // foreign key for Status in the join table
@@ -81,10 +81,10 @@ public class Customer implements Serializable {
 		this.phone = phone;
 	}
 
-	@Override
-	public String toString() {
-		return "Customer [id=" + id + ", siteId=" + siteId + ", name=" + name + ", address=" + address + ", phone="
-				+ phone + ", statuses=" + statuses + ", orders=" + orders + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Customer [id=" + id + ", siteId=" + siteId + ", name=" + name + ", address=" + address + ", phone="
+//				+ phone + ", statuses=" + statuses + ", orders=" + orders + "]";
+//	}
 
 }

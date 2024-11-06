@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,7 +40,7 @@ public class Status implements Serializable {
 	private String backgroundColor;
 
 	// Many-to-Many relationship with Customer
-	@ManyToMany(mappedBy = "statuses")
+	@ManyToMany(mappedBy = "statuses", fetch = FetchType.EAGER)
 	private Set<Customer> customers = new HashSet<>();
 
 	public Status(Long id, String siteId, String name, String backgroundColor, Set<Customer> customers) {
@@ -51,11 +52,11 @@ public class Status implements Serializable {
 		this.customers = customers;
 	}
 
-	@Override
-	public String toString() {
-		return "Status [id=" + id + ", siteId=" + siteId + ", name=" + name + ", backgroundColor=" + backgroundColor
-				+ ", customers=" + customers + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Status [id=" + id + ", siteId=" + siteId + ", name=" + name + ", backgroundColor=" + backgroundColor
+//				+ ", customers=" + customers + "]";
+//	}
 
 	
 

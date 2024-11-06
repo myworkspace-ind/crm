@@ -72,41 +72,31 @@ public class Order implements Serializable {
 	@JoinColumn(name = "order_status_id")
 	private OrderStatus orderStatus;
 	
-//	 // Relation Many-to-Many with GoodsCategory
-//    @ManyToMany
-//    @JoinTable(
-//        name = "order_goodscategory",
-//        joinColumns = @JoinColumn(name = "order_id"),
-//        inverseJoinColumns = @JoinColumn(name = "goods_category_id")
-//    )
-//    private Set<GoodsCategory> goodsCategories;
+	@ManyToOne
+    @JoinColumn(name = "goods_category_id") 
+    private GoodsCategory goodsCategory;
 
 	public Order(Long orderId, Date deliveryDate2, GoodsCategory goodsCategory2, Customer customer2,
 			String transportationMethod2) {
 	}
 
-	@Override
-	public String toString() {
-		return "Order [id=" + id + ", siteId=" + siteId + ", name=" + name + ", code=" + code + ", deliveryDate="
-				+ deliveryDate + ", transportationMethod=" + transportationMethod + ", customerRequirement="
-				+ customerRequirement + ", orderCategory=" + orderCategory + ", customer=" + customer + ", orderStatus="
-				+ orderStatus + "]";
-	}
-
-	public Order(Long id, String siteId, String name, String code, Date deliveryDate, String transportationMethod,
-			String customerRequirement, OrderCategory orderCategory, Customer customer, OrderStatus orderStatus) {
+	public Order(Long id, String siteId, String name, String code, Date createDate, Date deliveryDate,
+			String transportationMethod, String customerRequirement, OrderCategory orderCategory, Customer customer,
+			OrderStatus orderStatus, GoodsCategory goodsCategory) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
 		this.code = code;
+		this.createDate = createDate;
 		this.deliveryDate = deliveryDate;
 		this.transportationMethod = transportationMethod;
 		this.customerRequirement = customerRequirement;
 		this.orderCategory = orderCategory;
 		this.customer = customer;
 		this.orderStatus = orderStatus;
+		this.goodsCategory = goodsCategory;
 	}
-	
+
 
 }

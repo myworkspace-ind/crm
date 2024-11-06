@@ -20,6 +20,7 @@
 package mks.myworkspace.crm.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,12 +41,15 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.OrderCategoryService;
+import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
+import mks.myworkspace.crm.transformer.JpaTransformer_Order;
 
 /**
  * Handles requests for the application home page.
@@ -83,71 +87,122 @@ public class OrderController_Datatable extends BaseController {
 
 	@Autowired
 	OrderStatusService orderStatusService;
-	
+
 	@Autowired
 	CustomerService customerService;
-	
+
+	@Autowired
+	OrderService orderService;
+
 	@Value("classpath:orders/orders-demo.json")
 	private Resource resOrderDemo;
-	
+
 	@Value("${productList.colHeaders}")
 	private String[] productListColHeaders;
-	
+
 	@Value("${productList.colWidths}")
 	private int[] productListColWidths;
 
 	@GetMapping("")
-	public ModelAndView displayDataleOrder (@RequestParam(value = "categoryId", required = false) Long categoryId, HttpServletRequest request, HttpSession httpSession) {
+	public ModelAndView displayDataleOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
+			HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
 		initSession(request, httpSession);
 		List<OrderCategory> orderCategories;
 		orderCategories = orderCategoryService.getAllOrderCategoriesWithOrderStatuses();
 		log.debug("Fetching all order's categories.");
-	
-	    if (categoryId != null) {
-	        List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(categoryId);
-	        mav.addObject("orderStatuses", orderStatuses);
-	        mav.addObject("selectedCategoryId", categoryId);
-	    }else {
-	        // Nếu không có categoryId, mặc định hiển thị orderStatuses của loại đơn hàng có id là 1
-	        Long defaultCategoryId = 1L;
-	        List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(defaultCategoryId);
-	        mav.addObject("orderStatuses", orderStatuses);
-	        mav.addObject("selectedCategoryId", defaultCategoryId);
-	    }
-	    
-	    List<OrderStatus> listOrderStatuses;
-	    listOrderStatuses = orderStatusService.findAllOrderStatuses();
-	    log.debug("Fetching all order's statuses: {}", listOrderStatuses);
-	    
-	    List<Customer> listCustomers;
-	    listCustomers = customerService.getAllCustomers();
-	    
-	    mav.addObject("listCustomers", listCustomers);
-	    mav.addObject("listOrderStatuses", listOrderStatuses);
+
+		if (categoryId != null) {
+			List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(categoryId);
+			mav.addObject("orderStatuses", orderStatuses);
+			mav.addObject("selectedCategoryId", categoryId);
+		} else {
+			// Nếu không có categoryId, mặc định hiển thị orderStatuses của loại đơn hàng có
+			// id là 1
+			Long defaultCategoryId = 1L;
+			List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(defaultCategoryId);
+			mav.addObject("orderStatuses", orderStatuses);
+			mav.addObject("selectedCategoryId", defaultCategoryId);
+		}
+
+		List<OrderStatus> listOrderStatuses;
+		listOrderStatuses = orderStatusService.findAllOrderStatuses();
+		log.debug("Fetching all order's statuses: {}", listOrderStatuses);
+
+		List<Customer> listCustomers;
+		listCustomers = customerService.getAllCustomers();
+		
+		List<Order> listOrders;
+		listOrders = orderService.getAllOrders();
+		log.debug("Fetched orders: {}", listOrders.toString());
+		
+		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders);
+		log.debug("IN DATASET: ");
+		for (Object[] row : dataSet) {
+		    log.debug("Row: " + Arrays.toString(row));
+		}
+		
+		mav.addObject("dataSet", dataSet);
+		mav.addObject("listOrders", listOrders);
+		mav.addObject("listCustomers", listCustomers);
+		mav.addObject("listOrderStatuses", listOrderStatuses);
 		mav.addObject("orderCategories", orderCategories);
 
 		return mav;
 	}
-	
-	@GetMapping(value = {"/loaddata"}, produces="application/json")
+
+//	@GetMapping(value = { "/get-orders" }, produces = "application/json")
+//	@ResponseBody
+//	public Object getOrderData() throws IOException {
+//		log.debug("Get sample data from configuration file.");
+//		
+//		List<Object[]> jsonOrderTable = getDemoData();
+//		List<Order> lstOrders = orderService.getAllOrders();
+//		
+//		if (lstOrders == null || lstOrders.isEmpty()) {
+//			return jsonOrderTable;
+//		} else {
+//			//JSONArray jsonObjColWidths = jsonObjTableOrder.getJSONArray("colWidths");
+//			int[] jsonObjColWidths = productListColWidths;
+//			int len = (jsonObjColWidths != null) ? jsonObjColWidths.length : 0;
+//			int[] colWidths = new int[len];
+//			for (int i = 0; i < jsonObjColWidths.length; i++) {
+//				colWidths[i] = jsonObjColWidths.length;
+//			}
+//			//JSONArray jsonObjColHeaders = jsonObjTableOrder.getJSONArray("colHeaders");
+//			String[] jsonObjColHeaders = productListColHeaders;
+//			len = (jsonObjColHeaders != null) ? jsonObjColHeaders.length : 0;
+//			String[] colHeaders = new String[len];
+//			for (int i = 0; i < jsonObjColHeaders.length; i++) {
+//				colHeaders[i] = jsonObjColHeaders.toString();
+//			}
+//
+//			List<Object[]> tblData = JpaTransformer_Order.convert2D(lstOrders);
+//
+//			TableStructure tblOrder = new TableStructure(colWidths, colHeaders, tblData);
+//
+//			return tblOrder;
+//		}
+//	}
+
+	@GetMapping(value = { "/loaddata" }, produces = "application/json")
 	@ResponseBody
-    public TableStructure getProductTableData() {
+	public TableStructure getProductTableData() {
 		List<Object[]> lstProducts = getDemoData();
 
 		TableStructure productTable = new TableStructure(productListColWidths, productListColHeaders, lstProducts);
-		
-        return productTable;
-    }
+
+		return productTable;
+	}
 
 	private List<Object[]> getDemoData() {
 		List<Object[]> data = new ArrayList<Object[]>();
-	
-		data.add(new Object[] {"1", "D123A54", "2024-10-24", "Máy móc", "Nguyễn Văn A", "Xe tải", "..."});
-		data.add(new Object[] {"2", "M123543", "2024-10-25", "Thực phẩm", "Nguyễn Văn B", "Máy bay", "..."});
-		data.add(new Object[] {"3", "G123A54", "2024-10-24", "Mỹ phẩm", "Nguyễn Văn C", "Xe tải", "..."});
-		data.add(new Object[] {"4", "H123473", "2024-10-25", "Thực phẩm", "Lê Trần Minh D", "Xe đông lạnh", "..."});
-		
+
+		data.add(new Object[] { "1", "D123A54", "2024-10-24", "Máy móc", "Nguyễn Văn A", "Xe tải", "..." });
+		data.add(new Object[] { "2", "M123543", "2024-10-25", "Thực phẩm", "Nguyễn Văn B", "Máy bay", "..." });
+		data.add(new Object[] { "3", "G123A54", "2024-10-24", "Mỹ phẩm", "Nguyễn Văn C", "Xe tải", "..." });
+		data.add(new Object[] { "4", "H123473", "2024-10-25", "Thực phẩm", "Lê Trần Minh D", "Xe đông lạnh", "..." });
+
 		return data;
 	}
 
