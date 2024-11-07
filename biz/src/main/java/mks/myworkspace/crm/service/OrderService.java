@@ -9,5 +9,5 @@ public interface OrderService {
 	OrderRepository getRepo();
 	
 	List<Order> getAllOrders();
-	
+	Order getOrderById(Long orderId);
 }

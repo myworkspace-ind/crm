@@ -21,14 +21,58 @@ $(document).ready(function() {
 				targets: -1,  // Chọn cột cuối cùng để thêm nút
 				data: null,
 				defaultContent: `
-					<button class='btn btn-info'>Xem chi tiết</button>
-					<button class='btn btn-warning'>Sửa</button>
+					<button class='btn btn-info detail-btn'>Xem chi tiết</button>
+					<button class='btn btn-warning edit-btn'>Sửa</button>
 					<button class='btn btn-danger'>Xóa</button>
 					<button class='btn btn-success'>Cập nhật trạng thái</button>`
 			}
 		]
 	});
+
+	$('#tblDatatable tbody').on('click', '.edit-btn', function() {
+		var data = $('#tblDatatable').DataTable().row($(this).parents('tr')).data();
+		edit(data);
+	});
+
+	$('#tblDatatable tbody').on('click', '.detail-btn', function() {
+		var data = $('#tblDatatable').DataTable().row($(this).parents('tr')).data();
+		viewDetail(data);
+	});
 });
+
+let currentRow;
+
+function changeTitle(newTitle) {
+	document.getElementById("title").innerText = newTitle;
+}
+
+function edit(row) {
+	changeTitle('Cập nhật đơn hàng');
+	currentRow = row;
+	document.getElementById("updateOrderModal").style.display = "block";
+	document.getElementById("modalOverlay").style.display = "block";
+}
+
+function viewDetail(row) {
+	currentRow = row;
+	document.getElementById("orderDetailModal").style.display = "block";
+	document.getElementById("modalOverlay").style.display = "block";
+}
+
+function closeUpdateOrderModal() {
+	document.getElementById("updateOrderModal").style.display = "none";
+	document.getElementById("modalOverlay").style.display = "none";
+}
+
+function closeModalOrderDetail() {
+	document.getElementById("orderDetailModal").style.display = "none";
+	document.getElementById("modalOverlay").style.display = "none";
+}
+
+function closeModalOrderStatus() {
+	document.getElementById("statusModal").style.display = "none";
+	document.getElementById("modalOverlay").style.display = "none";
+}
 
 /*$(document).ready(function() {
 	$('#tblDatatable').DataTable({

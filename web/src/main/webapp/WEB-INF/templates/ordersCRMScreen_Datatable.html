@@ -60,14 +60,19 @@
 		    </select>
 		    <br><br>
 		    <button onclick="saveStatus()">Lưu</button>
-		    <button onclick="closeModal()">Đóng</button>
+		    <button onclick="closeModalOrderStatus()">Đóng</button>
 		</div>
-		<div id="modalOverlay" onclick="closeModal()">
+		
+		<div id="modalOverlay">
 		</div>
 		
 		<!-- BEGIN UPDATE MODAL -->
 		<th:block th:include="fragments/updateOrderModal"></th:block>
 		<!-- END UPDATE MODAL -->
+		
+		<!-- BEGIN ORDER DETAIL MODAL -->
+		<th:block th:include="fragments/orderDetailModal"></th:block>
+		<!-- END ORDER DETAIL MODAL -->
 		
 	</div>
 	<!-- END CONTENT -->

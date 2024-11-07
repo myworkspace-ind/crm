@@ -141,6 +141,8 @@ public class OrderController_Datatable extends BaseController {
 		for (Object[] row : dataSet) {
 		    log.debug("Row: " + Arrays.toString(row));
 		}
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 		
 		mav.addObject("dataSet", dataSet);
 		mav.addObject("listOrders", listOrders);
@@ -150,7 +152,26 @@ public class OrderController_Datatable extends BaseController {
 
 		return mav;
 	}
-
+	
+	@GetMapping("/viewDetails")
+	public ModelAndView displayOrderDetails(@RequestParam("orderId") Long orderId, HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
+		initSession(request, httpSession);
+		
+		Order order = orderService.getOrderById(orderId);
+		
+		if (order != null) {
+	        mav.addObject("order", order);
+	    } else {
+	        mav.addObject("errorMessage", "Order not found.");
+	    }
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		
+		return mav;
+	}
+	
 //	@GetMapping(value = { "/get-orders" }, produces = "application/json")
 //	@ResponseBody
 //	public Object getOrderData() throws IOException {

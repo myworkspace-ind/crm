@@ -25,5 +25,10 @@ public class OrderServiceImpl implements OrderService{
 		return repo.findAll();
 	}
 
+	@Override
+	public Order getOrderById(Long orderId) {
+		return repo.findById(orderId).orElse(null);
+	}
+
 
 }

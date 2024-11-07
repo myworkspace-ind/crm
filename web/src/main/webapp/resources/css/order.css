@@ -73,6 +73,7 @@ h4.title.order-title {
 .handsontable a:hover {
     color: #0b318a !important;
 }
+
 div#statusModal{
 	display:none; 
 	position:fixed; 
@@ -87,6 +88,7 @@ div#statusModal{
 	border:1px solid #ccc; 
 	z-index:1000;
 }
+
 div#modalOverlay{
 	display:none; 
 	position:fixed; 
@@ -97,11 +99,13 @@ div#modalOverlay{
 	background-color:rgba(0, 0, 0, 0.5); 
 	z-index:999;
 }
+
 select#statusSelect {
     background-color: white;
     color: black;
 }
-div#updateOrderModal{
+
+div#updateOrderModal, div#orderDetailModal{
 	display: none; 
 	position:fixed; 
 	top:50%; 
@@ -115,30 +119,37 @@ div#updateOrderModal{
 	max-height: 80vh;
 	overflow-y: auto;
 }
-div#updateOrderModal h3{
+
+div#updateOrderModal h3, div#orderDetailModal h3{
 	color: #DA4453;
 	font-weight: 600;
 }
-div#updateOrderModal hr{
+
+div#updateOrderModal hr, div#orderDetailModal hr{
     background-color: red;
 }
+
 .form-row {
     margin-left: 30px;
     margin-top: 20px;
     margin-bottom: -50px;
 }
+
 .row1 {
     display: flex;
     margin-left: 30px;
 }
+
 .row3{
 	margin-left: 30px;
 	margin-top: 50px;
 }
+
 input#orderCode,input#orderDate, select#orderStatus {
     background-color: white;
     color: black;
 }
+
 input#goodsType, input#transportMethod{
 	/* width: 30.5%; */
 	background-color: white;

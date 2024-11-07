@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<div id="updateOrderModal">
-		<h3 id="title">Cập nhật đơn hàng</h3>
+	<div id="orderDetailModal">
+		<h3 id="title">Chi tiết đơn hàng - <span class="orderId">A100000</span></h3>
 		<div class="closeBtnDiv" style="text-align: right;">
-			<button onclick="closeModal()" class="closeBtn"><i class="fas fa-times"></i></button>
+			<button onclick="closeModalOrderDetail()" class="closeBtn"><i class="fas fa-times"></i></button>
 		</div>
 		<hr>
 	    <form id="orderForm">
@@ -115,7 +115,7 @@
 		        
 			<div class="row4">
 				<button type="button" onclick="saveOrder()">Lưu</button>
-	        	<button type="button" onclick="closeUpdateOrderModal()">Trở về</button>
+	        	<button type="button" onclick="closeModalOrderDetail()">Trở về</button>
 			</div>
 	    </form>
 	</div>
