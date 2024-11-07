@@ -1,56 +1,50 @@
-.cover {
-    position: relative;
-    padding: 0px 30px;
-    margin-top: 10px;
-}
-
 .left, .right {
     position: absolute;
-    width: 40px; /* Đường kính của nút */
-    height: 40px; /* Đường kính của nút */
-    background-color: #967ADC; /* Màu nền của nút */
-    border-radius: 50%; /* Tạo hình dạng tròn */
-    display: flex; /* Để căn giữa nội dung */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-content: center; /* Căn giữa theo chiều ngang */
-    cursor: pointer; /* Thay đổi con trỏ khi hover */
-    color: white; /* Màu chữ */
-    font-size: 20px; /* Kích thước chữ */
-    border: none; /* Không có viền */
-    transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền khi hover */
+    width: 40px;
+    height: 40px;
+    background-color: #967ADC;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    border: none;
+    transition: background-color 0.3s;
 }
 
 .left::before {
-    content: '←'; /* Dấu mũi tên trái */
-    font-size: 20px; /* Kích thước mũi tên */
+    content: '←'; 
+    font-size: 20px;
 }
 
 .right::before {
-    content: '→'; /* Dấu mũi tên phải */
-    font-size: 20px; /* Kích thước mũi tên */
+    content: '→';
+    font-size: 20px;
 }
 
 .left:hover, .right:hover {
-    background-color: #8451C1; /* Thay đổi màu khi hover */
+    background-color: #8451C1;
 }
 
 .left {
     left: 0px;
-    top: 72%;
+    top: 70%;
     transform: translateY(-50%);
     z-index: 10;
 }
 
 .right {
-    right: 820px;
-    top: 72%;
+    right: 0px;
+    top: 70%;
     transform: translateY(-50%);
     z-index: 10;
 }
 
 .scroll-images {
     position: relative;
-    width: calc(100vw - 1070px);
+    width: calc(100vw - 700px);
     height: auto;
     display: flex;
     flex-wrap: nowrap;
@@ -58,7 +52,9 @@
     overflow-y: hidden;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    margin: 5px 10px;
+    margin: 0px 20px;
+    padding: 10px 0;
+    gap: 5px;
 }
 
 .child {
@@ -127,12 +123,20 @@ button {
 .all-customers-btn{
 	background-color: #967ADC;
 	width: fit-content;
-	margin: 5px 15px;
+	margin: 5px 20px;
 }
 
 .child.selected {
-/*     border: 3px solid #FFF; Viền đậm hơn cho trạng thái đã chọn */
-/*     box-shadow: 0px 0px 15px 2px rgba(255, 255, 255, 0.6); Thêm hiệu ứng đổ bóng */
 	border: 3px solid yellow;
     box-shadow: 0px 0px 10px yellow;
+}
+
+.cover {
+    position: relative;
+    padding: 10px 30px;
+    margin-top: 20px;
+    background-color: #f8f8f8;
+    border-radius: 10px; 
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
+    left: 20px;
 }

@@ -39,9 +39,26 @@
 			<section class="row">
 				<div class="col-12">
 					<div class="card">
-						<!-- BEGIN STATUS OF CUSTOMER -->
-						<th:block th:include="fragments/statusOfCustomer"></th:block>
-						<!-- END STATUS OF CUSTOMER -->
+<!-- 						BEGIN STATUS OF CUSTOMER -->
+<!-- 						<th:block th:include="fragments/statusOfCustomer"></th:block> -->
+<!-- 						END STATUS OF CUSTOMER -->
+
+<!-- 						Nút thêm mới khách hàng -->
+<!-- 						<button class="btn btn-primary btn-sm" data-toggle="modal" -->
+<!-- 							data-target="#addNewCustomerModal"> -->
+<!-- 							<i class="fa-solid fa-plus"></i> Thêm mới khách hàng -->
+<!-- 						</button> -->
+
+						<div style="display: flex; align-items: center;">
+							<!-- Status của khách hàng -->
+							<th:block th:include="fragments/statusOfCustomer"></th:block>
+
+							<!-- Nút thêm mới khách hàng -->
+							<button class="addCustomerbtn" data-toggle="modal"
+								data-target="#addNewCustomerModal">
+								<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
+							</button>
+						</div>
 
 						<!-- Modal cho Thêm Khách Hàng Mới -->
 						<div class="modal fade" id="addNewCustomerModal" tabindex="-1"

@@ -540,3 +540,20 @@ nav-link-expand i.fa-compress:before {
     text-align: center;
     vertical-align: middle;
 }
+
+.addCustomerbtn{
+	font-size: 16px;
+    padding: 8px 15px;
+    margin-left: 50px;
+    background-color: #967ADC;
+    border-radius: 10px;
+    color: white;
+    height: fit-content;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.addCustomerbtn:hover {
+    background-color: #8451C1;
+    color: #ffffff;
+}
