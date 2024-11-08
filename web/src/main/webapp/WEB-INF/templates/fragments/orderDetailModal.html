@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<body>
 	<div id="orderDetailModal">
-		<h3 id="title">Chi tiết đơn hàng - <span class="orderId">A100000</span></h3>
+		<h3 id="title">Chi tiết đơn hàng - <span id="orderCodeDetail"></span></h3>
 		<div class="closeBtnDiv" style="text-align: right;">
 			<button onclick="closeModalOrderDetail()" class="closeBtn"><i class="fas fa-times"></i></button>
 		</div>
@@ -10,37 +11,33 @@
 		    <div class="form-row">
 			    <div class="form-group col-md-3">
 			      <label for="inputDate">Ngày tạo</label>
-			      <input type="date" class="form-control" id="startDate" style="background-color: white; color: black; width: 100%;" placeholder="dd/mm/yyyy" required>
+			      <input type="date" class="form-control" id="orderCreateDateDetail" style="background-color: white; color: black; width: 100%;" placeholder="dd/mm/yyyy" required readonly>
 			    </div>
 			    <div class="form-group col-md-3">
 			      <label for="inputDate">Ngày giao</label>
-			      <input type="date" class="form-control" id="endDate" style="background-color: white; color: black; width: 100%;" placeholder="dd/mm/yyyy" required>
+			      <input type="date" class="form-control" id="orderDeliveryDateDetail" style="background-color: white; color: black; width: 100%;" placeholder="yyyy/mm/dd" required readonly>
 			    </div>
 			    <div class="form-group col-md-3">
 			      <label for="inputState">Trạng thái</label>
-				<select id="inputState" class="form-control" style="background-color: white; color: black; width: 100%;">
-					<th:block th:each="orderStatus : ${listOrderStatuses}">
-						<option th:value="${orderStatus.id}" th:text="${orderStatus.name}">
-						</option>
-					</th:block>
-				</select>					
+					<select id="orderStatusDetail" class="form-control" style="background-color: white; color: black;" readonly>
+						
+					</select>					
 			    </div>
 			    <div class="form-group col-md-3">
 			      <label for="inputOrderCode">Mã đơn hàng</label>
-			      <input type="text" class="form-control" id="orderCode">
+			      <input type="text" class="form-control" id=orderCodeDetailInput style="background-color: white; color: black;" readonly>
 			    </div>
 			</div>
 	    	
 		    <br/><div class="row2">
-		    	
 				    <div class="form-row">
 				        <div class="form-group col-md-6">
 				            <label for="goodsType">Loại hàng hóa</label>
-				            <input type="text" class="form-control" id="goodsType">
+				            <input type="text" class="form-control" id="orderGoodsDetail" style="background-color: white; color: black;" readonly>
 				        </div>
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Phương tiện vận chuyển</label>
-				            <input type="text" class="form-control" id="transportMethod">
+				            <input type="text" class="form-control" id="orderTransportDetail" style="background-color: white; color: black;" readonly>
 				        </div>
 				    </div>
 		    </div>
@@ -52,15 +49,15 @@
 			            <table class="sender-table">
 			                <tr>
 			                    <td>Họ tên:</td>
-			                    <td><input type="text" class="input-container" /></td>
+			                    <td><input type="text" class="input-container" id="orderCustomerName" readonly/></td>
 			                </tr>
 			                <tr>
 			                    <td>SDT:</td>
-			                    <td><input type="text" class="input-container" placeholder="(+84) 1234567890" /></td>
+			                    <td><input type="text" class="input-container" id= "orderCustomerPhone" placeholder="(+84) 1234567890" readonly /></td>
 			                </tr>
 			                <tr>
 			                    <td>Email:</td>
-			                    <td><input type="email" class="input-container" /></td>
+			                    <td><input type="email" class="input-container" readonly /></td>
 			                </tr>
 			            </table>
 			        </fieldset>
@@ -72,15 +69,15 @@
 				            <table class="receiver-table">
 				                <tr>
 				                    <td>Họ tên:</td>
-				                    <td><input type="text" class="input-container" /></td>
+				                    <td><input type="text" class="input-container" readonly/></td>
 				                </tr>
 				                <tr>
 				                    <td>SDT:</td>
-				                    <td><input type="text" class="input-container" placeholder="(+84) 1234567890" /></td>
+				                    <td><input type="text" class="input-container" placeholder="(+84) 1234567890" readonly/></td>
 				                </tr>
 				                <tr>
 				                    <td>Email:</td>
-				                    <td><input type="email" class="input-container" /></td>
+				                    <td><input type="email" class="input-container" readonly/></td>
 				                </tr>
 				            </table>
 				        </fieldset>
@@ -92,13 +89,13 @@
 				        <div class="form-group col-md-6">
 				            <label for="goodsType">Yêu cầu</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="textAreaExample2" rows="8"></textarea>
+								<textarea class="form-control" id="orderRequirementDetail" rows="8" readonly></textarea>
 							</div>
 				        </div>
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Địa chỉ</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="textAreaExample2" rows="8"></textarea>
+								<textarea class="form-control" id="textAreaExample2" rows="8" readonly></textarea>
 							</div>
 				        </div>
 				    </div>
@@ -114,9 +111,10 @@
 			</div>
 		        
 			<div class="row4">
-				<button type="button" onclick="saveOrder()">Lưu</button>
 	        	<button type="button" onclick="closeModalOrderDetail()">Trở về</button>
 			</div>
 	    </form>
 	</div>
+	<script type="text/javascript" th:src="@{/resources/js/orders/datatable.js}" ></script>
+</body>
 </html>

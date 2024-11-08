@@ -3,7 +3,7 @@
 $(document).ready(function() {
 	console.log(dataSet);
 
-	$('#tblDatatable').DataTable({
+	var table = $('#tblDatatable').DataTable({
 		data: dataSet,  // Sử dụng dataSet đã được truyền vào
 		dom: 'Bfrtip',
 		paging: true, // Phân trang
@@ -33,11 +33,43 @@ $(document).ready(function() {
 		var data = $('#tblDatatable').DataTable().row($(this).parents('tr')).data();
 		edit(data);
 	});
-
 	$('#tblDatatable tbody').on('click', '.detail-btn', function() {
+		var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
+		var orderId = row[0];
+
+		console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
+
+		$.ajax({
+			url: _ctx + '/orders-datatable/viewDetails/' + orderId,
+			method: 'GET',
+			success: function(response) {
+				console.log(response)
+				var orderStatus = response[4];
+				
+				$('#orderIdDetail').text(response[0]);
+				$('#orderCodeDetail').text(response[1]);
+				$('#orderCodeDetailInput').val(response[1]);
+				$('#orderDeliveryDateDetail').val(response[2]);
+				$('#orderCreateDateDetail').val(response[3]);
+				$('#orderStatusDetail').html('<option value="' + orderStatus + '">' + orderStatus + '</option>');
+				$('#orderGoodsDetail').val(response[5]);
+				$('#orderCustomerName').val(response[6]);
+				$('#orderCustomerPhone').val(response[7]);
+				$('#orderTransportDetail').val(response[8]);
+				$('#orderRequirementDetail').val(response[9]);
+
+				document.getElementById("orderDetailModal").style.display = "block";
+			},
+			error: function(error) {
+				console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
+			}
+		});
+	});
+
+	/*$('#tblDatatable tbody').on('click', '.detail-btn', function() {
 		var data = $('#tblDatatable').DataTable().row($(this).parents('tr')).data();
 		viewDetail(data);
-	});
+	});*/
 });
 
 let currentRow;

@@ -29,10 +29,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,6 +53,7 @@ import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Order;
+import mks.myworkspace.crm.transformer.JpaTransformer_OrderDetail;
 
 /**
  * Handles requests for the application home page.
@@ -131,19 +135,19 @@ public class OrderController_Datatable extends BaseController {
 
 		List<Customer> listCustomers;
 		listCustomers = customerService.getAllCustomers();
-		
+
 		List<Order> listOrders;
 		listOrders = orderService.getAllOrders();
 		log.debug("Fetched orders: {}", listOrders.toString());
-		
+
 		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders);
 		log.debug("IN DATASET: ");
 		for (Object[] row : dataSet) {
-		    log.debug("Row: " + Arrays.toString(row));
+			log.debug("Row: " + Arrays.toString(row));
 		}
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		
+
 		mav.addObject("dataSet", dataSet);
 		mav.addObject("listOrders", listOrders);
 		mav.addObject("listCustomers", listCustomers);
@@ -152,26 +156,21 @@ public class OrderController_Datatable extends BaseController {
 
 		return mav;
 	}
-	
-	@GetMapping("/viewDetails")
-	public ModelAndView displayOrderDetails(@RequestParam("orderId") Long orderId, HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
-		initSession(request, httpSession);
-		
+
+	@GetMapping("/viewDetails/{id}")
+	@ResponseBody
+	public ResponseEntity<?> displayOrderDetails(@PathVariable("id") Long orderId) {
 		Order order = orderService.getOrderById(orderId);
-		
 		if (order != null) {
-	        mav.addObject("order", order);
-	    } else {
-	        mav.addObject("errorMessage", "Order not found.");
-	    }
-		
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		
-		return mav;
+			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order);
+			return ResponseEntity.ok(orderDetailArray);
+		} else {
+			log.debug("CANNOT order!");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
+		}
+
 	}
-	
+
 //	@GetMapping(value = { "/get-orders" }, produces = "application/json")
 //	@ResponseBody
 //	public Object getOrderData() throws IOException {
