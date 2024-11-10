@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -15,22 +15,21 @@
 			</div>
 			
 			<button type="button" class="left" onclick="leftScroll()">
-<!-- 				<i class="fas fa-angle-double-left"></i> -->
+			<!--<i class="fas fa-angle-double-left"></i> -->
 			</button>
 			<div class="scroll-images">
 				<div th:each="status: ${statuses}" class="child"
-					th:style="'background-color:' + ${status.backgroundColor}"
-					th:onclick="'fetchCustomersByStatus(' + ${status.id} + ')'"
-					th:attr="data-status-id=${status.id}">
+					 th:style="'background-color:' + ${status.backgroundColor}"
+					 th:onclick="'fetchCustomersByStatus(' + ${status.id} + ')'"
+					 th:attr="data-status-id=${status.id}">
 					<h4 th:text="${status.name}"></h4>
 
 					<span class="count-badge"
-						th:text="${statusCounts != null && statusCounts[status.id] != null ? statusCounts[status.id] : 0}"></span>
-
+						  th:text="${statusCounts != null && statusCounts[status.id] != null ? statusCounts[status.id] : 0}"></span>
 				</div>
 			</div>
 			<button type="button" class="right" onclick="rightScroll()">
-<!-- 				<i class="fas fa-angle-double-right"></i> -->
+			<!--<i class="fas fa-angle-double-right"></i> -->
 			</button>
 		</form>
 		<!-- Optional: Div for additional content -->

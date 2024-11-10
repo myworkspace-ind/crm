@@ -117,14 +117,14 @@ public class CustomerServiceImpl implements CustomerService {
             statusCountMap.put(statusId, count);
         }
 
-        // Cộng kết quả từ subStatusCounts vào bản đồ đã có
+        // Cộng kết quả từ subStatusCounts vào map đã có
         for (Object[] row : subStatusCounts) {
             Long statusId = (Long) row[0];
             Long count = (Long) row[1];
             statusCountMap.merge(statusId, count, Long::sum);
         }
         
-        // In ra bản đồ kết quả để kiểm tra
+        // In ra map kết quả để kiểm tra
         System.out.println("Final Status Count Map: " + statusCountMap);
 
         return statusCountMap.isEmpty() ? new HashMap<>() : statusCountMap;
