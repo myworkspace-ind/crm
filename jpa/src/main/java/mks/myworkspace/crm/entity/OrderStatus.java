@@ -6,8 +6,10 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -27,28 +29,27 @@ public class OrderStatus implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(length = 99)
-	private String id; // system field
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id; // system field
 
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
 
 	@Column
 	private String name;
+
+//	@OneToMany(mappedBy = "orderStatus", fetch = FetchType.EAGER)
+//	private Set<Order> orders;
 	
-	@OneToMany(mappedBy = "orderStatus", fetch = FetchType.EAGER)
-	private Set<Order> orders;
-	
-	public OrderStatus(String id, String siteId, String name) {
+	@ManyToMany(mappedBy = "orderStatuses", fetch = FetchType.EAGER)
+	private Set<OrderCategory> orderCategories;
+
+	public OrderStatus(Long id, String siteId, String name, Set<OrderCategory> orderCategories) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
-	}
-	
-	@Override
-	public String toString() {
-		return "OrderStatus [id=" + id + ", siteId=" + siteId + ", name=" + name + "]";
+		this.orderCategories = orderCategories;
 	}
 
 }

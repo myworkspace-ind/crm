@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- START COMMON META AND TITLE -->
+	<th:block th:include="fragments/common_meta_title"></th:block>
+	<!-- END COMMON META AND TITLE -->
+	
+	<th:block th:include="fragments/head"></th:block>
+	<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+	
+	<script>console.log("Handsontable:", typeof Handsontable); //Check Handsontable is available or not
+	</script>
+	
+	
+	<!-- START COMMON CSS -->
+	<th:block th:include="fragments/common_css"></th:block>
+	<!-- END COMMON CSS -->
+	
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/ordersBtnHorizontalMenu.css}">	
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/new_style.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/order.css}">
+</head>
+
+<body
+	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	data-open="click" data-menu="vertical-compact-menu"
+	data-col="2-columns">
+
+	<!-- BEGIN HEADER -->
+	<th:block th:include="fragments/headerCRM"></th:block>
+	<!-- END HEADER -->
+	
+
+	<!-- BEGIN LEFT MENU NAVIGATION -->
+	<th:block th:include="fragments/leftNavCRM"></th:block>
+	<!-- END LEFT MENU NAVIGATION -->
+
+	<!--  BEGIN CONTENT -->
+	<div class="app-content content">
+	
+		<!-- BEGIN CONTENT WRAPPER -->
+		<th:block th:include="fragments/ordersContentWrapperCRM"></th:block>
+		<!-- END CONTENT WRAPPER -->
+		
+		<!-- BEGIN SEARCH CONDITION -->
+		<th:block th:include="fragments/searchCondition_Handsontable"></th:block>
+		<!-- END SEARCH CONDITION -->
+		
+		<div class="row">
+			 <div class="col-12">
+			 	<div class="order-screen">
+					<h4 class="title order-title">Danh sách đơn hàng</h4>
+					<th:block th:include="fragments/orders/frg_orders.html"></th:block>
+				</div>
+			</div>
+		</div>
+		
+		<div id="statusModal">
+		    <h3>Cập nhật trạng thái đơn hàng được chọn</h3>
+		    <select id="statusSelect">
+		        <option value="1">Nhận đơn</option>
+		        <option value="2">Lưu kho</option>
+		        <option value="3">Vận chuyển</option>
+		        <option value="4">Lưu kho lạnh</option>
+		        <option value="5">Giao hàng</option>
+		    </select>
+		    <br><br>
+		    <button type="button" onclick="saveStatus()">Lưu</button>
+		    <button type="button" onclick="closeModalOrderStatus()">Đóng</button>
+		</div>
+		
+		<div id="modalOverlay">
+		</div>
+		
+		<!-- BEGIN UPDATE MODAL -->
+		<th:block th:include="fragments/updateOrderModal"></th:block>
+		<!-- END UPDATE MODAL -->
+		
+	</div>
+	
+	<!-- END CONTENT -->
+		
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+	
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" th:src="@{/resources/js/orders/init.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/createOrder.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadOrderStatuses_Handsontable.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/getCurrentDate_Handsontable.js}"></script>
+	<!-- Screen Javascripts -->
+
+</body>
+</html>

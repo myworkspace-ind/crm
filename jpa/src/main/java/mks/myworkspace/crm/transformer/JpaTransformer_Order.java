@@ -5,27 +5,37 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Order;
 
+@Slf4j
 public class JpaTransformer_Order {
 
 	public static List<Object[]> convert2D(List<Order> lstOrders) {
-		if (lstOrders == null) {
+		if (lstOrders == null || lstOrders.isEmpty()) {
 			return null;
 		}
 
 		List<Object[]> lstObject = new ArrayList<>();
 
 		for (Order order : lstOrders) {
-			Object[] rowData = new Object[5];
-			rowData[0] = order.getId();// ma don hang
-			rowData[1] = formatDate(order.getDeliveryDate());// ngay giao
-			rowData[2] = order.getGoodsCategory();// loai hang hoa
-			rowData[3] = order.getCustomer();// thong tin nguoi gui
-			rowData[4] = order.getTransportationMethod();// phuong tien van chuyen
-			lstObject.add(rowData);
-		}
-		return lstObject;
+	        Object[] rowData = new Object[6];
+	        rowData[0] = order.getId(); // ID
+	        rowData[1] = order.getCode();// ma don hang
+	        rowData[2] = formatDate(order.getDeliveryDate()); // ngay giao
+	        rowData[3] = order.getGoodsCategory().getName(); // loai hang hoa
+	        rowData[4] = order.getCustomer().getCompanyName(); // thong tin nguoi gui
+	        rowData[5] = order.getTransportationMethod(); // phuong tien van chuyen
+
+	        // Log dữ liệu của từng hàng trong dataset
+	        log.debug("Order row: ID = {}, Delivery Date = {}, Category = {}, Customer = {}, Transportation Method = {}",
+	                rowData[0], rowData[1], rowData[2], rowData[3], rowData[4]);
+
+	        lstObject.add(rowData);
+	    }
+	    
+	    log.debug("Converted dataset: {}", lstObject);
+	    return lstObject;
 	}
 
 	private static String formatDate(Date date) {

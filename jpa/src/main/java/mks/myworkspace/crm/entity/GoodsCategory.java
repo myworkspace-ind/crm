@@ -1,13 +1,12 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -27,8 +26,8 @@ public class GoodsCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(length = 99)
-	private String id; // system field
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id; // system field
 
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
@@ -36,20 +35,12 @@ public class GoodsCategory implements Serializable {
 	@Column
 	private String name;
 
-	@OneToMany(mappedBy = "goodsCategory", fetch = FetchType.EAGER)
-	private Set<Order> orders;
 
-	public GoodsCategory(String id, String siteId, String name, Set<Order> orders) {
+	public GoodsCategory(Long id, String siteId, String name) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
-		this.orders = orders;
 	}
 
-	@Override
-	public String toString() {
-		return "GoodsCategory [id=" + id + ", siteId=" + siteId + ", name=" + name + ", orders=" + orders + "]";
-	}
-	
 }

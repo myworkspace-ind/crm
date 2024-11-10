@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div class="row">
+	   <div class="col-12">
+	       <div class="card">
+	           <div class="card-header">
+	               <h4 class="card-title search-condition">Điều kiện tìm kiếm</h4>
+	               <div class="heading-elements">
+	                   <ul class="list-inline mb-0">
+	                       <li><a data-action="collapse"><i class="fa-solid fa-minus"></i></a></li>
+	                       <li><a data-action="reload"><i class="fa-solid fa-rotate"></i></a></li>
+	                       <li><a data-action="expand"><i class="fa-solid fa-expand"></i></a></li>
+	                       <li><a data-action="close"><i class="fa-solid fa-xmark"></i></a></li>
+	                   </ul>
+	               </div>
+	           </div>
+	           <div class="card-content collapse show">
+	               <div class="card-body search-condition">
+	                   <div class="row">
+	                       <div class="col-md-3 col-sm-12">
+	                           <fieldset class="text-left customer-option">
+	                               <h5>Khách hàng</h5>
+	                               <select style="background-color: white; color: black; width: 100%;">
+	                               		<th:block th:each="customer : ${listCustomers}">
+											<option th:value="${customer.id}" th:text="${customer.companyName}">
+											</option>
+										</th:block>
+	                               </select>
+	                           </fieldset>
+	                           <fieldset class="text-left ordercate-option">
+	                               <h5>Loại đơn hàng</h5>
+	                               <select id="orderCategorySelect" onchange="loadOrderStatuses_Datatable()" 
+	                               		style="background-color: white; color: black; width: 100%;">
+									<th:block th:each="orderCategory : ${orderCategories}">
+						                <option th:value="${orderCategory.id}" th:text="${orderCategory.name}"
+						                        th:selected="${orderCategory.id == selectedCategoryId}"></option>
+						            </th:block>
+	                               </select>
+	                           </fieldset>
+	                       </div>
+	                       
+	                       <div class="col-md-3 col-sm-12">
+	                        <div id="orderStatusContainer">
+	                            <fieldset class="text-left order-status">
+	                                <h5>Trạng thái đơn hàng</h5>
+	                                    <th:block th:each="orderStatus : ${orderStatuses}">
+								            <label>
+								                <input type="checkbox" name="orderStatus" th:value="${orderStatus.id}" class="custom-checkbox checkbox-spacing" th:text="${orderStatus.name}"/> 
+								            </label><br/>
+							        	</th:block>
+	                            </fieldset>
+	                        </div>
+	                       </div>
+	                       <div class="col-md-3 col-sm-12">
+	                           <fieldset class="text-left startdate-option">
+	                               <h5>Ngày lập</h5>
+	                               <input type="date" id="orderDate" style="width: 100%; padding: 5px; color: black; background-color: white;">
+	                           </fieldset>
+	                           <fieldset class="text-left delidate-option">
+	                               <h5>Ngày giao</h5>
+	                               <input type="date" id= "deliveryDate" style="width: 100%; padding: 5px; color: black; background-color: white;">
+	                           </fieldset>
+	                           <fieldset class="text-right">
+	                           	<button type="submit" class="search-order" style="margin-top: 10px;">Tìm</button>
+	                           </fieldset>
+	                       </div>
+	                   </div>
+	               </div>
+	           </div>
+	       </div>
+	   </div>
+	</div>
+</body>
+</html>

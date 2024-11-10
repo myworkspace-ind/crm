@@ -41,7 +41,7 @@
 			<artifactId>crm-jpa</artifactId>
 			<version>${module.version}</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
