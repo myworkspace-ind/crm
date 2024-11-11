@@ -72,13 +72,13 @@ public class AppRepository {
 		if (customerIds == null || customerIds.isEmpty()) {
 			return;
 		}
-		
-		//Tạo các tham số
-		String sql = "DELETE FROM customer_status WHERE customer_id IN (" + customerIds.stream().map(id -> "?") 
-				.collect(Collectors.joining(",")) + ")";
+
+		// Tạo các tham số
+		String sql = "DELETE FROM customer_status WHERE customer_id IN ("
+				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
 		// Thực hiện câu lệnh xóa
-		jdbcTemplate0.update(sql, customerIds.toArray()); //Truyền mảng ID
+		jdbcTemplate0.update(sql, customerIds.toArray()); // Truyền mảng ID
 	}
 
 	public void deleteCustomersByIds(List<Long> customerIds) {
@@ -89,43 +89,31 @@ public class AppRepository {
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
-	
-	public List<Long> saveOrUpdateOrder(List<Order> entities) {
-		List<Long> ids = new ArrayList<>();
+
+	public Long saveOrUpdateOrder(Order order) {
+		Long id;
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
 				.usingGeneratedKeyColumns("id");
 
-		Long id;
-		for (Order order : entities) {
-			if (order.getId() == null) {
-				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
-			} else {
-				updateOrder(order);
-				id = order.getId();
-			}
-			ids.add(id);
+		if (order.getId() == null) {
+			id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
+		} else {
+			updateOrder(order);
+			id = order.getId();
 		}
-		return ids;
+		return id;
 	}
-	
+
 	private void updateOrder(Order order) {
 		String updateSql = "UPDATE crm_order SET site_id = ?, name = ?, code = ?, create_date = ?, delivery_date = ?, "
-                + "transportation_method = ?, customer_requirement = ?, order_cate_id = ?, cus_id = ?, "
-                + "order_status_id = ?, goods_category_id = ? WHERE id = ?";
-		
-		jdbcTemplate0.update(updateSql, 
-                order.getSiteId(), 
-                order.getName(), 
-                order.getCode(), 
-                order.getCreateDate(), 
-                order.getDeliveryDate(), 
-                order.getTransportationMethod(), 
-                order.getCustomerRequirement(), 
-                order.getOrderCategory() != null ? order.getOrderCategory().getId() : null, 
-                order.getCustomer() != null ? order.getCustomer().getId() : null, 
-                order.getOrderStatus() != null ? order.getOrderStatus().getId() : null, 
-                order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null, 
-                order.getId()
-        );
+				+ "transportation_method = ?, customer_requirement = ?, order_cate_id = ?, cus_id = ?, "
+				+ "order_status_id = ?, goods_category_id = ? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, order.getSiteId(), order.getName(), order.getCode(), order.getCreateDate(),
+				order.getDeliveryDate(), order.getTransportationMethod(), order.getCustomerRequirement(),
+				order.getOrderCategory() != null ? order.getOrderCategory().getId() : null,
+				order.getCustomer() != null ? order.getCustomer().getId() : null,
+				order.getOrderStatus() != null ? order.getOrderStatus().getId() : null,
+				order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null, order.getId());
 	}
 }

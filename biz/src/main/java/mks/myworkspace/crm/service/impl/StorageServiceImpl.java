@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.Getter;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.OrderRepository;
@@ -75,5 +76,21 @@ public class StorageServiceImpl implements StorageService {
 	public void deleteCustomersByIds(List<Long> customerIds) {
 		appRepo.deleteCustomersByIds(customerIds);
 		
+	}
+
+	
+	@Override
+	public Order saveOrUpdateOrder(Order order) {
+		Optional<Order> existingOrder = orderRepo.findByCode(order.getCode());
+		
+		if(existingOrder.isPresent()) {
+			throw new IllegalArgumentException ("Mã đơn hàng đã tồn tại. Vui lòng thử lại");
+		}
+		
+		Long id = appRepo.saveOrUpdateOrder(order);
+		if (id != null) {
+			order.setId(id);
+		}
+		return order;
 	}
 }

@@ -30,9 +30,42 @@ $(document).ready(function() {
 	});
 
 	$('#tblDatatable tbody').on('click', '.edit-btn', function() {
-		var data = $('#tblDatatable').DataTable().row($(this).parents('tr')).data();
-		edit(data);
-	});
+			var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
+			var orderId = row[0];
+
+			console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
+
+			$.ajax({
+				url: _ctx + '/orders-datatable/viewDetails/' + orderId,
+				method: 'GET',
+				success: function(response) {
+					console.log(response)
+					var orderStatus = response[4];
+					var goodsCategory = response[5];
+					var sender = response[6];
+					
+					$('#orderIdUpdate').text(response[0]);
+					$('#orderCodeUpdate').text(response[1]);
+					$('#orderCodeDetailInput').val(response[1]);
+					$('#orderDeliveryDateDetail').val(response[2]);
+					$('#orderCreateDateDetail').val(response[3]);
+					$('#orderStatusDetail').html('<option value="' + orderStatus + '">' + orderStatus + '</option>');
+					$('#orderGoodsDetail').html('<option value="' + goodsCategory + '">' + goodsCategory + '</option>');
+					$('#orderSenderName').html('<option value="' + sender + '">' + sender + '</option>');
+					$('#orderSenderPhone').val(response[7]);
+					$('#orderTransportDetail').val(response[8]);
+					$('#orderRequirementDetail').val(response[9]);
+					$('#orderSenderEmail').val(response[10]);
+
+					document.getElementById("orderDetailModal_ToUpdate").style.display = "block";
+				},
+				error: function(error) {
+					console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
+				}
+			});
+		});
+	
+	
 	$('#tblDatatable tbody').on('click', '.detail-btn', function() {
 		var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
 		var orderId = row[0];
@@ -75,13 +108,13 @@ $(document).ready(function() {
 	});*/
 });
 
-let currentRow;
+//let currentRow;
 
 function changeTitle(newTitle) {
 	document.getElementById("title").innerText = newTitle;
 }
 
-function edit(row) {
+/*function edit(row) {
 	changeTitle('Cập nhật đơn hàng');
 	currentRow = row;
 	document.getElementById("updateOrderModal").style.display = "block";
@@ -92,7 +125,7 @@ function viewDetail(row) {
 	currentRow = row;
 	document.getElementById("orderDetailModal").style.display = "block";
 	document.getElementById("modalOverlay").style.display = "block";
-}
+}*/
 
 function closeUpdateOrderModal() {
 	document.getElementById("updateOrderModal").style.display = "none";

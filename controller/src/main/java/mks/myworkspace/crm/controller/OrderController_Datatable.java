@@ -21,6 +21,7 @@ package mks.myworkspace.crm.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -184,9 +185,19 @@ public class OrderController_Datatable extends BaseController {
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody Order order) {
 		log.debug("Received Order: {}", order);
+		Map<String, String> response = new HashMap<>();
 
-	
-		return null;
+		try {
+			storageService.saveOrUpdateOrder(order);
+			response.put("status", "success");
+			response.put("message", "Order updated successfully.");
+		} catch (Exception e) {
+			log.error("Error saving/updating order: ", e);
+			response.put("status", "error");
+			response.put("message", "An error occurred while saving/updating the order.");
+		}
+		
+		return ResponseEntity.ok(response);
 	}
 
 //	@GetMapping(value = { "/get-orders" }, produces = "application/json")

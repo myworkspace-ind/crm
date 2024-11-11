@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mks.myworkspace.crm.entity.Order;
-import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.OrderRepository;
 import mks.myworkspace.crm.service.OrderService;
 
@@ -15,9 +14,6 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
 	private OrderRepository repo;
-	
-	@Autowired
-	private AppRepository appRepository;
 
 	@Override
 	public OrderRepository getRepo() {
@@ -32,11 +28,6 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public Order getOrderById(Long orderId) {
 		return repo.findById(orderId).orElse(null);
-	}
-
-	@Override
-	public List<Long> saveOrUpdateOrders(List<Order> orders) {
-		return appRepository.saveOrUpdateOrder(orders);
 	}
 
 
