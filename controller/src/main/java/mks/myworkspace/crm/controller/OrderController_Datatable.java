@@ -22,6 +22,7 @@ package mks.myworkspace.crm.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -36,6 +37,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -141,10 +144,16 @@ public class OrderController_Datatable extends BaseController {
 		log.debug("Fetched orders: {}", listOrders.toString());
 
 		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders);
-		log.debug("IN DATASET: ");
-		for (Object[] row : dataSet) {
-			log.debug("Row: " + Arrays.toString(row));
+		if (dataSet == null) {
+			log.debug("DataSet is null, using demo data.");
+			dataSet = getDemoData();
+		} else {
+			log.debug("IN DATASET:");
+			for (Object[] row : dataSet) {
+				log.debug("Row: " + Arrays.toString(row));
+			}
 		}
+
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 
@@ -169,6 +178,15 @@ public class OrderController_Datatable extends BaseController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
 		}
 
+	}
+
+	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody Order order) {
+		log.debug("Received Order: {}", order);
+
+	
+		return null;
 	}
 
 //	@GetMapping(value = { "/get-orders" }, produces = "application/json")

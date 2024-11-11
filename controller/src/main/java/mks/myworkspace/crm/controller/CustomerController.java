@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -83,37 +84,31 @@ public class CustomerController extends BaseController {
 		if (statusId != null) {
 			customers = customerService.findCustomersByStatus(statusId);
 			mav.addObject("statusId", statusId);
-//			log.debug("Fetching customers for status ID: {}", statusId);
 
 		} else if (keyword != null && !keyword.isEmpty()) {
 			customers = customerService.searchCustomers(keyword);
 			mav.addObject("keyword", keyword);
-//			log.debug("Searching customers with keyword: {}", keyword);
 
 		} else {
-			customers = customerService.getAllCustomersWithStatuses();
+			customers = customerService.getAllCustomersWithStatuses ();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
 
 		List<Status> statuses = statusService.getAllStatuses();
+
+		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
+		
+		// Kiểm tra xem statusCountMap có null không
+	    if (statusCounts == null) {
+	        statusCounts = new HashMap<>(); // Khởi tạo nếu null
+	    }
+	    
+	    long totalCustomerCount = customerService.getTotalCustomerCount();
+	    
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
-
-	//		for (Customer customer : customers) {
-	//			log.debug("Thông tin khách hàng: {}", customer.getName());
-	//		}
-	//		for (Status status : statuses) {
-	//			log.debug("Thông tin trạng thái KH: {}", status.getName());
-	//		}
-	//
-	//		for (Customer customer : customers) {
-	//			log.debug("Customer: {} (ID: {})", customer.getName(), customer.getId());
-	//
-	//			for (Status status : customer.getStatuses()) {
-	//				log.debug("  - Status: {}", status.getName());
-	//			}
-	//
-	//		}
+		mav.addObject("statusCounts", statusCounts);
+		mav.addObject("totalCustomerCount", totalCustomerCount);
 
 		return mav;
 	}

@@ -49,7 +49,7 @@ html body .content {
 }
 
 html body .content .content-wrapper {
-    padding: 2.2rem
+    padding: 1rem;
 }
 
 html body .content .content-wrapper .content-header-title {
@@ -3666,7 +3666,7 @@ body.vertical-layout.vertical-menu.menu-expanded .main-menu-footer .content {
 
 .customizer .customizer-toggle {
     position: absolute;
-    top: 35%;
+    top: 30%;
     width: 54px;
     height: 50px;
     left: -54px;
