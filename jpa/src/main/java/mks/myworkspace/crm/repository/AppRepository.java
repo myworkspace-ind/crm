@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.Order;
 
 @Repository
 public class AppRepository {
@@ -65,32 +66,66 @@ public class AppRepository {
 
 	private void update(Customer e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void deleteCustomerStatusByCustomerIds(List<Long> customerIds) {
 		if (customerIds == null || customerIds.isEmpty()) {
-			return; // Kh�ng l�m g� n?u danh s�ch r?ng
+			return;
 		}
-
-		String sql = "DELETE FROM customer_status WHERE customer_id IN (" + customerIds.stream().map(id -> "?") // T?o
-																												// c�c
-																												// tham
-																												// s?
+		
+		//Tạo các tham số
+		String sql = "DELETE FROM customer_status WHERE customer_id IN (" + customerIds.stream().map(id -> "?") 
 				.collect(Collectors.joining(",")) + ")";
 
-		// Th?c hi?n c�u l?nh x�a
-		jdbcTemplate0.update(sql, customerIds.toArray()); // Truy?n m?ng ID
+		// Thực hiện câu lệnh xóa
+		jdbcTemplate0.update(sql, customerIds.toArray()); //Truyền mảng ID
 	}
 
-	// g?i phuong th?c n�y tru?c khi x�a kh�ch h�ng
 	public void deleteCustomersByIds(List<Long> customerIds) {
-		deleteCustomerStatusByCustomerIds(customerIds); // X�a tru?c c�c b?n ghi li�n quan
-		// Ti?n h�nh x�a kh�ch h�ng
+		deleteCustomerStatusByCustomerIds(customerIds); // Xóa trước các bản ghi liên quan
+		// Tiến hành xóa khách hàng
 		String sql = "DELETE FROM crm_customer WHERE id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
+	
+	public List<Long> saveOrUpdateOrder(List<Order> entities) {
+		List<Long> ids = new ArrayList<>();
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
+				.usingGeneratedKeyColumns("id");
 
+		Long id;
+		for (Order order : entities) {
+			if (order.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
+			} else {
+				updateOrder(order);
+				id = order.getId();
+			}
+			ids.add(id);
+		}
+		return ids;
+	}
+	
+	private void updateOrder(Order order) {
+		String updateSql = "UPDATE crm_order SET site_id = ?, name = ?, code = ?, create_date = ?, delivery_date = ?, "
+                + "transportation_method = ?, customer_requirement = ?, order_cate_id = ?, cus_id = ?, "
+                + "order_status_id = ?, goods_category_id = ? WHERE id = ?";
+		
+		jdbcTemplate0.update(updateSql, 
+                order.getSiteId(), 
+                order.getName(), 
+                order.getCode(), 
+                order.getCreateDate(), 
+                order.getDeliveryDate(), 
+                order.getTransportationMethod(), 
+                order.getCustomerRequirement(), 
+                order.getOrderCategory() != null ? order.getOrderCategory().getId() : null, 
+                order.getCustomer() != null ? order.getCustomer().getId() : null, 
+                order.getOrderStatus() != null ? order.getOrderStatus().getId() : null, 
+                order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null, 
+                order.getId()
+        );
+	}
 }
