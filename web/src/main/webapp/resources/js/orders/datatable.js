@@ -45,6 +45,8 @@ $(document).ready(function() {
 			success: function(response) {
 				console.log(response)
 				var orderStatus = response[4];
+				var goodsCategory = response[5];
+				var sender = response[6];
 				
 				$('#orderIdDetail').text(response[0]);
 				$('#orderCodeDetail').text(response[1]);
@@ -52,11 +54,12 @@ $(document).ready(function() {
 				$('#orderDeliveryDateDetail').val(response[2]);
 				$('#orderCreateDateDetail').val(response[3]);
 				$('#orderStatusDetail').html('<option value="' + orderStatus + '">' + orderStatus + '</option>');
-				$('#orderGoodsDetail').val(response[5]);
-				$('#orderCustomerName').val(response[6]);
-				$('#orderCustomerPhone').val(response[7]);
+				$('#orderGoodsDetail').html('<option value="' + goodsCategory + '">' + goodsCategory + '</option>');
+				$('#orderSenderName').html('<option value="' + sender + '">' + sender + '</option>');
+				$('#orderSenderPhone').val(response[7]);
 				$('#orderTransportDetail').val(response[8]);
 				$('#orderRequirementDetail').val(response[9]);
+				$('#orderSenderEmail').val(response[10]);
 
 				document.getElementById("orderDetailModal").style.display = "block";
 			},

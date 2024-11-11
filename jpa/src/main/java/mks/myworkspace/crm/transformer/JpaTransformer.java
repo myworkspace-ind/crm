@@ -29,6 +29,7 @@ public class JpaTransformer {
 			rowData[10] = customer.getResponsiblePerson();
 			rowData[11] = customer.getCreatedAt();
 			rowData[12] = customer.getNote();
+			
 
 			lstObject.add(rowData);
         }
