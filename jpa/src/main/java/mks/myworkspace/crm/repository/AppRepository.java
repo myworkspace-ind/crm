@@ -1,5 +1,7 @@
 package mks.myworkspace.crm.repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,12 +9,15 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
+import mks.myworkspace.crm.entity.OrderStatus;
 
 @Repository
 public class AppRepository {
@@ -104,16 +109,78 @@ public class AppRepository {
 		return id;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void updateOrder(Order order) {
-		String updateSql = "UPDATE crm_order SET site_id = ?, name = ?, code = ?, create_date = ?, delivery_date = ?, "
-				+ "transportation_method = ?, customer_requirement = ?, order_cate_id = ?, cus_id = ?, "
-				+ "order_status_id = ?, goods_category_id = ? WHERE id = ?";
+		// Truy vấn dữ liệu đơn hàng cũ dựa trên ID
+		String selectSql = "SELECT * FROM crm_order WHERE id = ?";
 
-		jdbcTemplate0.update(updateSql, order.getSiteId(), order.getName(), order.getCode(), order.getCreateDate(),
-				order.getDeliveryDate(), order.getTransportationMethod(), order.getCustomerRequirement(),
-				order.getOrderCategory() != null ? order.getOrderCategory().getId() : null,
-				order.getCustomer() != null ? order.getCustomer().getId() : null,
-				order.getOrderStatus() != null ? order.getOrderStatus().getId() : null,
-				order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null, order.getId());
+		// Truy vấn để lấy dữ liệu đơn hàng cũ
+		Order existingOrder = jdbcTemplate0.queryForObject(selectSql, new Object[] { order.getId() },
+				new RowMapper<Order>() {
+					public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Order ord = new Order();
+						ord.setId(rs.getLong("id"));
+						ord.setSiteId(rs.getString("site_id"));
+						ord.setName(rs.getString("name"));
+						ord.setCode(rs.getString("code"));
+						ord.setCreateDate(rs.getDate("create_date"));
+						ord.setDeliveryDate(rs.getDate("delivery_date"));
+						ord.setTransportationMethod(rs.getString("transportation_method"));
+						ord.setCustomerRequirement(rs.getString("customer_requirement"));
+
+						Customer customer = new Customer();
+						long customerId = rs.getLong("cus_id");
+						customer.setId(customerId);
+						ord.setCustomer(customer);
+
+						GoodsCategory goodsCategory = new GoodsCategory();
+						goodsCategory.setId(rs.getLong("goods_category_id"));
+						ord.setGoodsCategory(goodsCategory);
+
+						OrderStatus orderStatus = new OrderStatus();
+						orderStatus.setId(rs.getLong("order_status_id"));
+						ord.setOrderStatus(orderStatus);
+						// Customer customer = new Customer();
+						// customer.setId(rs.getLong("crm_order.cus_id"));
+						// customer.setContactPerson(rs.getString("contact_person"));
+						// customer.setPhone(rs.getString("phone"));
+						// customer.setEmail(rs.getString("email"));
+						// ord.setCustomer(customer);
+
+						// GoodsCategory goodsCategory = new GoodsCategory();
+						// goodsCategory.setId(rs.getLong("id"));
+						// goodsCategory.setName(rs.getString("name"));
+						// ord.setGoodsCategory(goodsCategory);
+
+						// OrderStatus orderStatus = new OrderStatus();
+						// orderStatus.setId(rs.getLong("id"));
+						// orderStatus.setName(rs.getString("name"));
+						// ord.setOrderStatus(orderStatus);
+
+						return ord;
+					}
+				});
+
+		// SQL để cập nhật dữ liệu đơn hàng
+		String updateSql = "UPDATE crm_order SET name = ?, code = ?, create_date = ?, "
+				+ "delivery_date = ?, transportation_method = ?, customer_requirement = ?, "
+				+ "cus_id = ?, order_status_id = ?, goods_category_id = ? " + "WHERE id = ?";
+
+		// Thực thi câu lệnh cập nhật
+		jdbcTemplate0.update(updateSql, order.getName() != null ? order.getName() : existingOrder.getName(),
+				order.getCode() != null ? order.getCode() : existingOrder.getCode(),
+				order.getCreateDate() != null ? order.getCreateDate() : existingOrder.getCreateDate(),
+				order.getDeliveryDate() != null ? order.getDeliveryDate() : existingOrder.getDeliveryDate(),
+				order.getTransportationMethod() != null ? order.getTransportationMethod()
+						: existingOrder.getTransportationMethod(),
+				order.getCustomerRequirement() != null ? order.getCustomerRequirement()
+						: existingOrder.getCustomerRequirement(),
+				order.getCustomer() != null ? order.getCustomer().getId() : existingOrder.getCustomer().getId(),
+				order.getOrderStatus() != null ? order.getOrderStatus().getId()
+						: existingOrder.getOrderStatus().getId(),
+				order.getGoodsCategory() != null ? order.getGoodsCategory().getId()
+						: existingOrder.getGoodsCategory().getId(),
+				order.getId());
 	}
+
 }

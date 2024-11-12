@@ -2,16 +2,16 @@
  * 
  */
 const openCreateOrderBtn = document.getElementById('openCreateOrderBtn');
-const updateOrderModal = document.getElementById('updateOrderModal');
+const createOrderModal = document.getElementById('createOrderModal');
 const modalOverlay = document.getElementById('modalOverlay');
 
 openCreateOrderBtn.addEventListener('click', function(){
-	updateOrderModal.style.display = 'block';
+	createOrderModal.style.display = 'block';
 	modalOverlay.style.display = 'block';
 })
 
 function closeModal() {
-	updateOrderModal.style.display = 'none';
+	createOrderModal.style.display = 'none';
 	modalOverlay.style.display = 'none';
 }
 

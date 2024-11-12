@@ -105,7 +105,7 @@ select#statusSelect {
     color: black;
 }
 
-div#updateOrderModal, div#orderDetailModal, div#orderDetailModal_ToUpdate{
+div#updateOrderModal, div#orderDetailModal, div#createOrderModal{
 	display: none; 
 	position:fixed; 
 	top:50%; 
@@ -120,12 +120,12 @@ div#updateOrderModal, div#orderDetailModal, div#orderDetailModal_ToUpdate{
 	overflow-y: auto;
 }
 
-div#updateOrderModal h3, div#orderDetailModal h3, div#orderDetailModal_ToUpdate h3{
+div#updateOrderModal h3, div#orderDetailModal h3, div#createOrderModal h3{
 	color: #DA4453;
 	font-weight: 600;
 }
 
-div#updateOrderModal hr, div#orderDetailModal hr, div#orderDetailModal_ToUpdate hr{
+div#updateOrderModal hr, div#orderDetailModal hr, div#createOrderModal hr{
     background-color: red;
 }
 

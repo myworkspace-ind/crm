@@ -113,6 +113,10 @@ public class Customer implements Serializable {
 		this.note = note;
 	}
 
+	public Customer(String contactPerson2) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/*
 	 * @Override public String toString() { return "Customer [id=" + id +
 	 * ", siteId=" + siteId + ", companyName=" + companyName + ", contactPerson=" +

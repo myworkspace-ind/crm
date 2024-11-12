@@ -19,13 +19,13 @@ public class JpaTransformer_OrderDetail {
 		rowData[1] = order.getCode();
 		rowData[2] = formatDate(order.getDeliveryDate());
 		rowData[3] = formatDate(order.getCreateDate());
-		rowData[4] = order.getOrderStatus().getName();
-		rowData[5] = order.getGoodsCategory() != null ? order.getGoodsCategory().getName() : null;
-		rowData[6] = order.getCustomer() != null ? order.getCustomer().getContactPerson() : null;
-		rowData[7] = order.getCustomer() != null ? order.getCustomer().getPhone() : null;
+		rowData[4] = order.getOrderStatus().getId();
+		rowData[5] = order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null;
+		rowData[6] = order.getCustomer() != null ? order.getCustomer().getId() : null;
+		rowData[7] = order.getCustomer() != null ? order.getCustomer().getId() : null;
 		rowData[8] = order.getTransportationMethod();
 		rowData[9] = order.getCustomerRequirement();
-		rowData[10] = order.getCustomer() != null ? order.getCustomer().getEmail() : null;
+		rowData[10] = order.getCustomer() != null ? order.getCustomer().getId() : null;
 
 		log.debug(
 				"Order detail row: ID = {}, Code = {}, Delivery Date = {}, Category = {}, Customer = {}, Transportation Method = {}",

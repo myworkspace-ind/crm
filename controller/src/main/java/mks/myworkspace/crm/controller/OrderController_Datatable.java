@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +49,7 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
@@ -184,7 +186,8 @@ public class OrderController_Datatable extends BaseController {
 	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody Order order) {
-		log.debug("Received Order: {}", order);
+		log.debug("Received Order: {}", order.getId());
+
 		Map<String, String> response = new HashMap<>();
 
 		try {
@@ -196,7 +199,7 @@ public class OrderController_Datatable extends BaseController {
 			response.put("status", "error");
 			response.put("message", "An error occurred while saving/updating the order.");
 		}
-		
+
 		return ResponseEntity.ok(response);
 	}
 

@@ -1,34 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-	<div id="updateOrderModal">
-		<h3>ID của đơn hàng <span id="orderIdUpdate"></span></h3>
-		<h3 id="title">Cập nhật đơn hàng <span id="orderCodeUpdate"></span></h3>
+	<div id="createOrderModal">
+		<h3 id="title">Tạo mới đơn hàng</h3>
 		<div class="closeBtnDiv" style="text-align: right;">
-			<button onclick="closeUpdateOrderModal()" class="closeBtn"><i class="fas fa-times"></i></button>
+			<button onclick="closeModal()" class="closeBtn"><i class="fas fa-times"></i></button>
 		</div>
 		<hr>
 	    <form id="orderForm">
-		    <div class="form-row" style = "margin-bottom: -30px">
-			    <div class="form-group col-md-6">
+		    <div class="form-row">
+			    <div class="form-group col-md-3">
 			      <label for="inputDate">Ngày tạo</label>
-			      <input type="date" class="form-control" id="orderCreateDateUpdate" style="background-color: white; color: black; width: 100%;" placeholder="dd/mm/yyyy" required >
+			      <input type="date" class="form-control" id="orderCreateDateCreate" style="background-color: white; color: black; width: 100%;" placeholder="dd/mm/yyyy" required >
 			    </div>
-			    <div class="form-group col-md-6">
+			    <div class="form-group col-md-3">
 			      <label for="inputDate">Ngày giao</label>
-			      <input type="date" class="form-control" id="orderDeliveryDateUpdate" style="background-color: white; color: black; width: 100%;" placeholder="yyyy/mm/dd" required >
+			      <input type="date" class="form-control" id="orderDeliveryDateCreate" style="background-color: white; color: black; width: 100%;" placeholder="yyyy/mm/dd" required >
 			    </div>
-			</div>
-			
-			<div class="form-row">
-			    <div class="form-group col-md-6">
+			    <div class="form-group col-md-3">
 			      <label for="inputState">Trạng thái</label>
-					<select id="orderStatusUpdate" class="form-control" style="background-color: white; color: black;" >
+					<select id="orderStatusCreate" class="form-control" style="background-color: white; color: black;" >
+						
 					</select>					
 			    </div>
-			    <div class="form-group col-md-6">
+			    <div class="form-group col-md-3">
 			      <label for="orderCodeUpdateInput">Mã đơn hàng</label>
-			      <input type="text" class="form-control" id=orderCodeUpdateInput style="background-color: white; color: black;" >
+			      <input type="text" class="form-control" id=orderCodeCreateInput style="background-color: white; color: black;" >
 			    </div>
 			</div>
 	    	
@@ -36,11 +33,11 @@
 				    <div class="form-row">
 				        <div class="form-group col-md-6">
 				            <label for="goodsType">Loại hàng hóa</label>
-				            <select class="form-control" id="orderGoodsUpdate" style="background-color: white; color: black;" ></select>
+				            <select class="form-control" id="orderGoodsCreate" style="background-color: white; color: black;" ></select>
 				        </div>
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Phương tiện vận chuyển</label>
-				            <input type="text" class="form-control" id="orderTransportUpdate" style="background-color: white; color: black;" >
+				            <input type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" >
 				        </div>
 				    </div>
 		    </div>
@@ -52,15 +49,15 @@
 			            <table class="sender-table">
 			                <tr>
 			                    <td>Họ tên:</td>
-			                    <td><select class="form-control" id="orderSenderNameUpdate" style="background-color: white; color: black;" ></select>
+			                    <td><select class="form-control" id="orderSenderNameCreate" style="background-color: white; color: black;" ></select>
 			                </tr>
 			                <tr>
 			                    <td>SDT:</td>
-			                    <td><input type="text" class="input-container" id= "orderSenderPhoneUpdate" placeholder="(+84) 1234567890"  /></td>
+			                    <td><input type="text" class="input-container" id= "orderSenderPhoneCreate" placeholder="(+84) 1234567890"  /></td>
 			                </tr>
 			                <tr>
 			                    <td>Email:</td>
-			                    <td><input type="text" class="input-container" id= "orderSenderEmailUpdate"  /></td>
+			                    <td><input type="text" class="input-container" id= "orderSenderEmailCreate"  /></td>
 			                </tr>
 			            </table>
 			        </fieldset>
@@ -92,7 +89,7 @@
 				        <div class="form-group col-md-6">
 				            <label for="goodsType">Yêu cầu</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="orderRequirementUpdate" rows="8" ></textarea>
+								<textarea class="form-control" id="orderRequirementCreate" rows="8" ></textarea>
 							</div>
 				        </div>
 				        <div class="form-group col-md-6">
@@ -114,8 +111,8 @@
 			</div>
 		        
 			<div class="row4">
-				<button type="button" id="saveOrderButton">Lưu</button>
-	        	<button type="button" onclick="closeUpdateOrderModal()">Trở về</button>
+				<button type="button">Lưu</button>
+	        	<button type="button" onclick="closeModal()">Trở về</button>
 			</div>
 	    </form>
 	</div>

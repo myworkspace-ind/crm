@@ -1,35 +1,39 @@
 /*var dataSet */
 
 $(document).ready(function() {
-	console.log(dataSet);
+	if (!window.dataSetLogged) {
+		console.log(dataSet);
+		window.dataSetLogged = true; // Đánh dấu đã in dữ liệu
+	}
 
-	var table = $('#tblDatatable').DataTable({
-		data: dataSet,  // Sử dụng dataSet đã được truyền vào
-		dom: 'Bfrtip',
-		paging: true, // Phân trang
-		searching: true, // Tìm kiếm
-		ordering: true, // Sắp xếp
-		lengthMenu: [5, 10, 25], // Số lượng đơn hàng trên mỗi trang
-		buttons: [
-			'copyHtml5',
-			'excelHtml5',
-			'csvHtml5',
-			'pdfHtml5'
-		],
-		columnDefs: [
-			{
-				targets: -1,  // Chọn cột cuối cùng để thêm nút
-				data: null,
-				defaultContent: `
-					<button class='btn btn-info detail-btn'>Xem chi tiết</button>
-					<button class='btn btn-warning edit-btn'>Sửa</button>
-					<button class='btn btn-danger'>Xóa</button>
-					<button class='btn btn-success'>Cập nhật trạng thái</button>`
-			}
-		]
-	});
+	if (!$.fn.DataTable.isDataTable('#tblDatatable')) {
+		var table = $('#tblDatatable').DataTable({
+			data: dataSet,  // Sử dụng dataSet đã được truyền vào
+			dom: 'Bfrtip',
+			paging: true, // Phân trang
+			searching: true, // Tìm kiếm
+			ordering: true, // Sắp xếp
+			lengthMenu: [5, 10, 25], // Số lượng đơn hàng trên mỗi trang
+			buttons: [
+				'copyHtml5',
+				'excelHtml5',
+				'csvHtml5',
+				'pdfHtml5'
+			],
+			columnDefs: [
+				{
+					targets: -1,  // Chọn cột cuối cùng để thêm nút
+					data: null,
+					defaultContent: `
+							<button class='btn btn-info detail-btn'>Xem chi tiết</button>
+							<button class='btn btn-warning edit-btn'>Sửa</button>
+							<button class='btn btn-danger'>Xóa</button>
+							<button class='btn btn-success'>Cập nhật trạng thái</button>`
+				}
+			]
+		});
 
-	$('#tblDatatable tbody').on('click', '.edit-btn', function() {
+		$('#tblDatatable tbody').on('click', '.edit-btn', function() {
 			var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
 			var orderId = row[0];
 
@@ -43,9 +47,46 @@ $(document).ready(function() {
 					var orderStatus = response[4];
 					var goodsCategory = response[5];
 					var sender = response[6];
-					
+
 					$('#orderIdUpdate').text(response[0]);
 					$('#orderCodeUpdate').text(response[1]);
+					$('#orderCodeUpdateInput').val(response[1]);
+					$('#orderDeliveryDateUpdate').val(response[2]);
+					$('#orderCreateDateUpdate').val(response[3]);
+					$('#orderStatusUpdate').html('<option value="' + orderStatus + '">' + orderStatus + '</option>');
+					$('#orderGoodsUpdate').html('<option value="' + goodsCategory + '">' + goodsCategory + '</option>');
+					$('#orderSenderNameUpdate').html('<option value="' + sender + '">' + sender + '</option>');
+					$('#orderSenderPhoneUpdate').val(response[7]);
+					$('#orderTransportUpdate').val(response[8]);
+					$('#orderRequirementUpdate').val(response[9]);
+					$('#orderSenderEmailUpdate').val(response[10]);
+
+					document.getElementById("updateOrderModal").style.display = "block";
+				},
+				error: function(error) {
+					console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
+				}
+			});
+		});
+
+
+		$('#tblDatatable tbody').on('click', '.detail-btn', function() {
+			var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
+			var orderId = row[0];
+
+			console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
+
+			$.ajax({
+				url: _ctx + '/orders-datatable/viewDetails/' + orderId,
+				method: 'GET',
+				success: function(response) {
+					console.log(response)
+					var orderStatus = response[4];
+					var goodsCategory = response[5];
+					var sender = response[6];
+
+					$('#orderIdDetail').text(response[0]);
+					$('#orderCodeDetail').text(response[1]);
 					$('#orderCodeDetailInput').val(response[1]);
 					$('#orderDeliveryDateDetail').val(response[2]);
 					$('#orderCreateDateDetail').val(response[3]);
@@ -57,75 +98,76 @@ $(document).ready(function() {
 					$('#orderRequirementDetail').val(response[9]);
 					$('#orderSenderEmail').val(response[10]);
 
-					document.getElementById("orderDetailModal_ToUpdate").style.display = "block";
+					document.getElementById("orderDetailModal").style.display = "block";
 				},
 				error: function(error) {
 					console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
 				}
 			});
 		});
-	
-	
-	$('#tblDatatable tbody').on('click', '.detail-btn', function() {
-		var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
-		var orderId = row[0];
 
-		console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
-
-		$.ajax({
-			url: _ctx + '/orders-datatable/viewDetails/' + orderId,
-			method: 'GET',
-			success: function(response) {
-				console.log(response)
-				var orderStatus = response[4];
-				var goodsCategory = response[5];
-				var sender = response[6];
-				
-				$('#orderIdDetail').text(response[0]);
-				$('#orderCodeDetail').text(response[1]);
-				$('#orderCodeDetailInput').val(response[1]);
-				$('#orderDeliveryDateDetail').val(response[2]);
-				$('#orderCreateDateDetail').val(response[3]);
-				$('#orderStatusDetail').html('<option value="' + orderStatus + '">' + orderStatus + '</option>');
-				$('#orderGoodsDetail').html('<option value="' + goodsCategory + '">' + goodsCategory + '</option>');
-				$('#orderSenderName').html('<option value="' + sender + '">' + sender + '</option>');
-				$('#orderSenderPhone').val(response[7]);
-				$('#orderTransportDetail').val(response[8]);
-				$('#orderRequirementDetail').val(response[9]);
-				$('#orderSenderEmail').val(response[10]);
-
-				document.getElementById("orderDetailModal").style.display = "block";
-			},
-			error: function(error) {
-				console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
-			}
-		});
-	});
-
-	/*$('#tblDatatable tbody').on('click', '.detail-btn', function() {
-		var data = $('#tblDatatable').DataTable().row($(this).parents('tr')).data();
-		viewDetail(data);
-	});*/
+		/*$('#tblDatatable tbody').on('click', '.detail-btn', function() {
+			var data = $('#tblDatatable').DataTable().row($(this).parents('tr')).data();
+			viewDetail(data);
+		});*/
+	}
 });
 
-//let currentRow;
+$(document).on('click', '#saveOrderButton', function() {
+	var button = $(this);
+	button.prop('disabled', true); // Disable button to prevent multiple clicks
 
-function changeTitle(newTitle) {
-	document.getElementById("title").innerText = newTitle;
-}
+	var orderId = $('#orderIdUpdate').text();
+	var orderCode = $('#orderCodeUpdateInput').val();
+	var deliveryDate = $('#orderDeliveryDateUpdate').val();
+	var createDate = $('#orderCreateDateUpdate').val();
+	var status = $('#orderStatusUpdate').val();
+	var goodsCategory = $('#orderGoodsUpdate').val();
+	var senderName = $('#orderSenderNameUpdate').val()
+	var senderPhone = $('#orderSenderPhoneUpdate').val();
+	var transport = $('#orderTransportUpdate').val();
+	var requirement = $('#orderRequirementUpdate').val();
+	var senderEmail = $('#orderSenderEmailUpdate').val();
 
-/*function edit(row) {
-	changeTitle('Cập nhật đơn hàng');
-	currentRow = row;
-	document.getElementById("updateOrderModal").style.display = "block";
-	document.getElementById("modalOverlay").style.display = "block";
-}
+	console.log(orderId);
 
-function viewDetail(row) {
-	currentRow = row;
-	document.getElementById("orderDetailModal").style.display = "block";
-	document.getElementById("modalOverlay").style.display = "block";
-}*/
+	if (!orderId) {
+		alert('ID đơn hàng không hợp lệ.');
+		button.prop('disabled', false); // Enable button if id is not valid
+		return;
+	}
+
+	var order = {
+		id: orderId,
+		orderCode: orderCode,
+		deliveryDate : deliveryDate,
+		createDate : createDate,
+		status : status,
+		goodsCategory : goodsCategory,
+		senderName : senderName,
+		senderPhone : senderPhone,
+		transport : transport,
+		requirement : requirement,
+		senderEmail : senderEmail
+	};
+
+	$.ajax({
+		url: _ctx + '/orders-datatable/saveOrderData/',
+		method: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(order),
+		success: function(response) {
+			alert(response.message);
+			location.reload(); // Reload page after successful save
+		},
+		error: function(error) {
+			console.error('Có lỗi khi cập nhật đơn hàng:', error);
+			alert('Có lỗi khi cập nhật đơn hàng. Vui lòng thử lại.');
+			button.prop('disabled', false); // Enable button if error occurs
+		}
+	});
+});
+
 
 function closeUpdateOrderModal() {
 	document.getElementById("updateOrderModal").style.display = "none";

@@ -35,7 +35,11 @@ public class GoodsCategory implements Serializable {
 	@Column
 	private String name;
 
-
+	// Constructor nhận id
+    public GoodsCategory(Long id) {
+        this.id = id;
+    }
+    
 	public GoodsCategory(Long id, String siteId, String name) {
 		super();
 		this.id = id;

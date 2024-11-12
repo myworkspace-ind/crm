@@ -44,11 +44,11 @@ public class Order implements Serializable {
 	private String code;
 	
 	@Column(name = "create_date")
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	private Date createDate;
 	
 	@Column(name = "delivery_date")
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	private Date deliveryDate;
 
 	@Column(name = "transportation_method")
