@@ -54,10 +54,17 @@
 							<th:block th:include="fragments/statusOfCustomer"></th:block>
 
 							<!-- Nút thêm mới khách hàng -->
-							<button class="addCustomerbtn" data-toggle="modal"
-								data-target="#addNewCustomerModal">
+<!-- 							<button class="addCustomerbtn" data-toggle="modal" -->
+<!-- 								data-target="#addNewCustomerModal"> -->
+<!-- 								<i class="fa-solid fa-plus"></i> Thêm mới khách hàng -->
+<!-- 							</button> -->
+							
+							<!-- Thay đổi nút Thêm khách hàng -->
+							<button class="addCustomerbtn"
+								onclick="window.location.href='/crm-web/add-customer'">
 								<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
 							</button>
+
 						</div>
 
 						<!-- Modal cho Thêm Khách Hàng Mới -->

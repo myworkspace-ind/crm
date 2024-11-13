@@ -231,5 +231,25 @@ public class CustomerController extends BaseController {
 //	    //mav.addObject("customer", customer); // Thêm khách hàng vào model
 //		return mav;
 //	}
+	
+	// Hiển thị trang thêm mới khách hàng
+	@RequestMapping(value = { "/add-customer" }, method = RequestMethod.GET)
+	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("addCustomer");
+
+		// Thêm đối tượng Customer mới vào Model để truyền vào form
+		mav.addObject("customer", new Customer());
+
+		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
+		List<Status> statuses = statusService.getAllStatuses();
+		mav.addObject("statuses", statuses);
+
+		// Thiết lập các thuộc tính của session
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
 
 }
