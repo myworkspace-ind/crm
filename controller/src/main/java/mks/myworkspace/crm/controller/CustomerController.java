@@ -24,8 +24,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.service.CustomerService;
+import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
 
@@ -64,6 +66,9 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	StatusService statusService;
+	
+	@Autowired
+	ResponsiblePersonService responsiblePersonService;
 
 	@RequestMapping(value = { "/customer-list" }, method = RequestMethod.GET)
 	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
@@ -95,6 +100,8 @@ public class CustomerController extends BaseController {
 		}
 
 		List<Status> statuses = statusService.getAllStatuses();
+		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		
 
 		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
 		
@@ -107,6 +114,7 @@ public class CustomerController extends BaseController {
 	    
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
+		mav.addObject("responsiblePersons", responsiblePersons);
 		mav.addObject("statusCounts", statusCounts);
 		mav.addObject("totalCustomerCount", totalCustomerCount);
 
@@ -243,6 +251,9 @@ public class CustomerController extends BaseController {
 		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
 		List<Status> statuses = statusService.getAllStatuses();
 		mav.addObject("statuses", statuses);
+		
+		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		mav.addObject("responsiblePersons", responsiblePersons);
 
 		// Thiết lập các thuộc tính của session
 		initSession(request, httpSession);

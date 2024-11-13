@@ -11,7 +11,7 @@
 <!-- END COMMON CSS -->
 
 <link rel="stylesheet" type="text/css"
-	href="resources/css/new_style.css">
+	href="resources/css/add-customer-style.css">
 </head>
 
 <body
@@ -65,23 +65,12 @@
 										<label for="address">Địa Chỉ:</label> <input type="text"
 											class="form-control" id="address" name="address">
 									</div>
-
-									<div class="form-group">
-										<label for="responsible_person">Người Phụ Trách:</label> <input
-											type="text" class="form-control" id="responsible_person"
-											name="responsible_person">
-									</div>
-
-									<div class="form-group">
-										<label for="note">Ghi Chú:</label>
-										<textarea class="form-control" id="note" name="note"></textarea>
-									</div>
-
+									
 									<div class="form-group">
 										<label for="profession">Ngành Nghề:</label> <select
 											class="form-control" id="profession" name="profession">
 											<option value="">Chọn Ngành Nghề</option>
-											<!-- Thêm các tùy chọn ngành nghề tại đây -->
+											
 										</select>
 									</div>
 
@@ -89,7 +78,9 @@
 										<label for="main_status">Trạng Thái Chính:</label> <select
 											class="form-control" id="main_status" name="main_status">
 											<option value="">Chọn Trạng Thái Chính</option>
-											<!-- Thêm các tùy chọn trạng thái chính từ bảng entity status -->
+											<th:block th:each="status : ${statuses}">
+												<option th:value="${status.id}" th:text="${status.name}"></option>
+											</th:block>
 										</select>
 									</div>
 
@@ -97,12 +88,33 @@
 										<label for="sub_status">Trạng Thái Phụ:</label> <select
 											class="form-control" id="sub_status" name="sub_status">
 											<option value="">Chọn Trạng Thái Phụ</option>
-											<!-- Thêm các tùy chọn trạng thái phụ từ bảng entity status -->
+											<th:block th:each="status : ${statuses}">
+												<option th:value="${status.id}" th:text="${status.name}"></option>
+											</th:block>
 										</select>
+									</div>
+									
+									<div class="form-group">
+										<label for="responsible_person">Người Phụ Trách:</label> <select
+											class="form-control" id="responsible_person" name="responsible_person">
+											<option value="">Chọn Người Phụ Trách</option>
+											<th:block th:each="person : ${responsiblePersons}">
+												<option th:value="${person.id}" th:text="${person.name}"></option>
+											</th:block>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="note">Ghi Chú:</label>
+										<textarea class="form-control" id="note" name="note"></textarea>
 									</div>
 
 									<button type="submit" class="btn btn-primary"
 										onclick="addCustomer()">Lưu Khách Hàng</button>
+
+									<button type="button" class="btn btn-secondary"
+										onclick="goBack()">Quay Lại</button>
+
 								</form>
 							</div>
 						</div>
@@ -122,6 +134,10 @@
 			const createdAt = new Date().toISOString();
 			document.getElementById("addCustomerForm").created_at = createdAt;
 		}
+		
+		function goBack() {
+	        window.location.href = '/crm-web/customer-list';
+	    }
 	</script>
 </body>
 </html>

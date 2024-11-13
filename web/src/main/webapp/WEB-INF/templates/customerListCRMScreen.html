@@ -259,7 +259,7 @@
 																		<span
 																		th:text="${customer.subStatus != null ? customer.subStatus.name : ''}"></span>
 																	</td>
-																	<td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson : ''}"></td>
+																	<td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : ''}"></td>
 
 																	<td
 																		th:text="${customer.createdAt != null ? #dates.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td>

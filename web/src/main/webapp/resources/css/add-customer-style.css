@@ -1,0 +1,139 @@
+@charset "UTF-8";
+
+/* Màu nền cho các tùy chọn trong dropdown */
+option {
+    background-color: #d5c9eb;
+}
+
+/* Căn lề và căn chỉnh cho các ô input trong form */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Thiết lập định dạng cho nút Lưu Khách Hàng */
+.btn-primary {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+}
+
+/* Style cho nút Quay Lại */
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Các ô input với icon */
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon .form-control {
+    padding-left: 35px !important;
+}
+
+.input-with-icon .icon-container {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #444444;
+}
+
+/* Style cho Tiêu đề của Card */
+.card-title {
+    font-weight: bold;
+    font-size: 1.5em;
+    color: #5C6BC0;
+}
+
+/* Style cho khung của form */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.card-header {
+    text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Chỉnh khoảng cách các nút trong form */
+.form-group select,
+.form-group input,
+.form-group textarea {
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* Style cho nút thêm khách hàng */
+.addCustomerbtn {
+    font-size: 16px;
+    padding: 8px 15px;
+    background-color: #967ADC;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.addCustomerbtn:hover {
+    background-color: #8451C1;
+}
+
+/* Căn chỉnh cho form */
+.app-content .content-body {
+    padding: 20px;
+}
+
+.app-content section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+/* Cho các thành phần hiển thị inline như span */
+span {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+/* Định dạng cho các nhãn (label) trong form */
+label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
