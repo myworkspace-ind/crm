@@ -3,6 +3,7 @@ package mks.myworkspace.crm.repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -14,4 +15,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 //	List<Order> findAllWithAssociations();
 	@Query("SELECT o FROM Order o WHERE o.code = :code")
 	Optional<Order> findByCode(@Param("code") String code);
+	
+	
+	@Query("SELECT o FROM Order o WHERE o.id = :id")
+	Optional<Order> findOrderById(@Param("id") Long id);
+	
 }

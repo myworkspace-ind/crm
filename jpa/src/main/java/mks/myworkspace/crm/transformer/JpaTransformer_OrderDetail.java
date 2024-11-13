@@ -22,10 +22,10 @@ public class JpaTransformer_OrderDetail {
 		rowData[4] = order.getOrderStatus().getId();
 		rowData[5] = order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null;
 		rowData[6] = order.getCustomer() != null ? order.getCustomer().getId() : null;
-		rowData[7] = order.getCustomer() != null ? order.getCustomer().getId() : null;
+		rowData[7] = order.getCustomer() != null ? order.getCustomer().getPhone() : null;
 		rowData[8] = order.getTransportationMethod();
 		rowData[9] = order.getCustomerRequirement();
-		rowData[10] = order.getCustomer() != null ? order.getCustomer().getId() : null;
+		rowData[10] = order.getCustomer() != null ? order.getCustomer().getEmail() : null;
 
 		log.debug(
 				"Order detail row: ID = {}, Code = {}, Delivery Date = {}, Category = {}, Customer = {}, Transportation Method = {}",

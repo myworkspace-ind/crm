@@ -14,12 +14,14 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderStatus;
 
 @Repository
+@Slf4j
 public class AppRepository {
 	@Autowired
 	@Qualifier("jdbcTemplate0")
@@ -96,17 +98,33 @@ public class AppRepository {
 	}
 
 	public Long saveOrUpdateOrder(Order order) {
-		Long id;
-		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
-				.usingGeneratedKeyColumns("id");
+//		Long id;
+//		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
+//				.usingGeneratedKeyColumns("id");
+//
+//		if (order.getId() == null) {
+//			id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
+//		} else {
+//			updateOrder(order);
+//			id = order.getId();
+//		}
+////		return id;
+//		Long id;
+//		updateOrder(order);
+//		id = order.getId();
+		Long id = null;
 
-		if (order.getId() == null) {
-			id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
-		} else {
-			updateOrder(order);
-			id = order.getId();
-		}
-		return id;
+	    if (order.getId() == null) {
+	        log.debug("Inserting new order"); // Log when inserting a new order
+	        
+	    } else {
+	        log.debug("Updating existing order with ID: {}", order.getId()); // Log when updating
+	        updateOrder(order);
+	        id = order.getId();
+	    }
+
+	    log.debug("Resulting ID after saveOrUpdate: {}", id);
+	    return id;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -140,22 +158,6 @@ public class AppRepository {
 						OrderStatus orderStatus = new OrderStatus();
 						orderStatus.setId(rs.getLong("order_status_id"));
 						ord.setOrderStatus(orderStatus);
-						// Customer customer = new Customer();
-						// customer.setId(rs.getLong("crm_order.cus_id"));
-						// customer.setContactPerson(rs.getString("contact_person"));
-						// customer.setPhone(rs.getString("phone"));
-						// customer.setEmail(rs.getString("email"));
-						// ord.setCustomer(customer);
-
-						// GoodsCategory goodsCategory = new GoodsCategory();
-						// goodsCategory.setId(rs.getLong("id"));
-						// goodsCategory.setName(rs.getString("name"));
-						// ord.setGoodsCategory(goodsCategory);
-
-						// OrderStatus orderStatus = new OrderStatus();
-						// orderStatus.setId(rs.getLong("id"));
-						// orderStatus.setName(rs.getString("name"));
-						// ord.setOrderStatus(orderStatus);
 
 						return ord;
 					}

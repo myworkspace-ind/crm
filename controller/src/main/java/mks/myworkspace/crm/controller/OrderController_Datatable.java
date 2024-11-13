@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -39,7 +40,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,7 +49,6 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
-import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
@@ -60,6 +59,7 @@ import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Order;
 import mks.myworkspace.crm.transformer.JpaTransformer_OrderDetail;
+import mks.myworkspace.crm.transformer.OrderConverter;
 
 /**
  * Handles requests for the application home page.
@@ -185,15 +185,41 @@ public class OrderController_Datatable extends BaseController {
 
 	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody Order order) {
-		log.debug("Received Order: {}", order.getId());
-
+	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody String json) {
 		Map<String, String> response = new HashMap<>();
 
 		try {
-			storageService.saveOrUpdateOrder(order);
+			// Convert JSON string thành đối tượng Order
+			Order order = OrderConverter.convertJsonToOrder(json);
+
+			log.debug("Order Details after JSON Conversion:");
+			log.debug("Order ID: {}", order.getId());
+			log.debug("Order Code: {}", order.getCode());
+			log.debug("Create Date: {}", order.getCreateDate());
+			log.debug("Delivery Date: {}", order.getDeliveryDate());
+			log.debug("Requirement: {}", order.getCustomerRequirement());
+			log.debug("Transport: {}", order.getTransportationMethod());
+
+			if (order.getCustomer() != null) {
+				log.debug("Customer Name: {}", order.getCustomer().getContactPerson());
+				log.debug("Customer Email: {}", order.getCustomer().getEmail());
+				log.debug("Customer Phone: {}", order.getCustomer().getPhone());
+			}
+
+			if (order.getGoodsCategory() != null) {
+				log.debug("Goods Category: {}", order.getGoodsCategory().getName());
+			}
+
+			if (order.getOrderStatus() != null) {
+				log.debug("Order Status: {}", order.getOrderStatus().getName());
+			}
+
+			// Lưu hoặc cập nhật đơn hàng
+			Order savedOrder = storageService.saveOrUpdateOrder(order);
 			response.put("status", "success");
-			response.put("message", "Order updated successfully.");
+			response.put("message", "Order " + (order.getId() != null ? "updated" : "created") + " successfully.");
+			log.debug("Order saved with ID: {}", savedOrder.getId()); // Log kết quả ID
+
 		} catch (Exception e) {
 			log.error("Error saving/updating order: ", e);
 			response.put("status", "error");
@@ -201,6 +227,52 @@ public class OrderController_Datatable extends BaseController {
 		}
 
 		return ResponseEntity.ok(response);
+	}
+
+//	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")
+//	@ResponseBody
+//	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody Order order) {
+//		log.debug("Received Order: {}", order.getId());
+//		log.debug("Received Order Code: {}", order.getCode());
+//		log.debug("Received Order Customer: {}", order.getCustomer());
+//
+//		Map<String, String> response = new HashMap<>();
+//
+//		try {
+//			// Save or update the order
+//			Order savedOrder = storageService.saveOrUpdateOrder(order);
+//			response.put("status", "success");
+//			response.put("message", "Order " + (order.getId() != null ? "updated" : "created") + " successfully.");
+//			log.debug("Order saved with ID: {}", savedOrder.getId()); // Log the resulting ID
+//		} catch (Exception e) {
+//			log.error("Error saving/updating order: ", e);
+//			response.put("status", "error");
+//			response.put("message", "An error occurred while saving/updating the order.");
+//		}
+//
+//		return ResponseEntity.ok(response);
+//	}
+
+	@GetMapping("/orderDetail")
+	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long orderId, HttpServletRequest request,
+			HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable.html");
+
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		log.debug("Order Detail is running....");
+
+		Optional<Order> orderOpt = orderService.findById(orderId);
+
+		// Check if the customer exists and add to model
+		orderOpt.ifPresentOrElse(order -> {
+			mav.addObject("orderDetail", order);
+		}, () -> {
+			mav.addObject("errorMessage", "Order not found.");
+		});
+
+		return mav;
 	}
 
 //	@GetMapping(value = { "/get-orders" }, produces = "application/json")

@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import lombok.Getter;
@@ -63,7 +61,7 @@ public class Order implements Serializable {
 	private OrderCategory orderCategory;
 
 	// Relation 1-1 with Customer
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "cus_id", referencedColumnName = "id")
 	private Customer customer;
 

@@ -114,58 +114,72 @@ $(document).ready(function() {
 });
 
 $(document).on('click', '#saveOrderButton', function() {
-	var button = $(this);
-	button.prop('disabled', true); // Disable button to prevent multiple clicks
+    var button = $(this);
+    button.prop('disabled', true); // Disable button to prevent multiple clicks
 
-	var orderId = $('#orderIdUpdate').text();
-	var orderCode = $('#orderCodeUpdateInput').val();
-	var deliveryDate = $('#orderDeliveryDateUpdate').val();
-	var createDate = $('#orderCreateDateUpdate').val();
-	var status = $('#orderStatusUpdate').val();
-	var goodsCategory = $('#orderGoodsUpdate').val();
-	var senderName = $('#orderSenderNameUpdate').val()
-	var senderPhone = $('#orderSenderPhoneUpdate').val();
-	var transport = $('#orderTransportUpdate').val();
-	var requirement = $('#orderRequirementUpdate').val();
-	var senderEmail = $('#orderSenderEmailUpdate').val();
+    var orderId = $('#orderIdUpdate').text();
+    var orderCode = $('#orderCodeUpdateInput').val();
+    var deliveryDate = $('#orderDeliveryDateUpdate').val();
+    var createDate = $('#orderCreateDateUpdate').val();
+    var status = $('#orderStatusUpdate').val();
+    var goodsCategory = $('#orderGoodsUpdate').val();
+    var senderName = $('#orderSenderNameUpdate').val()
+    var senderPhone = $('#orderSenderPhoneUpdate').val();
+    var transport = $('#orderTransportUpdate').val();
+    var requirement = $('#orderRequirementUpdate').val();
+    var senderEmail = $('#orderSenderEmailUpdate').val();
 
-	console.log(orderId);
+    console.log(orderId); // In ra giá trị orderId
+    console.log(orderCode); // In ra giá trị orderCode
 
-	if (!orderId) {
-		alert('ID đơn hàng không hợp lệ.');
-		button.prop('disabled', false); // Enable button if id is not valid
-		return;
-	}
+    if (!orderId) {
+        alert('ID đơn hàng không hợp lệ.');
+        button.prop('disabled', false); // Enable button if id is not valid
+        return;
+    }
 
-	var order = {
-		id: orderId,
-		orderCode: orderCode,
-		deliveryDate : deliveryDate,
-		createDate : createDate,
-		status : status,
-		goodsCategory : goodsCategory,
-		senderName : senderName,
-		senderPhone : senderPhone,
-		transport : transport,
-		requirement : requirement,
-		senderEmail : senderEmail
-	};
+    var order = {
+        id: orderId,
+        orderCode: orderCode,
+        deliveryDate: deliveryDate,
+        createDate: createDate,
+        status: status,
+        goodsCategory: goodsCategory,
+        senderName: senderName,
+        senderPhone: senderPhone,
+        transport: transport,
+        requirement: requirement,
+        senderEmail: senderEmail
+    };
 
-	$.ajax({
-		url: _ctx + '/orders-datatable/saveOrderData/',
-		method: 'POST',
-		contentType: 'application/json',
-		data: JSON.stringify(order),
-		success: function(response) {
-			alert(response.message);
-			location.reload(); // Reload page after successful save
-		},
-		error: function(error) {
-			console.error('Có lỗi khi cập nhật đơn hàng:', error);
-			alert('Có lỗi khi cập nhật đơn hàng. Vui lòng thử lại.');
-			button.prop('disabled', false); // Enable button if error occurs
-		}
-	});
+    // In toàn bộ đối tượng order ra console
+    console.log("Order object being sent:", order);
+
+    $.ajax({
+        url: _ctx + '/orders-datatable/saveOrderData/',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(order),
+    
+        success: function(response) {
+            console.log("UDPATE FINAL ORDER: ", order); // In lại order khi thành công
+            if (response.status === "success") {
+                alert(response.message);
+                // Close modal or update the UI as needed
+                document.getElementById("updateOrderModal").style.display = "none";
+                // Reload or refresh the data table if needed
+                $('#tblDatatable').DataTable().ajax.reload();
+            } else {
+                alert(response.message);
+            }
+            button.prop('disabled', false); // Re-enable button
+        },
+        error: function(error) {
+            console.error("Error saving order:", error);
+            alert("An error occurred while saving/updating the order.");
+            button.prop('disabled', false); // Re-enable button
+        }
+    });
 });
 
 
