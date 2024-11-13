@@ -24,9 +24,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.service.CustomerService;
+import mks.myworkspace.crm.service.ProfessionService;
 import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
@@ -69,6 +71,9 @@ public class CustomerController extends BaseController {
 	
 	@Autowired
 	ResponsiblePersonService responsiblePersonService;
+	
+	@Autowired
+	ProfessionService professionService;
 
 	@RequestMapping(value = { "/customer-list" }, method = RequestMethod.GET)
 	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
@@ -78,9 +83,7 @@ public class CustomerController extends BaseController {
 		log.debug("Display Cusomter list with keyword= {}", keyword);
 		ModelAndView mav = new ModelAndView("customerListCRMScreen");
 		initSession(request, httpSession);
-		/*
-		 * log.debug("Customer List CRM Screen Controller is running....");
-		 */
+		
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 
@@ -101,13 +104,13 @@ public class CustomerController extends BaseController {
 
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		List<Profession> professions = professionService.getAllProfessions();
 		
 
 		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
 		
-		// Kiểm tra xem statusCountMap có null không
 	    if (statusCounts == null) {
-	        statusCounts = new HashMap<>(); // Khởi tạo nếu null
+	        statusCounts = new HashMap<>(); 
 	    }
 	    
 	    long totalCustomerCount = customerService.getTotalCustomerCount();
@@ -115,6 +118,7 @@ public class CustomerController extends BaseController {
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
 		mav.addObject("responsiblePersons", responsiblePersons);
+		mav.addObject("professions", professions);
 		mav.addObject("statusCounts", statusCounts);
 		mav.addObject("totalCustomerCount", totalCustomerCount);
 
@@ -254,6 +258,9 @@ public class CustomerController extends BaseController {
 		
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		mav.addObject("responsiblePersons", responsiblePersons);
+		
+		List<Profession> professions = professionService.getAllProfessions();
+		mav.addObject("professions", professions);
 
 		// Thiết lập các thuộc tính của session
 		initSession(request, httpSession);

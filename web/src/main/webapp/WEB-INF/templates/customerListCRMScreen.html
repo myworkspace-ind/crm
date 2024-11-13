@@ -248,7 +248,7 @@
 																	<td th:text="${customer.email != null ? customer.email : ''}"></td>
 																	<td th:text="${customer.phone != null ? customer.phone : ''}"></td>
 																	<td th:text="${customer.address != null ? customer.address : ''}"></td>
-																	<td th:text="${customer.profession != null ? customer.profession : ''}"></td>
+																	<td th:text="${customer.profession != null ? customer.profession.name : ''}"></td>
 																	<td th:class="'status-cell main-status'"
 																		th:style="${customer.mainStatus != null ? 'background-color: ' + customer.mainStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
 																		<span

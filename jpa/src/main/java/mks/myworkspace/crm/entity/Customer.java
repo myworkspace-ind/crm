@@ -53,8 +53,9 @@ public class Customer implements Serializable {
 	@Column(name = "address", length = 255)
 	private String address;
 	
-	@Column(name = "profession", length = 99)
-    private String profession;
+	@ManyToOne
+    @JoinColumn(name = "profession_id")
+    private Profession profession;
 	
     @ManyToOne
     @JoinColumn(name = "main_status_id")
@@ -79,7 +80,7 @@ public class Customer implements Serializable {
 	private Set<Order> orders;
 
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			String profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, Date createdAt,
+			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, Date createdAt,
 			String note, Set<Order> orders) {
 		super();
 		this.id = id;
@@ -99,7 +100,7 @@ public class Customer implements Serializable {
 	}
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			String profession, Date createdAt, String note) {
+			Date createdAt, String note) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -108,7 +109,6 @@ public class Customer implements Serializable {
 		this.email = email;
 		this.phone = phone;
 		this.address = address;
-		this.profession = profession;
 		this.createdAt = createdAt;
 		this.note = note;
 	}
