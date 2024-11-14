@@ -23,8 +23,8 @@ public class JpaTransformer_Order {
 	        rowData[0] = order.getId(); // ID
 	        rowData[1] = order.getCode();// ma don hang
 	        rowData[2] = formatDate(order.getDeliveryDate()); // ngay giao
-	        rowData[3] = order.getGoodsCategory().getId(); // loai hang hoa
-	        rowData[4] = order.getCustomer().getId(); // thong tin nguoi gui
+	        rowData[3] = order.getGoodsCategory().getName(); // loai hang hoa
+	        rowData[4] = order.getCustomer().getContactPerson(); // thong tin nguoi gui
 	        rowData[5] = order.getTransportationMethod(); // phuong tien van chuyen
 
 	        // Log dữ liệu của từng hàng trong dataset

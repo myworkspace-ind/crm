@@ -44,22 +44,29 @@ $(document).ready(function() {
 				method: 'GET',
 				success: function(response) {
 					console.log(response)
-					var orderStatus = response[4];
-					var goodsCategory = response[5];
-					var sender = response[6];
+					var orderStatusId = response[6];
+					var orderStatusName = response[7];
+					var orderGoodsCategoryId = response[8];
+					var orderGoodsCategoryName = response[9];
+					var orderCustomerId = response[10];
+					var orderCustomerName = response[11];
+					//var orderCustomerPhone = response[12];
+					//var orderCustomerEmail = response[13];
 
 					$('#orderIdUpdate').text(response[0]);
 					$('#orderCodeUpdate').text(response[1]);
 					$('#orderCodeUpdateInput').val(response[1]);
 					$('#orderDeliveryDateUpdate').val(response[2]);
 					$('#orderCreateDateUpdate').val(response[3]);
-					$('#orderStatusUpdate').html('<option value="' + orderStatus + '">' + orderStatus + '</option>');
-					$('#orderGoodsUpdate').html('<option value="' + goodsCategory + '">' + goodsCategory + '</option>');
-					$('#orderSenderNameUpdate').html('<option value="' + sender + '">' + sender + '</option>');
-					$('#orderSenderPhoneUpdate').val(response[7]);
-					$('#orderTransportUpdate').val(response[8]);
-					$('#orderRequirementUpdate').val(response[9]);
-					$('#orderSenderEmailUpdate').val(response[10]);
+					$('#orderTransportUpdate').val(response[4]);
+					$('#orderRequirementUpdate').val(response[5]);
+
+					$('#orderStatusUpdate').html('<option value="' + orderStatusId + '">' + orderStatusName + '</option>');
+					$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
+					$('#orderSenderNameUpdate').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
+
+					$('#orderSenderPhoneUpdate').val(response[12]);
+					$('#orderSenderEmailUpdate').val(response[13]);
 
 					document.getElementById("updateOrderModal").style.display = "block";
 				},
@@ -81,22 +88,29 @@ $(document).ready(function() {
 				method: 'GET',
 				success: function(response) {
 					console.log(response)
-					var orderStatus = response[4];
-					var goodsCategory = response[5];
-					var sender = response[6];
+					var orderStatusId = response[6];
+					var orderStatusName = response[7];
+					var orderGoodsCategoryId = response[8];
+					var orderGoodsCategoryName = response[9];
+					var orderCustomerId = response[10];
+					var orderCustomerName = response[11];
+					//var orderCustomerPhone = response[12];
+					//var orderCustomerEmail = response[13];
 
 					$('#orderIdDetail').text(response[0]);
 					$('#orderCodeDetail').text(response[1]);
 					$('#orderCodeDetailInput').val(response[1]);
 					$('#orderDeliveryDateDetail').val(response[2]);
 					$('#orderCreateDateDetail').val(response[3]);
-					$('#orderStatusDetail').html('<option value="' + orderStatus + '">' + orderStatus + '</option>');
-					$('#orderGoodsDetail').html('<option value="' + goodsCategory + '">' + goodsCategory + '</option>');
-					$('#orderSenderName').html('<option value="' + sender + '">' + sender + '</option>');
-					$('#orderSenderPhone').val(response[7]);
-					$('#orderTransportDetail').val(response[8]);
-					$('#orderRequirementDetail').val(response[9]);
-					$('#orderSenderEmail').val(response[10]);
+					$('#orderTransportDetail').val(response[4]);
+					$('#orderRequirementDetail').val(response[5]);
+
+					$('#orderStatusDetail').html('<option value="' + orderStatusId + '">' + orderStatusName + '</option>');
+					$('#orderGoodsDetail').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
+					$('#orderSenderName').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
+
+					$('#orderSenderPhone').val(response[12]);
+					$('#orderSenderEmail').val(response[13]);
 
 					document.getElementById("orderDetailModal").style.display = "block";
 				},
@@ -114,72 +128,72 @@ $(document).ready(function() {
 });
 
 $(document).on('click', '#saveOrderButton', function() {
-    var button = $(this);
-    button.prop('disabled', true); // Disable button to prevent multiple clicks
+	var button = $(this);
+	button.prop('disabled', true); // Disable button to prevent multiple clicks
 
-    var orderId = $('#orderIdUpdate').text();
-    var orderCode = $('#orderCodeUpdateInput').val();
-    var deliveryDate = $('#orderDeliveryDateUpdate').val();
-    var createDate = $('#orderCreateDateUpdate').val();
-    var status = $('#orderStatusUpdate').val();
-    var goodsCategory = $('#orderGoodsUpdate').val();
-    var senderName = $('#orderSenderNameUpdate').val()
-    var senderPhone = $('#orderSenderPhoneUpdate').val();
-    var transport = $('#orderTransportUpdate').val();
-    var requirement = $('#orderRequirementUpdate').val();
-    var senderEmail = $('#orderSenderEmailUpdate').val();
+	var orderId = $('#orderIdUpdate').text();
+	var orderCode = $('#orderCodeUpdateInput').val();
+	var deliveryDate = $('#orderDeliveryDateUpdate').val();
+	var createDate = $('#orderCreateDateUpdate').val();
+	var status = $('#orderStatusUpdate').val();
+	var goodsCategory = $('#orderGoodsUpdate').val();
+	var senderName = $('#orderSenderNameUpdate').val()
+	var senderPhone = $('#orderSenderPhoneUpdate').val();
+	var transport = $('#orderTransportUpdate').val();
+	var requirement = $('#orderRequirementUpdate').val();
+	var senderEmail = $('#orderSenderEmailUpdate').val();
 
-    console.log(orderId); // In ra giá trị orderId
-    console.log(orderCode); // In ra giá trị orderCode
+	console.log(orderId); // In ra giá trị orderId
+	console.log(orderCode); // In ra giá trị orderCode
 
-    if (!orderId) {
-        alert('ID đơn hàng không hợp lệ.');
-        button.prop('disabled', false); // Enable button if id is not valid
-        return;
-    }
+	if (!orderId) {
+		alert('ID đơn hàng không hợp lệ.');
+		button.prop('disabled', false); // Enable button if id is not valid
+		return;
+	}
 
-    var order = {
-        id: orderId,
-        orderCode: orderCode,
-        deliveryDate: deliveryDate,
-        createDate: createDate,
-        status: status,
-        goodsCategory: goodsCategory,
-        senderName: senderName,
-        senderPhone: senderPhone,
-        transport: transport,
-        requirement: requirement,
-        senderEmail: senderEmail
-    };
+	var order = {
+		id: orderId,
+		orderCode: orderCode,
+		deliveryDate: deliveryDate,
+		createDate: createDate,
+		status: status,
+		goodsCategory: goodsCategory,
+		senderName: senderName,
+		senderPhone: senderPhone,
+		transport: transport,
+		requirement: requirement,
+		senderEmail: senderEmail
+	};
 
-    // In toàn bộ đối tượng order ra console
-    console.log("Order object being sent:", order);
+	// In toàn bộ đối tượng order ra console
+	console.log("Order object being sent:", order);
 
-    $.ajax({
-        url: _ctx + '/orders-datatable/saveOrderData/',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(order),
-    
-        success: function(response) {
-            console.log("UDPATE FINAL ORDER: ", order); // In lại order khi thành công
-            if (response.status === "success") {
-                alert(response.message);
-                // Close modal or update the UI as needed
-                document.getElementById("updateOrderModal").style.display = "none";
-                // Reload or refresh the data table if needed
-                $('#tblDatatable').DataTable().ajax.reload();
-            } else {
-                alert(response.message);
-            }
-            button.prop('disabled', false); // Re-enable button
-        },
-        error: function(error) {
-            console.error("Error saving order:", error);
-            alert("An error occurred while saving/updating the order.");
-            button.prop('disabled', false); // Re-enable button
-        }
-    });
+	$.ajax({
+		url: _ctx + '/orders-datatable/saveOrderData/',
+		method: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(order),
+
+		success: function(response) {
+			console.log("UDPATE FINAL ORDER: ", order); // In lại order khi thành công
+			if (response.status === "success") {
+				alert(response.message);
+				// Close modal or update the UI as needed
+				document.getElementById("updateOrderModal").style.display = "none";
+				// Reload or refresh the data table if needed
+				$('#tblDatatable').DataTable().ajax.reload();
+			} else {
+				alert(response.message);
+			}
+			button.prop('disabled', false); // Re-enable button
+		},
+		error: function(error) {
+			console.error("Error saving order:", error);
+			alert("An error occurred while saving/updating the order.");
+			button.prop('disabled', false); // Re-enable button
+		}
+	});
 });
 
 

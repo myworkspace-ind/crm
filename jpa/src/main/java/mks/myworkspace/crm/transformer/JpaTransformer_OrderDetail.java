@@ -14,22 +14,32 @@ public class JpaTransformer_OrderDetail {
 			return null;
 		}
 
-		Object[] rowData = new Object[11];
+		Object[] rowData = new Object[14];
 		rowData[0] = order.getId();
 		rowData[1] = order.getCode();
 		rowData[2] = formatDate(order.getDeliveryDate());
 		rowData[3] = formatDate(order.getCreateDate());
-		rowData[4] = order.getOrderStatus().getId();
-		rowData[5] = order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null;
-		rowData[6] = order.getCustomer() != null ? order.getCustomer().getId() : null;
-		rowData[7] = order.getCustomer() != null ? order.getCustomer().getPhone() : null;
-		rowData[8] = order.getTransportationMethod();
-		rowData[9] = order.getCustomerRequirement();
-		rowData[10] = order.getCustomer() != null ? order.getCustomer().getEmail() : null;
+		rowData[4] = order.getTransportationMethod();
+		rowData[5] = order.getCustomerRequirement();
+		
+		// Include both ID and name of reference tables
+		//Order Status
+		rowData[6] = order.getOrderStatus() != null ? order.getOrderStatus().getId() : null;
+		rowData[7] = order.getOrderStatus() != null ? order.getOrderStatus().getName() : null;
+		
+		//GoodsCategory
+		rowData[8] = order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null;
+		rowData[9] = order.getGoodsCategory() != null ? order.getGoodsCategory().getName() : null;
+		
+		//Customer
+		rowData[10] = order.getCustomer() != null ? order.getCustomer().getId() : null;
+		rowData[11] = order.getCustomer() != null ? order.getCustomer().getContactPerson() : null;
+		rowData[12] = order.getCustomer() != null ? order.getCustomer().getPhone() : null;
+		rowData[13] = order.getCustomer() != null ? order.getCustomer().getEmail() : null;
 
-		log.debug(
-				"Order detail row: ID = {}, Code = {}, Delivery Date = {}, Category = {}, Customer = {}, Transportation Method = {}",
-				rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5]);
+//		log.debug(
+//				"Order detail row: ID = {}, Code = {}, Delivery Date = {}, Category = {}, Customer = {}, Transportation Method = {}",
+//				rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5]);
 
 		return rowData;
 	}

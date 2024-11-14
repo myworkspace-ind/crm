@@ -78,7 +78,6 @@ public class CustomerController extends BaseController {
 		 */
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-
 		List<Customer> customers;
 
 		if (statusId != null) {
