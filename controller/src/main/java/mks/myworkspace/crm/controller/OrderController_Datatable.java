@@ -50,10 +50,12 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
 import mks.myworkspace.crm.service.CustomerService;
+import mks.myworkspace.crm.service.GoodsCategoryService;
 import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
@@ -101,6 +103,9 @@ public class OrderController_Datatable extends BaseController {
 
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired
+	GoodsCategoryService goodsCategoryService;
 
 	@Autowired
 	OrderService orderService;
@@ -175,8 +180,9 @@ public class OrderController_Datatable extends BaseController {
 	public ResponseEntity<?> displayOrderDetails(@PathVariable("id") Long orderId) {
 		Order order = orderService.getOrderById(orderId);
 		List<OrderStatus> allOrderStatuses = orderStatusService.findAllOrderStatuses();
+		List<GoodsCategory> allGoodsCategory = goodsCategoryService.findAllGoodsCategory();
 		if (order != null) {
-			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order, allOrderStatuses);
+			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order, allOrderStatuses, allGoodsCategory);
 			return ResponseEntity.ok(orderDetailArray);
 		} else {
 			log.debug("CANNOT order!");

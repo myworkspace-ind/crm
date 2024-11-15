@@ -5,13 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
+import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderStatus;
 
 @Slf4j
 public class JpaTransformer_OrderDetail {
 
-	public static Object[] convert2D(Order order, List<OrderStatus> allOrderStatuses) {
+	public static Object[] convert2D(Order order, List<OrderStatus> allOrderStatuses, List<GoodsCategory> allGoodsCategory) {
 		if (order == null) {
 			return null;
 		}
@@ -36,9 +37,15 @@ public class JpaTransformer_OrderDetail {
 		rowData[7] = order.getOrderStatus() != null ? order.getOrderStatus().getId() : null;
 		
 		// GoodsCategory
-		rowData[8] = order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null;
-		rowData[9] = order.getGoodsCategory() != null ? order.getGoodsCategory().getName() : null;
-
+		if (allGoodsCategory != null && !allGoodsCategory.isEmpty()) {
+			Object[][] goodsCategoryData = convert2D_GoodsCategory(allGoodsCategory);
+			rowData[8] = goodsCategoryData; 
+		} else {
+			rowData[8] = null;
+		}
+		
+		rowData[9] = order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null;
+		
 		// Customer
 		rowData[10] = order.getCustomer() != null ? order.getCustomer().getId() : null;
 		rowData[11] = order.getCustomer() != null ? order.getCustomer().getContactPerson() : null;
@@ -64,7 +71,7 @@ public class JpaTransformer_OrderDetail {
 			return new Object[0][];
 		}
 
-		Object[][] rowData = new Object[allOrderStatuses.size()][2]; // Ví dụ: chứa ID và Name của OrderStatus
+		Object[][] rowData = new Object[allOrderStatuses.size()][2]; //chứa ID và Name của OrderStatus
 
 		for (int i = 0; i < allOrderStatuses.size(); i++) {
 			OrderStatus status = allOrderStatuses.get(i);
@@ -72,6 +79,22 @@ public class JpaTransformer_OrderDetail {
 			rowData[i][1] = status.getName();
 		}
 
+		return rowData;
+	}
+	
+	public static Object[][] convert2D_GoodsCategory(List<GoodsCategory> allGoodsCategory){
+		if(allGoodsCategory == null || allGoodsCategory.isEmpty()) {
+			return new Object[0][];
+		}
+		
+		Object[][] rowData = new Object[allGoodsCategory.size()][2];
+		
+		for(int i = 0; i < allGoodsCategory.size(); i++) {
+			GoodsCategory goodsCategory = allGoodsCategory.get(i);
+			rowData[i][0] = goodsCategory.getId();
+			rowData[i][1] = goodsCategory.getName();
+		}
+		
 		return rowData;
 	}
 }

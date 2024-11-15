@@ -49,12 +49,13 @@ $(document).ready(function() {
 					var orderStatusData = response[6]
 					var currentOrderStatusId = response[7];
 
-					var orderGoodsCategoryId = response[8];
+					var orderGoodsCategoryData = response[8];
+					var currentOrderGoodsCategoryId = response[9];
+
 					var orderGoodsCategoryName = response[9];
 					var orderCustomerId = response[10];
 					var orderCustomerName = response[11];
-					//var orderCustomerPhone = response[12];
-					//var orderCustomerEmail = response[13];
+
 
 					$('#orderIdUpdate').text(response[0]);
 					$('#orderCodeUpdate').text(response[1]);
@@ -64,19 +65,25 @@ $(document).ready(function() {
 					$('#orderTransportUpdate').val(response[4]);
 					$('#orderRequirementUpdate').val(response[5]);
 
-					// Cập nhật Order Status (lấy từ response[6] - mảng 2 chiều)
 					if (orderStatusData && orderStatusData.length > 0) {
 						var options = orderStatusData.map(function(status) {
-							// status[0] là ID và status[1] là Name của trạng thái
-							var selected = status[0] === currentOrderStatusId ? ' selected' : ''; // So sánh ID trạng thái hiện tại
+							var selected = status[0] === currentOrderStatusId ? ' selected' : '';
 							return '<option value="' + status[0] + '"' + selected + '>' + status[1] + '</option>';
 						}).join('');
 
-						// Chèn các option vào #orderStatusDetail
 						$('#orderStatusUpdate').html(options);
 					}
 
-					$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
+					if (orderGoodsCategoryData && orderGoodsCategoryData.length > 0) {
+						var options = orderGoodsCategoryData.map(function(goodscategory) {
+							var selected = goodscategory[0] === currentOrderGoodsCategoryId ? ' selected' : '';
+							return '<option value="' + goodscategory[0] + '"' + selected + '>' + goodscategory[1] + '</option>';
+						}).join('');
+
+						$('#orderGoodsUpdate').html(options);
+					}
+
+					//$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
 					$('#orderSenderNameUpdate').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
 
 					$('#orderSenderPhoneUpdate').val(response[12]);
