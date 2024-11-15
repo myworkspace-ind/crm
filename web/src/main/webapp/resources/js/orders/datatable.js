@@ -100,46 +100,69 @@ $(document).ready(function() {
 
 
 		$('#tblDatatable tbody').on('click', '.detail-btn', function() {
-			/*var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
-						var orderId = row[0];
+			var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
+			var orderId = row[0];
 
-						console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
+			console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
 
-						$.ajax({
-							url: _ctx + 'orders-datatable/viewDetails/' + orderId,
-							method: 'GET',
-							success: function(response) {
-								console.log(response)
-								var orderStatusId = response[6];
-								var orderStatusName = response[7];
-								var orderGoodsCategoryId = response[8];
-								var orderGoodsCategoryName = response[9];
-								var orderCustomerId = response[10];
-								var orderCustomerName = response[11];
-								//var orderCustomerPhone = response[12];
-								//var orderCustomerEmail = response[13];
+			$.ajax({
+				url: _ctx + 'orders-datatable/viewDetails/' + orderId,
+				method: 'GET',
+				success: function(response) {
+					console.log(response)
+					//var orderStatusId = response[6];
+					//var orderStatusName = response[7];
+					var orderStatusData = response[6]
+					var currentOrderStatusId = response[7];
 
-								$('#orderIdUpdate').text(response[0]);
-								$('#orderCodeUpdate').text(response[1]);
-								$('#orderCodeUpdateInput').val(response[1]);
-								$('#orderDeliveryDateUpdate').val(response[2]);
-								$('#orderCreateDateUpdate').val(response[3]);
-								$('#orderTransportUpdate').val(response[4]);
-								$('#orderRequirementUpdate').val(response[5]);
+					var orderGoodsCategoryData = response[8];
+					var currentOrderGoodsCategoryId = response[9];
 
-								$('#orderStatusUpdate').html('<option value="' + orderStatusId + '">' + orderStatusName + '</option>');
-								$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
-								$('#orderSenderNameUpdate').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
+					var orderGoodsCategoryName = response[9];
+					var orderCustomerId = response[10];
+					var orderCustomerName = response[11];
 
-								$('#orderSenderPhoneUpdate').val(response[12]);
-								$('#orderSenderEmailUpdate').val(response[13]);
 
-								document.getElementById("updateOrderModal").style.display = "block";
-							},
-							error: function(error) {
-								console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
-							}
-						});*/
+					$('#orderIdDetail').text(response[0]);
+					$('#orderCodeDetail').text(response[1]);
+					$('#orderCodeDetailInput').val(response[1]);
+					$('#orderDeliveryDateDetail').val(response[2]);
+					$('#orderCreateDateDetail').val(response[3]);
+					$('#orderTransportDetail').val(response[4]);
+					$('#orderRequirementDetail').val(response[5]);
+
+					if (orderStatusData && orderStatusData.length > 0) {
+						var options = orderStatusData.map(function(status) {
+							var selected = status[0] === currentOrderStatusId ? ' selected' : '';
+							return '<option value="' + status[0] + '"' + selected + '>' + status[1] + '</option> readonly';
+						}).join('');
+
+						$('#orderStatusDetail').html(options);
+						$('#orderStatusDetail').css('pointer-events', 'none'); 
+					}
+
+					if (orderGoodsCategoryData && orderGoodsCategoryData.length > 0) {
+						var options = orderGoodsCategoryData.map(function(goodscategory) {
+							var selected = goodscategory[0] === currentOrderGoodsCategoryId ? ' selected' : '';
+							return '<option value="' + goodscategory[0] + '"' + selected + '>' + goodscategory[1] + '</option>';
+						}).join('');
+
+						$('#orderGoodsDetail').html(options);
+						$('#orderGoodsDetail').css('pointer-events', 'none'); 
+					}
+
+					//$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
+					$('#orderSenderNameDetail').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
+
+					$('#orderSenderPhoneDetail').val(response[12]);
+					$('#orderSenderEmailDetail').val(response[13]);
+
+					document.getElementById("orderDetailModal").style.display = "block";
+				},
+				error: function(error) {
+					console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
+				}
+			});
 		});
 
 		/*$('#tblDatatable tbody').on('click', '.detail-btn', function() {
