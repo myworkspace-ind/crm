@@ -40,12 +40,15 @@ $(document).ready(function() {
 			console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
 
 			$.ajax({
-				url: _ctx + '/orders-datatable/viewDetails/' + orderId,
+				url: _ctx + 'orders-datatable/viewDetails/' + orderId,
 				method: 'GET',
 				success: function(response) {
 					console.log(response)
-					var orderStatusId = response[6];
-					var orderStatusName = response[7];
+					//var orderStatusId = response[6];
+					//var orderStatusName = response[7];
+					var orderStatusData = response[6]
+					var currentOrderStatusId = response[7];
+
 					var orderGoodsCategoryId = response[8];
 					var orderGoodsCategoryName = response[9];
 					var orderCustomerId = response[10];
@@ -61,7 +64,18 @@ $(document).ready(function() {
 					$('#orderTransportUpdate').val(response[4]);
 					$('#orderRequirementUpdate').val(response[5]);
 
-					$('#orderStatusUpdate').html('<option value="' + orderStatusId + '">' + orderStatusName + '</option>');
+					// Cập nhật Order Status (lấy từ response[6] - mảng 2 chiều)
+					if (orderStatusData && orderStatusData.length > 0) {
+						var options = orderStatusData.map(function(status) {
+							// status[0] là ID và status[1] là Name của trạng thái
+							var selected = status[0] === currentOrderStatusId ? ' selected' : ''; // So sánh ID trạng thái hiện tại
+							return '<option value="' + status[0] + '"' + selected + '>' + status[1] + '</option>';
+						}).join('');
+
+						// Chèn các option vào #orderStatusDetail
+						$('#orderStatusUpdate').html(options);
+					}
+
 					$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
 					$('#orderSenderNameUpdate').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
 
@@ -74,50 +88,51 @@ $(document).ready(function() {
 					console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
 				}
 			});
+
 		});
 
 
 		$('#tblDatatable tbody').on('click', '.detail-btn', function() {
-			var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
-			var orderId = row[0];
+			/*var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
+						var orderId = row[0];
 
-			console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
+						console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
 
-			$.ajax({
-				url: _ctx + '/orders-datatable/viewDetails/' + orderId,
-				method: 'GET',
-				success: function(response) {
-					console.log(response)
-					var orderStatusId = response[6];
-					var orderStatusName = response[7];
-					var orderGoodsCategoryId = response[8];
-					var orderGoodsCategoryName = response[9];
-					var orderCustomerId = response[10];
-					var orderCustomerName = response[11];
-					//var orderCustomerPhone = response[12];
-					//var orderCustomerEmail = response[13];
+						$.ajax({
+							url: _ctx + 'orders-datatable/viewDetails/' + orderId,
+							method: 'GET',
+							success: function(response) {
+								console.log(response)
+								var orderStatusId = response[6];
+								var orderStatusName = response[7];
+								var orderGoodsCategoryId = response[8];
+								var orderGoodsCategoryName = response[9];
+								var orderCustomerId = response[10];
+								var orderCustomerName = response[11];
+								//var orderCustomerPhone = response[12];
+								//var orderCustomerEmail = response[13];
 
-					$('#orderIdDetail').text(response[0]);
-					$('#orderCodeDetail').text(response[1]);
-					$('#orderCodeDetailInput').val(response[1]);
-					$('#orderDeliveryDateDetail').val(response[2]);
-					$('#orderCreateDateDetail').val(response[3]);
-					$('#orderTransportDetail').val(response[4]);
-					$('#orderRequirementDetail').val(response[5]);
+								$('#orderIdUpdate').text(response[0]);
+								$('#orderCodeUpdate').text(response[1]);
+								$('#orderCodeUpdateInput').val(response[1]);
+								$('#orderDeliveryDateUpdate').val(response[2]);
+								$('#orderCreateDateUpdate').val(response[3]);
+								$('#orderTransportUpdate').val(response[4]);
+								$('#orderRequirementUpdate').val(response[5]);
 
-					$('#orderStatusDetail').html('<option value="' + orderStatusId + '">' + orderStatusName + '</option>');
-					$('#orderGoodsDetail').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
-					$('#orderSenderName').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
+								$('#orderStatusUpdate').html('<option value="' + orderStatusId + '">' + orderStatusName + '</option>');
+								$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
+								$('#orderSenderNameUpdate').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
 
-					$('#orderSenderPhone').val(response[12]);
-					$('#orderSenderEmail').val(response[13]);
+								$('#orderSenderPhoneUpdate').val(response[12]);
+								$('#orderSenderEmailUpdate').val(response[13]);
 
-					document.getElementById("orderDetailModal").style.display = "block";
-				},
-				error: function(error) {
-					console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
-				}
-			});
+								document.getElementById("updateOrderModal").style.display = "block";
+							},
+							error: function(error) {
+								console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
+							}
+						});*/
 		});
 
 		/*$('#tblDatatable tbody').on('click', '.detail-btn', function() {
@@ -126,6 +141,7 @@ $(document).ready(function() {
 		});*/
 	}
 });
+
 
 $(document).on('click', '#saveOrderButton', function() {
 	var button = $(this);

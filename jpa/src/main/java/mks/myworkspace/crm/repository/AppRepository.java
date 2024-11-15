@@ -79,18 +79,14 @@ public class AppRepository {
 		if (customerIds == null || customerIds.isEmpty()) {
 			return;
 		}
-
-		// Tạo các tham số
 		String sql = "DELETE FROM customer_status WHERE customer_id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
-		// Thực hiện câu lệnh xóa
-		jdbcTemplate0.update(sql, customerIds.toArray()); // Truyền mảng ID
+		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
 
 	public void deleteCustomersByIds(List<Long> customerIds) {
-		deleteCustomerStatusByCustomerIds(customerIds); // Xóa trước các bản ghi liên quan
-		// Tiến hành xóa khách hàng
+		//deleteCustomerStatusByCustomerIds(customerIds); 
 		String sql = "DELETE FROM crm_customer WHERE id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 

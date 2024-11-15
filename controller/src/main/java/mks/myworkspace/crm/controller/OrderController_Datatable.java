@@ -21,6 +21,7 @@ package mks.myworkspace.crm.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +115,7 @@ public class OrderController_Datatable extends BaseController {
 	private int[] productListColWidths;
 
 	@GetMapping("")
-	public ModelAndView displayDataleOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
+	public ModelAndView displayDatatableOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
 			HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
 		initSession(request, httpSession);
@@ -173,8 +174,9 @@ public class OrderController_Datatable extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> displayOrderDetails(@PathVariable("id") Long orderId) {
 		Order order = orderService.getOrderById(orderId);
+		List<OrderStatus> allOrderStatuses = orderStatusService.findAllOrderStatuses();
 		if (order != null) {
-			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order);
+			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order, allOrderStatuses);
 			return ResponseEntity.ok(orderDetailArray);
 		} else {
 			log.debug("CANNOT order!");
@@ -187,7 +189,7 @@ public class OrderController_Datatable extends BaseController {
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody String json) {
 		Map<String, String> response = new HashMap<>();
-		
+
 		try {
 			// Convert JSON string thành đối tượng Order
 			Order order = OrderConverter.convertJsonToOrder(json);
@@ -227,6 +229,29 @@ public class OrderController_Datatable extends BaseController {
 		}
 
 		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping(value = { "/getAllOrderStatuses" }, produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Object> getAllOrderStatuses() {
+		try {
+			List<OrderStatus> allOrderStatuses = orderStatusService.findAllOrderStatuses();
+
+			// Chuyển đổi danh sách OrderStatus thành mảng 2 chiều
+			Object[][] orderStatusData = JpaTransformer_OrderDetail.convert2D_OrderStatus(allOrderStatuses);
+
+			// Chuyển đổi mảng 2 chiều thành danh sách danh sách để tương thích với JSON
+			List<List<Object>> jsonCompatibleData = new ArrayList<>();
+			for (Object[] row : orderStatusData) {
+				jsonCompatibleData.add(Arrays.asList(row));
+			}
+
+			log.debug("Fetched all order statuses: {}", jsonCompatibleData);
+			return ResponseEntity.ok(jsonCompatibleData);
+		} catch (Exception e) {
+			log.error("Error fetching order statuses: ", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+		}
 	}
 
 //	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")

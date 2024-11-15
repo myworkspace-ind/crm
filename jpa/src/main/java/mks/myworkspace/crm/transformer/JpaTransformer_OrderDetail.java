@@ -2,14 +2,16 @@ package mks.myworkspace.crm.transformer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Order;
+import mks.myworkspace.crm.entity.OrderStatus;
 
 @Slf4j
 public class JpaTransformer_OrderDetail {
 
-	public static Object[] convert2D(Order order) {
+	public static Object[] convert2D(Order order, List<OrderStatus> allOrderStatuses) {
 		if (order == null) {
 			return null;
 		}
@@ -21,17 +23,23 @@ public class JpaTransformer_OrderDetail {
 		rowData[3] = formatDate(order.getCreateDate());
 		rowData[4] = order.getTransportationMethod();
 		rowData[5] = order.getCustomerRequirement();
-		
+
 		// Include both ID and name of reference tables
-		//Order Status
-		rowData[6] = order.getOrderStatus() != null ? order.getOrderStatus().getId() : null;
-		rowData[7] = order.getOrderStatus() != null ? order.getOrderStatus().getName() : null;
+		// Order Status
+		if (allOrderStatuses != null && !allOrderStatuses.isEmpty()) {
+			Object[][] orderStatusData = convert2D_OrderStatus(allOrderStatuses);
+			rowData[6] = orderStatusData; 
+		} else {
+			rowData[6] = null;
+		}
 		
-		//GoodsCategory
+		rowData[7] = order.getOrderStatus() != null ? order.getOrderStatus().getId() : null;
+		
+		// GoodsCategory
 		rowData[8] = order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null;
 		rowData[9] = order.getGoodsCategory() != null ? order.getGoodsCategory().getName() : null;
-		
-		//Customer
+
+		// Customer
 		rowData[10] = order.getCustomer() != null ? order.getCustomer().getId() : null;
 		rowData[11] = order.getCustomer() != null ? order.getCustomer().getContactPerson() : null;
 		rowData[12] = order.getCustomer() != null ? order.getCustomer().getPhone() : null;
@@ -49,5 +57,21 @@ public class JpaTransformer_OrderDetail {
 			return null;
 		}
 		return new SimpleDateFormat("yyyy-MM-dd").format(date);
+	}
+
+	public static Object[][] convert2D_OrderStatus(List<OrderStatus> allOrderStatuses) {
+		if (allOrderStatuses == null || allOrderStatuses.isEmpty()) {
+			return new Object[0][];
+		}
+
+		Object[][] rowData = new Object[allOrderStatuses.size()][2]; // Ví dụ: chứa ID và Name của OrderStatus
+
+		for (int i = 0; i < allOrderStatuses.size(); i++) {
+			OrderStatus status = allOrderStatuses.get(i);
+			rowData[i][0] = status.getId();
+			rowData[i][1] = status.getName();
+		}
+
+		return rowData;
 	}
 }
