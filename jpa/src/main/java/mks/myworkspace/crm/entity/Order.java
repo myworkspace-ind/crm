@@ -62,8 +62,12 @@ public class Order implements Serializable {
 
 	// Relation 1-1 with Customer
 	@ManyToOne
-	@JoinColumn(name = "cus_id", referencedColumnName = "id")
-	private Customer customer;
+	@JoinColumn(name = "sender_id", referencedColumnName = "id")
+	private Customer sender;
+	
+	@ManyToOne
+	@JoinColumn(name = "receiver_id", referencedColumnName = "id")
+	private Customer receiver;
 
 	// Relation Many-to-One with OrderStatus
 	@ManyToOne
@@ -74,13 +78,9 @@ public class Order implements Serializable {
     @JoinColumn(name = "goods_category_id") 
     private GoodsCategory goodsCategory;
 
-	public Order(Long orderId, Date deliveryDate2, GoodsCategory goodsCategory2, Customer customer2,
-			String transportationMethod2) {
-	}
-
 	public Order(Long id, String siteId, String name, String code, Date createDate, Date deliveryDate,
-			String transportationMethod, String customerRequirement, OrderCategory orderCategory, Customer customer,
-			OrderStatus orderStatus, GoodsCategory goodsCategory) {
+			String transportationMethod, String customerRequirement, OrderCategory orderCategory, Customer sender,
+			Customer receiver, OrderStatus orderStatus, GoodsCategory goodsCategory) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -91,10 +91,13 @@ public class Order implements Serializable {
 		this.transportationMethod = transportationMethod;
 		this.customerRequirement = customerRequirement;
 		this.orderCategory = orderCategory;
-		this.customer = customer;
+		this.sender = sender;
+		this.receiver = receiver;
 		this.orderStatus = orderStatus;
 		this.goodsCategory = goodsCategory;
 	}
+
+	
 
 
 }

@@ -41,13 +41,13 @@ public class OrderConverter {
 		}
 		order.setCustomerRequirement(jsonObject.getString("requirement"));
 		order.setTransportationMethod(jsonObject.getString("transport"));
-
-		Customer customer = new Customer();
-		customer.setId(jsonObject.getLong("senderName"));
 		
-		customer.setEmail(jsonObject.getString("senderEmail"));
-		customer.setPhone(jsonObject.getString("senderPhone"));
-		order.setCustomer(customer);
+		//Sender
+		Customer sender = new Customer();
+		sender.setId(jsonObject.getLong("senderName"));
+		sender.setEmail(jsonObject.getString("senderEmail"));
+		sender.setPhone(jsonObject.getString("senderPhone"));
+		order.setSender(sender);
 
 		GoodsCategory goodsCategory = new GoodsCategory();
 		goodsCategory.setId(jsonObject.getLong("goodsCategory"));

@@ -10,3 +10,5 @@ function getCurrentDate() {
 //document.getElementById('orderDeliveryDate').value = getCurrentDate();
 document.getElementById('orderDate').value = getCurrentDate();
 document.getElementById('deliveryDate').value = getCurrentDate();
+document.getElementById('orderCreateDateCreate').value = getCurrentDate();
+document.getElementById('orderDeliveryDateCreate').value = getCurrentDate();

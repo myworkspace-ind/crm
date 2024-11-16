@@ -74,12 +74,9 @@ public class Customer implements Serializable {
     @Column(name = "note", length = 255)
     private String note;
     
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
-	private Set<Order> orders;
-
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
 			String profession, Status mainStatus, Status subStatus, String responsiblePerson, Date createdAt,
-			String note, Set<Order> orders) {
+			String note) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -94,7 +91,6 @@ public class Customer implements Serializable {
 		this.responsiblePerson = responsiblePerson;
 		this.createdAt = createdAt;
 		this.note = note;
-		this.orders = orders;
 	}
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,

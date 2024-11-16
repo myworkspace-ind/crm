@@ -86,7 +86,7 @@ public class AppRepository {
 	}
 
 	public void deleteCustomersByIds(List<Long> customerIds) {
-		//deleteCustomerStatusByCustomerIds(customerIds); 
+		// deleteCustomerStatusByCustomerIds(customerIds);
 		String sql = "DELETE FROM crm_customer WHERE id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
@@ -110,17 +110,29 @@ public class AppRepository {
 //		id = order.getId();
 		Long id = null;
 
-	    if (order.getId() == null) {
-	        log.debug("Inserting new order"); // Log when inserting a new order
-	        
-	    } else {
-	        log.debug("Updating existing order with ID: {}", order.getId()); // Log when updating
-	        updateOrder(order);
-	        id = order.getId();
-	    }
+		if (order.getId() == null) {
+			log.debug("Inserting new order"); // Log when inserting a new order
+			createOrder(order);
 
-	    log.debug("Resulting ID after saveOrUpdate: {}", id);
-	    return id;
+		} else {
+			log.debug("Updating existing order with ID: {}", order.getId()); // Log when updating
+			updateOrder(order);
+			id = order.getId();
+		}
+
+		log.debug("Resulting ID after saveOrUpdate: {}", id);
+		return id;
+	}
+
+	public Long createOrder(Order order) {
+		Long id;
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
+				.usingGeneratedKeyColumns("id");
+
+		id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
+		
+		return id;
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -142,10 +154,17 @@ public class AppRepository {
 						ord.setTransportationMethod(rs.getString("transportation_method"));
 						ord.setCustomerRequirement(rs.getString("customer_requirement"));
 
-						Customer customer = new Customer();
-						long customerId = rs.getLong("cus_id");
-						customer.setId(customerId);
-						ord.setCustomer(customer);
+						// Sender
+						Customer sender = new Customer();
+						long senderId = rs.getLong("sender_id");
+						sender.setId(senderId);
+						ord.setSender(sender);
+
+						// Receiver
+						Customer receiver = new Customer();
+						long receiverId = rs.getLong("receiver_id");
+						receiver.setId(receiverId);
+						ord.setReceiver(receiver);
 
 						GoodsCategory goodsCategory = new GoodsCategory();
 						goodsCategory.setId(rs.getLong("goods_category_id"));
@@ -162,7 +181,7 @@ public class AppRepository {
 		// SQL để cập nhật dữ liệu đơn hàng
 		String updateSql = "UPDATE crm_order SET name = ?, code = ?, create_date = ?, "
 				+ "delivery_date = ?, transportation_method = ?, customer_requirement = ?, "
-				+ "cus_id = ?, order_status_id = ?, goods_category_id = ? " + "WHERE id = ?";
+				+ "sender_id = ?, receiver_id = ?, order_status_id = ?, goods_category_id = ? " + "WHERE id = ?";
 
 		// Thực thi câu lệnh cập nhật
 		jdbcTemplate0.update(updateSql, order.getName() != null ? order.getName() : existingOrder.getName(),
@@ -173,7 +192,10 @@ public class AppRepository {
 						: existingOrder.getTransportationMethod(),
 				order.getCustomerRequirement() != null ? order.getCustomerRequirement()
 						: existingOrder.getCustomerRequirement(),
-				order.getCustomer() != null ? order.getCustomer().getId() : existingOrder.getCustomer().getId(),
+
+				order.getSender() != null ? order.getSender().getId() : existingOrder.getSender().getId(),
+				order.getReceiver() != null ? order.getReceiver().getId() : existingOrder.getReceiver().getId(),
+
 				order.getOrderStatus() != null ? order.getOrderStatus().getId()
 						: existingOrder.getOrderStatus().getId(),
 				order.getGoodsCategory() != null ? order.getGoodsCategory().getId()

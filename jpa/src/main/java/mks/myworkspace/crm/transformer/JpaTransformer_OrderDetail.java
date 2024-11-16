@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
+import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderStatus;
@@ -46,11 +47,11 @@ public class JpaTransformer_OrderDetail {
 		
 		rowData[9] = order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null;
 		
-		// Customer
-		rowData[10] = order.getCustomer() != null ? order.getCustomer().getId() : null;
-		rowData[11] = order.getCustomer() != null ? order.getCustomer().getContactPerson() : null;
-		rowData[12] = order.getCustomer() != null ? order.getCustomer().getPhone() : null;
-		rowData[13] = order.getCustomer() != null ? order.getCustomer().getEmail() : null;
+		// Sender
+		rowData[10] = order.getSender() != null ? order.getSender().getId() : null;
+		rowData[11] = order.getSender() != null ? order.getSender().getContactPerson() : null;
+		rowData[12] = order.getSender() != null ? order.getSender().getPhone() : null;
+		rowData[13] = order.getSender() != null ? order.getSender().getEmail() : null;
 
 //		log.debug(
 //				"Order detail row: ID = {}, Code = {}, Delivery Date = {}, Category = {}, Customer = {}, Transportation Method = {}",
@@ -93,6 +94,22 @@ public class JpaTransformer_OrderDetail {
 			GoodsCategory goodsCategory = allGoodsCategory.get(i);
 			rowData[i][0] = goodsCategory.getId();
 			rowData[i][1] = goodsCategory.getName();
+		}
+		
+		return rowData;
+	}
+	
+	public static Object[][] convert2D_Customer(List<Customer> allCustomer){
+		if(allCustomer == null || allCustomer.isEmpty()) {
+			return new Object[0][];
+		}
+		
+		Object[][] rowData = new Object[allCustomer.size()][2];
+		
+		for(int i = 0; i < allCustomer.size(); i++) {
+			Customer customer = allCustomer.get(i);
+			rowData[i][0] = customer.getId();
+			rowData[i][1] = customer.getContactPerson();
 		}
 		
 		return rowData;

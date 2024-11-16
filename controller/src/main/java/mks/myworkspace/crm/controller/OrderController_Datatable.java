@@ -147,6 +147,9 @@ public class OrderController_Datatable extends BaseController {
 
 		List<Customer> listCustomers;
 		listCustomers = customerService.getAllCustomers();
+		
+		List<GoodsCategory> listGoodsCategories;
+		listGoodsCategories = goodsCategoryService.findAllGoodsCategory();
 
 		List<Order> listOrders;
 		listOrders = orderService.getAllOrders();
@@ -171,6 +174,7 @@ public class OrderController_Datatable extends BaseController {
 		mav.addObject("listCustomers", listCustomers);
 		mav.addObject("listOrderStatuses", listOrderStatuses);
 		mav.addObject("orderCategories", orderCategories);
+		mav.addObject("listGoodsCategories", listGoodsCategories);
 
 		return mav;
 	}
@@ -190,7 +194,22 @@ public class OrderController_Datatable extends BaseController {
 		}
 
 	}
-
+	
+	@RequestMapping(value = "/create-order", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<?> createOrder(@RequestBody Order order, HttpServletRequest request,
+			HttpSession httpSession) {
+		try {
+			storageService.saveOrUpdateOrder(order);
+			return ResponseEntity.ok().body(Map.of("message", "Đơn hàng mới đã được thêm!", "order", order));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
+		}
+	}
+	
 	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody String json) {
@@ -208,10 +227,10 @@ public class OrderController_Datatable extends BaseController {
 			log.debug("Requirement: {}", order.getCustomerRequirement());
 			log.debug("Transport: {}", order.getTransportationMethod());
 
-			if (order.getCustomer() != null) {
-				log.debug("Customer Name: {}", order.getCustomer().getContactPerson());
-				log.debug("Customer Email: {}", order.getCustomer().getEmail());
-				log.debug("Customer Phone: {}", order.getCustomer().getPhone());
+			if (order.getSender() != null) {
+				log.debug("Customer Name: {}", order.getSender().getContactPerson());
+				log.debug("Customer Email: {}", order.getSender().getEmail());
+				log.debug("Customer Phone: {}", order.getSender().getPhone());
 			}
 
 			if (order.getGoodsCategory() != null) {

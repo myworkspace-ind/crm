@@ -2,30 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 	<div id="createOrderModal">
-		<h3 id="title">Tạo mới đơn hàng</h3>
+		<!-- <h3>ID của đơn hàng <span id="orderIdUpdate"></span></h3> -->
+		<h3 id="title">Tạo mới đơn hàng </h3>
 		<div class="closeBtnDiv" style="text-align: right;">
 			<button onclick="closeModal()" class="closeBtn"><i class="fas fa-times"></i></button>
 		</div>
 		<hr>
-	    <form id="orderForm">
-		    <div class="form-row">
-			    <div class="form-group col-md-3">
+	    <form id="orderCreateForm"  action="create-order" method="post">
+		    <div class="form-row" style = "margin-bottom: -30px">
+			    <div class="form-group col-md-6">
 			      <label for="inputDate">Ngày tạo</label>
 			      <input type="date" class="form-control" id="orderCreateDateCreate" style="background-color: white; color: black; width: 100%;" placeholder="dd/mm/yyyy" required >
 			    </div>
-			    <div class="form-group col-md-3">
+			    <div class="form-group col-md-6">
 			      <label for="inputDate">Ngày giao</label>
 			      <input type="date" class="form-control" id="orderDeliveryDateCreate" style="background-color: white; color: black; width: 100%;" placeholder="yyyy/mm/dd" required >
 			    </div>
-			    <div class="form-group col-md-3">
+			</div>
+			
+			<div class="form-row">
+			    <div class="form-group col-md-6">
 			      <label for="inputState">Trạng thái</label>
 					<select id="orderStatusCreate" class="form-control" style="background-color: white; color: black;" >
-						
 					</select>					
 			    </div>
-			    <div class="form-group col-md-3">
+			    <div class="form-group col-md-6">
 			      <label for="orderCodeUpdateInput">Mã đơn hàng</label>
-			      <input type="text" class="form-control" id=orderCodeCreateInput style="background-color: white; color: black;" >
+			      <input type="text" class="form-control" id=orderCodeInputCreate style="background-color: white; color: black;" >
 			    </div>
 			</div>
 	    	
@@ -33,7 +36,12 @@
 				    <div class="form-row">
 				        <div class="form-group col-md-6">
 				            <label for="goodsType">Loại hàng hóa</label>
-				            <select class="form-control" id="orderGoodsCreate" style="background-color: white; color: black;" ></select>
+				            <select class="form-control" id="orderGoodsCreate" style="background-color: white; color: black;" >
+				            	<th:block th:each="goodsCategory : ${listGoodsCategories}">
+				            		<option th:value="${goodsCategory.id}" th:text="${goodsCategory.name}">
+				            		</option>
+				            	</th:block>
+				            </select>
 				        </div>
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Phương tiện vận chuyển</label>
@@ -42,7 +50,7 @@
 				    </div>
 		    </div>
 		    
-		    <div class="container">
+		    <!-- <div class="container">
 				<div class="column">
 			        <fieldset>
 			            <legend>Thông tin người gửi</legend>
@@ -53,11 +61,11 @@
 			                </tr>
 			                <tr>
 			                    <td>SDT:</td>
-			                    <td><input type="text" class="input-container" id= "orderSenderPhoneCreate" placeholder="(+84) 1234567890"  /></td>
+			                    <td><input type="text" class="input-container" id= "orderSenderPhoneCreate" placeholder="(+84) 1234567890" readonly /></td>
 			                </tr>
 			                <tr>
 			                    <td>Email:</td>
-			                    <td><input type="text" class="input-container" id= "orderSenderEmailCreate"  /></td>
+			                    <td><input type="text" class="input-container" id= "orderSenderEmailCreate" readonly /></td>
 			                </tr>
 			            </table>
 			        </fieldset>
@@ -82,9 +90,9 @@
 				            </table>
 				        </fieldset>
 				</div>
-		</div>
+		</div> -->
 	        
-	        <div class="row2">
+	        <!-- <div class="row2">
 	        	<div class="form-row">
 				        <div class="form-group col-md-6">
 				            <label for="goodsType">Yêu cầu</label>
@@ -99,19 +107,19 @@
 							</div>
 				        </div>
 				    </div>
-	        </div>
+	        </div> -->
 	
 	        <div class="row3">
 				<legend class="legent-row3">Tự động cập nhật qua các kênh</legend>
-				<label><input type="checkbox" id="emailUpdate" style="margin-left: 30px; background-color: gray; color: black;"> Email</label>
-				<br><label><input type="checkbox" id="zaloUpdate" style="margin-left: 30px; background-color: gray; color: black;"> Zalo</label><span> (+84) 0987654321</span>
+				<label><input type="checkbox" id="emailCreate" style="margin-left: 30px; background-color: gray; color: black;"> Email</label>
+				<br><label><input type="checkbox" id="zaloCreate" style="margin-left: 30px; background-color: gray; color: black;"> Zalo</label><span> (+84) 0987654321</span>
 					<a href="#" style="color: #6942ca;"> Thay đổi</a>
 				<br><label><input type="checkbox" id="smsUpdate" style="margin-left: 30px; background-color: gray; color: black;"> SMS</label><span> (+84) 0987654321</span>
 					<a href="#" style="color: #6942ca;"> Thay đổi</a>
 			</div>
 		        
 			<div class="row4">
-				<button type="button">Lưu</button>
+				<!-- <button type="button" id="saveOrderButton">Lưu</button> -->
 	        	<button type="button" onclick="closeModal()">Trở về</button>
 			</div>
 	    </form>

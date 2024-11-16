@@ -24,7 +24,7 @@ public class JpaTransformer_Order {
 	        rowData[1] = order.getCode();// ma don hang
 	        rowData[2] = formatDate(order.getDeliveryDate()); // ngay giao
 	        rowData[3] = order.getGoodsCategory().getName(); // loai hang hoa
-	        rowData[4] = order.getCustomer().getContactPerson(); // thong tin nguoi gui
+	        rowData[4] = order.getSender().getContactPerson(); // thong tin nguoi gui
 	        rowData[5] = order.getTransportationMethod(); // phuong tien van chuyen
 
 	        // Log dữ liệu của từng hàng trong dataset
