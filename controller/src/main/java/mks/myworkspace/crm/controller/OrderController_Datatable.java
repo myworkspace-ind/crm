@@ -125,8 +125,10 @@ public class OrderController_Datatable extends BaseController {
 		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
 		initSession(request, httpSession);
 		List<OrderCategory> orderCategories;
+		List<OrderCategory> orderCategories_2;
 		orderCategories = orderCategoryService.getAllOrderCategoriesWithOrderStatuses();
-		log.debug("Fetching all order's categories.");
+		orderCategories_2 = orderCategoryService.getAllOrderCategoriesWithOrderStatuses();
+		//log.debug("Fetching all order's categories.");
 
 		if (categoryId != null) {
 			List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(categoryId);
