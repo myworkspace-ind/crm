@@ -27,11 +27,10 @@
 			    </div>
 			     <div class="form-group col-md-6">
 					<label for="goodsType">Loại đơn hàng</label>
-		            <select class="form-control" id="orderGoodsCreate" style="background-color: white; color: black;" >
-		            	<th:block th:each="goodsCategory : ${listGoodsCategories}">
-		            		<option th:value="${goodsCategory.id}" th:text="${goodsCategory.name}">
-		            		</option>
-		            	</th:block>
+		            <select class="form-control" id="orderCategoryCreate" style="background-color: white; color: black;" >
+		            	<th:block th:each="orderCategory : ${orderCategories}">
+				            <option th:value="${orderCategory.id}" th:text="${orderCategory.name}"></option>
+				        </th:block>
 		            </select>				
 			    </div>
 			</div>
@@ -50,6 +49,7 @@
 				        <div class="form-group col-md-6">
 				            <label for="inputState">Trạng thái</label>
 							<select id="orderStatusCreate" class="form-control" style="background-color: white; color: black;" >
+							
 							</select>
 				        </div>
 				    </div>

@@ -125,10 +125,8 @@ public class OrderController_Datatable extends BaseController {
 		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
 		initSession(request, httpSession);
 		List<OrderCategory> orderCategories;
-		List<OrderCategory> orderCategories_2;
 		orderCategories = orderCategoryService.getAllOrderCategoriesWithOrderStatuses();
-		orderCategories_2 = orderCategoryService.getAllOrderCategoriesWithOrderStatuses();
-		//log.debug("Fetching all order's categories.");
+		log.debug("Fetching all order's categories.");
 
 		if (categoryId != null) {
 			List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(categoryId);
@@ -280,7 +278,50 @@ public class OrderController_Datatable extends BaseController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
 		}
 	}
+	
+	@GetMapping("/orderDetail")
+	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long orderId, HttpServletRequest request,
+			HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable.html");
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		log.debug("Order Detail is running....");
 
+		Optional<Order> orderOpt = orderService.findById(orderId);
+
+		// Check if the customer exists and add to model
+		orderOpt.ifPresentOrElse(order -> {
+			mav.addObject("orderDetail", order);
+		}, () -> {
+			mav.addObject("errorMessage", "Order not found.");
+		});
+
+		return mav;
+	}
+	
+	@GetMapping(value = "/order-statuses", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Object> getOrderStatusesByCategory(@RequestParam("categoryId") Long categoryId) {
+	    try {
+	        List<OrderStatus> statuses = orderStatusService.findByOrderCategories_Id(categoryId);
+	        Object[][] orderStatusData = JpaTransformer_OrderDetail.convert2D_OrderStatus(statuses);
+	        // Chuyển đổi mảng 2 chiều thành danh sách danh sách để tương thích với JSON
+	        List<List<Object>> jsonCompatibleData = new ArrayList<>();
+	        for (Object[] row : orderStatusData) {
+	            jsonCompatibleData.add(Arrays.asList(row));
+	        }
+	        log.debug("Fetched order statuses for category {}: {}", categoryId, jsonCompatibleData);
+	        
+	        return ResponseEntity.ok(jsonCompatibleData);
+	    } catch (Exception e) {
+	        log.error("Error fetching order statuses for category {}: ", categoryId, e);
+
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+	    }
+	}
+	
+	
 //	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")
 //	@ResponseBody
 //	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody Order order) {
@@ -305,27 +346,6 @@ public class OrderController_Datatable extends BaseController {
 //		return ResponseEntity.ok(response);
 //	}
 
-	@GetMapping("/orderDetail")
-	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long orderId, HttpServletRequest request,
-			HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable.html");
-
-		initSession(request, httpSession);
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		log.debug("Order Detail is running....");
-
-		Optional<Order> orderOpt = orderService.findById(orderId);
-
-		// Check if the customer exists and add to model
-		orderOpt.ifPresentOrElse(order -> {
-			mav.addObject("orderDetail", order);
-		}, () -> {
-			mav.addObject("errorMessage", "Order not found.");
-		});
-
-		return mav;
-	}
 
 //	@GetMapping(value = { "/get-orders" }, produces = "application/json")
 //	@ResponseBody
