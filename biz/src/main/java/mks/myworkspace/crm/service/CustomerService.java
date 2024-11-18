@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import mks.myworkspace.crm.entity.Customer;
@@ -24,5 +25,8 @@ public interface CustomerService {
 	void deleteCustomersByIds(Iterable<Long> ids);
 	
 	void deleteAllByIds(List<Long> customerIds);
-
+	
+	Map<Long, Long> getCustomerCountsByStatus();
+	
+	long getTotalCustomerCount();
 }

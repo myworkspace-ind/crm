@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import lombok.Getter;
@@ -44,11 +42,11 @@ public class Order implements Serializable {
 	private String code;
 	
 	@Column(name = "create_date")
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	private Date createDate;
 	
 	@Column(name = "delivery_date")
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	private Date deliveryDate;
 
 	@Column(name = "transportation_method")
@@ -63,50 +61,43 @@ public class Order implements Serializable {
 	private OrderCategory orderCategory;
 
 	// Relation 1-1 with Customer
-	@OneToOne
-	@JoinColumn(name = "cus_id", referencedColumnName = "id")
-	private Customer customer;
+	@ManyToOne
+	@JoinColumn(name = "sender_id", referencedColumnName = "id")
+	private Customer sender;
+	
+	@ManyToOne
+	@JoinColumn(name = "receiver_id", referencedColumnName = "id")
+	private Customer receiver;
 
 	// Relation Many-to-One with OrderStatus
 	@ManyToOne
 	@JoinColumn(name = "order_status_id")
 	private OrderStatus orderStatus;
 	
-//	 // Relation Many-to-Many with GoodsCategory
-//    @ManyToMany
-//    @JoinTable(
-//        name = "order_goodscategory",
-//        joinColumns = @JoinColumn(name = "order_id"),
-//        inverseJoinColumns = @JoinColumn(name = "goods_category_id")
-//    )
-//    private Set<GoodsCategory> goodsCategories;
+	@ManyToOne
+    @JoinColumn(name = "goods_category_id") 
+    private GoodsCategory goodsCategory;
 
-	public Order(Long orderId, Date deliveryDate2, GoodsCategory goodsCategory2, Customer customer2,
-			String transportationMethod2) {
-	}
-
-	@Override
-	public String toString() {
-		return "Order [id=" + id + ", siteId=" + siteId + ", name=" + name + ", code=" + code + ", deliveryDate="
-				+ deliveryDate + ", transportationMethod=" + transportationMethod + ", customerRequirement="
-				+ customerRequirement + ", orderCategory=" + orderCategory + ", customer=" + customer + ", orderStatus="
-				+ orderStatus + "]";
-	}
-
-	public Order(Long id, String siteId, String name, String code, Date deliveryDate, String transportationMethod,
-			String customerRequirement, OrderCategory orderCategory, Customer customer, OrderStatus orderStatus) {
+	public Order(Long id, String siteId, String name, String code, Date createDate, Date deliveryDate,
+			String transportationMethod, String customerRequirement, OrderCategory orderCategory, Customer sender,
+			Customer receiver, OrderStatus orderStatus, GoodsCategory goodsCategory) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
 		this.code = code;
+		this.createDate = createDate;
 		this.deliveryDate = deliveryDate;
 		this.transportationMethod = transportationMethod;
 		this.customerRequirement = customerRequirement;
 		this.orderCategory = orderCategory;
-		this.customer = customer;
+		this.sender = sender;
+		this.receiver = receiver;
 		this.orderStatus = orderStatus;
+		this.goodsCategory = goodsCategory;
 	}
+
 	
+
 
 }

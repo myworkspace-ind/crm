@@ -44,7 +44,9 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="order-screen-datatable">
+					<div class="table-responsive" style = "width: 100%">
 					<th:block th:include="fragments/orders/frg_datatable"></th:block>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -60,15 +62,24 @@
 		    </select>
 		    <br><br>
 		    <button onclick="saveStatus()">Lưu</button>
-		    <button onclick="closeModal()">Đóng</button>
+		    <button onclick="closeModalOrderStatus()">Đóng</button>
 		</div>
-		<div id="modalOverlay" onclick="closeModal()">
+		
+		<div id="modalOverlay">
 		</div>
+		
+		<!-- BEGIN UPDATE MODAL -->
+		<th:block th:include="fragments/createOrderModal"></th:block>
+		<!-- END UPDATE MODAL -->
 		
 		<!-- BEGIN UPDATE MODAL -->
 		<th:block th:include="fragments/updateOrderModal"></th:block>
 		<!-- END UPDATE MODAL -->
 		
+		<!-- BEGIN ORDER DETAIL MODAL -->
+		<th:block th:include="fragments/orderDetailModal"></th:block>
+		<!-- END ORDER DETAIL MODAL -->
+				
 	</div>
 	<!-- END CONTENT -->
 	

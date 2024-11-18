@@ -77,7 +77,7 @@ function initTable(colHeaders, colWidths, data) {
 		console.error("Container tblOrder không tồn tại.");
 	}
 }
-function changeTitle(newTitle){
+function changeTitle(newTitle) {
 	document.getElementById("title").innerText = newTitle;
 }
 
@@ -105,9 +105,14 @@ function openStatusModal(row) {
 	document.getElementById("statusModal").style.display = "block";
 	document.getElementById("modalOverlay").style.display = "block";
 }
-function closeModal() {
-	document.getElementById("statusModal").style.display = "none";
+
+function closeUpdateOrderModal() {
 	document.getElementById("updateOrderModal").style.display = "none";
+	document.getElementById("modalOverlay").style.display = "none";
+}
+
+function closeModalOrderStatus() {
+	document.getElementById("statusModal").style.display = "none";
 	document.getElementById("modalOverlay").style.display = "none";
 }
 

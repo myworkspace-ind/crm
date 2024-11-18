@@ -35,20 +35,16 @@ public class GoodsCategory implements Serializable {
 	@Column
 	private String name;
 
-//	// Relation Many-to-Many with Order
-//    @ManyToMany(mappedBy = "goodsCategories")
-//    private Set<Order> orders;
-
+	// Constructor nhận id
+    public GoodsCategory(Long id) {
+        this.id = id;
+    }
+    
 	public GoodsCategory(Long id, String siteId, String name) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
-	}
-
-	@Override
-	public String toString() {
-		return "GoodsCategory [id=" + id + ", siteId=" + siteId + ", name=" + name + "]";
 	}
 
 }

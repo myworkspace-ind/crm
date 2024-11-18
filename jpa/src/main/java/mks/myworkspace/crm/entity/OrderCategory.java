@@ -61,10 +61,5 @@ public class OrderCategory implements Serializable {
 		this.orderStatuses = orderStatuses;
 	}
 
-	@Override
-	public String toString() {
-		return "OrderCategory [id=" + id + ", siteId=" + siteId + ", name=" + name + ", orders=" + orders
-				+ ", orderStatuses=" + orderStatuses + "]";
-	}
 	
 }

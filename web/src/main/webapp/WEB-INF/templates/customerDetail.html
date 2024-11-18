@@ -64,7 +64,7 @@
 								alt="User Avatar">
 						</div>
 						<div class="user-details">
-							<h2 th:text="${customer.name}"></h2>
+							<h2 th:text="${customer.companyName}"></h2>
 							<p th:text="${customer.address}"></p>
 							<p th:text="${customer.phone}"></p>
 						</div>
@@ -75,15 +75,15 @@
 						<button>Delete</button>
 					</div>
 
-					<div class="relationship-section">
+					<!-- <div class="relationship-section">
 						<label for="relationship">Trạng thái:</label>
 						<ul>
-							<!-- Lặp qua danh sách trạng thái -->
+							Lặp qua danh sách trạng thái
 							<li th:each="status : ${customer.statuses}"
 								th:text="${status.name}"></li>
 						</ul>
 
-					</div>
+					</div> -->
 
 					<div class="person-in-charge">
 						<label class="label-bold" for="person-in-charge">Người phụ

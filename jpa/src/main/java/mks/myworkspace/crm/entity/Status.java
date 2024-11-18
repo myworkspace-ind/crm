@@ -6,10 +6,11 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -38,9 +39,17 @@ public class Status implements Serializable {
 	@Column(length = 99)
 	private String backgroundColor;
 
-	// Many-to-Many relationship with Customer
-	@ManyToMany(mappedBy = "statuses")
-	private Set<Customer> customers = new HashSet<>();
+//	// Many-to-Many relationship with Customer
+//	@ManyToMany(mappedBy = "statuses")
+//	private Set<Customer> customers = new HashSet<>();
+	
+	// One-to-Many relationship with Customer for main status
+    @OneToMany(mappedBy = "mainStatus", fetch = FetchType.EAGER)
+    private Set<Customer> mainStatusCustomers = new HashSet<>();
+
+    // One-to-Many relationship with Customer for sub status
+    @OneToMany(mappedBy = "subStatus", fetch = FetchType.EAGER)
+    private Set<Customer> subStatusCustomers = new HashSet<>();
 
 	public Status(Long id, String siteId, String name, String backgroundColor, Set<Customer> customers) {
 		super();
@@ -48,15 +57,11 @@ public class Status implements Serializable {
 		this.siteId = siteId;
 		this.name = name;
 		this.backgroundColor = backgroundColor;
-		this.customers = customers;
 	}
 
 	@Override
-	public String toString() {
-		return "Status [id=" + id + ", siteId=" + siteId + ", name=" + name + ", backgroundColor=" + backgroundColor
-				+ ", customers=" + customers + "]";
-	}
-
-	
-
+    public String toString() {
+        return "Status [id=" + id + ", siteId=" + siteId + ", name=" + name + ", backgroundColor=" + backgroundColor
+                + ", mainCustomers=" + mainStatusCustomers + ", subCustomers=" + subStatusCustomers + "]";
+    }
 }
