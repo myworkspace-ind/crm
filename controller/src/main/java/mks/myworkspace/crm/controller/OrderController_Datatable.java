@@ -103,7 +103,7 @@ public class OrderController_Datatable extends BaseController {
 
 	@Autowired
 	CustomerService customerService;
-	
+
 	@Autowired
 	GoodsCategoryService goodsCategoryService;
 
@@ -147,7 +147,7 @@ public class OrderController_Datatable extends BaseController {
 
 		List<Customer> listCustomers;
 		listCustomers = customerService.getAllCustomers();
-		
+
 		List<GoodsCategory> listGoodsCategories;
 		listGoodsCategories = goodsCategoryService.findAllGoodsCategory();
 
@@ -194,22 +194,7 @@ public class OrderController_Datatable extends BaseController {
 		}
 
 	}
-	
-	@RequestMapping(value = "/create-order", consumes = "application/json", produces = "application/json")
-	@ResponseBody
-	public ResponseEntity<?> createOrder(@RequestBody Order order, HttpServletRequest request,
-			HttpSession httpSession) {
-		try {
-			storageService.saveOrUpdateOrder(order);
-			return ResponseEntity.ok().body(Map.of("message", "Đơn hàng mới đã được thêm!", "order", order));
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errorMessage", e.getMessage()));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
-		}
-	}
-	
+
 	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody String json) {
@@ -217,7 +202,7 @@ public class OrderController_Datatable extends BaseController {
 
 		try {
 			// Convert JSON string thành đối tượng Order
-			Order order = OrderConverter.convertJsonToOrder(json);
+			Order order = OrderConverter.convertJsonToOrder_Update(json);
 
 			log.debug("Order Details after JSON Conversion:");
 			log.debug("Order ID: {}", order.getId());
@@ -255,7 +240,40 @@ public class OrderController_Datatable extends BaseController {
 
 		return ResponseEntity.ok(response);
 	}
+	
+	
+	@PostMapping(value = "/create-order", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> createOrder(@RequestBody String json) {
+		Map<String, String> response = new HashMap<>();
 
+		try {
+			// Convert JSON string thành đối tượng Order
+			Order order = OrderConverter.convertJsonToOrder_Create(json);
+			
+			//Create Order
+			Order savedOrder = storageService.saveOrUpdateOrder(order);
+			System.out.println("Saved Order: " + savedOrder.toString());
+			System.out.println("Sender: " + (savedOrder.getSender() != null ? savedOrder.getSender().getId() : "null"));
+			System.out.println("Receiver: " + (savedOrder.getReceiver() != null ? savedOrder.getReceiver().getId() : "null"));
+			System.out.println("GoodsCategory: " + (savedOrder.getGoodsCategory() != null ? savedOrder.getGoodsCategory().getId() : "null"));
+			System.out.println("OrderStatus: " + (savedOrder.getOrderStatus() != null ? savedOrder.getOrderStatus().getId() : "null"));
+			System.out.println("OrderCategory: " + (savedOrder.getOrderCategory() != null ? savedOrder.getOrderCategory().getId() : "null"));
+			response.put("status", "success");
+			response.put("message", "Order " + (order.getId() != null ? "updated" : "created") + " successfully.");
+			log.debug("Order saved with ID: {}", savedOrder.getId()); // Log kết quả ID
+
+		} catch (Exception e) {
+			log.error("Error saving/updating order: ", e);
+			response.put("status", "error");
+			response.put("message", "An error occurred while saving/updating the order.");
+		}
+
+		return ResponseEntity.ok(response);
+	}
+
+	
+	
 	@GetMapping(value = { "/getAllOrderStatuses" }, produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Object> getAllOrderStatuses() {
@@ -278,7 +296,7 @@ public class OrderController_Datatable extends BaseController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
 		}
 	}
-	
+
 	@GetMapping("/orderDetail")
 	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long orderId, HttpServletRequest request,
 			HttpSession httpSession) {
@@ -299,29 +317,48 @@ public class OrderController_Datatable extends BaseController {
 
 		return mav;
 	}
-	
+
 	@GetMapping(value = "/order-statuses", produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Object> getOrderStatusesByCategory(@RequestParam("categoryId") Long categoryId) {
-	    try {
-	        List<OrderStatus> statuses = orderStatusService.findByOrderCategories_Id(categoryId);
-	        Object[][] orderStatusData = JpaTransformer_OrderDetail.convert2D_OrderStatus(statuses);
-	        // Chuyển đổi mảng 2 chiều thành danh sách danh sách để tương thích với JSON
-	        List<List<Object>> jsonCompatibleData = new ArrayList<>();
-	        for (Object[] row : orderStatusData) {
-	            jsonCompatibleData.add(Arrays.asList(row));
-	        }
-	        log.debug("Fetched order statuses for category {}: {}", categoryId, jsonCompatibleData);
-	        
-	        return ResponseEntity.ok(jsonCompatibleData);
-	    } catch (Exception e) {
-	        log.error("Error fetching order statuses for category {}: ", categoryId, e);
+		try {
+			List<OrderStatus> statuses = orderStatusService.findByOrderCategories_Id(categoryId);
+			Object[][] orderStatusData = JpaTransformer_OrderDetail.convert2D_OrderStatus(statuses);
+			// Chuyển đổi mảng 2 chiều thành danh sách danh sách để tương thích với JSON
+			List<List<Object>> jsonCompatibleData = new ArrayList<>();
+			for (Object[] row : orderStatusData) {
+				jsonCompatibleData.add(Arrays.asList(row));
+			}
+			log.debug("Fetched order statuses for category {}: {}", categoryId, jsonCompatibleData);
 
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
-	    }
+			return ResponseEntity.ok(jsonCompatibleData);
+		} catch (Exception e) {
+			log.error("Error fetching order statuses for category {}: ", categoryId, e);
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+		}
 	}
-	
-	
+
+	@GetMapping("/get-sender-receiver-details")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> getSenderDetails(@RequestParam("customerId") Long customerId) {
+		try {
+			Optional<Customer> customerDetail = customerService.findById(customerId);
+
+			if (customerDetail.isPresent()) {
+				Customer customer = customerDetail.get();
+				Map<String, String> senderDetail = new HashMap<>();
+				senderDetail.put("phone", customer.getPhone());
+				senderDetail.put("email", customer.getEmail());
+
+				return ResponseEntity.ok(senderDetail);
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 //	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")
 //	@ResponseBody
 //	public ResponseEntity<Map<String, String>> saveOrderData(@RequestBody Order order) {
@@ -345,7 +382,6 @@ public class OrderController_Datatable extends BaseController {
 //
 //		return ResponseEntity.ok(response);
 //	}
-
 
 //	@GetMapping(value = { "/get-orders" }, produces = "application/json")
 //	@ResponseBody

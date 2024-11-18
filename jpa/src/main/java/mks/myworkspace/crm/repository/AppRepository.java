@@ -92,27 +92,30 @@ public class AppRepository {
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
+	
+//	public Order saveOrUpdateOrder(Order order) {
+//	    if (order.getId() == null) {
+//	        log.debug("Inserting new order"); // Log when inserting a new order
+//	        Long newId = createOrder(order); // Tạo mới order và lấy ID mới
+//	        order.setId(newId); // Cập nhật ID mới vào đối tượng order
+//	    } else {
+//	        log.debug("Updating existing order with ID: {}", order.getId()); // Log when updating
+//	        updateOrder(order); // Cập nhật thông tin order
+//	    }
+//
+//	    log.debug("Final Order ID after saveOrUpdate: {}", order.getId());
+//	    return order; // Trả về đối tượng order đã được cập nhật
+//	}
+	
 
 	public Long saveOrUpdateOrder(Order order) {
-//		Long id;
-//		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
-//				.usingGeneratedKeyColumns("id");
-//
-//		if (order.getId() == null) {
-//			id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
-//		} else {
-//			updateOrder(order);
-//			id = order.getId();
-//		}
-////		return id;
-//		Long id;
-//		updateOrder(order);
-//		id = order.getId();
+
 		Long id = null;
 
 		if (order.getId() == null) {
 			log.debug("Inserting new order"); // Log when inserting a new order
 			createOrder(order);
+			id = order.getId();
 
 		} else {
 			log.debug("Updating existing order with ID: {}", order.getId()); // Log when updating
@@ -130,7 +133,7 @@ public class AppRepository {
 				.usingGeneratedKeyColumns("id");
 
 		id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
-		
+		log.debug("New ID: {}", id);
 		return id;
 
 	}

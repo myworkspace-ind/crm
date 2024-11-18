@@ -41,6 +41,9 @@ public class Order implements Serializable {
 	@Column
 	private String code;
 	
+	@Column
+	private String address;
+	
 	@Column(name = "create_date")
 	//@Temporal(TemporalType.DATE)
 	private Date createDate;
