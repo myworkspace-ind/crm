@@ -3,7 +3,9 @@ package mks.myworkspace.crm.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +16,30 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderStatus;
 
 @Repository
+@Slf4j
 public class AppRepository {
 	@Autowired
 	@Qualifier("jdbcTemplate0")
 	private JdbcTemplate jdbcTemplate0;
+
+	@Autowired
+	CustomerRepository customerRepository;
+
+	@Autowired
+	OrderStatusRepository orderStatusRepository;
+
+	@Autowired
+	GoodsCategoryRepository goodsCategoryRepository;
+
+	@Autowired
+	OrderCategoryRepository orderCategoryRepository;
 
 	/**
 	 * @param entities
@@ -77,18 +93,14 @@ public class AppRepository {
 		if (customerIds == null || customerIds.isEmpty()) {
 			return;
 		}
-
-		// Tạo các tham số
 		String sql = "DELETE FROM customer_status WHERE customer_id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
-		// Thực hiện câu lệnh xóa
-		jdbcTemplate0.update(sql, customerIds.toArray()); // Truyền mảng ID
+		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
 
 	public void deleteCustomersByIds(List<Long> customerIds) {
-		deleteCustomerStatusByCustomerIds(customerIds); // Xóa trước các bản ghi liên quan
-		// Tiến hành xóa khách hàng
+		// deleteCustomerStatusByCustomerIds(customerIds);
 		String sql = "DELETE FROM crm_customer WHERE id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
@@ -97,16 +109,87 @@ public class AppRepository {
 
 	public Long saveOrUpdateOrder(Order order) {
 		Long id;
-		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
-				.usingGeneratedKeyColumns("id");
 
+		// Fetch related entities
+		if (order.getSender() != null && order.getSender().getId() != null) {
+			order.setSender(customerRepository.findById(order.getSender().getId())
+					.orElseThrow(() -> new IllegalArgumentException("Sender not found")));
+		}
+		if (order.getReceiver() != null && order.getReceiver().getId() != null) {
+			order.setReceiver(customerRepository.findById(order.getReceiver().getId())
+					.orElseThrow(() -> new IllegalArgumentException("Receiver not found")));
+		}
+		if (order.getGoodsCategory() != null && order.getGoodsCategory().getId() != null) {
+			order.setGoodsCategory(goodsCategoryRepository.findById(order.getGoodsCategory().getId())
+					.orElseThrow(() -> new IllegalArgumentException("GoodsCategory not found")));
+		}
+		if (order.getOrderStatus() != null && order.getOrderStatus().getId() != null) {
+			order.setOrderStatus(orderStatusRepository.findById(order.getOrderStatus().getId())
+					.orElseThrow(() -> new IllegalArgumentException("OrderStatus not found")));
+		}
+		if (order.getOrderCategory() != null && order.getOrderCategory().getId() != null) {
+			order.setOrderCategory(orderCategoryRepository.findById(order.getOrderCategory().getId())
+					.orElseThrow(() -> new IllegalArgumentException("OrderCategory not found")));
+		}
+
+		// Insert or update logic
 		if (order.getId() == null) {
-			id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
+			log.debug("Inserting new order");
+			id = createOrder(order);
 		} else {
+			log.debug("Updating existing order with ID: {}", order.getId());
 			updateOrder(order);
 			id = order.getId();
 		}
+
+		log.debug("Resulting ID after saveOrUpdate: {}", id);
 		return id;
+	}
+
+//	public Long saveOrUpdateOrder(Order order) {
+//
+//		Long id;
+//
+//		if (order.getId() == null) {
+//			log.debug("Inserting new order"); // Log when inserting a new order
+//			createOrder(order);
+//			id = order.getId();
+//
+//		} else {
+//			log.debug("Updating existing order with ID: {}", order.getId()); // Log when updating
+//			updateOrder(order);
+//			id = order.getId();
+//		}
+//
+//		log.debug("Resulting ID after saveOrUpdate: {}", id);
+//		return id;
+//	}
+
+	public Long createOrder(Order order) {
+		Long id;
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
+				.usingGeneratedKeyColumns("id");
+
+		Map<String, Object> parameters = new HashMap<>();
+		// Thêm các trường cố định trong entity (không có liên kết bảng)
+		parameters.put("code", order.getCode());
+		parameters.put("create_date", order.getCreateDate());
+		parameters.put("delivery_date", order.getDeliveryDate());
+		parameters.put("customer_requirement", order.getCustomerRequirement());
+		parameters.put("transportation_method", order.getTransportationMethod());
+		parameters.put("address", order.getAddress());
+
+		// Thêm các khóa ngoại
+		parameters.put("sender_id", order.getSender() != null ? order.getSender().getId() : null);
+		parameters.put("receiver_id", order.getReceiver() != null ? order.getReceiver().getId() : null);
+		parameters.put("goods_category_id", order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null);
+		parameters.put("order_status_id", order.getOrderStatus() != null ? order.getOrderStatus().getId() : null);
+		parameters.put("order_cate_id", order.getOrderCategory() != null ? order.getOrderCategory().getId() : null);
+
+		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		log.debug("New ID: {}", id);
+		return id;
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -128,10 +211,17 @@ public class AppRepository {
 						ord.setTransportationMethod(rs.getString("transportation_method"));
 						ord.setCustomerRequirement(rs.getString("customer_requirement"));
 
-						Customer customer = new Customer();
-						long customerId = rs.getLong("cus_id");
-						customer.setId(customerId);
-						ord.setCustomer(customer);
+						// Sender
+						Customer sender = new Customer();
+						long senderId = rs.getLong("sender_id");
+						sender.setId(senderId);
+						ord.setSender(sender);
+
+						// Receiver
+						Customer receiver = new Customer();
+						long receiverId = rs.getLong("receiver_id");
+						receiver.setId(receiverId);
+						ord.setReceiver(receiver);
 
 						GoodsCategory goodsCategory = new GoodsCategory();
 						goodsCategory.setId(rs.getLong("goods_category_id"));
@@ -140,22 +230,6 @@ public class AppRepository {
 						OrderStatus orderStatus = new OrderStatus();
 						orderStatus.setId(rs.getLong("order_status_id"));
 						ord.setOrderStatus(orderStatus);
-						// Customer customer = new Customer();
-						// customer.setId(rs.getLong("crm_order.cus_id"));
-						// customer.setContactPerson(rs.getString("contact_person"));
-						// customer.setPhone(rs.getString("phone"));
-						// customer.setEmail(rs.getString("email"));
-						// ord.setCustomer(customer);
-
-						// GoodsCategory goodsCategory = new GoodsCategory();
-						// goodsCategory.setId(rs.getLong("id"));
-						// goodsCategory.setName(rs.getString("name"));
-						// ord.setGoodsCategory(goodsCategory);
-
-						// OrderStatus orderStatus = new OrderStatus();
-						// orderStatus.setId(rs.getLong("id"));
-						// orderStatus.setName(rs.getString("name"));
-						// ord.setOrderStatus(orderStatus);
 
 						return ord;
 					}
@@ -164,7 +238,7 @@ public class AppRepository {
 		// SQL để cập nhật dữ liệu đơn hàng
 		String updateSql = "UPDATE crm_order SET name = ?, code = ?, create_date = ?, "
 				+ "delivery_date = ?, transportation_method = ?, customer_requirement = ?, "
-				+ "cus_id = ?, order_status_id = ?, goods_category_id = ? " + "WHERE id = ?";
+				+ "sender_id = ?, receiver_id = ?, order_status_id = ?, goods_category_id = ? " + "WHERE id = ?";
 
 		// Thực thi câu lệnh cập nhật
 		jdbcTemplate0.update(updateSql, order.getName() != null ? order.getName() : existingOrder.getName(),
@@ -175,7 +249,10 @@ public class AppRepository {
 						: existingOrder.getTransportationMethod(),
 				order.getCustomerRequirement() != null ? order.getCustomerRequirement()
 						: existingOrder.getCustomerRequirement(),
-				order.getCustomer() != null ? order.getCustomer().getId() : existingOrder.getCustomer().getId(),
+
+				order.getSender() != null ? order.getSender().getId() : existingOrder.getSender().getId(),
+				order.getReceiver() != null ? order.getReceiver().getId() : existingOrder.getReceiver().getId(),
+
 				order.getOrderStatus() != null ? order.getOrderStatus().getId()
 						: existingOrder.getOrderStatus().getId(),
 				order.getGoodsCategory() != null ? order.getGoodsCategory().getId()

@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,11 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public Order getOrderById(Long orderId) {
 		return repo.findById(orderId).orElse(null);
+	}
+
+	@Override
+	public Optional<Order> findById(Long orderId) {
+		return repo.findOrderById(orderId);
 	}
 
 

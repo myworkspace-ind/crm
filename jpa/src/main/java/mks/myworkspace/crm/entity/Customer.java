@@ -2,17 +2,14 @@ package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -76,12 +73,9 @@ public class Customer implements Serializable {
     @Column(name = "note", length = 255)
     private String note;
     
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
-	private Set<Order> orders;
-
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
 			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, Date createdAt,
-			String note, Set<Order> orders) {
+			String note) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -96,7 +90,6 @@ public class Customer implements Serializable {
 		this.responsiblePerson = responsiblePerson;
 		this.createdAt = createdAt;
 		this.note = note;
-		this.orders = orders;
 	}
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,

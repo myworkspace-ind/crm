@@ -10,10 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import lombok.Getter;
@@ -43,6 +40,9 @@ public class Order implements Serializable {
 	@Column
 	private String code;
 	
+	@Column
+	private String address;
+	
 	@Column(name = "create_date")
 	//@Temporal(TemporalType.DATE)
 	private Date createDate;
@@ -57,15 +57,19 @@ public class Order implements Serializable {
 	@Column(name = "customer_requirement")
 	private String customerRequirement;
 
-	// Relation 1-1 with OrderCategoryRepository
-	@OneToOne
+	// Relation with OrderCategoryRepository
+	@ManyToOne
 	@JoinColumn(name = "order_cate_id", referencedColumnName = "id")
 	private OrderCategory orderCategory;
 
-	// Relation 1-1 with Customer
-	@OneToOne
-	@JoinColumn(name = "cus_id", referencedColumnName = "id")
-	private Customer customer;
+	// Relation with Customer
+	@ManyToOne
+	@JoinColumn(name = "sender_id", referencedColumnName = "id")
+	private Customer sender;
+	
+	@ManyToOne
+	@JoinColumn(name = "receiver_id", referencedColumnName = "id")
+	private Customer receiver;
 
 	// Relation Many-to-One with OrderStatus
 	@ManyToOne
@@ -76,13 +80,9 @@ public class Order implements Serializable {
     @JoinColumn(name = "goods_category_id") 
     private GoodsCategory goodsCategory;
 
-	public Order(Long orderId, Date deliveryDate2, GoodsCategory goodsCategory2, Customer customer2,
-			String transportationMethod2) {
-	}
-
 	public Order(Long id, String siteId, String name, String code, Date createDate, Date deliveryDate,
-			String transportationMethod, String customerRequirement, OrderCategory orderCategory, Customer customer,
-			OrderStatus orderStatus, GoodsCategory goodsCategory) {
+			String transportationMethod, String customerRequirement, OrderCategory orderCategory, Customer sender,
+			Customer receiver, OrderStatus orderStatus, GoodsCategory goodsCategory) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -93,10 +93,10 @@ public class Order implements Serializable {
 		this.transportationMethod = transportationMethod;
 		this.customerRequirement = customerRequirement;
 		this.orderCategory = orderCategory;
-		this.customer = customer;
+		this.sender = sender;
+		this.receiver = receiver;
 		this.orderStatus = orderStatus;
 		this.goodsCategory = goodsCategory;
 	}
-
 
 }

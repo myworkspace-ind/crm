@@ -23,7 +23,7 @@
 	                               <h5>Khách hàng</h5>
 	                               <select style="background-color: white; color: black; width: 100%;">
 	                               		<th:block th:each="customer : ${listCustomers}">
-											<option th:value="${customer.id}" th:text="${customer.companyName}">
+											<option th:value="${customer.id}" th:text="${customer.contactPerson}">
 											</option>
 										</th:block>
 	                               </select>

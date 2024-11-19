@@ -6,7 +6,9 @@ function getCurrentDate() {
 	return `${year}-${month}-${day}`;
 }
 
-document.getElementById('orderCreateDateDetail').value = getCurrentDate();
-document.getElementById('orderDeliveryDate').value = getCurrentDate();
+//document.getElementById('orderCreateDateDetail').value = getCurrentDate();
+//document.getElementById('orderDeliveryDate').value = getCurrentDate();
 document.getElementById('orderDate').value = getCurrentDate();
 document.getElementById('deliveryDate').value = getCurrentDate();
+document.getElementById('orderCreateDateCreate').value = getCurrentDate();
+document.getElementById('orderDeliveryDateCreate').value = getCurrentDate();
