@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -58,12 +57,12 @@ public class Order implements Serializable {
 	@Column(name = "customer_requirement")
 	private String customerRequirement;
 
-	// Relation 1-1 with OrderCategoryRepository
-	@OneToOne
+	// Relation with OrderCategoryRepository
+	@ManyToOne
 	@JoinColumn(name = "order_cate_id", referencedColumnName = "id")
 	private OrderCategory orderCategory;
 
-	// Relation 1-1 with Customer
+	// Relation with Customer
 	@ManyToOne
 	@JoinColumn(name = "sender_id", referencedColumnName = "id")
 	private Customer sender;
@@ -99,8 +98,5 @@ public class Order implements Serializable {
 		this.orderStatus = orderStatus;
 		this.goodsCategory = goodsCategory;
 	}
-
-	
-
 
 }

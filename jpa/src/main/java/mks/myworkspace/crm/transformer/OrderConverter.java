@@ -6,12 +6,13 @@ import java.text.SimpleDateFormat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
-
+@Slf4j
 public class OrderConverter {
 	public static Order convertJsonToOrder_Create(String json) {
 		JSONObject jsonObject = new JSONObject(json);
@@ -40,26 +41,51 @@ public class OrderConverter {
 		order.setAddress(jsonObject.getString("address"));
 
 		// Sender
-		Customer sender = new Customer();
-		sender.setId(Long.parseLong(jsonObject.getString("sender")));
-		order.setSender(sender);
+	    log.debug("Fetching sender information...");
+	    Customer sender = new Customer();
+	    String senderId = jsonObject.getString("sender");
+	    log.debug("Sender ID from JSON: {}", senderId);
+	    sender.setId(Long.parseLong(senderId));
+	    log.debug("Sender object created: {}", sender);
+	    order.setSender(sender);
 
-		// Receiver
-		Customer receiver = new Customer();
-		receiver.setId(Long.parseLong(jsonObject.getString("receiver")));
-		order.setReceiver(receiver);
+	    // Receiver
+	    log.debug("Fetching receiver information...");
+	    Customer receiver = new Customer();
+	    String receiverId = jsonObject.getString("receiver");
+	    log.debug("Receiver ID from JSON: {}", receiverId);
+	    receiver.setId(Long.parseLong(receiverId));
+	    log.debug("Receiver object created: {}", receiver);
+	    order.setReceiver(receiver);
 
-		GoodsCategory goodsCategory = new GoodsCategory();
-		goodsCategory.setId(Long.parseLong(jsonObject.getString("goodsCategory")));
-		order.setGoodsCategory(goodsCategory);
+	    // Goods Category
+	    log.debug("Fetching goods category...");
+	    GoodsCategory goodsCategory = new GoodsCategory();
+	    String goodsCategoryId = jsonObject.getString("goodsCategory");
+	    log.debug("Goods Category ID from JSON: {}", goodsCategoryId);
+	    goodsCategory.setId(Long.parseLong(goodsCategoryId));
+	    log.debug("Goods Category object created: {}", goodsCategory);
+	    order.setGoodsCategory(goodsCategory);
 
-		OrderStatus orderStatus = new OrderStatus();
-		orderStatus.setId(Long.parseLong(jsonObject.getString("orderStatus")));
-		order.setOrderStatus(orderStatus);
+	    // Order Status
+	    log.debug("Fetching order status...");
+	    OrderStatus orderStatus = new OrderStatus();
+	    String orderStatusId = jsonObject.getString("orderStatus");
+	    log.debug("Order Status ID from JSON: {}", orderStatusId);
+	    orderStatus.setId(Long.parseLong(orderStatusId));
+	    log.debug("Order Status object created: {}", orderStatus);
+	    order.setOrderStatus(orderStatus);
 
-		OrderCategory orderCategory = new OrderCategory();
-		orderCategory.setId(Long.parseLong(jsonObject.getString("orderCategory")));
-		order.setOrderCategory(orderCategory);
+	    // Order Category
+	    log.debug("Fetching order category...");
+	    OrderCategory orderCategory = new OrderCategory();
+	    String orderCategoryId = jsonObject.getString("orderCategory");
+	    log.debug("Order Category ID from JSON: {}", orderCategoryId);
+	    orderCategory.setId(Long.parseLong(orderCategoryId));
+	    log.debug("Order Category object created: {}", orderCategory);
+	    order.setOrderCategory(orderCategory);
+
+	    log.debug("Order object created: {}", order);
 
 		return order;
 	}

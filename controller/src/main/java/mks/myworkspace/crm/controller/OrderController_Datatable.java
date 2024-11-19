@@ -262,6 +262,9 @@ public class OrderController_Datatable extends BaseController {
 			response.put("status", "success");
 			response.put("message", "Order " + (order.getId() != null ? "updated" : "created") + " successfully.");
 			log.debug("Order saved with ID: {}", savedOrder.getId()); // Log kết quả ID
+			
+			// Redirect to the orders datatable page
+			response.put("reload", "true");
 
 		} catch (Exception e) {
 			log.error("Error saving/updating order: ", e);
