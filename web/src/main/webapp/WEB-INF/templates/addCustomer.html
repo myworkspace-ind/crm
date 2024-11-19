@@ -10,8 +10,7 @@
 <th:block th:include="fragments/common_css"></th:block>
 <!-- END COMMON CSS -->
 
-<link rel="stylesheet" type="text/css"
-	href="resources/css/add-customer-style.css">
+<link rel="stylesheet" type="text/css" href="resources/css/add-customer-style.css">
 </head>
 
 <body
@@ -69,7 +68,7 @@
 									<div class="form-group">
 										<label for="profession">Ngành Nghề:</label> <select
 											class="form-control" id="profession" name="profession">
-											<option value="">Chọn Ngành Nghề</option>
+											<!-- <option value="">Chọn Ngành Nghề</option> -->
 											<th:block th:each="profession : ${professions}">
 												<option th:value="${profession.id}" th:text="${profession.name}"></option>
 											</th:block>
@@ -79,7 +78,7 @@
 									<div class="form-group">
 										<label for="main_status">Trạng Thái Chính:</label> <select
 											class="form-control" id="main_status" name="main_status">
-											<option value="">Chọn Trạng Thái Chính</option>
+											<!-- <option value="">Chọn Trạng Thái Chính</option> -->
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}" th:text="${status.name}"></option>
 											</th:block>
@@ -89,7 +88,7 @@
 									<div class="form-group">
 										<label for="sub_status">Trạng Thái Phụ:</label> <select
 											class="form-control" id="sub_status" name="sub_status">
-											<option value="">Chọn Trạng Thái Phụ</option>
+											<!-- <option value="">Chọn Trạng Thái Phụ</option> -->
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}" th:text="${status.name}"></option>
 											</th:block>
@@ -99,7 +98,7 @@
 									<div class="form-group">
 										<label for="responsible_person">Người Phụ Trách:</label> <select
 											class="form-control" id="responsible_person" name="responsible_person">
-											<option value="">Chọn Người Phụ Trách</option>
+											<!-- <option value="">Chọn Người Phụ Trách</option> -->
 											<th:block th:each="person : ${responsiblePersons}">
 												<option th:value="${person.id}" th:text="${person.name}"></option>
 											</th:block>
@@ -127,9 +126,16 @@
 	</div>
 	<!-- END CONTENT -->
 
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
 	<!-- START COMMON JAVASCRIPT -->
 	<th:block th:include="fragments/common_javascript"></th:block>
 	<!-- END COMMON JAVASCRIPT -->
+	
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
 
 	<script type="text/javascript">
 		function addCustomer() {
