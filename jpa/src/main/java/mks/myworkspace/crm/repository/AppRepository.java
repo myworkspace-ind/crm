@@ -106,8 +106,17 @@ public class AppRepository {
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
+	
+	public void deleteOrderById(Long orderId) {
+		if(orderId == null) {
+			return;
+		}
+		
+		String sql = "DELETE FROM crm_order WHERE id = ?";
+		jdbcTemplate0.update(sql, orderId);
+	}
 
-	public Long saveOrUpdateOrder(Order order) {
+ 	public Long saveOrUpdateOrder(Order order) {
 		Long id;
 
 		// Fetch related entities
@@ -145,25 +154,6 @@ public class AppRepository {
 		log.debug("Resulting ID after saveOrUpdate: {}", id);
 		return id;
 	}
-
-//	public Long saveOrUpdateOrder(Order order) {
-//
-//		Long id;
-//
-//		if (order.getId() == null) {
-//			log.debug("Inserting new order"); // Log when inserting a new order
-//			createOrder(order);
-//			id = order.getId();
-//
-//		} else {
-//			log.debug("Updating existing order with ID: {}", order.getId()); // Log when updating
-//			updateOrder(order);
-//			id = order.getId();
-//		}
-//
-//		log.debug("Resulting ID after saveOrUpdate: {}", id);
-//		return id;
-//	}
 
 	public Long createOrder(Order order) {
 		Long id;
@@ -210,6 +200,7 @@ public class AppRepository {
 						ord.setDeliveryDate(rs.getDate("delivery_date"));
 						ord.setTransportationMethod(rs.getString("transportation_method"));
 						ord.setCustomerRequirement(rs.getString("customer_requirement"));
+						ord.setAddress(rs.getString("address"));
 
 						// Sender
 						Customer sender = new Customer();
@@ -237,7 +228,7 @@ public class AppRepository {
 
 		// SQL để cập nhật dữ liệu đơn hàng
 		String updateSql = "UPDATE crm_order SET name = ?, code = ?, create_date = ?, "
-				+ "delivery_date = ?, transportation_method = ?, customer_requirement = ?, "
+				+ "delivery_date = ?, transportation_method = ?, customer_requirement = ?, address = ?, "
 				+ "sender_id = ?, receiver_id = ?, order_status_id = ?, goods_category_id = ? " + "WHERE id = ?";
 
 		// Thực thi câu lệnh cập nhật
@@ -249,10 +240,9 @@ public class AppRepository {
 						: existingOrder.getTransportationMethod(),
 				order.getCustomerRequirement() != null ? order.getCustomerRequirement()
 						: existingOrder.getCustomerRequirement(),
-
+				order.getAddress() != null ? order.getAddress() : existingOrder.getAddress(),
 				order.getSender() != null ? order.getSender().getId() : existingOrder.getSender().getId(),
 				order.getReceiver() != null ? order.getReceiver().getId() : existingOrder.getReceiver().getId(),
-
 				order.getOrderStatus() != null ? order.getOrderStatus().getId()
 						: existingOrder.getOrderStatus().getId(),
 				order.getGoodsCategory() != null ? order.getGoodsCategory().getId()

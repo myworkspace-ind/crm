@@ -93,4 +93,9 @@ public class StorageServiceImpl implements StorageService {
 		log.debug("Final Order ID after saveOrUpdate: {}", order.getId()); // Log the final ID after save/update
 		return order;
 	}
+
+	@Override
+	public void deleteOrderById(Long orderId) {
+		appRepo.deleteOrderById(orderId);
+	}
 }

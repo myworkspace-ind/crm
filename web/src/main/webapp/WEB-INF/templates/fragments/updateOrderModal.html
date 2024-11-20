@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 	<div id="updateOrderModal">
-		<h3>ID của đơn hàng: <span id="orderIdUpdate"></span></h3>
+		<h3 id="orderIdForUpdate">ID của đơn hàng: <span id="orderIdUpdate"></span></h3>
 		<h3 id="title">Cập nhật đơn hàng <span id="orderCodeUpdate"></span></h3>
 		<div class="closeBtnDiv" style="text-align: right;">
 			<button onclick="closeUpdateOrderModal()" class="closeBtn"><i class="fas fa-times"></i></button>
@@ -51,8 +51,12 @@
 			            <legend>Thông tin người gửi</legend>
 			            <table class="sender-table">
 			                <tr>
-			                    <td>Họ tên:</td>
-			                    <td><select class="form-control" id="orderSenderNameUpdate" style="background-color: white; color: black;" ></select>
+			                 <td>Họ tên:</td>
+			                    <td>
+			                    	<select class="form-control" id="orderSenderNameUpdate" style="background-color: white; color: black;" >
+			                    	
+			                    	</select>
+			                    </td>
 			                </tr>
 			                <tr>
 			                    <td>SDT:</td>
@@ -69,20 +73,24 @@
 				<div class="column col2">
 				        <fieldset>
 				            	<legend>Thông tin người nhận</legend>
-				            <table class="receiver-table">
-				                <tr>
+				           <table class="sender-table">
+				               <tr>
 				                    <td>Họ tên:</td>
-				                    <td><input type="text" class="input-container" /></td>
-				                </tr>
-				                <tr>
+				                    <td>
+				                    	<select class="form-control" id="orderReceiverNameUpdate" style="background-color: white; color: black;" >
+				                    		
+				                    	</select>
+				                    </td>
+				               </tr>
+				               <tr>
 				                    <td>SDT:</td>
-				                    <td><input type="text" class="input-container" placeholder="(+84) 1234567890" /></td>
-				                </tr>
-				                <tr>
+				                    <td><input type="text" class="input-container" id= "orderReceiverPhoneUpdate" placeholder="(+84) 1234567890" readonly /></td>
+				               </tr>
+				               <tr>
 				                    <td>Email:</td>
-				                    <td><input type="email" class="input-container" /></td>
-				                </tr>
-				            </table>
+				                    <td><input type="text" class="input-container" id= "orderReceiverEmailUpdate" readonly /></td>
+				               </tr>
+			            </table>
 				        </fieldset>
 				</div>
 		</div>
@@ -98,7 +106,7 @@
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Địa chỉ</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="textAreaExample2" rows="8" ></textarea>
+								<textarea class="form-control" id="orderAddressUpdate" rows="8" ></textarea>
 							</div>
 				        </div>
 				    </div>

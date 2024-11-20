@@ -37,6 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -184,12 +185,15 @@ public class OrderController_Datatable extends BaseController {
 	public ResponseEntity<?> displayOrderDetails(@PathVariable("id") Long orderId) {
 		Order order = orderService.getOrderById(orderId);
 		List<OrderStatus> allOrderStatuses = orderStatusService.findAllOrderStatuses();
-		List<GoodsCategory> allGoodsCategory = goodsCategoryService.findAllGoodsCategory();
+		List<GoodsCategory> allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
+		List<Customer> allSenders = customerService.getAllCustomers();
+		List<Customer> allReceivers = customerService.getAllCustomers();
 		if (order != null) {
-			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order, allOrderStatuses, allGoodsCategory);
+			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order, allOrderStatuses,
+					allGoodsCategories, allSenders, allReceivers);
 			return ResponseEntity.ok(orderDetailArray);
 		} else {
-			log.debug("CANNOT order!");
+			log.debug("CANNOT FIND ORDER!");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
 		}
 
@@ -240,8 +244,7 @@ public class OrderController_Datatable extends BaseController {
 
 		return ResponseEntity.ok(response);
 	}
-	
-	
+
 	@PostMapping(value = "/create-order", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> createOrder(@RequestBody String json) {
@@ -250,19 +253,23 @@ public class OrderController_Datatable extends BaseController {
 		try {
 			// Convert JSON string thành đối tượng Order
 			Order order = OrderConverter.convertJsonToOrder_Create(json);
-			
-			//Create Order
+
+			// Create Order
 			Order savedOrder = storageService.saveOrUpdateOrder(order);
 			System.out.println("Saved Order: " + savedOrder.toString());
 			System.out.println("Sender: " + (savedOrder.getSender() != null ? savedOrder.getSender().getId() : "null"));
-			System.out.println("Receiver: " + (savedOrder.getReceiver() != null ? savedOrder.getReceiver().getId() : "null"));
-			System.out.println("GoodsCategory: " + (savedOrder.getGoodsCategory() != null ? savedOrder.getGoodsCategory().getId() : "null"));
-			System.out.println("OrderStatus: " + (savedOrder.getOrderStatus() != null ? savedOrder.getOrderStatus().getId() : "null"));
-			System.out.println("OrderCategory: " + (savedOrder.getOrderCategory() != null ? savedOrder.getOrderCategory().getId() : "null"));
+			System.out.println(
+					"Receiver: " + (savedOrder.getReceiver() != null ? savedOrder.getReceiver().getId() : "null"));
+			System.out.println("GoodsCategory: "
+					+ (savedOrder.getGoodsCategory() != null ? savedOrder.getGoodsCategory().getId() : "null"));
+			System.out.println("OrderStatus: "
+					+ (savedOrder.getOrderStatus() != null ? savedOrder.getOrderStatus().getId() : "null"));
+			System.out.println("OrderCategory: "
+					+ (savedOrder.getOrderCategory() != null ? savedOrder.getOrderCategory().getId() : "null"));
 			response.put("status", "success");
 			response.put("message", "Order " + (order.getId() != null ? "updated" : "created") + " successfully.");
 			log.debug("Order saved with ID: {}", savedOrder.getId()); // Log kết quả ID
-			
+
 			// Redirect to the orders datatable page
 			response.put("reload", "true");
 
@@ -275,8 +282,6 @@ public class OrderController_Datatable extends BaseController {
 		return ResponseEntity.ok(response);
 	}
 
-	
-	
 	@GetMapping(value = { "/getAllOrderStatuses" }, produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Object> getAllOrderStatuses() {
@@ -361,6 +366,28 @@ public class OrderController_Datatable extends BaseController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
+	}
+
+	@DeleteMapping(value = "/delete-order", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> deleteOrderById(@RequestBody String json) {
+		Map<String, String> response = new HashMap<>();
+
+		try {
+			// Xóa đơn hàng
+			Long orderId = OrderConverter.convertJsonToOrder_Delete(json);
+			storageService.deleteOrderById(orderId);
+			response.put("status", "success");
+			response.put("message", "Order deleted successfully.");
+			log.debug("Order deleted with ID: {}", orderId); // Log kết quả ID
+
+		} catch (Exception e) {
+			log.error("Error deleting order: ", e);
+			response.put("status", "error");
+			response.put("message", "An error occurred while deleting the order.");
+		}
+
+		return ResponseEntity.ok(response);
 	}
 //	@PostMapping(value = "/saveOrderData", consumes = "application/json", produces = "application/json")
 //	@ResponseBody
