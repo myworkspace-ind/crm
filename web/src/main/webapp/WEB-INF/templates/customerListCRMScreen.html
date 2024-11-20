@@ -54,10 +54,17 @@
 							<th:block th:include="fragments/statusOfCustomer"></th:block>
 
 							<!-- Nút thêm mới khách hàng -->
-							<button class="addCustomerbtn" data-toggle="modal"
-								data-target="#addNewCustomerModal">
+<!-- 							<button class="addCustomerbtn" data-toggle="modal" -->
+<!-- 								data-target="#addNewCustomerModal"> -->
+<!-- 								<i class="fa-solid fa-plus"></i> Thêm mới khách hàng -->
+<!-- 							</button> -->
+							
+							<!-- Thay đổi nút Thêm khách hàng -->
+							<button class="addCustomerbtn"
+								onclick="window.location.href='/crm-web/add-customer'">
 								<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
 							</button>
+
 						</div>
 
 						<!-- Modal cho Thêm Khách Hàng Mới -->
@@ -241,7 +248,7 @@
 																	<td th:text="${customer.email != null ? customer.email : ''}"></td>
 																	<td th:text="${customer.phone != null ? customer.phone : ''}"></td>
 																	<td th:text="${customer.address != null ? customer.address : ''}"></td>
-																	<td th:text="${customer.profession != null ? customer.profession : ''}"></td>
+																	<td th:text="${customer.profession != null ? customer.profession.name : ''}"></td>
 																	<td th:class="'status-cell main-status'"
 																		th:style="${customer.mainStatus != null ? 'background-color: ' + customer.mainStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
 																		<span
@@ -252,7 +259,7 @@
 																		<span
 																		th:text="${customer.subStatus != null ? customer.subStatus.name : ''}"></span>
 																	</td>
-																	<td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson : ''}"></td>
+																	<td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : ''}"></td>
 
 																	<td
 																		th:text="${customer.createdAt != null ? #dates.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td>
