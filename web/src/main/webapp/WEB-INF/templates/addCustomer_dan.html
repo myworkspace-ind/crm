@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<!-- START COMMON META AND TITLE -->
+<th:block th:include="fragments/common_meta_title"></th:block>
+<!-- END COMMON META AND TITLE -->
+
+<!-- START COMMON CSS -->
+<th:block th:include="fragments/common_css"></th:block>
+<!-- END COMMON CSS -->
+
+<link rel="stylesheet" type="text/css" href="resources/css/add-customer-style.css">
+</head>
+
+<body
+	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	data-open="click" data-menu="vertical-compact-menu"
+	data-col="2-columns">
+
+	<!-- BEGIN HEADER -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER -->
+
+	<!-- BEGIN LEFT MENU NAVIGATION -->
+<!-- 	<th:block th:include="fragments/leftNavCRM"></th:block> -->
+	<!-- END LEFT MENU NAVIGATION -->
+
+	<!-- BEGIN CONTENT -->
+	<div class="app-content content">
+		<div class="content-body">
+			<section class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Thêm Khách Hàng Mới</h4>
+						</div>
+						<div class="card-content">
+							<div class="card-body">
+								<form id="addCustomerForm">
+									<div class="form-group">
+										<label for="company_name">Tên Công Ty:</label> <input
+											type="text" class="form-control" id="company_name"
+											name="company_name" required>
+									</div>
+
+									<div class="form-group">
+										<label for="contact_person">Người Liên Hệ Chính:</label> <input
+											type="text" class="form-control" id="contact_person"
+											name="contact_person" required>
+									</div>
+
+									<div class="form-group">
+										<label for="email">Email:</label> <input type="email"
+											class="form-control" id="email" name="email" required>
+									</div>
+
+									<div class="form-group">
+										<label for="phone">Số Điện Thoại:</label> <input type="tel"
+											class="form-control" id="phone" name="phone" required>
+									</div>
+
+									<div class="form-group">
+										<label for="address">Địa Chỉ:</label> <input type="text"
+											class="form-control" id="address" name="address">
+									</div>
+									
+									<div class="form-group">
+										<label for="profession">Ngành Nghề:</label> <select
+											class="form-control" id="profession" name="profession">
+											<!-- <option value="">Chọn Ngành Nghề</option> -->
+											<th:block th:each="profession : ${professions}">
+												<option th:value="${profession.id}" th:text="${profession.name}"></option>
+											</th:block>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="main_status">Trạng Thái Chính:</label> <select
+											class="form-control" id="main_status" name="main_status">
+											<!-- <option value="">Chọn Trạng Thái Chính</option> -->
+											<th:block th:each="status : ${statuses}">
+												<option th:value="${status.id}" th:text="${status.name}"></option>
+											</th:block>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="sub_status">Trạng Thái Phụ:</label> <select
+											class="form-control" id="sub_status" name="sub_status">
+											<!-- <option value="">Chọn Trạng Thái Phụ</option> -->
+											<th:block th:each="status : ${statuses}">
+												<option th:value="${status.id}" th:text="${status.name}"></option>
+											</th:block>
+										</select>
+									</div>
+									
+									<div class="form-group">
+										<label for="responsible_person">Người Phụ Trách:</label> <select
+											class="form-control" id="responsible_person" name="responsible_person">
+											<!-- <option value="">Chọn Người Phụ Trách</option> -->
+											<th:block th:each="person : ${responsiblePersons}">
+												<option th:value="${person.id}" th:text="${person.name}"></option>
+											</th:block>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="note">Ghi Chú:</label>
+										<textarea class="form-control" id="note" name="note"></textarea>
+									</div>
+
+									<button type="submit" class="btn btn-primary"
+										onclick="addCustomer()">Lưu Khách Hàng</button>
+
+									<button type="button" class="btn btn-secondary"
+										onclick="goBack()">Quay Lại</button>
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+	<!-- END CONTENT -->
+
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+	
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
+
+	<script type="text/javascript">
+		function addCustomer() {
+			const createdAt = new Date().toISOString();
+			document.getElementById("addCustomerForm").created_at = createdAt;
+		}
+		
+		function goBack() {
+	        window.location.href = '/crm-web/customer-list';
+	    }
+	</script>
+</body>
+</html>
