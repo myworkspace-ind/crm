@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="/library/webjars/datatables/1.10.25/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="/library/webjars/datatables/1.10.25/css/jquery.dataTables.min.css">
+    
+    <!-- START COMMON CSS -->
+	<th:block th:include="fragments/common_css"></th:block>
+	<!-- END COMMON CSS -->
+	
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/ordersBtnHorizontalMenu.css}">	
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/new_style.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/order.css}">
+	<th:block th:include="fragments/common_meta_title"></th:block>
+<!-- END COMMON META AND TITLE -->
+	<th:block th:include="fragments/common_meta_title"></th:block>
+    <th:block th:include="fragments/head"></th:block>
+    <th:block th:include="fragments/common_css"></th:block>
+<!-- START COMMON CSS -->
+<th:block th:include="fragments/common_css"></th:block>
+<!-- END COMMON CSS -->
+
+<link rel="stylesheet" type="text/css" href="resources/css/new_style.css">
+<link rel="stylesheet" type="text/css" href="resources/css/status.css">
+<link rel="stylesheet" type="text/css" href="resources/css/buttonGroupFunction.css">
+</head>
+</head>
+<style>
+div#createOrderModal{
+	display: block; 
+	z-index:1;
+}
+</style>
+<body
+	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	data-open="click" data-menu="vertical-compact-menu"
+	data-col="2-columns">
+	
+	<th:block th:include="fragments/hmenu"></th:block>
+
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<div class="app-content content">
+
+		<div class="content-header-left col-md-6 col-12 mb-2">
+				<div class="empty-div" style="height: 30px;"></div>
+				 <div class="row" style="text-align: right;">
+				 	<div class="heading-elements">
+           				<button id="openCreateOrderBtn" class="btn btn-primary btn-sm config"><i class="fas fa-plus white"></i> Đơn hàng</button>
+                	</div>	
+				 </div>
+			</div>
+		
+		<div id="statusModal">
+		    <h3>Cập nhật trạng thái đơn hàng được chọn</h3>
+		    <select id="statusSelect">
+		        <option value="1">Nhận đơn</option>
+		        <option value="2">Lưu kho</option>
+		        <option value="3">Vận chuyển</option>
+		        <option value="4">Lưu kho lạnh</option>
+		        <option value="5">Giao hàng</option>
+		    </select>
+		    <br><br>
+		    <button onclick="saveStatus()">Lưu</button>
+		    <button onclick="closeModalOrderStatus()">Đóng</button>
+		</div>
+		<!-- BEGIN UPDATE MODAL -->
+		<th:block th:include="fragments/createOrderModal"></th:block>
+	</div>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadOrderStatuses_Datatable.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadSender-Receiver_Inform_Create.js}"></script>
+<script>
+const openCreateOrderBtn = document.getElementById('openCreateOrderBtn');
+const createOrderModal = document.getElementById('createOrderModal');
+const modalOverlay = document.getElementById('modalOverlay');
+
+openCreateOrderBtn.addEventListener('click', function() {
+	createOrderModal.style.display = 'block';
+	modalOverlay.style.display = 'block';
+})
+
+function closeModal() {
+	createOrderModal.style.display = 'none';
+	modalOverlay.style.display = 'none';
+}
+
+function changeTitle(newTitle) {
+	document.getElementById("title").innerText = newTitle;
+}
+
+document.getElementById("createOrderButton").addEventListener("click", function() {
+	const orderData = {
+		createDate: document.getElementById("orderCreateDateCreate").value,
+		deliveryDate: document.getElementById("orderDeliveryDateCreate").value,
+		orderCode: document.getElementById("orderCodeInputCreate").value,
+		orderCategory: document.getElementById("orderCategoryCreate").value,
+		goodsCategory: document.getElementById("orderGoodsCreate").value,
+		orderStatus: document.getElementById("orderStatusCreate").value,
+		transportMethod: document.getElementById("orderTransportCreate").value,
+		sender: document.getElementById("orderSenderNameCreate").value,
+		receiver: document.getElementById("orderReceiverNameCreate").value,
+		requirement: document.getElementById("orderRequirementCreate").value,
+		address: document.getElementById("orderAddressCreate").value
+	};
+
+	// Kiểm tra nếu dữ liệu đã đầy đủ trước khi gửi
+	if (!orderData.createDate) {
+		alert("Vui lòng điền ngày tạo đơn!");
+		return;
+	}
+	if (!orderData.deliveryDate) {
+		alert("Vui lòng điền ngày giao hàng!");
+		return;
+	}
+	if (!orderData.orderCode) {
+		alert("Vui lòng điền mã đơn hàng!");
+		return;
+	}
+	if (!orderData.orderCategory) {
+		alert("Vui lòng chọn danh mục đơn hàng!");
+		return;
+	}
+	if (!orderData.goodsCategory) {
+		alert("Vui lòng chọn loại hàng hóa!");
+		return;
+	}
+	if (!orderData.orderStatus) {
+		alert("Vui lòng chọn trạng thái đơn hàng!");
+		return;
+	}
+	if (!orderData.transportMethod) {
+		alert("Vui lòng chọn phương thức vận chuyển!");
+		return;
+	}
+	if (!orderData.sender) {
+		alert("Vui lòng điền tên người gửi!");
+		return;
+	}
+	if (!orderData.receiver) {
+		alert("Vui lòng điền tên người nhận!");
+		return;
+	}
+	if (!orderData.requirement) {
+		alert("Vui lòng điền yêu cầu! Nếu không có yêu cầu gì, vui lòng điền 'Không có'");
+		return;
+	}
+	if (!orderData.address) {
+		alert("Vui lòng điền địa chỉ nhận hàng!");
+		return;
+	}
+
+	const _ctx = "/crm-web/";
+	// Gửi request POST tới backend để lưu đơn hàng
+	fetch(`${_ctx}orders-datatable/create-order`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(orderData)
+	})
+		.then(response => {
+			if (!response.ok) {
+				// Nếu response không thành công, ném ra lỗi
+				return response.json().then(err => {
+					throw new Error(err.errorMessage || 'Có lỗi xảy ra.');
+				});
+			}
+			return response.json();
+		})
+		.then(data => {
+			alert(data.message);  // Hiển thị thông báo từ backen
+			location.reload();
+		})
+		.catch(error => {
+			console.error("Lỗi khi tạo đơn hàng:", error);
+			alert("Đã xảy ra lỗi: " + error.message);
+		});
+
+});
+
+</script>
+</body>
+</html>
