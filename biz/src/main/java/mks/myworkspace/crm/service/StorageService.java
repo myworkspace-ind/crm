@@ -22,5 +22,7 @@ public interface StorageService {
 	void deleteCustomersByIds(List<Long> customerIds);
 	
 	public Order saveOrUpdateOrder(Order order);
+	
+	void deleteOrderById(Long orderId);
 
 }

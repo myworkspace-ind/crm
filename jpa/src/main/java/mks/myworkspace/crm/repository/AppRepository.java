@@ -3,7 +3,9 @@ package mks.myworkspace.crm.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,18 @@ public class AppRepository {
 	@Autowired
 	@Qualifier("jdbcTemplate0")
 	private JdbcTemplate jdbcTemplate0;
+
+	@Autowired
+	CustomerRepository customerRepository;
+
+	@Autowired
+	OrderStatusRepository orderStatusRepository;
+
+	@Autowired
+	GoodsCategoryRepository goodsCategoryRepository;
+
+	@Autowired
+	OrderCategoryRepository orderCategoryRepository;
 
 	/**
 	 * @param entities
@@ -92,30 +106,47 @@ public class AppRepository {
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
+	
+	public void deleteOrderById(Long orderId) {
+		if(orderId == null) {
+			return;
+		}
+		
+		String sql = "DELETE FROM crm_order WHERE id = ?";
+		jdbcTemplate0.update(sql, orderId);
+	}
 
-	public Long saveOrUpdateOrder(Order order) {
-//		Long id;
-//		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
-//				.usingGeneratedKeyColumns("id");
-//
-//		if (order.getId() == null) {
-//			id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
-//		} else {
-//			updateOrder(order);
-//			id = order.getId();
-//		}
-////		return id;
-//		Long id;
-//		updateOrder(order);
-//		id = order.getId();
-		Long id = null;
+ 	public Long saveOrUpdateOrder(Order order) {
+		Long id;
 
+		// Fetch related entities
+		if (order.getSender() != null && order.getSender().getId() != null) {
+			order.setSender(customerRepository.findById(order.getSender().getId())
+					.orElseThrow(() -> new IllegalArgumentException("Sender not found")));
+		}
+		if (order.getReceiver() != null && order.getReceiver().getId() != null) {
+			order.setReceiver(customerRepository.findById(order.getReceiver().getId())
+					.orElseThrow(() -> new IllegalArgumentException("Receiver not found")));
+		}
+		if (order.getGoodsCategory() != null && order.getGoodsCategory().getId() != null) {
+			order.setGoodsCategory(goodsCategoryRepository.findById(order.getGoodsCategory().getId())
+					.orElseThrow(() -> new IllegalArgumentException("GoodsCategory not found")));
+		}
+		if (order.getOrderStatus() != null && order.getOrderStatus().getId() != null) {
+			order.setOrderStatus(orderStatusRepository.findById(order.getOrderStatus().getId())
+					.orElseThrow(() -> new IllegalArgumentException("OrderStatus not found")));
+		}
+		if (order.getOrderCategory() != null && order.getOrderCategory().getId() != null) {
+			order.setOrderCategory(orderCategoryRepository.findById(order.getOrderCategory().getId())
+					.orElseThrow(() -> new IllegalArgumentException("OrderCategory not found")));
+		}
+
+		// Insert or update logic
 		if (order.getId() == null) {
-			log.debug("Inserting new order"); // Log when inserting a new order
-			createOrder(order);
-
+			log.debug("Inserting new order");
+			id = createOrder(order);
 		} else {
-			log.debug("Updating existing order with ID: {}", order.getId()); // Log when updating
+			log.debug("Updating existing order with ID: {}", order.getId());
 			updateOrder(order);
 			id = order.getId();
 		}
@@ -129,8 +160,24 @@ public class AppRepository {
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_order")
 				.usingGeneratedKeyColumns("id");
 
-		id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(order)).longValue();
-		
+		Map<String, Object> parameters = new HashMap<>();
+		// Thêm các trường cố định trong entity (không có liên kết bảng)
+		parameters.put("code", order.getCode());
+		parameters.put("create_date", order.getCreateDate());
+		parameters.put("delivery_date", order.getDeliveryDate());
+		parameters.put("customer_requirement", order.getCustomerRequirement());
+		parameters.put("transportation_method", order.getTransportationMethod());
+		parameters.put("address", order.getAddress());
+
+		// Thêm các khóa ngoại
+		parameters.put("sender_id", order.getSender() != null ? order.getSender().getId() : null);
+		parameters.put("receiver_id", order.getReceiver() != null ? order.getReceiver().getId() : null);
+		parameters.put("goods_category_id", order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null);
+		parameters.put("order_status_id", order.getOrderStatus() != null ? order.getOrderStatus().getId() : null);
+		parameters.put("order_cate_id", order.getOrderCategory() != null ? order.getOrderCategory().getId() : null);
+
+		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		log.debug("New ID: {}", id);
 		return id;
 
 	}
@@ -153,6 +200,7 @@ public class AppRepository {
 						ord.setDeliveryDate(rs.getDate("delivery_date"));
 						ord.setTransportationMethod(rs.getString("transportation_method"));
 						ord.setCustomerRequirement(rs.getString("customer_requirement"));
+						ord.setAddress(rs.getString("address"));
 
 						// Sender
 						Customer sender = new Customer();
@@ -180,7 +228,7 @@ public class AppRepository {
 
 		// SQL để cập nhật dữ liệu đơn hàng
 		String updateSql = "UPDATE crm_order SET name = ?, code = ?, create_date = ?, "
-				+ "delivery_date = ?, transportation_method = ?, customer_requirement = ?, "
+				+ "delivery_date = ?, transportation_method = ?, customer_requirement = ?, address = ?, "
 				+ "sender_id = ?, receiver_id = ?, order_status_id = ?, goods_category_id = ? " + "WHERE id = ?";
 
 		// Thực thi câu lệnh cập nhật
@@ -192,10 +240,9 @@ public class AppRepository {
 						: existingOrder.getTransportationMethod(),
 				order.getCustomerRequirement() != null ? order.getCustomerRequirement()
 						: existingOrder.getCustomerRequirement(),
-
+				order.getAddress() != null ? order.getAddress() : existingOrder.getAddress(),
 				order.getSender() != null ? order.getSender().getId() : existingOrder.getSender().getId(),
 				order.getReceiver() != null ? order.getReceiver().getId() : existingOrder.getReceiver().getId(),
-
 				order.getOrderStatus() != null ? order.getOrderStatus().getId()
 						: existingOrder.getOrderStatus().getId(),
 				order.getGoodsCategory() != null ? order.getGoodsCategory().getId()

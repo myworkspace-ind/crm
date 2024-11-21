@@ -13,19 +13,19 @@ import mks.myworkspace.crm.entity.OrderStatus;
 @Slf4j
 public class JpaTransformer_OrderDetail {
 
-	public static Object[] convert2D(Order order, List<OrderStatus> allOrderStatuses, List<GoodsCategory> allGoodsCategory) {
+	public static Object[] convert2D(Order order, List<OrderStatus> allOrderStatuses, List<GoodsCategory> allGoodsCategory, List<Customer> allSenders, List<Customer> allReceivers) {
 		if (order == null) {
 			return null;
 		}
 
-		Object[] rowData = new Object[14];
+		Object[] rowData = new Object[15];
 		rowData[0] = order.getId();
 		rowData[1] = order.getCode();
 		rowData[2] = formatDate(order.getDeliveryDate());
 		rowData[3] = formatDate(order.getCreateDate());
 		rowData[4] = order.getTransportationMethod();
 		rowData[5] = order.getCustomerRequirement();
-
+		
 		// Include both ID and name of reference tables
 		// Order Status
 		if (allOrderStatuses != null && !allOrderStatuses.isEmpty()) {
@@ -34,7 +34,6 @@ public class JpaTransformer_OrderDetail {
 		} else {
 			rowData[6] = null;
 		}
-		
 		rowData[7] = order.getOrderStatus() != null ? order.getOrderStatus().getId() : null;
 		
 		// GoodsCategory
@@ -44,14 +43,23 @@ public class JpaTransformer_OrderDetail {
 		} else {
 			rowData[8] = null;
 		}
-		
 		rowData[9] = order.getGoodsCategory() != null ? order.getGoodsCategory().getId() : null;
 		
 		// Sender
-		rowData[10] = order.getSender() != null ? order.getSender().getId() : null;
-		rowData[11] = order.getSender() != null ? order.getSender().getContactPerson() : null;
-		rowData[12] = order.getSender() != null ? order.getSender().getPhone() : null;
-		rowData[13] = order.getSender() != null ? order.getSender().getEmail() : null;
+		if(allSenders != null && !allSenders.isEmpty()) {
+			Object[][] senderData = convert2D_Customer(allSenders);
+			rowData[10] = senderData;
+		}
+		rowData[11] = order.getSender() != null ? order.getSender().getId() : null;
+		
+		//Receiver
+		if(allReceivers != null && !allReceivers.isEmpty()) {
+			Object[][] receiverData = convert2D_Customer(allReceivers);
+			rowData[12] = receiverData;
+		}
+		rowData[13] = order.getReceiver() != null ? order.getReceiver().getId() : null;
+		
+		rowData[14] = order.getAddress();
 
 //		log.debug(
 //				"Order detail row: ID = {}, Code = {}, Delivery Date = {}, Category = {}, Customer = {}, Transportation Method = {}",

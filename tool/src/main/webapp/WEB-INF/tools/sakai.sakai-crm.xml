@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <registration>
 	<tool id="sakai.crm" 
-		title="crm" 
-		description="This description is set in the crm-tool registration file, found in the webapp/tools directory">
+		title="CRM" 
+		description="Care your customer better.">
 
 		<category name="course" />
       	<category name="project" />
