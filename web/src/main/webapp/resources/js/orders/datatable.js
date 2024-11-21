@@ -41,10 +41,16 @@ $(document).ready(function() {
 					targets: -1,  // Chọn cột cuối cùng để thêm nút
 					data: null,
 					defaultContent: `
-							<button class='btn btn-info detail-btn'>Xem chi tiết</button>
-							<button class='btn btn-warning edit-btn'>Sửa</button>
-							<button class='btn btn-danger delete-btn'>Xóa</button>
-							<button class='btn btn-success'>Cập nhật trạng thái</button>`
+					<div class="row">
+						<div class="col-lg-12">
+								<div class="btn-group" role="group" aria-label="...">
+									<button class='btn btn-info detail-btn'>Xem chi tiết</button>
+									<button class='btn btn-warning edit-btn'>Sửa</button>
+									<button class='btn btn-danger delete-btn'>Xóa</button>
+									<button class='btn btn-success'>Cập nhật trạng thái</button>
+								</div>
+						</div>
+					</div> `
 				}
 			]
 		});
