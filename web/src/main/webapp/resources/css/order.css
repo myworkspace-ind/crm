@@ -44,7 +44,7 @@ fieldset.text-left.delidate-option {
 }
 
 fieldset.text-left.order-status{
-	margin-left: 90px;
+	margin-left: 120px;
 }
 
 button.search-order {
@@ -263,5 +263,13 @@ input[type="search"] {
 
 h3#orderIdForUpdate {
     display: block;
+}
+
+.detail-btn,
+.edit-btn,
+.delete-btn,
+.update-status-btn {
+    display: inline-block;
+    margin-right: 5px;
 }
 
