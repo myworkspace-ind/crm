@@ -101,24 +101,13 @@ document.getElementById("createOrderButton").addEventListener("click", function(
 		.then(data => {
 			alert(data.message);  // Hiển thị thông báo từ backend
 			closeModal();  // Đóng modal sau khi tạo đơn hàng thành công
-			if (data.reload === "true") {
-				reloadOrdersData();
-			}
+			location.reload();
 		})
 		.catch(error => {
 			console.error("Lỗi khi tạo đơn hàng:", error);
 			alert("Đã xảy ra lỗi: " + error.message);
 		});
 
-	// Hàm reload lại dữ liệu
-	function reloadOrdersData() {
-		fetch(`${_ctx}orders-datatable/`)  // Hoặc endpoint lấy danh sách orders
-			.then(response => response.json())
-			.then(data => {
-				// Xử lý dữ liệu và cập nhật giao diện
-			})
-			.catch(error => console.error('Error loading orders:', error));
-	}
 });
 
 

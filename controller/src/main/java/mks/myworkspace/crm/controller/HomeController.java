@@ -59,7 +59,7 @@ public class HomeController extends BaseController {
 	 */
 	@RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("homeCRMScreen");
+		ModelAndView mav = new ModelAndView("main");
 
 		initSession(request, httpSession);
 		log.debug("Home CRM Screen Controller is running....");

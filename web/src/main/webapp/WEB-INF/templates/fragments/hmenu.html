@@ -1,22 +1,24 @@
 <!-- Fragment: Horizontal menu -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-light navbar-without-dd-arrow navbar-shadow navbar-brand-center" role="navigation" data-menu="menu-wrapper" data-nav="brand-center" style="width: 1897px; position: fixed; top: 0px; z-index: auto;">
+<div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-light navbar-without-dd-arrow navbar-shadow navbar-brand-center" role="navigation" data-menu="menu-wrapper" data-nav="brand-center" style="width: 1897px; position: fixed; top: 0px; z-index: 1000;">
       <div class="main-menu-content center-layout" data-menu="menu-container">
         
         <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
             <li class="dropdown nav-item active" data-menu="dropdown">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-user-following"></i><span data-i18n="nav.dash.main">Customer</span></a>
                 <ul class="dropdown-menu">
-                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Search</a>
-                  </li>
-                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Care</a>
-                  </li>
+                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">New (Kỳ)</a></li>
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer-list-vinh}" data-toggle="dropdown">List (Vinh)</a></li> 
+                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Search</a></li>
+                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Care</a></li>
                 </ul>
             </li>
             <li class="dropdown nav-item" data-menu="dropdown">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-docs"></i><span data-i18n="nav.dash.main">Order</span></a>
                 <ul class="dropdown-menu">
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/ordersConfigurationCRMScreen_Khanh/orders}" data-toggle="dropdown">Show Order (Khanh)</a>
+                  </li>
                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">New</a>
                   </li>
                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Search</a>
@@ -30,18 +32,22 @@
                 <ul class="dropdown-menu">
                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Order configuration</a>
                   </li>
-                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">General</a>
-                  </li>
+                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">General</a></li>
                 </ul>
             </li>
-            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">Settings</span></a>
+            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">Reports</span></a>
                 <ul class="dropdown-menu">
-                  <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Order</a>
+                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Customer</a></li>
+                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Order</a></li>
+                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Task</a></li>
+                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Project</a></li>
+                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Product</a></li>
+                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Contract</a></li>
+                   <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">MKT</a>
                     <ul class="dropdown-menu">
-                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Order types</a>
-                      </li>
-                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Order status</a>
-                      </li>
+                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Chiến dịch</a></li>
+                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Affiliate</a></li>
+                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Telesales</a></li>
                      </ul>
                    </li>
                 </ul>
