@@ -155,8 +155,14 @@ public class OrderController_Datatable extends BaseController {
 		List<Order> listOrders;
 		listOrders = orderService.getAllOrders();
 		log.debug("Fetched orders: {}", listOrders.toString());
+		
+		List<GoodsCategory> allGoodsCategories;
+		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
+		
+		List<Customer> allSenders;
+		allSenders = customerService.getAllCustomers();
 
-		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders);
+		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
 		if (dataSet == null) {
 			log.debug("DataSet is null, using demo data.");
 			dataSet = getDemoData();
