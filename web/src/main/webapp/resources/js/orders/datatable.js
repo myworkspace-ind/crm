@@ -43,7 +43,7 @@ $(document).ready(function() {
 					defaultContent: `
 							<button class='btn btn-info detail-btn'>Xem chi tiết</button>
 							<button class='btn btn-warning edit-btn'>Sửa</button>
-							<button class='btn btn-danger'>Xóa</button>
+							<button class='btn btn-danger delete-btn'>Xóa</button>
 							<button class='btn btn-success'>Cập nhật trạng thái</button>`
 				}
 			]
@@ -196,6 +196,35 @@ $(document).ready(function() {
 				}
 			});
 		});
+		
+		$('#tblDatatable tbody').on('click', '.delete-btn', function () {
+		    var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu dòng
+		    var orderId = row[0]; // ID của đơn hàng
+		    console.log('Xóa đơn hàng với ID:', orderId);
+
+		    if (confirm("Bạn có chắc chắn muốn xóa đơn hàng này?")) {
+		        $.ajax({
+		            url: _ctx + 'orders-datatable/delete-order',
+		            method: 'DELETE',
+		            contentType: 'application/json',
+		            data: JSON.stringify({ id: orderId }), // Truyền dữ liệu JSON
+		            success: function (response) {
+		                if (response.status === "success") {
+		                    alert(response.message);
+							location.reload();
+		                    // Reload lại DataTable
+		                    table.row($(this).parents('tr')).remove().draw();
+		                } else {
+		                    alert(response.message);
+		                }
+		            },
+		            error: function (error) {
+		                console.error('Lỗi khi xóa đơn hàng:', error);
+		                alert('Có lỗi xảy ra khi xóa đơn hàng.');
+		            }
+		        });
+		    }
+		});
 
 		/*$('#tblDatatable tbody').on('click', '.detail-btn', function() {
 			var data = $('#tblDatatable').DataTable().row($(this).parents('tr')).data();
@@ -271,7 +300,8 @@ $(document).on('click', '#saveOrderButton', function() {
 				// Close modal or update the UI as needed
 				document.getElementById("updateOrderModal").style.display = "none";
 				// Reload or refresh the data table if needed
-				$('#tblDatatable').DataTable().ajax.reload();
+				location.reload();
+				//$('#tblDatatable').DataTable().ajax.reload();
 			} else {
 				alert(response.message);
 			}
