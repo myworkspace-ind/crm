@@ -15,10 +15,26 @@ $(document).ready(function() {
 			ordering: true, // Sắp xếp
 			lengthMenu: [5, 10, 25], // Số lượng đơn hàng trên mỗi trang
 			buttons: [
-				'copyHtml5',
-				'excelHtml5',
-				'csvHtml5',
-				'pdfHtml5'
+				{
+					extend: 'copyHtml5',
+					text: '<i class="fa fa-copy"></i> Sao chép',
+					className: 'btn-copy'
+				},
+				{
+					extend: 'excelHtml5',
+					text: '<i class="fa fa-file-excel"></i> Xuất Excel',
+					className: 'btn-excel'
+				},
+				{
+					extend: 'csvHtml5',
+					text: '<i class="fa fa-file-csv"></i> Xuất CSV',
+					className: 'btn-csv'
+				},
+				{
+					extend: 'pdfHtml5',
+					text: '<i class="fa fa-file-pdf"></i> Xuất PDF',
+					className: 'btn-pdf'
+				},
 			],
 			columnDefs: [
 				{
@@ -27,7 +43,7 @@ $(document).ready(function() {
 					defaultContent: `
 							<button class='btn btn-info detail-btn'>Xem chi tiết</button>
 							<button class='btn btn-warning edit-btn'>Sửa</button>
-							<button class='btn btn-danger'>Xóa</button>
+							<button class='btn btn-danger delete-btn'>Xóa</button>
 							<button class='btn btn-success'>Cập nhật trạng thái</button>`
 				}
 			]
@@ -52,10 +68,12 @@ $(document).ready(function() {
 					var orderGoodsCategoryData = response[8];
 					var currentOrderGoodsCategoryId = response[9];
 
-					var orderGoodsCategoryName = response[9];
-					var orderCustomerId = response[10];
-					var orderCustomerName = response[11];
+					//var orderGoodsCategoryName = response[9];
+					var orderSenderData = response[10];
+					var currentOrderSenderId = response[11];
 
+					var orderReceiverData = response[12];
+					var currentOrderReceiverId = response[13];
 
 					$('#orderIdUpdate').text(response[0]);
 					$('#orderCodeUpdate').text(response[1]);
@@ -64,6 +82,7 @@ $(document).ready(function() {
 					$('#orderCreateDateUpdate').val(response[3]);
 					$('#orderTransportUpdate').val(response[4]);
 					$('#orderRequirementUpdate').val(response[5]);
+					$('#orderAddressUpdate').val(response[14]);
 
 					if (orderStatusData && orderStatusData.length > 0) {
 						var options = orderStatusData.map(function(status) {
@@ -83,11 +102,25 @@ $(document).ready(function() {
 						$('#orderGoodsUpdate').html(options);
 					}
 
-					//$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
-					$('#orderSenderNameUpdate').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
+					if (orderSenderData && orderSenderData.length > 0) {
+						var options = orderSenderData.map(function(sender) {
+							var selected = sender[0] === currentOrderSenderId ? ' selected' : '';
+							return '<option value="' + sender[0] + '"' + selected + '>' + sender[1] + '</option>';
+						}).join('');
+						$('#orderSenderNameUpdate').html(options);
+					}
 
-					$('#orderSenderPhoneUpdate').val(response[12]);
-					$('#orderSenderEmailUpdate').val(response[13]);
+					if (orderReceiverData && orderReceiverData.length > 0) {
+						var options = orderReceiverData.map(function(receiver) {
+							var selected = receiver[0] === currentOrderReceiverId ? ' selected' : '';
+							return '<option value="' + receiver[0] + '"' + selected + '>' + receiver[1] + '</option>';
+						}).join('');
+						$('#orderReceiverNameUpdate').html(options); 
+					}
+
+
+					//$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
+					//$('#orderSenderNameUpdate').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
 
 					document.getElementById("updateOrderModal").style.display = "block";
 				},
@@ -97,7 +130,6 @@ $(document).ready(function() {
 			});
 
 		});
-
 
 		$('#tblDatatable tbody').on('click', '.detail-btn', function() {
 			var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
@@ -118,7 +150,6 @@ $(document).ready(function() {
 					var orderGoodsCategoryData = response[8];
 					var currentOrderGoodsCategoryId = response[9];
 
-					var orderGoodsCategoryName = response[9];
 					var orderCustomerId = response[10];
 					var orderCustomerName = response[11];
 
@@ -130,6 +161,7 @@ $(document).ready(function() {
 					$('#orderCreateDateDetail').val(response[3]);
 					$('#orderTransportDetail').val(response[4]);
 					$('#orderRequirementDetail').val(response[5]);
+					
 
 					if (orderStatusData && orderStatusData.length > 0) {
 						var options = orderStatusData.map(function(status) {
@@ -138,7 +170,7 @@ $(document).ready(function() {
 						}).join('');
 
 						$('#orderStatusDetail').html(options);
-						$('#orderStatusDetail').css('pointer-events', 'none'); 
+						$('#orderStatusDetail').css('pointer-events', 'none');
 					}
 
 					if (orderGoodsCategoryData && orderGoodsCategoryData.length > 0) {
@@ -148,7 +180,7 @@ $(document).ready(function() {
 						}).join('');
 
 						$('#orderGoodsDetail').html(options);
-						$('#orderGoodsDetail').css('pointer-events', 'none'); 
+						$('#orderGoodsDetail').css('pointer-events', 'none');
 					}
 
 					//$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
@@ -163,6 +195,35 @@ $(document).ready(function() {
 					console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
 				}
 			});
+		});
+		
+		$('#tblDatatable tbody').on('click', '.delete-btn', function () {
+		    var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu dòng
+		    var orderId = row[0]; // ID của đơn hàng
+		    console.log('Xóa đơn hàng với ID:', orderId);
+
+		    if (confirm("Bạn có chắc chắn muốn xóa đơn hàng này?")) {
+		        $.ajax({
+		            url: _ctx + 'orders-datatable/delete-order',
+		            method: 'DELETE',
+		            contentType: 'application/json',
+		            data: JSON.stringify({ id: orderId }), // Truyền dữ liệu JSON
+		            success: function (response) {
+		                if (response.status === "success") {
+		                    alert(response.message);
+							location.reload();
+		                    // Reload lại DataTable
+		                    table.row($(this).parents('tr')).remove().draw();
+		                } else {
+		                    alert(response.message);
+		                }
+		            },
+		            error: function (error) {
+		                console.error('Lỗi khi xóa đơn hàng:', error);
+		                alert('Có lỗi xảy ra khi xóa đơn hàng.');
+		            }
+		        });
+		    }
 		});
 
 		/*$('#tblDatatable tbody').on('click', '.detail-btn', function() {
@@ -185,9 +246,14 @@ $(document).on('click', '#saveOrderButton', function() {
 	var goodsCategory = $('#orderGoodsUpdate').val();
 	var senderName = $('#orderSenderNameUpdate').val()
 	var senderPhone = $('#orderSenderPhoneUpdate').val();
+	var senderEmail = $('#orderSenderEmailUpdate').val();
+	var receiverName = $('#orderReceiverNameUpdate').val();
+	var receiverPhone = $('#orderReceiverPhoneUpdate').val();
+	var receiverEmail = $('#orderReceiverEmailUpdate').val();
 	var transport = $('#orderTransportUpdate').val();
 	var requirement = $('#orderRequirementUpdate').val();
-	var senderEmail = $('#orderSenderEmailUpdate').val();
+	var address =  $('#orderAddressUpdate').val();
+
 
 	console.log(orderId); // In ra giá trị orderId
 	console.log(orderCode); // In ra giá trị orderCode
@@ -207,9 +273,15 @@ $(document).on('click', '#saveOrderButton', function() {
 		goodsCategory: goodsCategory,
 		senderName: senderName,
 		senderPhone: senderPhone,
+		senderEmail: senderEmail,
+
+		receiverName: receiverName,
+		receiverPhone: receiverPhone,
+		receiverEmail: receiverEmail,
+		
 		transport: transport,
 		requirement: requirement,
-		senderEmail: senderEmail
+		address : address,
 	};
 
 	// In toàn bộ đối tượng order ra console
@@ -228,7 +300,8 @@ $(document).on('click', '#saveOrderButton', function() {
 				// Close modal or update the UI as needed
 				document.getElementById("updateOrderModal").style.display = "none";
 				// Reload or refresh the data table if needed
-				$('#tblDatatable').DataTable().ajax.reload();
+				location.reload();
+				//$('#tblDatatable').DataTable().ajax.reload();
 			} else {
 				alert(response.message);
 			}

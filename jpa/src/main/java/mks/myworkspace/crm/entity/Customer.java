@@ -2,17 +2,14 @@ package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -53,8 +50,9 @@ public class Customer implements Serializable {
 	@Column(name = "address", length = 255)
 	private String address;
 	
-	@Column(name = "profession", length = 99)
-    private String profession;
+	@ManyToOne(optional = true)
+    @JoinColumn(name = "profession_id")
+    private Profession profession;
 	
     @ManyToOne
     @JoinColumn(name = "main_status_id")
@@ -64,8 +62,9 @@ public class Customer implements Serializable {
     @JoinColumn(name = "sub_status_id")
     private Status subStatus;
     
-    @Column(name = "responsible_person", length = 99)
-    private String responsiblePerson;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "responsible_person_id")
+    private ResponsiblePerson responsiblePerson;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
@@ -75,7 +74,7 @@ public class Customer implements Serializable {
     private String note;
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			String profession, Status mainStatus, Status subStatus, String responsiblePerson, Date createdAt,
+			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, Date createdAt,
 			String note) {
 		super();
 		this.id = id;
@@ -94,7 +93,7 @@ public class Customer implements Serializable {
 	}
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			String profession, String responsiblePerson, Date createdAt, String note) {
+			Date createdAt, String note) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -103,8 +102,6 @@ public class Customer implements Serializable {
 		this.email = email;
 		this.phone = phone;
 		this.address = address;
-		this.profession = profession;
-		this.responsiblePerson = responsiblePerson;
 		this.createdAt = createdAt;
 		this.note = note;
 	}

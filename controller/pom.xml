@@ -18,12 +18,11 @@
 		<dependency>
 			<groupId>mks.myworkspace.crm</groupId>
 			<artifactId>crm-api</artifactId>
-			<!--             <version>${module.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>mks.myworkspace.crm</groupId>
 			<artifactId>crm-common</artifactId>
-			<version>23.2</version>
+			<version>${module.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mks.myworkspace.crm</groupId>
@@ -33,7 +32,6 @@
 		<dependency>
 			<groupId>mks.myworkspace.crm</groupId>
 			<artifactId>crm-impl</artifactId>
-			<!--             <version>${module.version}</version> -->
 		</dependency>
 
 		<dependency>
@@ -122,11 +120,11 @@
 		</dependency>
 
 		<!-- JPA API -->
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
-			<version>2.2</version> <!-- Example version -->
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>javax.persistence</groupId>-->
+<!--			<artifactId>javax.persistence-api</artifactId>-->
+<!--			<version>2.2</version>  Example version -->
+<!--		</dependency>-->
 
 		
 	</dependencies>

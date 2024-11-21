@@ -82,17 +82,7 @@ public class StorageServiceImpl implements StorageService {
 
 	@Override
 	public Order saveOrUpdateOrder(Order order) {
-//		Optional<Order> existingOrder = orderRepo.findByCode(order.getCode());
-//		
-//		if(existingOrder.isPresent()) {
-//			throw new IllegalArgumentException ("Mã đơn hàng đã tồn tại. Vui lòng thử lại");
-//		}
-//		
-//		Long id = appRepo.saveOrUpdateOrder(order);
-//		if (id != null) {
-//			order.setId(id);
-//		}
-//		return order;
+
 		log.debug("Processing Order with ID: {}", order.getId()); // Check the ID before saving
 
 		Long id = appRepo.saveOrUpdateOrder(order); // This should return the ID of the saved or updated order
@@ -102,5 +92,10 @@ public class StorageServiceImpl implements StorageService {
 
 		log.debug("Final Order ID after saveOrUpdate: {}", order.getId()); // Log the final ID after save/update
 		return order;
+	}
+
+	@Override
+	public void deleteOrderById(Long orderId) {
+		appRepo.deleteOrderById(orderId);
 	}
 }

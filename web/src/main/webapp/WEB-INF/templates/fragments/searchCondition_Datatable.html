@@ -30,13 +30,18 @@
 	                           </fieldset>
 	                           <fieldset class="text-left ordercate-option">
 	                               <h5>Loại đơn hàng</h5>
-	                               <select id="orderCategorySelect" onchange="loadOrderStatuses_Datatable()" 
+	                               <select class="form-control" id="orderCategoryFilter" style="background-color: white; color: black;" >
+						            	<th:block th:each="orderCategory : ${orderCategories}">
+								            <option th:value="${orderCategory.id}" th:text="${orderCategory.name}"></option>
+								        </th:block>
+						            </select>		
+	                               <!-- <select id="orderCategorySelect" onchange="loadOrderStatuses_Datatable()" 
 	                               		style="background-color: white; color: black; width: 100%;">
 									<th:block th:each="orderCategory : ${orderCategories}">
 						                <option th:value="${orderCategory.id}" th:text="${orderCategory.name}"
 						                        th:selected="${orderCategory.id == selectedCategoryId}"></option>
 						            </th:block>
-	                               </select>
+	                               </select> -->
 	                           </fieldset>
 	                       </div>
 	                       
@@ -44,11 +49,14 @@
 	                        <div id="orderStatusContainer">
 	                            <fieldset class="text-left order-status">
 	                                <h5>Trạng thái đơn hàng</h5>
-	                                    <th:block th:each="orderStatus : ${orderStatuses}">
+		                                <div id="orderStatusFilter">
+		                                
+		                                </div>
+	                                    <!-- <th:block th:each="orderStatus : ${orderStatuses}">
 								            <label>
 								                <input type="checkbox" name="orderStatus" th:value="${orderStatus.id}" class="custom-checkbox checkbox-spacing" th:text="${orderStatus.name}"/> 
 								            </label><br/>
-							        	</th:block>
+							        	</th:block> -->
 	                            </fieldset>
 	                        </div>
 	                       </div>

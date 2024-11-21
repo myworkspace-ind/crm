@@ -22,13 +22,16 @@
 			
 			<div class="form-row">
 			    <div class="form-group col-md-6">
-			      <label for="inputState">Trạng thái</label>
-					<select id="orderStatusCreate" class="form-control" style="background-color: white; color: black;" >
-					</select>					
-			    </div>
-			    <div class="form-group col-md-6">
 			      <label for="orderCodeUpdateInput">Mã đơn hàng</label>
 			      <input type="text" class="form-control" id=orderCodeInputCreate style="background-color: white; color: black;" >
+			    </div>
+			     <div class="form-group col-md-6">
+					<label for="goodsType">Loại đơn hàng</label>
+		            <select class="form-control" id="orderCategoryCreate" style="background-color: white; color: black;" >
+		            	<th:block th:each="orderCategory : ${orderCategories}">
+				            <option th:value="${orderCategory.id}" th:text="${orderCategory.name}"></option>
+				        </th:block>
+		            </select>				
 			    </div>
 			</div>
 	    	
@@ -44,20 +47,38 @@
 				            </select>
 				        </div>
 				        <div class="form-group col-md-6">
-				            <label for="transportMethod">Phương tiện vận chuyển</label>
-				            <input type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" >
+				            <label for="inputState">Trạng thái</label>
+							<select id="orderStatusCreate" class="form-control" style="background-color: white; color: black;" >
+							
+							</select>
 				        </div>
 				    </div>
 		    </div>
 		    
-		    <!-- <div class="container">
+		    <br/><div class="row2">
+		    	<div class="form-row">
+			        <div class="form-group col-md-6">
+			            <label for="transportMethod">Phương tiện vận chuyển</label>
+			            <input type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" >
+			        </div>
+			    </div>
+		   		</div>
+		    
+		   <div class="container">
 				<div class="column">
 			        <fieldset>
 			            <legend>Thông tin người gửi</legend>
 			            <table class="sender-table">
 			                <tr>
 			                    <td>Họ tên:</td>
-			                    <td><select class="form-control" id="orderSenderNameCreate" style="background-color: white; color: black;" ></select>
+			                    <td>
+			                    	<select class="form-control" id="orderSenderNameCreate" style="background-color: white; color: black; width: 100%;">
+	                               		<th:block th:each="customer : ${listCustomers}">
+											<option th:value="${customer.id}" th:text="${customer.contactPerson}">
+											</option>
+										</th:block>
+	                               </select>
+			                    </td>
 			                </tr>
 			                <tr>
 			                    <td>SDT:</td>
@@ -77,22 +98,29 @@
 				            <table class="receiver-table">
 				                <tr>
 				                    <td>Họ tên:</td>
-				                    <td><input type="text" class="input-container" /></td>
+				                  	<td>
+				                  		<select class="form-control" id="orderReceiverNameCreate" style="background-color: white; color: black; width: 100%;">
+		                               		<th:block th:each="customer : ${listCustomers}">
+												<option th:value="${customer.id}" th:text="${customer.contactPerson}">
+												</option>
+											</th:block>
+	                               		</select>
+				                  	</td>
 				                </tr>
 				                <tr>
 				                    <td>SDT:</td>
-				                    <td><input type="text" class="input-container" placeholder="(+84) 1234567890" /></td>
+				                    <td><input type="text" class="input-container" id= "orderReceiverPhoneCreate" placeholder="(+84) 1234567890" readonly /></td>
 				                </tr>
 				                <tr>
 				                    <td>Email:</td>
-				                    <td><input type="email" class="input-container" /></td>
+				                    <td><input type="email" class="input-container" id= "orderReceiverEmailCreate" readonly /></td>
 				                </tr>
 				            </table>
 				        </fieldset>
 				</div>
-		</div> -->
+		</div>
 	        
-	        <!-- <div class="row2">
+	        <div class="row2">
 	        	<div class="form-row">
 				        <div class="form-group col-md-6">
 				            <label for="goodsType">Yêu cầu</label>
@@ -103,11 +131,11 @@
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Địa chỉ</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="textAreaExample2" rows="8" ></textarea>
+								<textarea class="form-control" id="orderAddressCreate" rows="8" ></textarea>
 							</div>
 				        </div>
 				    </div>
-	        </div> -->
+	        </div>
 	
 	        <div class="row3">
 				<legend class="legent-row3">Tự động cập nhật qua các kênh</legend>
@@ -119,7 +147,7 @@
 			</div>
 		        
 			<div class="row4">
-				<!-- <button type="button" id="saveOrderButton">Lưu</button> -->
+				<button type="button" id="createOrderButton">Lưu</button>
 	        	<button type="button" onclick="closeModal()">Trở về</button>
 			</div>
 	    </form>
