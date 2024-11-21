@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- START COMMON META AND TITLE -->
+	<th:block th:include="fragments/common_meta_title"></th:block>
+	<!-- END COMMON META AND TITLE -->
+	
+	<th:block th:include="fragments/head"></th:block>
+	
+    <link rel="stylesheet" type="text/css" href="/library/webjars/datatables/1.10.25/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="/library/webjars/datatables/1.10.25/css/jquery.dataTables.min.css">
+    
+    <!-- START COMMON CSS -->
+	<th:block th:include="fragments/common_css"></th:block>
+	<!-- END COMMON CSS -->
+	
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/ordersBtnHorizontalMenu.css}">	
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/new_style.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/order.css}">
+</head>
+<body
+	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	data-open="click" data-menu="vertical-compact-menu"
+	data-col="2-columns">
+	
+	<!-- BEGIN HMENU  -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HMENU  -->
+	
+	<!--  BEGIN CONTENT -->
+	<div class="app-content content">
+		<!-- BEGIN CONTENT WRAPPER -->
+		<th:block th:include="fragments/ordersContentWrapperCRM"></th:block>
+		<!-- END CONTENT WRAPPER -->
+		
+		<!-- BEGIN SEARCH CONDITION -->
+		<th:block th:include="fragments/searchCondition_Datatable"></th:block>
+		<!-- END SEARCH CONDITION -->
+		
+		<div class="row">
+			<div class="col-12">
+				<div class="order-screen-datatable">
+					<div class="table-responsive" style = "width: 100%">
+					<th:block th:include="fragments/orders/frg_datatable"></th:block>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="statusModal">
+		    <h3>Cập nhật trạng thái đơn hàng được chọn</h3>
+		    <select id="statusSelect">
+		        <option value="1">Nhận đơn</option>
+		        <option value="2">Lưu kho</option>
+		        <option value="3">Vận chuyển</option>
+		        <option value="4">Lưu kho lạnh</option>
+		        <option value="5">Giao hàng</option>
+		    </select>
+		    <br><br>
+		    <button onclick="saveStatus()">Lưu</button>
+		    <button onclick="closeModalOrderStatus()">Đóng</button>
+		</div>
+		
+		<div id="modalOverlay">
+		</div>
+		
+		<!-- BEGIN UPDATE MODAL -->
+		<th:block th:include="fragments/createOrderModal"></th:block>
+		<!-- END UPDATE MODAL -->
+		
+		<!-- BEGIN UPDATE MODAL -->
+		<th:block th:include="fragments/updateOrderModal"></th:block>
+		<!-- END UPDATE MODAL -->
+		
+		<!-- BEGIN ORDER DETAIL MODAL -->
+		<th:block th:include="fragments/orderDetailModal"></th:block>
+		<!-- END ORDER DETAIL MODAL -->
+				
+	</div>
+	<!-- END CONTENT -->
+	
+	<script type="text/javascript" th:src="@{/resources/js/orders/datatable.js}" ></script>
+	
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+	
+	 <!-- Bottom Javascripts -->
+    <script src="/library/webjars/datatables/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="/library/webjars/datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="/library/webjars/datatables.net/js/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="/library/webjars/datatables.net/js/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="/library/webjars/datatables.net/js/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="/library/webjars/datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="/library/webjars/datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/createOrder.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadOrderStatuses_Datatable.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/getCurrentDate_Handsontable.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadSender-Receiver_Inform_Create.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadSender-Receiver_Inform_Update.js}"></script>
+	
+   
+</body>
+</html>
