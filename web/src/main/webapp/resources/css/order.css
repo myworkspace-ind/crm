@@ -174,14 +174,16 @@ table {
     border-collapse: collapse;
 }
 
-table.sender-table, table.receiver-table {
+table.sender-table, table.receiver-table, td {
     margin-left: 30px;
     max-width: 500px;
+    padding: 8px !important;
 }
 
 table, td {
     border: 1px solid #939393;
-    padding: 8px;
+    /* padding: 8px */
+    padding: 0px;
 }
 
 legend {
