@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<!-- START COMMON META AND TITLE -->
+<th:block th:include="fragments/common_meta_title"></th:block>
+<!-- END COMMON META AND TITLE -->
+	<th:block th:include="fragments/common_meta_title"></th:block>
+    <th:block th:include="fragments/head"></th:block>
+    <th:block th:include="fragments/common_css"></th:block>
+<!-- START COMMON CSS -->
+<th:block th:include="fragments/common_css"></th:block>
+<!-- END COMMON CSS -->
+
+<link rel="stylesheet" type="text/css" href="resources/css/new_style.css">
+<link rel="stylesheet" type="text/css" href="resources/css/status.css">
+<link rel="stylesheet" type="text/css" href="resources/css/buttonGroupFunction.css">
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            z-index:1;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 250px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 8px 16px;
+            margin-left: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        #history{
+        	z-index:1;
+        	
+        }
+    </style>
+</head>
+
+<body
+
+	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	data-open="click" data-menu="vertical-compact-menu"
+	data-col="2-columns">
+
+	<!-- BEGIN HEADER  -->
+	
+	<!-- END HEADER  -->
+	 <th:block th:include="fragments/hmenu"></th:block>
+	<!-- BEGIN LEFT MENU NAVIGATION -->
+	
+	<!-- END LEFT MENU NAVIGATION -->
+
+    <!-- Center form -->
+
+    <!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+
+	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
+	<div id="history">
+		<h1>Lịch sử cập nhật trạng thái đơn hàng</h1>
+
+    <!-- Thanh tìm kiếm -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm theo mã đơn hàng...">
+        <button onclick="searchTable()">Tìm kiếm</button>
+    </div>
+
+    <!-- Bảng dữ liệu -->
+    <table id="historyTable">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Mã đơn hàng</th>
+                <th>Trạng thái trước</th>
+                <th>Trạng thái sau</th>
+                <th>Ngày cập nhật</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>B123336</td>
+                <td>Nhận đơn</td>
+                <td>Bóc hàng</td>
+                <td>2024-11-20</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>C123455</td>
+                <td>Bóc hàng</td>
+                <td>Trữ lạnh</td>
+                <td>2024-11-21</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>D100012</td>
+                <td>Đóng gói</td>
+                <td>Vận chuyển</td>
+                <td>2024-11-22</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>D100034</td>
+                <td>Vận chuyển</td>
+                <td>Giao hàng</td>
+                <td>2024-11-22</td>
+            </tr>
+        </tbody>
+    </table>
+		
+	</div>
+    
+    <script>
+        function searchTable() {
+            var input, filter, table, tr, td, i, j, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("historyTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Duyệt qua tất cả các dòng bảng
+            for (i = 1; i < tr.length; i++) {
+                tr[i].style.display = "none"; // Ẩn tất cả các dòng
+                td = tr[i].getElementsByTagName("td");
+                for (j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
