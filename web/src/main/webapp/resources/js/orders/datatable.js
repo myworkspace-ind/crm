@@ -66,15 +66,12 @@ $(document).ready(function() {
 				method: 'GET',
 				success: function(response) {
 					console.log(response)
-					//var orderStatusId = response[6];
-					//var orderStatusName = response[7];
 					var orderStatusData = response[6]
 					var currentOrderStatusId = response[7];
 
 					var orderGoodsCategoryData = response[8];
 					var currentOrderGoodsCategoryId = response[9];
 
-					//var orderGoodsCategoryName = response[9];
 					var orderSenderData = response[10];
 					var currentOrderSenderId = response[11];
 
@@ -121,7 +118,7 @@ $(document).ready(function() {
 							var selected = receiver[0] === currentOrderReceiverId ? ' selected' : '';
 							return '<option value="' + receiver[0] + '"' + selected + '>' + receiver[1] + '</option>';
 						}).join('');
-						$('#orderReceiverNameUpdate').html(options); 
+						$('#orderReceiverNameUpdate').html(options);
 					}
 
 
@@ -148,16 +145,17 @@ $(document).ready(function() {
 				method: 'GET',
 				success: function(response) {
 					console.log(response)
-					//var orderStatusId = response[6];
-					//var orderStatusName = response[7];
 					var orderStatusData = response[6]
 					var currentOrderStatusId = response[7];
 
 					var orderGoodsCategoryData = response[8];
 					var currentOrderGoodsCategoryId = response[9];
 
-					var orderCustomerId = response[10];
-					var orderCustomerName = response[11];
+					var orderSenderData = response[10];
+					var currentOrderSenderId = response[11];
+
+					var orderReceiverData = response[12];
+					var currentOrderReceiverId = response[13];
 
 
 					$('#orderIdDetail').text(response[0]);
@@ -167,7 +165,7 @@ $(document).ready(function() {
 					$('#orderCreateDateDetail').val(response[3]);
 					$('#orderTransportDetail').val(response[4]);
 					$('#orderRequirementDetail').val(response[5]);
-					
+					$('#orderAddressDetail').val(response[14]);
 
 					if (orderStatusData && orderStatusData.length > 0) {
 						var options = orderStatusData.map(function(status) {
@@ -189,11 +187,24 @@ $(document).ready(function() {
 						$('#orderGoodsDetail').css('pointer-events', 'none');
 					}
 
-					//$('#orderGoodsUpdate').html('<option value="' + orderGoodsCategoryId + '">' + orderGoodsCategoryName + '</option>');
-					$('#orderSenderNameDetail').html('<option value="' + orderCustomerId + '">' + orderCustomerName + '</option>');
+					if (orderSenderData && orderSenderData.length > 0) {
+						var options = orderSenderData.map(function(sender) {
+							var selected = sender[0] === currentOrderSenderId ? ' selected' : '';
+							return '<option value="' + sender[0] + '"' + selected + '>' + sender[1] + '</option>';
+						}).join('');
+						$('#orderSenderNameDetail').html(options);
+						$('#orderSenderNameDetail').css('pointer-events', 'none');
+					}
 
-					$('#orderSenderPhoneDetail').val(response[12]);
-					$('#orderSenderEmailDetail').val(response[13]);
+					if (orderReceiverData && orderReceiverData.length > 0) {
+						var options = orderReceiverData.map(function(receiver) {
+							var selected = receiver[0] === currentOrderReceiverId ? ' selected' : '';
+							return '<option value="' + receiver[0] + '"' + selected + '>' + receiver[1] + '</option>';
+						}).join('');
+						$('#orderReceiverNameDetail').html(options);
+						$('#orderReceiverNameDetail').css('pointer-events', 'none');
+					}
+
 
 					document.getElementById("orderDetailModal").style.display = "block";
 				},
@@ -202,34 +213,34 @@ $(document).ready(function() {
 				}
 			});
 		});
-		
-		$('#tblDatatable tbody').on('click', '.delete-btn', function () {
-		    var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu dòng
-		    var orderId = row[0]; // ID của đơn hàng
-		    console.log('Xóa đơn hàng với ID:', orderId);
 
-		    if (confirm("Bạn có chắc chắn muốn xóa đơn hàng này?")) {
-		        $.ajax({
-		            url: _ctx + 'orders-datatable/delete-order',
-		            method: 'DELETE',
-		            contentType: 'application/json',
-		            data: JSON.stringify({ id: orderId }), // Truyền dữ liệu JSON
-		            success: function (response) {
-		                if (response.status === "success") {
-		                    alert(response.message);
+		$('#tblDatatable tbody').on('click', '.delete-btn', function() {
+			var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu dòng
+			var orderId = row[0]; // ID của đơn hàng
+			console.log('Xóa đơn hàng với ID:', orderId);
+
+			if (confirm("Bạn có chắc chắn muốn xóa đơn hàng này?")) {
+				$.ajax({
+					url: _ctx + 'orders-datatable/delete-order',
+					method: 'DELETE',
+					contentType: 'application/json',
+					data: JSON.stringify({ id: orderId }), // Truyền dữ liệu JSON
+					success: function(response) {
+						if (response.status === "success") {
+							alert(response.message);
 							location.reload();
-		                    // Reload lại DataTable
-		                    table.row($(this).parents('tr')).remove().draw();
-		                } else {
-		                    alert(response.message);
-		                }
-		            },
-		            error: function (error) {
-		                console.error('Lỗi khi xóa đơn hàng:', error);
-		                alert('Có lỗi xảy ra khi xóa đơn hàng.');
-		            }
-		        });
-		    }
+							// Reload lại DataTable
+							table.row($(this).parents('tr')).remove().draw();
+						} else {
+							alert(response.message);
+						}
+					},
+					error: function(error) {
+						console.error('Lỗi khi xóa đơn hàng:', error);
+						alert('Có lỗi xảy ra khi xóa đơn hàng.');
+					}
+				});
+			}
 		});
 
 		/*$('#tblDatatable tbody').on('click', '.detail-btn', function() {
@@ -258,7 +269,7 @@ $(document).on('click', '#saveOrderButton', function() {
 	var receiverEmail = $('#orderReceiverEmailUpdate').val();
 	var transport = $('#orderTransportUpdate').val();
 	var requirement = $('#orderRequirementUpdate').val();
-	var address =  $('#orderAddressUpdate').val();
+	var address = $('#orderAddressUpdate').val();
 
 
 	console.log(orderId); // In ra giá trị orderId
@@ -284,10 +295,10 @@ $(document).on('click', '#saveOrderButton', function() {
 		receiverName: receiverName,
 		receiverPhone: receiverPhone,
 		receiverEmail: receiverEmail,
-		
+
 		transport: transport,
 		requirement: requirement,
-		address : address,
+		address: address,
 	};
 
 	// In toàn bộ đối tượng order ra console

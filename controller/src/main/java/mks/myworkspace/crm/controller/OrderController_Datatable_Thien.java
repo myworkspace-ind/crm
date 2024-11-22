@@ -70,8 +70,8 @@ import mks.myworkspace.crm.transformer.OrderConverter;
  */
 @Controller
 @Slf4j
-@RequestMapping("/orders-datatable")
-public class OrderController_Datatable extends BaseController {
+@RequestMapping("/orders-datatable-thien")
+public class OrderController_Datatable_Thien extends BaseController {
 
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
@@ -123,7 +123,7 @@ public class OrderController_Datatable extends BaseController {
 	@GetMapping("")
 	public ModelAndView displayDatatableOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
 			HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
+		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable_Thien");
 		initSession(request, httpSession);
 		List<OrderCategory> orderCategories;
 		orderCategories = orderCategoryService.getAllOrderCategoriesWithOrderStatuses();
@@ -155,10 +155,10 @@ public class OrderController_Datatable extends BaseController {
 		List<Order> listOrders;
 		listOrders = orderService.getAllOrders();
 		log.debug("Fetched orders: {}", listOrders.toString());
-		
+
 		List<GoodsCategory> allGoodsCategories;
 		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
-		
+
 		List<Customer> allSenders;
 		allSenders = customerService.getAllCustomers();
 

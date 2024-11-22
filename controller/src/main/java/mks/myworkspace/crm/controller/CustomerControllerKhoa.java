@@ -3,6 +3,7 @@ package mks.myworkspace.crm.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,7 +28,7 @@ import mks.myworkspace.crm.service.StorageService;
 
 @Controller
 @Slf4j
-public class CustomerControllerVinh extends BaseController {
+public class CustomerControllerKhoa extends BaseController {
 
 	@Autowired
 	CustomerService customerService;
@@ -43,14 +44,13 @@ public class CustomerControllerVinh extends BaseController {
 	
 	@Autowired
 	ProfessionService professionService;
-
-	@RequestMapping(value = { "/customer-list-vinh" }, method = RequestMethod.GET)
-	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
+	@RequestMapping(value = { "/customer-khoa" }, method = RequestMethod.GET)
+	public ModelAndView displayCustomerListScreen(@RequestParam(value = "keyword", required = false) String keyword,
 			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
 			HttpSession httpSession) {
 
 		log.debug("Display Cusomter list with keyword= {}", keyword);
-		ModelAndView mav = new ModelAndView("customer_list_vinh");
+		ModelAndView mav = new ModelAndView("customerInteraction");
 		initSession(request, httpSession);
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
@@ -89,6 +89,27 @@ public class CustomerControllerVinh extends BaseController {
 		mav.addObject("professions", professions);
 		mav.addObject("statusCounts", statusCounts);
 		mav.addObject("totalCustomerCount", totalCustomerCount);
+
+		return mav;
+	}
+	@RequestMapping(value = { "/customerEdit" }, method = RequestMethod.GET)
+	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
+			HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("editCustomerStatus_khoa");
+
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		log.debug("Customer Detail is running....");
+
+		Optional<Customer> customerOpt = customerService.findById(customerId);
+
+		// Check if the customer exists and add to model
+		customerOpt.ifPresentOrElse(customer -> {
+			mav.addObject("customer", customer);
+		}, () -> {
+			mav.addObject("errorMessage", "Customer not found.");
+		});
 
 		return mav;
 	}

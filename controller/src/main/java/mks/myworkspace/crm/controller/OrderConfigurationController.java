@@ -88,12 +88,33 @@ public class OrderConfigurationController extends BaseController {
 		int[] colWidths = { 50, 300, 300, };
 		String[] colHeaders = { "No", "Loại đơn hàng", "Ghi chú", };
 		List<Object[]> tblData = new ArrayList<>();
-		Object[] data1 = new Object[] { "1", "Mặc định", "" };
-		Object[] data2 = new Object[] { "2", "Máy móc", "" };
-		Object[] data3 = new Object[] { "3", "Thực phẩm", "" };
-		tblData.add(data1);
-		tblData.add(data2);
-		tblData.add(data3);
+		 Object[] data1 = new Object[] { "1", "Mặc định", "" };
+		    Object[] data2 = new Object[] { "2", "Máy móc", "" };
+		    Object[] data3 = new Object[] { "3", "Thực phẩm", "" };
+		    Object[] data4 = new Object[] { "4", "Điện tử", "" };
+		    Object[] data5 = new Object[] { "5", "Thời trang", "" };
+		    Object[] data6 = new Object[] { "6", "Nội thất", "" };
+		    Object[] data7 = new Object[] { "7", "Văn phòng phẩm", "" };
+		    Object[] data8 = new Object[] { "8", "Dịch vụ", "" };
+		    Object[] data9 = new Object[] { "9", "Y tế", "" };
+		    Object[] data10 = new Object[] { "10", "Hóa chất", "" };
+		    Object[] data11 = new Object[] { "11", "Xây dựng", "" };
+		    Object[] data12 = new Object[] { "12", "Nông nghiệp", "" };
+		    Object[] data13 = new Object[] { "13", "Giải trí", "" };
+
+		    tblData.add(data1);
+		    tblData.add(data2);
+		    tblData.add(data3);
+		    tblData.add(data4);
+		    tblData.add(data5);
+		    tblData.add(data6);
+		    tblData.add(data7);
+		    tblData.add(data8);
+		    tblData.add(data9);
+		    tblData.add(data10);
+		    tblData.add(data11);
+		    tblData.add(data12);
+		    tblData.add(data13);
 
 		TableStructure tblOrderConfiguration = new TableStructure(colWidths, colHeaders, tblData);
 
