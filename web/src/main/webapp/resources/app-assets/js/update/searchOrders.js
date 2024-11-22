@@ -19,18 +19,28 @@ document.addEventListener('DOMContentLoaded', function() {
 				'Content-Type': 'application/json',
 			},
 		})
-			.then(response => response.json())
-			.then(data => {
+			.then(response => {
+				// Kiểm tra response có JSON không
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				return response.text(); // Lấy text để kiểm tra nội dung
+			})
+			.then(text => {
+				// Parse JSON chỉ khi không rỗng
+				const data = text ? JSON.parse(text) : [];
 				if (data && data.length > 0) {
 					orderTableSearchResult(data);
 				} else {
 					// Hiển thị thông báo khi không có kết quả
-					const resultContainer = document.querySelector('#tblDatatable tbody');
+					const resultContainer = document.querySelector('#tblDatatable');
 					resultContainer.innerHTML = '<p>Không có kết quả phù hợp</p>';
 				}
 			})
 			.catch(error => {
 				console.error('Error:', error);
+				const resultContainer = document.querySelector('#tblDatatable tbody');
+				resultContainer.innerHTML = `<p>Lỗi xảy ra: ${error.message}</p>`;
 			});
 	});
 
@@ -109,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				console.log("Dòng được nhấp vào: ", row);
 				var orderId = row[0];
 				console.log("Row[0]: ", orderId);
-				
+
 				console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
 
 				$.ajax({
