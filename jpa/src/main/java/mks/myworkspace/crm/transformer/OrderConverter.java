@@ -143,7 +143,7 @@ public class OrderConverter {
 	
 	public static Long convertJsonToOrder_Delete(String json) {
 		JSONObject jsonObject = new JSONObject(json);
-		Long orderId = jsonObject.getLong("orderid");
+		Long orderId = jsonObject.getLong("id");
 		return orderId;
 	}
 }

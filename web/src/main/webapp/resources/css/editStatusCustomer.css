@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+.customer-status{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+  	margin: 0 auto;
+}
+
+
+.table-responsive{
+	justify-content: center;
+	width: 100%;
+}
+
+.table-bordered td, .table-bordered th {
+	vertical-align: middle;
+	text-align: center;
+}
+
+
+.table-bordered input[type="text"] {
+	width: 100%;
+	text-align: center;
+}
+
+.table-bordered .button-group {
+	display:flex;
+	flex-direction: row;
+}
+
+.button-group btn {
+	width: 60px;
+	padding: 5px;
+}
+
+
+.table-title {
+	font-size: 1.25rem;
+	font-weight: bold;
+	margin-bottom: 10px;
+  text-align: center;
+}

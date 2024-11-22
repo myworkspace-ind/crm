@@ -8,22 +8,25 @@
 		</div>
 		<hr>
 	    <form id="orderForm">
-		    <div class="form-row">
-			    <div class="form-group col-md-3">
+		    <div class="form-row" style = "margin-bottom: -30px">
+			    <div class="form-group col-md-6">
 			      <label for="inputDate">Ngày tạo</label>
 			      <input type="date" class="form-control" id="orderCreateDateDetail" style="background-color: white; color: black; width: 100%;" placeholder="dd/mm/yyyy" required readonly>
 			    </div>
-			    <div class="form-group col-md-3">
+			    <div class="form-group col-md-6">
 			      <label for="inputDate">Ngày giao</label>
 			      <input type="date" class="form-control" id="orderDeliveryDateDetail" style="background-color: white; color: black; width: 100%;" placeholder="yyyy/mm/dd" required readonly>
 			    </div>
-			    <div class="form-group col-md-3">
+			</div>
+			
+			<div class="form-row">
+			    <div class="form-group col-md-6">
 			      <label for="inputState">Trạng thái</label>
 					<select id="orderStatusDetail" class="form-control" style="background-color: white; color: black;" readonly>
 						
 					</select>					
 			    </div>
-			    <div class="form-group col-md-3">
+			    <div class="form-group col-md-6">
 			      <label for="inputOrderCode">Mã đơn hàng</label>
 			      <input type="text" class="form-control" id=orderCodeDetailInput style="background-color: white; color: black;" readonly>
 			    </div>
@@ -49,7 +52,11 @@
 			            <table class="sender-table">
 			                <tr>
 			                    <td>Họ tên:</td>
-			                    <td><select class="form-control" id="orderSenderNameDetail" style="background-color: white; color: black;" readonly></select>
+			                    <td>
+			                    	<select class="form-control" id="orderSenderNameDetail" style="background-color: white; color: black;" readonly>
+			                    	
+			                    	</select>
+			                    </td>
 			                </tr>
 			                <tr>
 			                    <td>SDT:</td>
@@ -69,15 +76,19 @@
 				            <table class="receiver-table">
 				                <tr>
 				                    <td>Họ tên:</td>
-				                    <td><input type="text" class="input-container" readonly/></td>
+				                    <td>
+			                    	<select class="form-control" id="orderReceiverNameDetail" style="background-color: white; color: black;" readonly>
+			                    	
+			                    	</select>
+			                    </td>
 				                </tr>
 				                <tr>
 				                    <td>SDT:</td>
-				                    <td><input type="text" class="input-container" placeholder="(+84) 1234567890" readonly/></td>
+				                    <td><input type="text" class="input-container" id= "orderReceiverPhoneDetail" placeholder="(+84) 1234567890" readonly/></td>
 				                </tr>
 				                <tr>
 				                    <td>Email:</td>
-				                    <td><input type="email" class="input-container" readonly/></td>
+				                    <td><input type="email" class="input-container" id= "orderReceiverEmailDetail" readonly/></td>
 				                </tr>
 				            </table>
 				        </fieldset>
@@ -95,7 +106,7 @@
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Địa chỉ</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="textAreaExample2" rows="8" readonly></textarea>
+								<textarea class="form-control" id="orderAddressDetail" rows="8" readonly></textarea>
 							</div>
 				        </div>
 				    </div>

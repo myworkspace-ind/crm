@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+.interaction-select, .search-bar, table {
+	margin-top: 20px;
+}
+
+.interaction-select label {
+	font-size: 18px;
+	margin-right: 10px;
+}
+
+.search-bar input {
+	width: 50px;
+	height: 35px;
+}
+
+.search-bar{
+	margin-top: 20px;
+}
+
+/* Table styling */
+table th, table td {
+	vertical-align: middle;
+	text-align: center;
+	padding: 15px;
+}
+
+table td{
+	height:200px;
+}
+
+table th {
+	background-color: #f8f9fa;
+	font-weight: bold;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+.dropdown .btn{
+	width: 100%;
+}
+
+.dropdown.click .dropdown-menu {
+    display: block;
+}
+
+/* Adjusting column widths */
+.col-stt {
+	width: 5%;
+}
+
+.col-name, 
+.col-phone, 
+.col-contact,
+.col-email,
+.col-action {
+	width: 20%;
+}

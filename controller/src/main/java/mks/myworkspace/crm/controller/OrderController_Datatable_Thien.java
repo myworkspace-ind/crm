@@ -63,7 +63,6 @@ import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Order;
 import mks.myworkspace.crm.transformer.JpaTransformer_OrderDetail;
-import mks.myworkspace.crm.transformer.JpaTransformer_OrderSearch;
 import mks.myworkspace.crm.transformer.OrderConverter;
 
 /**
@@ -71,8 +70,8 @@ import mks.myworkspace.crm.transformer.OrderConverter;
  */
 @Controller
 @Slf4j
-@RequestMapping("/orders-datatable")
-public class OrderController_Datatable extends BaseController {
+@RequestMapping("/orders-datatable-thien")
+public class OrderController_Datatable_Thien extends BaseController {
 
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
@@ -123,9 +122,8 @@ public class OrderController_Datatable extends BaseController {
 
 	@GetMapping("")
 	public ModelAndView displayDatatableOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
-			 								  @RequestParam(value = "customerId", required = false) Long customerId,
-			 								  HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
+			HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable_Thien");
 		initSession(request, httpSession);
 		List<OrderCategory> orderCategories;
 		orderCategories = orderCategoryService.getAllOrderCategoriesWithOrderStatuses();
@@ -157,26 +155,14 @@ public class OrderController_Datatable extends BaseController {
 		List<Order> listOrders;
 		listOrders = orderService.getAllOrders();
 		log.debug("Fetched orders: {}", listOrders.toString());
-		
+
 		List<GoodsCategory> allGoodsCategories;
 		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
-		
+
 		List<Customer> allSenders;
 		allSenders = customerService.getAllCustomers();
-		
-		 // Search functionality
-	    List<Order> ordersSearch = (customerId != null) ? orderService.searchOrders(customerId) : listOrders;
-	    List<GoodsCategory> allGoodsCategoriesSearch = goodsCategoryService.findAllGoodsCategory();
-	    List<Customer> allSendersSearch = customerService.getAllCustomers();
 
-	    List<Object[]> dataSet;
-	    //dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
-	    if (customerId == null) {
-	        dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
-	    } else {
-	        dataSet = JpaTransformer_Order.convert2D(ordersSearch, allGoodsCategoriesSearch, allSendersSearch);
-	    }
-		
+		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
 		if (dataSet == null) {
 			log.debug("DataSet is null, using demo data.");
 			dataSet = getDemoData();
@@ -199,26 +185,7 @@ public class OrderController_Datatable extends BaseController {
 
 		return mav;
 	}
-	
-	
-	@GetMapping("/search-orders")
-	@ResponseBody
-	public List<Object[]> searchOrders(@RequestParam(required = false) Long customerId){
-		List<Order> orders;
-		orders = orderService.searchOrders(customerId);
-		
-		List<GoodsCategory> allGoodsCategories;
-		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
-		
-		List<Customer> allSenders;
-		allSenders = customerService.getAllCustomers();
-		
-		return JpaTransformer_OrderSearch.convert2D(orders, allGoodsCategories, allSenders);
-		//List<Object[]> orderData = JpaTransformer_OrderSearch.convert2D(orders, allGoodsCategories, allSenders);
-		//return orderData;
-	}
-	
-	
+
 	@GetMapping("/viewDetails/{id}")
 	@ResponseBody
 	public ResponseEntity<?> displayOrderDetails(@PathVariable("id") Long orderId) {
@@ -343,29 +310,27 @@ public class OrderController_Datatable extends BaseController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
 		}
 	}
-	
 
+	@GetMapping("/orderDetail")
+	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long orderId, HttpServletRequest request,
+			HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable.html");
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		log.debug("Order Detail is running....");
 
-//	@GetMapping("/orderDetail")
-//	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long orderId, HttpServletRequest request,
-//			HttpSession httpSession) {
-//		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable.html");
-//		initSession(request, httpSession);
-//		mav.addObject("currentSiteId", getCurrentSiteId());
-//		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-//		log.debug("Order Detail is running....");
-//
-//		Optional<Order> orderOpt = orderService.findById(orderId);
-//
-//		// Check if the customer exists and add to model
-//		orderOpt.ifPresentOrElse(order -> {
-//			mav.addObject("orderDetail", order);
-//		}, () -> {
-//			mav.addObject("errorMessage", "Order not found.");
-//		});
-//
-//		return mav;
-//	}
+		Optional<Order> orderOpt = orderService.findById(orderId);
+
+		// Check if the customer exists and add to model
+		orderOpt.ifPresentOrElse(order -> {
+			mav.addObject("orderDetail", order);
+		}, () -> {
+			mav.addObject("errorMessage", "Order not found.");
+		});
+
+		return mav;
+	}
 
 	@GetMapping(value = "/order-statuses", produces = "application/json")
 	@ResponseBody

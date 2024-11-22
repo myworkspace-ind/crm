@@ -42,8 +42,9 @@ import mks.myworkspace.crm.common.model.TableStructure;
  */
 @Controller
 @Slf4j
-@RequestMapping("/orders-configuration")
-public class OrderConfigurationController extends BaseController {
+//@RequestMapping("/orders-configuration")
+@RequestMapping("/ordersConfigurationCRMOrderType_Bao")
+public class OrderConfigurationController_Bao extends BaseController {
 
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
@@ -67,7 +68,7 @@ public class OrderConfigurationController extends BaseController {
 	 */
 	@GetMapping("/orders")
 	public ModelAndView displayOrderConfiguration(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("ordersConfigurationCRMScreen");
+		ModelAndView mav = new ModelAndView("ordersConfigurationCRMOrderType_Bao");
 
 		initSession(request, httpSession);
 		return mav;
@@ -88,33 +89,50 @@ public class OrderConfigurationController extends BaseController {
 		int[] colWidths = { 50, 300, 300, };
 		String[] colHeaders = { "No", "Loại đơn hàng", "Ghi chú", };
 		List<Object[]> tblData = new ArrayList<>();
-		 Object[] data1 = new Object[] { "1", "Mặc định", "" };
-		    Object[] data2 = new Object[] { "2", "Máy móc", "" };
-		    Object[] data3 = new Object[] { "3", "Thực phẩm", "" };
-		    Object[] data4 = new Object[] { "4", "Điện tử", "" };
-		    Object[] data5 = new Object[] { "5", "Thời trang", "" };
-		    Object[] data6 = new Object[] { "6", "Nội thất", "" };
-		    Object[] data7 = new Object[] { "7", "Văn phòng phẩm", "" };
-		    Object[] data8 = new Object[] { "8", "Dịch vụ", "" };
-		    Object[] data9 = new Object[] { "9", "Y tế", "" };
-		    Object[] data10 = new Object[] { "10", "Hóa chất", "" };
-		    Object[] data11 = new Object[] { "11", "Xây dựng", "" };
-		    Object[] data12 = new Object[] { "12", "Nông nghiệp", "" };
-		    Object[] data13 = new Object[] { "13", "Giải trí", "" };
+		Object[] data1 = new Object[] { "1", "Mặc định", "Loại đơn hàng mặc định ban đầu." };
+		Object[] data2 = new Object[] { "2", "Máy móc", "Đơn hàng liên quan đến các thiết bị máy móc." };
+		Object[] data3 = new Object[] { "3", "Thực phẩm", "Đơn hàng về thực phẩm tươi hoặc đông lạnh." };
+		Object[] data4 = new Object[] { "4", "Mỹ phẩm", "Sản phẩm chăm sóc sắc đẹp và làm đẹp." };
+		Object[] data5 = new Object[] { "5", "Điện tử", "Đơn hàng liên quan đến các thiết bị điện tử." };
+		Object[] data6 = new Object[] { "6", "Hàng gia dụng", "Đơn hàng về đồ dùng gia đình như bếp, tủ lạnh." };
+		Object[] data7 = new Object[] { "7", "Dược phẩm", "Thuốc và sản phẩm y tế." };
+		Object[] data8 = new Object[] { "8", "Thời trang", "Đơn hàng quần áo, giày dép và phụ kiện." };
+		Object[] data9 = new Object[] { "9", "Sách vở", "Đơn hàng tài liệu học tập, sách, báo." };
+		Object[] data10 = new Object[] { "10", "Văn phòng phẩm", "Đồ dùng văn phòng như bút, sổ, giấy." };
+		Object[] data11 = new Object[] { "11", "Đồ chơi", "Đơn hàng đồ chơi trẻ em." };
+		Object[] data12 = new Object[] { "12", "Đồ thể thao", "Dụng cụ và trang phục thể thao." };
+		Object[] data13 = new Object[] { "13", "Hóa chất", "Các sản phẩm hóa chất, chất tẩy rửa." };
+		Object[] data14 = new Object[] { "14", "Xe cộ", "Phương tiện vận tải như xe đạp, xe máy." };
+		Object[] data15 = new Object[] { "15", "Đồ nội thất", "Bàn, ghế, tủ, giường và đồ nội thất khác." };
+		Object[] data16 = new Object[] { "16", "Nguyên liệu xây dựng", "Xi măng, sắt thép, gạch." };
+		Object[] data17 = new Object[] { "17", "Sản phẩm nghệ thuật", "Tranh vẽ, tượng điêu khắc." };
+		Object[] data18 = new Object[] { "18", "Thiết bị công nghiệp", "Máy móc công nghiệp lớn." };
+		Object[] data19 = new Object[] { "19", "Sản phẩm nông nghiệp", "Hoa quả, rau củ, lúa gạo." };
+		Object[] data20 = new Object[] { "20", "Thực phẩm chức năng", "Sản phẩm bổ sung dinh dưỡng hoặc hỗ trợ sức khỏe." };
 
-		    tblData.add(data1);
-		    tblData.add(data2);
-		    tblData.add(data3);
-		    tblData.add(data4);
-		    tblData.add(data5);
-		    tblData.add(data6);
-		    tblData.add(data7);
-		    tblData.add(data8);
-		    tblData.add(data9);
-		    tblData.add(data10);
-		    tblData.add(data11);
-		    tblData.add(data12);
-		    tblData.add(data13);
+		tblData.add(data1);
+		tblData.add(data2);
+		tblData.add(data3);
+		tblData.add(data4);
+		tblData.add(data5);
+		tblData.add(data6);
+		tblData.add(data7);
+		tblData.add(data8);
+		tblData.add(data9);
+		tblData.add(data10);
+		tblData.add(data11);
+		tblData.add(data12);
+		tblData.add(data13);
+		tblData.add(data14);
+		tblData.add(data15);
+		tblData.add(data16);
+		tblData.add(data17);
+		tblData.add(data18);
+		tblData.add(data19);
+		tblData.add(data20);
+
+
+
 
 		TableStructure tblOrderConfiguration = new TableStructure(colWidths, colHeaders, tblData);
 

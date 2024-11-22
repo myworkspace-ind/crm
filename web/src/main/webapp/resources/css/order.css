@@ -44,7 +44,7 @@ fieldset.text-left.delidate-option {
 }
 
 fieldset.text-left.order-status{
-	margin-left: 90px;
+	margin-left: 120px;
 }
 
 button.search-order {
@@ -174,14 +174,16 @@ table {
     border-collapse: collapse;
 }
 
-table.sender-table, table.receiver-table {
+table.sender-table, table.receiver-table, td {
     margin-left: 30px;
     max-width: 500px;
+    padding: 8px !important;
 }
 
 table, td {
     border: 1px solid #939393;
-    padding: 8px;
+    /* padding: 8px */
+    padding: 0px;
 }
 
 legend {
@@ -263,5 +265,13 @@ input[type="search"] {
 
 h3#orderIdForUpdate {
     display: block;
+}
+
+.detail-btn, .detailOrderSearch-btn,
+.edit-btn, .editOrderSearch-btn,
+.delete-btn, .deleteOrderSearch-btn
+.updateOrderStatus-btn, .updateOrderStatusSearch-btn  {
+    display: inline-block;
+    margin-right: 5px;
 }
 

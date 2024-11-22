@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="fragments/common_meta_title"></th:block>
+<th:block th:include="fragments/head"></th:block>
+<th:block th:include="fragments/common_css"></th:block>
+
+<link rel="stylesheet" type="text/css" href="resources/css/customerInteraction.css">
+</head>
+<body
+	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	data-open="click" data-menu="vertical-compact-menu"
+	data-col="2-columns">
+
+	<!-- BEGIN HEADER -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER -->
+
+	<!-- BEGIN CONTENT -->
+	<div class="container mt-4">
+		<div class="interact-day-group d-flex flex-row mb-3">
+			<label for="interaction-time" class="mr-4">Tương tác mới nhất
+				cách đây</label> <select class="form-select"
+				aria-label="Default select example">
+				<option selected>Open this select menu</option>
+				<option value="1">1 tuần</option>
+				<option value="2">2 tuần</option>
+				<option value="3">3 tuần</option>
+			</select>
+		</div>
+
+		<div class="search-bar d-flex justify-content-end">
+			<input type="text" id="search-input"
+				class="form-control d-flex w-25 justify-content-end" placeholder="Tìm kiếm">
+		</div>
+
+		<div class="table-container">
+			<div class="table-responsive">
+				<table id="table" class="table table-bordered">
+					<thead class="thead">
+						<tr class="bg">
+							<th class="col-stt th1" >STT</th>
+							<th class="col-name th2" >Tên khách hàng</th>
+							<th class="col-email th3" >Email</th>
+							<th class="col-phone th4" >Số điện thoại</th>
+							<th class="col-contact th5" >Người liên hệ chính</th>
+							<th class="col-action th6" >Hành động</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="customer, iterStat : ${customers}">
+							<td th:text="${iterStat.index + 1}"></td>
+							<td
+								th:text="${customer.companyName != null ? customer.companyName : ''}"></td>
+							<td th:text="${customer.email != null ? customer.email : ''}"></td>
+							<td th:text="${customer.phone != null ? customer.phone : ''}"></td>
+							<td
+								th:text="${customer.contactPerson != null ? customer.contactPerson : ''}"></td>
+							<td>
+								<div class="dropdown">
+									<button class="btn btn-secondary dropdown-toggle" type="button"
+										id="dropdownMenuButton" data-toggle="dropdown"
+										 aria-expanded="false">Action</button>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+										<a class="dropdown-item" th:href="@{customerEdit(id=${customer.id})}">Cập nhật</a> 
+										<a class="dropdown-item" href="#">Xóa</a> 
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- END CONTENT -->
+
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+</body>
+<!-- START COMMON JAVASCRIPT -->
+<th:block th:include="fragments/common_javascript"></th:block>
+<!-- END COMMON JAVASCRIPT -->
+</html>
