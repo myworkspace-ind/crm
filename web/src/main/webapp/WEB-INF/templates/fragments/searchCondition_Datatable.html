@@ -21,7 +21,7 @@
 	                       <div class="col-md-3 col-sm-12">
 	                           <fieldset class="text-left customer-option">
 	                               <h5>Khách hàng</h5>
-	                               <select class="form-control" style="background-color: white; color: black;">
+	                               <select class="form-control" id="orderCustomerFilter" style="background-color: white; color: black;">
 	                               		<th:block th:each="customer : ${listCustomers}">
 											<option th:value="${customer.id}" th:text="${customer.contactPerson}">
 											</option>
@@ -72,7 +72,7 @@
 							    <fieldset class="text-right">
 							        <!-- <button type="submit" class="search-order" style="margin-top: 10px; display: inline-block;">Tìm</button> -->
 							        <div class="input-group">
-									  <button type="button" class="btn btn-primary" data-mdb-ripple-init style="margin-top: 10px; display: inline-block; width: 40%">
+									  <button type="button" class="btn btn-primary btn-search-orders" data-mdb-ripple-init style="margin-top: 10px; display: inline-block; width: 40%">
 									  	<i class="fas fa-search"></i> Tìm 
 									  </button>
 									</div>

@@ -14,4 +14,6 @@ public interface OrderService {
 	Order getOrderById(Long orderId);
 	
 	Optional<Order> findById(Long orderId);
+	
+	List<Order> searchOrders(Long customerId);
 }

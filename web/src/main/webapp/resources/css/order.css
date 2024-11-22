@@ -267,10 +267,10 @@ h3#orderIdForUpdate {
     display: block;
 }
 
-.detail-btn,
-.edit-btn,
-.delete-btn,
-.update-status-btn {
+.detail-btn, .detailOrderSearch-btn,
+.edit-btn, .editOrderSearch-btn,
+.delete-btn, .deleteOrderSearch-btn
+.updateOrderStatus-btn, .updateOrderStatusSearch-btn  {
     display: inline-block;
     margin-right: 5px;
 }
