@@ -38,7 +38,7 @@ public class IntroController extends BaseController {
 	 */
 	@GetMapping("/intro")
 	public ModelAndView displayIntro() {
-		ModelAndView mav = new ModelAndView("intro");
+		ModelAndView mav = new ModelAndView("intro_cong");
 		return mav;
 	}
 }
