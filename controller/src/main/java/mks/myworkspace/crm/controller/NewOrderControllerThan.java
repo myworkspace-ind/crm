@@ -136,7 +136,7 @@ public class NewOrderControllerThan extends BaseController {
 		listOrders = orderService.getAllOrders();
 		log.debug("Fetched orders: {}", listOrders.toString());
 
-		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders);
+		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders, listGoodsCategories, listCustomers);
 		if (dataSet == null) {
 			log.debug("DataSet is null, using demo data.");
 			dataSet = getDemoData();
