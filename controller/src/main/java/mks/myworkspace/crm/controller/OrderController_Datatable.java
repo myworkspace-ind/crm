@@ -165,7 +165,7 @@ public class OrderController_Datatable extends BaseController {
 		allSenders = customerService.getAllCustomers();
 		
 		 // Search functionality
-	    List<Order> ordersSearch = (customerId != null) ? orderService.searchOrders(customerId) : listOrders;
+	    List<Order> ordersSearch = (customerId != null & categoryId != null) ? orderService.searchOrders(customerId, categoryId) : listOrders;
 	    List<GoodsCategory> allGoodsCategoriesSearch = goodsCategoryService.findAllGoodsCategory();
 	    List<Customer> allSendersSearch = customerService.getAllCustomers();
 
@@ -203,9 +203,9 @@ public class OrderController_Datatable extends BaseController {
 	
 	@GetMapping("/search-orders")
 	@ResponseBody
-	public List<Object[]> searchOrders(@RequestParam(required = false) Long customerId){
+	public List<Object[]> searchOrders(@RequestParam(required = false) Long customerId, @RequestParam(required = false) Long orderCategoryId ){
 		List<Order> orders;
-		orders = orderService.searchOrders(customerId);
+		orders = orderService.searchOrders(customerId, orderCategoryId);
 		
 		List<GoodsCategory> allGoodsCategories;
 		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();

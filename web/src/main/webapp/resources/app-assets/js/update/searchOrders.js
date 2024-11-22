@@ -4,11 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	searchButton.addEventListener('click', function() {
 		// Lấy các giá trị từ form
 		const customerId = document.querySelector('#orderCustomerFilter').value;
+		const orderCategoryId = document.querySelector('#orderCategoryFilter').value;
 		const _ctx = "/crm-web/";
 
 		// Xây dựng query string từ các tham số
 		const params = new URLSearchParams({
 			customerId: customerId,
+			orderCategoryId: orderCategoryId
 		}).toString();  // Chuyển tham số thành chuỗi query string
 
 		fetch(`${_ctx}orders-datatable/search-orders?${params}`, {
@@ -19,8 +21,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		})
 			.then(response => response.json())
 			.then(data => {
-				console.log('Data received:', data);
-				orderTableSearchResult(data);
+				if (data && data.length > 0) {
+					orderTableSearchResult(data);
+				} else {
+					// Hiển thị thông báo khi không có kết quả
+					const resultContainer = document.querySelector('#tblDatatable tbody');
+					resultContainer.innerHTML = '<p>Không có kết quả phù hợp</p>';
+				}
 			})
 			.catch(error => {
 				console.error('Error:', error);
@@ -42,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			            <td>${order[5]}</td>  <!-- Phương tiện vận chuyển -->
 			        `;
 			tbody.appendChild(row);
-			console.log("ROW:" , order[0]);
+			console.log("orderId:", order[0]);
 		});
 
 		if ($.fn.DataTable.isDataTable('#tblDatatable')) {
@@ -99,8 +106,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			// Attach event listeners to buttons
 			$('#tblDatatable tbody').on('click', '.editOrderSearch-btn', function() {
 				var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
+				console.log("Dòng được nhấp vào: ", row);
 				var orderId = row[0];
-
+				console.log("Row[0]: ", orderId);
+				
 				console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
 
 				$.ajax({

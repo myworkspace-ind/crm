@@ -37,8 +37,8 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<Order> searchOrders(Long customerId) {
-		return repo.findOrderByCriteria(customerId);
+	public List<Order> searchOrders(Long customerId, Long orderCategoryId) {
+		return repo.findOrderByCriteria(customerId, orderCategoryId);
 	}
 
 

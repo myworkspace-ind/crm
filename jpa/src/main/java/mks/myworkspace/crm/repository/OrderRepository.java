@@ -21,9 +21,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	Optional<Order> findOrderById(@Param("id") Long id);
 	
 	@Query("SELECT o FROM Order o WHERE "
-			+ "(:customerId IS NULL OR o.sender.id = :customerId OR o.receiver.id = :customerId) ")
-			//+ "AND (:orderCategoryId IS NULL OR o.orderCategory.id = :orderCategoryId)")
-	List<Order> findOrderByCriteria(@Param("customerId") Long customerId);
-									//@Param("orderCategoryId") Long orderCategoryId);
+			+ "(:customerId IS NULL OR o.sender.id = :customerId OR o.receiver.id = :customerId) "
+			+ "AND (:orderCategoryId IS NULL OR o.orderCategory.id = :orderCategoryId)")
+	List<Order> findOrderByCriteria(@Param("customerId") Long customerId,
+									@Param("orderCategoryId") Long orderCategoryId);
 	
 }
