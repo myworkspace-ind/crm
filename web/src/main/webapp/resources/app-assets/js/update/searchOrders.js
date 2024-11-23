@@ -27,20 +27,42 @@ document.addEventListener('DOMContentLoaded', function() {
 				return response.text(); // Lấy text để kiểm tra nội dung
 			})
 			.then(text => {
-				// Parse JSON chỉ khi không rỗng
 				const data = text ? JSON.parse(text) : [];
-				if (data && data.length > 0) {
-					orderTableSearchResult(data);
-				} else {
-					// Hiển thị thông báo khi không có kết quả
-					const resultContainer = document.querySelector('#tblDatatable');
-					resultContainer.innerHTML = '<p>Không có kết quả phù hợp</p>';
-				}
-			})
-			.catch(error => {
-				console.error('Error:', error);
 				const resultContainer = document.querySelector('#tblDatatable tbody');
-				resultContainer.innerHTML = `<p>Lỗi xảy ra: ${error.message}</p>`;
+				const messageContainer = document.querySelector('#noResultsMessage');
+
+				// Xóa thông báo cũ nếu có
+				if (messageContainer) {
+					messageContainer.remove();
+				}
+
+				if (resultContainer) {
+					// Xóa nội dung cũ trong bảng
+					resultContainer.innerHTML = '';
+
+					if (data && data.length > 0) {
+						orderTableSearchResult(data);
+					} else {
+						// Tạo thông báo bên ngoài bảng
+						const newMessage = document.createElement('div');
+						newMessage.id = 'noResultsMessage';
+						newMessage.textContent = 'Không có kết quả phù hợp.';
+						newMessage.style.cssText = `
+							padding: 10px;
+							margin: 10px 0;
+							background-color: #f8d7da;
+							color: #721c24;
+							border: 1px solid #f5c6cb;
+							border-radius: 4px;
+							text-align: center;
+							font-size: 16px;
+						`;
+						// Đặt thông báo ngay trên bảng
+						resultContainer.parentElement.parentElement.insertBefore(newMessage, resultContainer.parentElement);
+					}
+				} else {
+					console.error('#tblDatatable tbody không tồn tại.');
+				}
 			});
 	});
 
