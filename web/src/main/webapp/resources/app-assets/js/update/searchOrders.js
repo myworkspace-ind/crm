@@ -7,11 +7,17 @@ document.addEventListener('DOMContentLoaded', function() {
 		const orderCategoryId = document.querySelector('#orderCategoryFilter').value;
 		const _ctx = "/crm-web/";
 
+		// Lấy danh sách id từ checkbox của trạng thái
+		/*const selectedStatuses = Array.from(
+			document.querySelectorAll('#orderStatusFilter input[name="orderStatus"]:checked')
+		).map((checkbox) => checkbox.value); */
+
 		// Xây dựng query string từ các tham số
 		const params = new URLSearchParams({
 			customerId: customerId,
-			orderCategoryId: orderCategoryId
-		}).toString();  // Chuyển tham số thành chuỗi query string
+			orderCategoryId: orderCategoryId,
+			//statuses: selectedStatuses.join(','),
+		}).toString(); 
 
 		fetch(`${_ctx}orders-datatable/search-orders?${params}`, {
 			method: 'GET',
@@ -136,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 
 			// Attach event listeners to buttons
-			$('#tblDatatable tbody').on('click', '.editOrderSearch-btn', function() {
+			$('#tblDatatable tbody').off('click', '.editOrderSearch-btn').on('click', '.editOrderSearch-btn', function() {
 				var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
 				console.log("Dòng được nhấp vào: ", row);
 				var orderId = row[0];
@@ -217,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			});
 
-			$('#tblDatatable tbody').on('click', '.detailOrderSearch-btn', function() {
+			$('#tblDatatable tbody').off('click', '.detailOrderSearch-btn').on('click', '.detailOrderSearch-btn', function() {
 				var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
 				var orderId = row[0];
 
@@ -297,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				});
 			});
 
-			$('#tblDatatable tbody').on('click', '.deleteOrderSearch-btn', function() {
+			$('#tblDatatable tbody').off('click', '.deleteOrderSearch-btn').on('click', '.deleteOrderSearch-btn', function() {
 				var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu dòng
 				var orderId = row[0]; // ID của đơn hàng
 				console.log('Xóa đơn hàng với ID:', orderId);

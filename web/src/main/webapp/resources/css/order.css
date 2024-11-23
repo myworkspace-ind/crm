@@ -275,3 +275,7 @@ h3#orderIdForUpdate {
     margin-right: 5px;
 }
 
+button.btn.btn-success.updateOrderStatusSearch-btn {
+    margin-left: 5px;
+}
+

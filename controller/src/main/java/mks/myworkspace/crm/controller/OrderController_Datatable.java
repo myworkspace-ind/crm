@@ -124,6 +124,7 @@ public class OrderController_Datatable extends BaseController {
 	@GetMapping("")
 	public ModelAndView displayDatatableOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
 			 								  @RequestParam(value = "customerId", required = false) Long customerId,
+			 								  //@RequestParam(required = false) List<Long>statuses,
 			 								  HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
 		initSession(request, httpSession);
@@ -165,7 +166,7 @@ public class OrderController_Datatable extends BaseController {
 		allSenders = customerService.getAllCustomers();
 		
 		 // Search functionality
-	    List<Order> ordersSearch = (customerId != null & categoryId != null) ? orderService.searchOrders(customerId, categoryId) : listOrders;
+	    List<Order> ordersSearch = (customerId != null & categoryId != null ) ? orderService.searchOrders(customerId, categoryId) : listOrders;
 	    List<GoodsCategory> allGoodsCategoriesSearch = goodsCategoryService.findAllGoodsCategory();
 	    List<Customer> allSendersSearch = customerService.getAllCustomers();
 
@@ -203,7 +204,9 @@ public class OrderController_Datatable extends BaseController {
 	
 	@GetMapping("/search-orders")
 	@ResponseBody
-	public List<Object[]> searchOrders(@RequestParam(required = false) Long customerId, @RequestParam(required = false) Long orderCategoryId ){
+	public List<Object[]> searchOrders(@RequestParam(required = false) Long customerId, 
+									   @RequestParam(required = false) Long orderCategoryId){
+									   //@RequestParam(required = false) List<Long>statuses)
 		List<Order> orders;
 		orders = orderService.searchOrders(customerId, orderCategoryId);
 		
