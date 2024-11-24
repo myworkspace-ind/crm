@@ -12,7 +12,7 @@
 						</div>
 						<div class="card-content">
 							<div class="card-body">
-								<form id="addCustomerForm">
+								<form id="addNewCustomerForm">
 									<div class="form-group">
 										<label for="company_name">Tên Công Ty:</label> <input
 											type="text" class="form-control" id="company_name"
@@ -85,8 +85,11 @@
 										<textarea class="form-control" id="note" name="note"></textarea>
 									</div>
 
+									<!-- <button type="submit" class="btn btn-primary"
+										onclick="addCustomer()">Lưu Khách Hàng</button> -->
+										
 									<button type="submit" class="btn btn-primary"
-										onclick="addCustomer()">Lưu Khách Hàng</button>
+										>Lưu Khách Hàng</button>
 
 									<button type="button" class="btn btn-secondary"
 										onclick="goBack()">Quay Lại</button>
@@ -99,5 +102,13 @@
 			</section>
 		</div>
 	</div>
+	<script>
+	  document.querySelectorAll("input[required]").forEach((input) => {
+	    const label = input.previousElementSibling;
+	    if (label) {
+	      label.innerHTML += ' <span style="color: red;">*</span>';
+	    }
+	  });
+	</script>
 	<!-- END CONTENT -->
 
