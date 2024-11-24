@@ -85,7 +85,7 @@ public class CustomerManagementController extends BaseController {
 //				colHeaders[i] = jsonObjColHeaders.getString(i);
 //			}
 //
-//			List<Object[]> tblData = JpaTransformer.convert2D(lstCustomers);
+//			List<Object[]> tblData = JpaTransformer.	(lstCustomers);
 //
 //			TableStructure tblTask = new TableStructure(colWidths, colHeaders, tblData);
 //
