@@ -151,4 +151,11 @@ public class OrderController extends BaseController {
 		return tblOrder;
 	}
 
+	@GetMapping("/list")
+	public ModelAndView displayOrderConfiguration(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("ordersConfigurationCRMScreen_v2");
+
+		initSession(request, httpSession);
+		return mav;
+	}
 }
