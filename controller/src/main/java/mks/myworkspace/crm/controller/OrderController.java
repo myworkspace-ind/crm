@@ -158,4 +158,11 @@ public class OrderController extends BaseController {
 		initSession(request, httpSession);
 		return mav;
 	}
+	
+	@GetMapping("/history")
+	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("historyUpdate");
+
+		return mav;
+	}
 }
