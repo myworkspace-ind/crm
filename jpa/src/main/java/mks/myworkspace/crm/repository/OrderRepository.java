@@ -22,10 +22,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	
 	@Query("SELECT o FROM Order o WHERE "
 			+ "(:customerId IS NULL OR o.sender.id = :customerId OR o.receiver.id = :customerId) "
-			+ "AND (:orderCategoryId IS NULL OR o.orderCategory.id = :orderCategoryId)")
-			//+ "AND (:statuses IS NULL OR o.orderStatus.id IN :statuses)")
+			+ "AND (:orderCategoryId IS NULL OR o.orderCategory.id = :orderCategoryId)"
+			+ "AND ((:statuses IS NULL OR :statuses = '') OR o.orderStatus.id IN :statuses)")
 	List<Order> findOrderByCriteria(@Param("customerId") Long customerId,
-									@Param("orderCategoryId") Long orderCategoryId);
-									//@Param("statuses") List<Long> statuses);
+									@Param("orderCategoryId") Long orderCategoryId,
+									@Param("statuses") List<Long> statuses);
 	
 }

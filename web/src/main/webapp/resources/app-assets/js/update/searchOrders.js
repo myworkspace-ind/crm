@@ -8,16 +8,21 @@ document.addEventListener('DOMContentLoaded', function() {
 		const _ctx = "/crm-web/";
 
 		// Lấy danh sách id từ checkbox của trạng thái
-		/*const selectedStatuses = Array.from(
+		const selectedStatuses = Array.from(
 			document.querySelectorAll('#orderStatusFilter input[name="orderStatus"]:checked')
-		).map((checkbox) => checkbox.value); */
+		).map((checkbox) => checkbox.value);
+		
+		const paramsObject = {
+		    customerId: customerId || '', 
+		    orderCategoryId: orderCategoryId || '' 
+		};
+		
+		if (selectedStatuses.length > 0) {
+		    paramsObject.statuses = selectedStatuses.join(',');
+		}
 
 		// Xây dựng query string từ các tham số
-		const params = new URLSearchParams({
-			customerId: customerId,
-			orderCategoryId: orderCategoryId,
-			//statuses: selectedStatuses.join(','),
-		}).toString(); 
+		const params = new URLSearchParams(paramsObject).toString();
 
 		fetch(`${_ctx}orders-datatable/search-orders?${params}`, {
 			method: 'GET',
