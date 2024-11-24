@@ -12,9 +12,9 @@
 <th:block th:include="fragments/common_css"></th:block>
 <!-- END COMMON CSS -->
 
-<link rel="stylesheet" type="text/css" href="resources/css/new_style.css">
-<link rel="stylesheet" type="text/css" href="resources/css/status.css">
-<link rel="stylesheet" type="text/css" href="resources/css/buttonGroupFunction.css">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/status.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/buttonGroupFunction.css}">
 </head>
 
 <body
@@ -43,26 +43,16 @@
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/navigate.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/status.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/search.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/fetchCustomersByStatus.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/customerList_JS.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/customerList_js_2.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/customerList_Pagination.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/toggleCheckboxActions.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/addCustomer.js"></script>
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/buttonGroupFunction.js"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/status.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/search.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/fetchCustomersByStatus.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/customerList_JS.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/customerList_js_2.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/customerList_Pagination.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/toggleCheckboxActions.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/addCustomer.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/buttonGroupFunction.js}"></script>
 
 </body>
 </html>

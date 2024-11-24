@@ -1,8 +1,5 @@
 package mks.myworkspace.crm.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
-import mks.myworkspace.crm.entity.Profession;
-import mks.myworkspace.crm.entity.ResponsiblePerson;
-import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.ProfessionService;
 import mks.myworkspace.crm.service.ResponsiblePersonService;
@@ -44,54 +38,7 @@ public class CustomerControllerKhoa extends BaseController {
 	
 	@Autowired
 	ProfessionService professionService;
-	@RequestMapping(value = { "/customer-khoa" }, method = RequestMethod.GET)
-	public ModelAndView displayCustomerListScreen(@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
-			HttpSession httpSession) {
 
-		log.debug("Display Cusomter list with keyword= {}", keyword);
-		ModelAndView mav = new ModelAndView("customerInteraction");
-		initSession(request, httpSession);
-		
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		List<Customer> customers;
-
-		if (statusId != null) {
-			customers = customerService.findCustomersByStatus(statusId);
-			mav.addObject("statusId", statusId);
-
-		} else if (keyword != null && !keyword.isEmpty()) {
-			customers = customerService.searchCustomers(keyword);
-			mav.addObject("keyword", keyword);
-
-		} else {
-			customers = customerService.getAllCustomersWithStatuses ();
-			log.debug("No keyword or statusId provided. Fetching all customers.");
-		}
-
-		List<Status> statuses = statusService.getAllStatuses();
-		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
-		List<Profession> professions = professionService.getAllProfessions();
-		
-
-		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
-		
-	    if (statusCounts == null) {
-	        statusCounts = new HashMap<>(); 
-	    }
-	    
-	    long totalCustomerCount = customerService.getTotalCustomerCount();
-	    
-		mav.addObject("customers", customers);
-		mav.addObject("statuses", statuses);
-		mav.addObject("responsiblePersons", responsiblePersons);
-		mav.addObject("professions", professions);
-		mav.addObject("statusCounts", statusCounts);
-		mav.addObject("totalCustomerCount", totalCustomerCount);
-
-		return mav;
-	}
 	@RequestMapping(value = { "/customerEdit" }, method = RequestMethod.GET)
 	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
 			HttpSession httpSession) {
