@@ -321,4 +321,32 @@ public class CustomerController extends BaseController {
 
 		return mav;
 	}
+	
+	/**
+	 * @author Khoa
+	 * @param customerId
+	 * @param request
+	 * @param httpSession
+	 * @return
+	 */
+	@GetMapping("edit")
+	public ModelAndView edit(@RequestParam("id") Long customerId, HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("editCustomerStatus_khoa");
+
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		log.debug("Customer Detail is running....");
+
+		Optional<Customer> customerOpt = customerService.findById(customerId);
+
+		// Check if the customer exists and add to model
+		customerOpt.ifPresentOrElse(customer -> {
+			mav.addObject("customer", customer);
+		}, () -> {
+			mav.addObject("errorMessage", "Customer not found.");
+		});
+
+		return mav;
+	}
 }
