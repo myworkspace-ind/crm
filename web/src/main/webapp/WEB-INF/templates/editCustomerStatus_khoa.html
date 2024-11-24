@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- START COMMON META AND TITLE -->
+<th:block th:include="fragments/common_meta_title"></th:block>
+<!-- END COMMON META AND TITLE -->
+
+<!-- START COMMON CSS -->
+<th:block th:include="fragments/common_css"></th:block>
+<!-- END COMMON CSS -->
+
+<th:block th:include="fragments/head"></th:block>
+
+<link rel="stylesheet" type="text/css" href="resources/css/editStatusCustomer.css">
+<link rel="stylesheet" type="text/css" href="resources/css/new_style.css">
+<link rel="stylesheet" type="text/css" href="resources/css/customerDetail.css">
+</head>
+</head>
+<body
+	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	data-open="click" data-menu="vertical-compact-menu"
+	data-col="2-columns">
+	>
+	<!-- BEGIN HEADER -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER -->
+
+	<!-- BEGIN CONTENT -->
+
+	<!-- BEGIN CustomerDetail -->
+	<th:block th:include="fragments/frg_CustomerDetail"></th:block>
+	<!-- END CustomerDetail -->
+
+
+	<div class="customer-status container mt-5">
+		<!-- Tiêu đề bảng -->
+		<div class="table-title">Tương tác</div>
+
+		<div class="table-responsive">
+			<table class="table table-bordered" id="interactionTable">
+				<thead class="table-light">
+					<tr>
+						<th>Ngày</th>
+						<th>Nội dung trao đổi</th>
+						<th>Người trao đổi</th>
+						<th>Kế hoạch tiếp theo</th>
+						<th>Hành động</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="text" class="form-control"></td>
+						<td><input type="text" class="form-control"></td>
+						<td><input type="text" class="form-control"></td>
+						<td><input type="text" class="form-control"></td>
+						<td>
+							<div class="button-group">
+								<button class="btn btn-success btn-sm me-2">Sửa</button>
+								<button class="btn btn-danger btn-sm">Xóa</button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- END CONTENT -->
+
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+</body>
+<script>
+    
+function addRow() {
+    const tableBody = document.querySelector("#interactionTable tbody");
+    const newRow = document.createElement("tr");
+
+    for (let i = 0; i < 5; i++) {
+        const newCell = document.createElement("td");
+        if (i < 4) {
+            const input = document.createElement("input");
+            input.type = "text";
+            input.className = "form-control";
+            
+            
+            input.addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    addRow(); 
+                    event.preventDefault(); 
+                }
+            });
+
+            newCell.appendChild(input);
+        } else {
+            const editButton = document.createElement("button");
+            editButton.className = "btn btn-success btn-sm me-2";
+            editButton.textContent = "Sửa";
+
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "btn btn-danger btn-sm";
+            deleteButton.textContent = "Xóa";
+
+            newCell.appendChild(editButton);
+            newCell.appendChild(deleteButton);
+        }
+        newRow.appendChild(newCell);
+    }
+
+    tableBody.appendChild(newRow);
+}
+
+
+	document.querySelectorAll("#interactionTable input").forEach(input => {
+    input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            addRow(); 
+            event.preventDefault(); 
+        }
+    });
+});
+</script>
+</html>

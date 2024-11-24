@@ -24,11 +24,12 @@
 	data-col="2-columns">
 
     <!-- BEGIN HEADER -->
-	<th:block th:include="fragments/headerCRM"></th:block>
+	<!-- <th:block th:include="fragments/headerCRM"></th:block> -->
+	<th:block th:include="fragments/hmenu"></th:block>
 	<!-- END HEADER -->
 	
 	<!-- BEGIN LEFT MENU NAVIGATION -->
-	<th:block th:include="fragments/leftNavCRM"></th:block>
+	<!-- <th:block th:include="fragments/leftNavCRM"></th:block> -->
 	<!-- END LEFT MENU NAVIGATION -->
 	
 	<!--  BEGIN CONTENT -->
@@ -108,6 +109,8 @@
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/getCurrentDate_Handsontable.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadSender-Receiver_Inform_Create.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadSender-Receiver_Inform_Update.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadSender-Receiver_Inform_Detail.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/searchOrders.js}"></script>
 	
    
 </body>

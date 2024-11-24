@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<!-- START COMMON META AND TITLE -->
+<th:block th:include="fragments/common_meta_title"></th:block>
+<!-- END COMMON META AND TITLE -->
+	<th:block th:include="fragments/common_meta_title"></th:block>
+    <th:block th:include="fragments/head"></th:block>
+    <th:block th:include="fragments/common_css"></th:block>
+<!-- START COMMON CSS -->
+<th:block th:include="fragments/common_css"></th:block>
+<!-- END COMMON CSS -->
+
+<link rel="stylesheet" type="text/css" href="resources/css/new_style.css">
+<link rel="stylesheet" type="text/css" href="resources/css/status.css">
+<link rel="stylesheet" type="text/css" href="resources/css/buttonGroupFunction.css">
+</head>
+
+<body
+	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	data-open="click" data-menu="vertical-compact-menu"
+	data-col="2-columns">
+
+	<!-- BEGIN HEADER  -->
+	
+	<!-- END HEADER  -->
+	<div class="container mt-5">
+	<form action="/crm-web/customer-list-search-son" method="get" class="mb-4">
+	    <!-- Ô nhập từ khóa -->
+	    <div class="mb-3">
+	        <label for="keyword" class="form-label">Từ khóa:</label>
+	        <input type="text" id="keyword" name="keyword" class="form-control" placeholder="Nhập từ khóa..." >
+	    </div>
+	    <div class="mb-3">
+	        <label class="form-label">Tìm kiếm theo:</label>
+	        <div class="form-check">
+	            <input type="radio" id="fieldCompanyName" name="field" value="company_name" class="form-check-input" >
+	            <label for="fieldCompanyName" class="form-check-label">Tên công ty</label>
+	        </div>
+	        <div class="form-check">
+	            <input type="radio" id="fieldContactPerson" name="field" value="contact_person" class="form-check-input">
+	            <label for="fieldContactPerson" class="form-check-label">Người liên hệ</label>
+	        </div>
+	        <div class="form-check">
+	            <input type="radio" id="fieldEmail" name="field" value="email" class="form-check-input">
+	            <label for="fieldEmail" class="form-check-label">Email</label>
+	        </div>
+	        <div class="form-check">
+	            <input type="radio" id="fieldPhone" name="field" value="phone" class="form-check-input">
+	            <label for="fieldPhone" class="form-check-label">Số điện thoại</label>
+	        </div>
+	        <div class="form-check">
+	            <input type="radio" id="fieldAddress" name="field" value="address" class="form-check-input">
+	            <label for="fieldAddress" class="form-check-label">Địa chỉ</label>
+	        </div>
+	    </div>
+	
+	    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+	</form>
+	</div>
+	
+	
+	 <th:block th:include="fragments/hmenu"></th:block>
+	<!-- BEGIN LEFT MENU NAVIGATION -->
+	
+	<!-- END LEFT MENU NAVIGATION -->
+
+    <!-- Center form -->
+    <th:block th:include="fragments/frg_customerListCRMScreen"></th:block>
+
+    <!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+
+	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/navigate.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/status.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/search.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/fetchCustomersByStatus.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/customerList_JS.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/customerList_js_2.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/customerList_Pagination.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/toggleCheckboxActions.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/addCustomer.js"></script>
+	<script type="text/javascript"
+		src="resources/app-assets/js/update/buttonGroupFunction.js"></script>
+
+</body>
+</html>
+
+
