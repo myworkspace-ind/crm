@@ -18,10 +18,8 @@
             <li class="dropdown nav-item" data-menu="dropdown">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-docs"></i><span data-i18n="nav.dash.main">Order</span></a>
                 <ul class="dropdown-menu">
-                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/list}" data-toggle="dropdown">List</a>
-                  </li>
-                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/NewOrder}" data-toggle="dropdown">New (Than)</a>
-                  </li>
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/new}" data-toggle="dropdown">New</a></li>
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/list}" data-toggle="dropdown">List</a></li>
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders-datatable-thien}" data-toggle="dropdown">Search</a>
                   </li>
                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Update status</a>
