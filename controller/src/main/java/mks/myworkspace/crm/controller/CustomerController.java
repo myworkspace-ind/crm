@@ -81,7 +81,7 @@ public class CustomerController extends BaseController {
 			HttpSession httpSession) {
 
 		log.debug("Display Cusomter list with keyword= {}", keyword);
-		ModelAndView mav = new ModelAndView("customerListCRMScreen");
+		ModelAndView mav = new ModelAndView("customer_list_v2");
 		initSession(request, httpSession);
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
