@@ -34,24 +34,15 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Controller
 @Slf4j	
-public class MainController extends BaseController {
+public class FeatureIntroductionController extends BaseController {
  
 	/**
 	 * Simply selects the home view to render by returning its name.
      * @return 
 	 */
-	@RequestMapping(value = {"/main"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/Feature_Introduction"}, method = RequestMethod.GET)
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("main");
-
-		initSession(request, httpSession);
-		log.debug("Main CRM Screen Controller is running....");
-		
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-
+		ModelAndView mav = new ModelAndView("Feature_Introduction");
 		return mav;
-
 	}
-
 }

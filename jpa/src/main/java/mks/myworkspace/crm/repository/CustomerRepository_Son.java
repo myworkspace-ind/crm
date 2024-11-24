@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import mks.myworkspace.crm.entity.Customer;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository_Son extends JpaRepository<Customer, Long> {
 
     List<Customer> findAll();
 
@@ -58,6 +58,28 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 		       "WHERE ss IS NOT NULL " +
 		       "GROUP BY ss.id")
 	List<Object[]> countCustomersBySubStatus();
+	
+	
+	
+	@Query("SELECT c FROM Customer c WHERE c.companyName=:cpname")
+    List<Customer> findByCpName(@Param("cpname") String cpname);
+	
+	@Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE LOWER(c.companyName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+	List<Customer> findByCompanyName(@Param("keyword") String keyword);
+	
+	@Query("SELECT c FROM Customer c WHERE LOWER(c.contactPerson) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+	List<Customer> findByContactPerson(@Param("keyword") String keyword);
+	
+	@Query("SELECT c FROM Customer c WHERE LOWER(c.email) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+	List<Customer> findByEmail(@Param("keyword") String keyword);
+	
+	@Query("SELECT c FROM Customer c WHERE LOWER(c.phone) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+	List<Customer> findByPhoneNew(@Param("keyword") String keyword);
+	
+	@Query("SELECT c FROM Customer c WHERE LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+	List<Customer> findByAddress(@Param("keyword") String keyword);
+
+
 	
 	@Query("SELECT COUNT(c) FROM Customer c")
 	long countAllCustomers();

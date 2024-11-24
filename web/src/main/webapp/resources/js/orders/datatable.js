@@ -47,7 +47,7 @@ $(document).ready(function() {
 									<button class='btn btn-info detail-btn'>Xem chi tiết</button>
 									<button class='btn btn-warning edit-btn'>Sửa</button>
 									<button class='btn btn-danger delete-btn'>Xóa</button>
-									<button class='btn btn-success'>Cập nhật trạng thái</button>
+									<button class='btn btn-success updateOrderStatus-btn'>Cập nhật trạng thái</button>
 								</div>
 						</div>
 					</div> `

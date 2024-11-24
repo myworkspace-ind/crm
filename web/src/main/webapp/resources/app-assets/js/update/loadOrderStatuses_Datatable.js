@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			})
 			.catch((error) => {
 				console.error("Error loading order statuses:", error);
-				orderStatusContainer.innerHTML = "<p>Đã xảy ra lỗi khi tải trạng thái đơn hàng.</p>";
+				orderStatusContainer.innerHTML = "<p>Chưa có trạng thái đơn hàng nào phù hợp.</p>";
 			});
 	}
 });

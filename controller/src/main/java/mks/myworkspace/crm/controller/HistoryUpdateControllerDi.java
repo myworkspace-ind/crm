@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,24 +34,19 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Controller
 @Slf4j	
-public class MainController extends BaseController {
+public class HistoryUpdateControllerDi extends BaseController {
  
 	/**
 	 * Simply selects the home view to render by returning its name.
      * @return 
 	 */
-	@RequestMapping(value = {"/main"}, method = RequestMethod.GET)
+	@GetMapping(value = {"/HistoryUpdate"})
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("main");
+		ModelAndView mav = new ModelAndView("historyUpdate");
 
-		initSession(request, httpSession);
-		log.debug("Main CRM Screen Controller is running....");
 		
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 
 		return mav;
 
 	}
-
 }
