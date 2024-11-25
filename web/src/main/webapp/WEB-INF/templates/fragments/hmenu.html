@@ -8,9 +8,9 @@
             <li class="dropdown nav-item active" data-menu="dropdown">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-user-following"></i><span data-i18n="nav.dash.main">Customer</span></a>
                 <ul class="dropdown-menu">
-                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">New (Kỳ)</a></li>
-                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer-list-vinh}" data-toggle="dropdown">List (Vinh)</a></li>
-                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{customer-khoa}" data-toggle="dropdown">Interaction (Khoa)</a></li>  
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/add-customer}" data-toggle="dropdown">New</a></li>
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer-list}" data-toggle="dropdown">List</a></li>
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer-khoa}" data-toggle="dropdown">Interaction (Khoa)</a></li>  
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer-list-son}" data-toggle="dropdown">Search (Son)</a></li>
                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Care</a></li>
                 </ul>
@@ -18,7 +18,7 @@
             <li class="dropdown nav-item" data-menu="dropdown">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-docs"></i><span data-i18n="nav.dash.main">Order</span></a>
                 <ul class="dropdown-menu">
-                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/ordersConfigurationCRMScreen_Khanh/orders}" data-toggle="dropdown">Show Order (Khanh)</a>
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/list}" data-toggle="dropdown">List</a>
                   </li>
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/NewOrder}" data-toggle="dropdown">New (Than)</a>
                   </li>
@@ -26,22 +26,18 @@
                   </li>
                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Update status</a>
                   </li>
-                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/HistoryUpdate}" data-toggle="dropdown">History Update(Di)</a>
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/history}" data-toggle="dropdown">History</a>
                   </li>
                 </ul>
             </li>
             <li class="dropdown nav-item" data-menu="dropdown">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-settings"></i><span data-i18n="nav.dash.main">Settings</span></a>
-                <ul class="dropdown-menu">
-               		<li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Order configuration</a>
-                  		<ul class="dropdown-menu">
-		                  	<li data-menu=""><a class="dropdown-item" th:href="@{/ordersConfigurationCRMOrderType_Bao/orders}" data-toggle="dropdown">Order Type (Bao)</a></li>
-		                  	<li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Order Status</a></li>
-                  		</ul>
-                  	</li> 
-                 
-                  	<li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">General</a></li>
-                </ul>
+                   <ul class="dropdown-menu">
+                      <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration-ky/status}" data-toggle="dropdown">Order configuration</a></li>
+                      <li data-menu=""><a class="dropdown-item" th:href="@{/ordersConfigurationCRMOrderType_Bao/orders}" data-toggle="dropdown">Order Type (Bao)</a></li>
+                      <li data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration-ky/status}" data-toggle="dropdown">Order Status</a></li>
+                      <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">General</a></li>
+                  </ul>
             </li>
             <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">Reports</span></a>
                 <ul class="dropdown-menu">

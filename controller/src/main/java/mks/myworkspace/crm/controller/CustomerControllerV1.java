@@ -38,7 +38,8 @@ import mks.myworkspace.crm.service.StorageService;
  */
 @Controller
 @Slf4j
-public class CustomerController extends BaseController {
+@RequestMapping("/customer/v1")
+public class CustomerControllerV1 extends BaseController {
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
 	 * 
@@ -81,7 +82,7 @@ public class CustomerController extends BaseController {
 			HttpSession httpSession) {
 
 		log.debug("Display Cusomter list with keyword= {}", keyword);
-		ModelAndView mav = new ModelAndView("customer_list_v2");
+		ModelAndView mav = new ModelAndView("customerListCRMScreen");
 		initSession(request, httpSession);
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
@@ -160,7 +161,7 @@ public class CustomerController extends BaseController {
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
 		}
 	}
-
+	
 	@Transactional
 	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
 	@ResponseBody
@@ -246,9 +247,7 @@ public class CustomerController extends BaseController {
 	// Hiển thị trang thêm mới khách hàng
 	@RequestMapping(value = { "/add-customer" }, method = RequestMethod.GET)
 	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
-		//ModelAndView mav = new ModelAndView("addCustomer");
-		ModelAndView mav = new ModelAndView("addCustomer_v2.html");
-		
+		ModelAndView mav = new ModelAndView("addCustomer");
 
 		// Thêm đối tượng Customer mới vào Model để truyền vào form
 		mav.addObject("customer", new Customer());

@@ -4,12 +4,25 @@ document.addEventListener('DOMContentLoaded', function() {
 	searchButton.addEventListener('click', function() {
 		// Lấy các giá trị từ form
 		const customerId = document.querySelector('#orderCustomerFilter').value;
+		const orderCategoryId = document.querySelector('#orderCategoryFilter').value;
 		const _ctx = "/crm-web/";
 
+		// Lấy danh sách id từ checkbox của trạng thái
+		const selectedStatuses = Array.from(
+			document.querySelectorAll('#orderStatusFilter input[name="orderStatus"]:checked')
+		).map((checkbox) => checkbox.value);
+		
+		const paramsObject = {
+		    customerId: customerId || '', 
+		    orderCategoryId: orderCategoryId || '' 
+		};
+		
+		if (selectedStatuses.length > 0) {
+		    paramsObject.statuses = selectedStatuses.join(',');
+		}
+
 		// Xây dựng query string từ các tham số
-		const params = new URLSearchParams({
-			customerId: customerId,
-		}).toString();  // Chuyển tham số thành chuỗi query string
+		const params = new URLSearchParams(paramsObject).toString();
 
 		fetch(`${_ctx}orders-datatable/search-orders?${params}`, {
 			method: 'GET',
@@ -17,13 +30,50 @@ document.addEventListener('DOMContentLoaded', function() {
 				'Content-Type': 'application/json',
 			},
 		})
-			.then(response => response.json())
-			.then(data => {
-				console.log('Data received:', data);
-				orderTableSearchResult(data);
+			.then(response => {
+				// Kiểm tra response có JSON không
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				return response.text(); // Lấy text để kiểm tra nội dung
 			})
-			.catch(error => {
-				console.error('Error:', error);
+			.then(text => {
+				const data = text ? JSON.parse(text) : [];
+				const resultContainer = document.querySelector('#tblDatatable tbody');
+				const messageContainer = document.querySelector('#noResultsMessage');
+
+				// Xóa thông báo cũ nếu có
+				if (messageContainer) {
+					messageContainer.remove();
+				}
+
+				if (resultContainer) {
+					// Xóa nội dung cũ trong bảng
+					resultContainer.innerHTML = '';
+
+					if (data && data.length > 0) {
+						orderTableSearchResult(data);
+					} else {
+						// Tạo thông báo bên ngoài bảng
+						const newMessage = document.createElement('div');
+						newMessage.id = 'noResultsMessage';
+						newMessage.textContent = 'Không có kết quả phù hợp.';
+						newMessage.style.cssText = `
+							padding: 10px;
+							margin: 10px 0;
+							background-color: #f8d7da;
+							color: #721c24;
+							border: 1px solid #f5c6cb;
+							border-radius: 4px;
+							text-align: center;
+							font-size: 16px;
+						`;
+						// Đặt thông báo ngay trên bảng
+						resultContainer.parentElement.parentElement.insertBefore(newMessage, resultContainer.parentElement);
+					}
+				} else {
+					console.error('#tblDatatable tbody không tồn tại.');
+				}
 			});
 	});
 
@@ -42,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			            <td>${order[5]}</td>  <!-- Phương tiện vận chuyển -->
 			        `;
 			tbody.appendChild(row);
-			console.log("ROW:" , order[0]);
+			console.log("orderId:", order[0]);
 		});
 
 		if ($.fn.DataTable.isDataTable('#tblDatatable')) {
@@ -97,9 +147,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 
 			// Attach event listeners to buttons
-			$('#tblDatatable tbody').on('click', '.editOrderSearch-btn', function() {
+			$('#tblDatatable tbody').off('click', '.editOrderSearch-btn').on('click', '.editOrderSearch-btn', function() {
 				var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
+				console.log("Dòng được nhấp vào: ", row);
 				var orderId = row[0];
+				console.log("Row[0]: ", orderId);
 
 				console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
 
@@ -176,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			});
 
-			$('#tblDatatable tbody').on('click', '.detailOrderSearch-btn', function() {
+			$('#tblDatatable tbody').off('click', '.detailOrderSearch-btn').on('click', '.detailOrderSearch-btn', function() {
 				var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
 				var orderId = row[0];
 
@@ -256,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				});
 			});
 
-			$('#tblDatatable tbody').on('click', '.deleteOrderSearch-btn', function() {
+			$('#tblDatatable tbody').off('click', '.deleteOrderSearch-btn').on('click', '.deleteOrderSearch-btn', function() {
 				var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu dòng
 				var orderId = row[0]; // ID của đơn hàng
 				console.log('Xóa đơn hàng với ID:', orderId);

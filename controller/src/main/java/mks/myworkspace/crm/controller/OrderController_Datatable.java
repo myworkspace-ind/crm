@@ -124,6 +124,7 @@ public class OrderController_Datatable extends BaseController {
 	@GetMapping("")
 	public ModelAndView displayDatatableOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
 			 								  @RequestParam(value = "customerId", required = false) Long customerId,
+			 								  @RequestParam(required = false) List<Long>statuses,
 			 								  HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
 		initSession(request, httpSession);
@@ -165,7 +166,7 @@ public class OrderController_Datatable extends BaseController {
 		allSenders = customerService.getAllCustomers();
 		
 		 // Search functionality
-	    List<Order> ordersSearch = (customerId != null) ? orderService.searchOrders(customerId) : listOrders;
+	    List<Order> ordersSearch = (customerId != null & categoryId != null & statuses != null) ? orderService.searchOrders(customerId, categoryId, statuses) : listOrders;
 	    List<GoodsCategory> allGoodsCategoriesSearch = goodsCategoryService.findAllGoodsCategory();
 	    List<Customer> allSendersSearch = customerService.getAllCustomers();
 
@@ -200,12 +201,13 @@ public class OrderController_Datatable extends BaseController {
 		return mav;
 	}
 	
-	
 	@GetMapping("/search-orders")
 	@ResponseBody
-	public List<Object[]> searchOrders(@RequestParam(required = false) Long customerId){
+	public List<Object[]> searchOrders(@RequestParam(required = false) Long customerId, 
+									   @RequestParam(required = false) Long orderCategoryId,
+									   @RequestParam(required = false) List<Long>statuses){
 		List<Order> orders;
-		orders = orderService.searchOrders(customerId);
+		orders = orderService.searchOrders(customerId, orderCategoryId, statuses);
 		
 		List<GoodsCategory> allGoodsCategories;
 		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
@@ -306,7 +308,7 @@ public class OrderController_Datatable extends BaseController {
 			System.out.println("OrderCategory: "
 					+ (savedOrder.getOrderCategory() != null ? savedOrder.getOrderCategory().getId() : "null"));
 			response.put("status", "success");
-			response.put("message", "Order " + (order.getId() != null ? "updated" : "created") + " successfully.");
+			response.put("message", "Order created successfully.");
 			log.debug("Order saved with ID: {}", savedOrder.getId()); // Log kết quả ID
 
 			// Redirect to the orders datatable page
