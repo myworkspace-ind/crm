@@ -60,19 +60,6 @@ public class OrderConfigurationController extends BaseController {
 
 	}
 
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 * 
-	 * @return
-	 */
-	@GetMapping("/orders")
-	public ModelAndView displayOrderConfiguration(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("ordersConfigurationCRMScreen");
-
-		initSession(request, httpSession);
-		return mav;
-	}
-	
 	@GetMapping("/status")
 	public ModelAndView displayOrderConfigurationStatus(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersConfiguration-StatusCRMScreen");
