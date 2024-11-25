@@ -5,24 +5,24 @@ document.addEventListener('DOMContentLoaded', function() {
 		// Lấy các giá trị từ form
 		const customerId = document.querySelector('#orderCustomerFilter').value;
 		const orderCategoryId = document.querySelector('#orderCategoryFilter').value;
+		const selectedStatuses = [];
+		const checkboxes = document.querySelectorAll('input[name="orderStatus"]:checked');
+		checkboxes.forEach(checkbox => {
+			selectedStatuses.push(parseInt(checkbox.value, 10)); 
+		});
 		const _ctx = "/crm-web/";
 
-		// Lấy danh sách id từ checkbox của trạng thái
-		const selectedStatuses = Array.from(
-			document.querySelectorAll('#orderStatusFilter input[name="orderStatus"]:checked')
-		).map((checkbox) => checkbox.value);
-		
 		const paramsObject = {
-		    customerId: customerId || '', 
-		    orderCategoryId: orderCategoryId || '' 
+			customerId: customerId || '',
+			orderCategoryId: orderCategoryId || '',
+			statuses: selectedStatuses.length > 0 ? selectedStatuses : '',
 		};
-		
-		if (selectedStatuses.length > 0) {
-		    paramsObject.statuses = selectedStatuses.join(',');
-		}
 
 		// Xây dựng query string từ các tham số
 		const params = new URLSearchParams(paramsObject).toString();
+		const requestUrl = `${_ctx}orders-datatable/search-orders?${params}`;
+
+		console.log("Request URL:", requestUrl);
 
 		fetch(`${_ctx}orders-datatable/search-orders?${params}`, {
 			method: 'GET',
