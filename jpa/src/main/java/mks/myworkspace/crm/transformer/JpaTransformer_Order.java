@@ -66,11 +66,10 @@ public class JpaTransformer_Order {
 	}
 	
 	
-
 	private static String formatDate(Date date) {
 		if (date == null) {
 			return null;
 		}
-		return new SimpleDateFormat("yyyy-MM-dd").format(date);
+		return new SimpleDateFormat("dd/MM/yyyy").format(date);
 	}
 }

@@ -3,7 +3,6 @@ package mks.myworkspace.crm.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,7 +21,7 @@ import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
-import mks.myworkspace.crm.service.CustomerService;
+import mks.myworkspace.crm.service.CustomerService_Son;
 import mks.myworkspace.crm.service.ProfessionService;
 import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
@@ -30,10 +29,10 @@ import mks.myworkspace.crm.service.StorageService;
 
 @Controller
 @Slf4j
-public class CustomerControllerKhoa extends BaseController {
+public class CustomerControllerSon extends BaseController {
 
 	@Autowired
-	CustomerService customerService;
+	CustomerService_Son customerService;
 
 	@Autowired
 	StorageService storageService;
@@ -46,13 +45,14 @@ public class CustomerControllerKhoa extends BaseController {
 	
 	@Autowired
 	ProfessionService professionService;
-	@RequestMapping(value = { "/customer-khoa" }, method = RequestMethod.GET)
-	public ModelAndView displayCustomerListScreen(@RequestParam(value = "keyword", required = false) String keyword,
+
+	@RequestMapping(value = { "/customer-list-son" }, method = RequestMethod.GET)
+	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
 			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
 			HttpSession httpSession) {
 
 		log.debug("Display Cusomter list with keyword= {}", keyword);
-		ModelAndView mav = new ModelAndView("customerInteraction");
+		ModelAndView mav = new ModelAndView("customer_list_son");
 		initSession(request, httpSession);
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
@@ -76,7 +76,6 @@ public class CustomerControllerKhoa extends BaseController {
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
 		
-
 		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
 		
 	    if (statusCounts == null) {
@@ -94,24 +93,68 @@ public class CustomerControllerKhoa extends BaseController {
 
 		return mav;
 	}
-	@RequestMapping(value = { "/customerEdit" }, method = RequestMethod.GET)
-	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
+	
+	@RequestMapping(value = { "/customer-list-search-son" }, method = RequestMethod.GET)
+	public ModelAndView displayCustomerListCRMSearch(
+			@RequestParam(value = "keyword", required = false) String keyword,
+	        @RequestParam(value = "field", required = false) String field, 
+			HttpServletRequest request,
 			HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("editCustomerStatus_khoa");
-
-		initSession(request, httpSession);
+		System.out.println("aa");
+		log.debug("Search Customers with keyword={} and field={}", keyword, field);
+	    ModelAndView mav = new ModelAndView("customer_list_son");
+	    initSession(request, httpSession);
+		
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		log.debug("Customer Detail is running....");
+		List<Customer> customers;
 
-		Optional<Customer> customerOpt = customerService.findById(customerId);
 
-		// Check if the customer exists and add to model
-		customerOpt.ifPresentOrElse(customer -> {
-			mav.addObject("customer", customer);
-		}, () -> {
-			mav.addObject("errorMessage", "Customer not found.");
-		});
+		if (keyword != null && !keyword.isEmpty() && field != null && !field.isEmpty()) {
+	        switch (field) {
+	            case "company_name":
+	                customers = customerService.findByCompanyName(keyword);
+	                break;
+	            case "contact_person":
+	                customers = customerService.findByContactPerson(keyword);
+	                break;
+	            case "email":
+	                customers = customerService.findByEmail(keyword);
+	                break;
+	            case "phone":
+	                customers = customerService.findByPhoneNew(keyword);
+	                break;
+	            case "address":
+	                customers = customerService.findByAddress(keyword);
+	                break;
+	            default:
+	                customers = customerService.getAllCustomersWithStatuses();
+	        }
+	    } else {
+	        customers = customerService.getAllCustomersWithStatuses();
+	        log.debug("No keyword or field provided. Fetching all customers.");
+	    }
+
+		List<Status> statuses = statusService.getAllStatuses();
+		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		List<Profession> professions = professionService.getAllProfessions();
+		
+		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
+		
+	    if (statusCounts == null) {
+	        statusCounts = new HashMap<>(); 
+	    }
+	    long totalCustomerCount = customerService.getTotalCustomerCount();
+
+		mav.addObject("statuses", statuses);
+		mav.addObject("responsiblePersons", responsiblePersons);
+		mav.addObject("professions", professions);
+		mav.addObject("statusCounts", statusCounts);
+		mav.addObject("totalCustomerCount", totalCustomerCount);
+	    
+		mav.addObject("customers", customers);
+	    mav.addObject("keyword", keyword);
+	    mav.addObject("field", field);
 
 		return mav;
 	}

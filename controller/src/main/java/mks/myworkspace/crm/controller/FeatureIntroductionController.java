@@ -19,26 +19,30 @@
 
 package mks.myworkspace.crm.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Handles requests for the application intro page.
+ * Handles requests for the application home page on Platform MyWorkspace/Sakai.
  */
 @Controller
 @Slf4j	
-public class IntroController extends BaseController {
+public class FeatureIntroductionController extends BaseController {
  
 	/**
-	 * Display intro.
+	 * Simply selects the home view to render by returning its name.
      * @return 
 	 */
-	@GetMapping("/intro")
-	public ModelAndView displayIntro() {
-		ModelAndView mav = new ModelAndView("intro");
+	@RequestMapping(value = {"/Feature_Introduction"}, method = RequestMethod.GET)
+	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("Feature_Introduction");
 		return mav;
 	}
 }

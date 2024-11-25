@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- START COMMON META AND TITLE -->
+<th:block th:replace="~{fragments/common_meta_title :: head}"></th:block>
+<!-- END COMMON META AND TITLE -->
+
+<th:block th:replace="~{fragments/head :: head}"></th:block>
+<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+
+<script>console.log("Handsontable:", typeof Handsontable); //Check Handsontable is available or not
+</script>
+
+
+<!-- START COMMON CSS -->
+<th:block th:replace="~{fragments/common_css :: head}"></th:block>
+<!-- <th:block th:replace="~{fragments/common_css :: common_css}"></th:block> -->
+<!-- END COMMON CSS -->
+
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/ordersBtnHorizontalMenu.css}">	
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/order.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/orders-configuration.css}">
+</head>
+<body
+	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	data-open="click" data-menu="vertical-compact-menu"
+	data-col="2-columns">
+
+		<!-- BEGIN HEADER -->
+	<!-- <th:block th:include="fragments/headerCRM"></th:block> Thanh nav cũ -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER -->	
+	
+	<div class="row">
+		 <div class="col-12">
+		 	<div class="order-screen">
+				<h4 class="title order-title">Cấu hình trạng thái</h4>
+				<th:block th:include="fragments/orders-configuration/frg_orders-configuration-status.html"></th:block>
+			</div>
+		</div>
+	</div>
+
+	</div>
+	
+	<!-- END CONTENT -->
+		
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+	
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" th:src="@{/resources/js/orders-configuration/status-init.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<!-- Screen Javascripts -->
+
+</body>
+</html>

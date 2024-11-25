@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ import mks.myworkspace.crm.service.StorageService;
  */
 @Controller
 @Slf4j
+@RequestMapping("/customer")
 public class CustomerController extends BaseController {
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
@@ -75,13 +77,13 @@ public class CustomerController extends BaseController {
 	@Autowired
 	ProfessionService professionService;
 
-	@RequestMapping(value = { "/customer-list" }, method = RequestMethod.GET)
+	@GetMapping("list")
 	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
 			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
 			HttpSession httpSession) {
 
 		log.debug("Display Cusomter list with keyword= {}", keyword);
-		ModelAndView mav = new ModelAndView("customerListCRMScreen");
+		ModelAndView mav = new ModelAndView("customer_list_v2");
 		initSession(request, httpSession);
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
@@ -244,9 +246,11 @@ public class CustomerController extends BaseController {
 //	}
 	
 	// Hiển thị trang thêm mới khách hàng
-	@RequestMapping(value = { "/add-customer" }, method = RequestMethod.GET)
+	@GetMapping("add")
 	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("addCustomer");
+		//ModelAndView mav = new ModelAndView("addCustomer");
+		ModelAndView mav = new ModelAndView("addCustomer_v2.html");
+		
 
 		// Thêm đối tượng Customer mới vào Model để truyền vào form
 		mav.addObject("customer", new Customer());
@@ -269,4 +273,80 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 
+	@GetMapping("interact")
+	public ModelAndView displayCustomerListScreen(@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
+			HttpSession httpSession) {
+
+		log.debug("Display Cusomter list with keyword= {}", keyword);
+		ModelAndView mav = new ModelAndView("customerInteraction");
+		initSession(request, httpSession);
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		List<Customer> customers;
+
+		if (statusId != null) {
+			customers = customerService.findCustomersByStatus(statusId);
+			mav.addObject("statusId", statusId);
+
+		} else if (keyword != null && !keyword.isEmpty()) {
+			customers = customerService.searchCustomers(keyword);
+			mav.addObject("keyword", keyword);
+
+		} else {
+			customers = customerService.getAllCustomersWithStatuses ();
+			log.debug("No keyword or statusId provided. Fetching all customers.");
+		}
+
+		List<Status> statuses = statusService.getAllStatuses();
+		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		List<Profession> professions = professionService.getAllProfessions();
+		
+
+		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
+		
+	    if (statusCounts == null) {
+	        statusCounts = new HashMap<>(); 
+	    }
+	    
+	    long totalCustomerCount = customerService.getTotalCustomerCount();
+	    
+		mav.addObject("customers", customers);
+		mav.addObject("statuses", statuses);
+		mav.addObject("responsiblePersons", responsiblePersons);
+		mav.addObject("professions", professions);
+		mav.addObject("statusCounts", statusCounts);
+		mav.addObject("totalCustomerCount", totalCustomerCount);
+
+		return mav;
+	}
+	
+	/**
+	 * @author Khoa
+	 * @param customerId
+	 * @param request
+	 * @param httpSession
+	 * @return
+	 */
+	@GetMapping("edit")
+	public ModelAndView edit(@RequestParam("id") Long customerId, HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("editCustomerStatus_khoa");
+
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		log.debug("Customer Detail is running....");
+
+		Optional<Customer> customerOpt = customerService.findById(customerId);
+
+		// Check if the customer exists and add to model
+		customerOpt.ifPresentOrElse(customer -> {
+			mav.addObject("customer", customer);
+		}, () -> {
+			mav.addObject("errorMessage", "Customer not found.");
+		});
+
+		return mav;
+	}
 }
