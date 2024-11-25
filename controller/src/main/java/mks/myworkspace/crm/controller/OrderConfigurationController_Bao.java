@@ -74,7 +74,7 @@ public class OrderConfigurationController_Bao extends BaseController {
 		return mav;
 	}
 	
-	@GetMapping("/status")
+	@GetMapping("/statuss")
 	public ModelAndView displayOrderConfigurationStatus(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersConfiguration-StatusCRMScreen");
 
