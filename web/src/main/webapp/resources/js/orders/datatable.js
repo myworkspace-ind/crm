@@ -55,6 +55,21 @@ $(document).ready(function() {
 			]
 		});
 
+		$('#tblDatatable tbody').on('click', '.updateOrderStatus-btn', function() {
+			console.log('Cập nhật trạng thái đơn hàng ');
+			//document.getElementById("updateOrderStatusModal").style.display = "block";
+			$('#updateOrderStatusModal').modal('show');
+			$('#updateOrderStatusModal').removeAttr('inert');
+
+		});
+		$('#updateOrderStatusModal').on('hidden.bs.modal', function() {
+			$('#updateOrderStatusModal').attr('inert', true);
+		});
+
+
+
+
+
 		$('#tblDatatable tbody').on('click', '.edit-btn', function() {
 			var row = table.row($(this).closest('tr')).data(); // Lấy dữ liệu của dòng được nhấp vào
 			var orderId = row[0];

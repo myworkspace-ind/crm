@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div class="modal fade" id="updateOrderStatusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" inert>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #003a6b">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: white">Cập Nhật Trạng Thái Đơn Hàng</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateOrderStatusForm">
+                        <!-- Mã đơn hàng -->
+                        <div class="form-group">
+                            <label for="orderId">Mã đơn hàng</label>
+                            <input type="text" class="form-control" id="orderId" placeholder="Hiển thị mã đơn hàng" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="orderId">Loại đơn hàng</label>
+                            <input type="text" class="form-control" id="orderId" placeholder="Hiển thị loại đơn hàng" required>
+                        </div>
+                        <!-- Trạng thái đơn hàng -->
+                        <div class="form-group">
+                            <label for="orderStatus">Trạng thái đơn hàng</label>
+                            <select class="form-control" id="orderStatus" required>
+                                <option value="pending">Chờ xử lý</option>
+                                <option value="processing">Đang xử lý</option>
+                                <option value="shipped">Đã giao hàng</option>
+                                <option value="completed">Hoàn tất</option>
+                                <option value="cancelled">Đã hủy</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer row4">
+                    <button type="button" id="">Cập nhật</button>
+	        		<button type="button" onclick="">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	<script type="text/javascript" th:src="@{/resources/js/orders/datatable.js}" ></script>
+</body>
+</html>
