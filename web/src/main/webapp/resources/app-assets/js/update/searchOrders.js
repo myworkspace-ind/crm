@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const selectedStatuses = [];
 		const checkboxes = document.querySelectorAll('input[name="orderStatus"]:checked');
 		checkboxes.forEach(checkbox => {
-			selectedStatuses.push(parseInt(checkbox.value, 10)); 
+			selectedStatuses.push(parseInt(checkbox.value, 10));
 		});
 		const _ctx = "/crm-web/";
 
@@ -335,6 +335,49 @@ document.addEventListener('DOMContentLoaded', function() {
 						}
 					});
 				}
+			});
+
+			$('#tblDatatable tbody').off('click', '.updateOrderStatusSearch-btn').on('click', '.updateOrderStatusSearch-btn', function() {
+				var row = table.row($(this).closest('tr')).data();
+				var orderId = row[0];
+
+				console.log('Cập nhật trạng thái đơn hàng ');
+				//document.getElementById("updateOrderStatusModal").style.display = "block";
+				$('#updateOrderStatusModal').modal('show');
+				$('#updateOrderStatusModal').removeAttr('inert');
+
+
+
+				console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
+
+				$.ajax({
+					url: _ctx + 'orders-datatable/viewDetails/' + orderId,
+					method: 'GET',
+					success: function(response) {
+						console.log(response);
+
+						var orderCategoryData = response[15];
+						var currentOrderCategoryId = response[16];
+						$('#orderCodeUpdateStatus').val(response[1]);
+						if (orderCategoryData && orderCategoryData.length > 0) {
+							var options = orderCategoryData.map(function(ordercategory) {
+								var selected = ordercategory[0] === currentOrderCategoryId ? ' selected' : '';
+								return '<option value="' + ordercategory[0] + '"' + selected + '>' + ordercategory[1] + '</option>';
+							}).join('');
+
+							$('#orderCategoryUpdateStatus').html(options);
+							$('#orderCategoryUpdateStatus').css('pointer-events', 'none');
+						}
+
+					},
+					error: function(error) {
+						console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
+					}
+				});
+
+			});
+			$('#updateOrderStatusModal').on('hidden.bs.modal', function() {
+				$('#updateOrderStatusModal').attr('inert', true);
 			});
 		}
 	}

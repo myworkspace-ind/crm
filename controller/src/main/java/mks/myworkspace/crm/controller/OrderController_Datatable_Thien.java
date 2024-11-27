@@ -194,9 +194,10 @@ public class OrderController_Datatable_Thien extends BaseController {
 		List<GoodsCategory> allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
 		List<Customer> allSenders = customerService.getAllCustomers();
 		List<Customer> allReceivers = customerService.getAllCustomers();
+		List<OrderCategory> allOrderCategories = orderCategoryService.findAll();
 		if (order != null) {
 			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order, allOrderStatuses,
-					allGoodsCategories, allSenders, allReceivers);
+					allGoodsCategories, allSenders, allReceivers, allOrderCategories);
 			return ResponseEntity.ok(orderDetailArray);
 		} else {
 			log.debug("CANNOT FIND ORDER!");

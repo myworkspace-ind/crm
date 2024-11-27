@@ -56,18 +56,47 @@ $(document).ready(function() {
 		});
 
 		$('#tblDatatable tbody').on('click', '.updateOrderStatus-btn', function() {
+			var row = table.row($(this).closest('tr')).data();
+			var orderId = row[0];
+
 			console.log('Cập nhật trạng thái đơn hàng ');
 			//document.getElementById("updateOrderStatusModal").style.display = "block";
 			$('#updateOrderStatusModal').modal('show');
 			$('#updateOrderStatusModal').removeAttr('inert');
 
+
+
+			console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
+
+			$.ajax({
+				url: _ctx + 'orders-datatable/viewDetails/' + orderId,
+				method: 'GET',
+				success: function(response) {
+					console.log(response);
+					
+					var orderCategoryData = response[15];
+					var currentOrderCategoryId = response[16];
+					$('#orderCodeUpdateStatus').val(response[1]);
+					if (orderCategoryData && orderCategoryData.length > 0) {
+						var options = orderCategoryData.map(function(ordercategory) {
+							var selected = ordercategory[0] === currentOrderCategoryId ? ' selected' : '';
+							return '<option value="' + ordercategory[0] + '"' + selected + '>' + ordercategory[1] + '</option>';
+						}).join('');
+
+						$('#orderCategoryUpdateStatus').html(options);
+						$('#orderCategoryUpdateStatus').css('pointer-events', 'none');
+					}
+
+				},
+				error: function(error) {
+					console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
+				}
+			});
+
 		});
 		$('#updateOrderStatusModal').on('hidden.bs.modal', function() {
 			$('#updateOrderStatusModal').attr('inert', true);
 		});
-
-
-
 
 
 		$('#tblDatatable tbody').on('click', '.edit-btn', function() {
@@ -361,6 +390,12 @@ function closeModalOrderDetail() {
 function closeModalOrderStatus() {
 	document.getElementById("statusModal").style.display = "none";
 	document.getElementById("modalOverlay").style.display = "none";
+}
+
+function closeUpdateOrderStatusModal() {
+	/*document.getElementById("updateOrderStatusModal").style.display = "none";
+	document.getElementsByClassName("modal fade").style.display = "none";*/
+	$('#updateOrderStatusModal').modal('hide');
 }
 
 /*$(document).ready(function() {

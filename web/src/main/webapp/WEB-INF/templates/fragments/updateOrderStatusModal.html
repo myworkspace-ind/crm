@@ -7,7 +7,7 @@
                 <div class="modal-header" style="background-color: #003a6b">
                     <h5 class="modal-title" id="exampleModalLabel" style="color: white">Cập Nhật Trạng Thái Đơn Hàng</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true" style="color: white" onclick="closeUpdateOrderStatusModal()">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -15,28 +15,24 @@
                         <!-- Mã đơn hàng -->
                         <div class="form-group">
                             <label for="orderId">Mã đơn hàng</label>
-                            <input type="text" class="form-control" id="orderId" placeholder="Hiển thị mã đơn hàng" required>
+                            <input type="text" class="form-control" id="orderCodeUpdateStatus" placeholder="Hiển thị mã đơn hàng" required readonly="readonly">
                         </div>
                         <div class="form-group">
                             <label for="orderId">Loại đơn hàng</label>
-                            <input type="text" class="form-control" id="orderId" placeholder="Hiển thị loại đơn hàng" required>
+                            <select class="form-control" id="orderCategoryUpdateStatus" style="background-color: white; color: black;" readonly="readonly"></select>
                         </div>
                         <!-- Trạng thái đơn hàng -->
                         <div class="form-group">
                             <label for="orderStatus">Trạng thái đơn hàng</label>
-                            <select class="form-control" id="orderStatus" required>
-                                <option value="pending">Chờ xử lý</option>
-                                <option value="processing">Đang xử lý</option>
-                                <option value="shipped">Đã giao hàng</option>
-                                <option value="completed">Hoàn tất</option>
-                                <option value="cancelled">Đã hủy</option>
+                            <select class="form-control" id="orderStatusUpdateStatus" style="background-color: white; color: black;"required>
+                               
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer row4">
                     <button type="button" id="">Cập nhật</button>
-	        		<button type="button" onclick="">Đóng</button>
+	        		<button type="button" onclick="closeUpdateOrderStatusModal()">Đóng</button>
                 </div>
             </div>
         </div>
