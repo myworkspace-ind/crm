@@ -346,8 +346,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				$('#updateOrderStatusModal').modal('show');
 				$('#updateOrderStatusModal').removeAttr('inert');
 
-
-
 				console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
 
 				$.ajax({
@@ -355,10 +353,16 @@ document.addEventListener('DOMContentLoaded', function() {
 					method: 'GET',
 					success: function(response) {
 						console.log(response);
+						$('#orderIdUpdateStatus').text(response[0]);
+
+						var orderStatusData = response[6]
+						var currentOrderStatusId = response[7];
 
 						var orderCategoryData = response[15];
 						var currentOrderCategoryId = response[16];
+
 						$('#orderCodeUpdateStatus').val(response[1]);
+
 						if (orderCategoryData && orderCategoryData.length > 0) {
 							var options = orderCategoryData.map(function(ordercategory) {
 								var selected = ordercategory[0] === currentOrderCategoryId ? ' selected' : '';
@@ -367,6 +371,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 							$('#orderCategoryUpdateStatus').html(options);
 							$('#orderCategoryUpdateStatus').css('pointer-events', 'none');
+						}
+
+						if (orderStatusData && orderStatusData.length > 0) {
+							var options = orderStatusData.map(function(status) {
+								var selected = status[0] === currentOrderStatusId ? ' selected' : '';
+								return '<option value="' + status[0] + '"' + selected + '>' + status[1] + '</option>';
+							}).join('');
+
+							$('#orderStatusUpdateStatus').html(options);
 						}
 
 					},
@@ -378,6 +391,55 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 			$('#updateOrderStatusModal').on('hidden.bs.modal', function() {
 				$('#updateOrderStatusModal').attr('inert', true);
+			});
+
+			$(document).on('click', '#saveOrderStatusButton', function() {
+				var button = $(this);
+				button.prop('disabled', true); // Disable button to prevent multiple clicks
+
+				var orderId = $('#orderIdUpdateStatus').text();
+				var orderStatus = $('#orderStatusUpdateStatus').val();
+
+				console.log(orderId); // In ra giá trị orderId
+				console.log(orderStatus); // In ra giá trị orderCode
+
+				if (!orderId) {
+					alert('ID đơn hàng không hợp lệ.');
+					button.prop('disabled', false); // Enable button if id is not valid
+					return;
+				}
+
+				var order = {
+					id: orderId,
+					orderStatus: orderStatus,
+				};
+
+				// In toàn bộ đối tượng order ra console
+				console.log("Order object being sent:", order);
+
+				$.ajax({
+					url: _ctx + '/orders-datatable/saveOrderStatus/',
+					method: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(order),
+
+					success: function(response) {
+						console.log("UDPATE FINAL ORDER STATUS: ", order); // In lại order khi thành công
+						if (response.status === "success") {
+							alert(response.message);
+							document.getElementById("updateOrderStatusModal").style.display = "none";
+							location.reload();
+						} else {
+							alert(response.message);
+						}
+						button.prop('disabled', false); // Re-enable button
+					},
+					error: function(error) {
+						console.error("Error saving order:", error);
+						alert("An error occurred while saving/updating the order.");
+						button.prop('disabled', false); // Re-enable button
+					}
+				});
 			});
 		}
 	}
