@@ -10,5 +10,5 @@ public interface OrderCategoryService {
 	
 	List<OrderCategory> getAllOrderCategoriesWithOrderStatuses();
 	
-	List<OrderCategory> findAll();
+	List<OrderCategory> findAllOrderCategory();
 }
