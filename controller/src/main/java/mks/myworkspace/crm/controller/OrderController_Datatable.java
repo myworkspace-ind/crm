@@ -181,7 +181,7 @@ public class OrderController_Datatable extends BaseController {
 		List<Object[]> dataSet;
 		// dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories,
 		// allSenders);
-		if (customerId == null) {
+		if (customerId == null && categoryId == null && statuses == null) {
 			dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
 		} else {
 			dataSet = JpaTransformer_Order.convert2D(ordersSearch, allGoodsCategoriesSearch, allSendersSearch);
@@ -254,7 +254,7 @@ public class OrderController_Datatable extends BaseController {
 		List<GoodsCategory> allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
 		List<Customer> allSenders = customerService.getAllCustomers();
 		List<Customer> allReceivers = customerService.getAllCustomers();
-		List<OrderCategory> allOrderCategories = orderCategoryService.findAll();
+		List<OrderCategory> allOrderCategories = orderCategoryService.findAllOrderCategory();
 		if (order != null) {
 			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order, allOrderStatuses,
 					allGoodsCategories, allSenders, allReceivers, allOrderCategories);

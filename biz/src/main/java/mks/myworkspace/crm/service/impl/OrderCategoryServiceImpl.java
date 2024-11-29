@@ -29,7 +29,7 @@ public class OrderCategoryServiceImpl implements OrderCategoryService{
 	}
 
 	@Override
-	public List<OrderCategory> findAll() {
+	public List<OrderCategory> findAllOrderCategory() {
 		return repo.findAll();
 	}
 
