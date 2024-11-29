@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 })
 
-document.addEventListener("DOMContentLoaded", function() {
+/*document.addEventListener("DOMContentLoaded", function() {
 	const orderCategory_UpdateStatusSelect = document.getElementById("orderCategoryUpdateStatus");
 	const orderStatus_UpdateStatusSelect = document.getElementById("orderStatusUpdateStatus");
 	const _ctx = "/crm-web/";
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			.catch(error => console.error("Error loading order statuses:", error));
 	}
 
-})
+})*/
 
 document.addEventListener("DOMContentLoaded", function() {
 	const orderCategorySelect = document.getElementById("orderCategoryFilter");

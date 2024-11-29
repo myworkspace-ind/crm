@@ -98,4 +98,17 @@ public class StorageServiceImpl implements StorageService {
 	public void deleteOrderById(Long orderId) {
 		appRepo.deleteOrderById(orderId);
 	}
+
+	@Override
+	public Order updateOrderStatus(Order order) {
+		log.debug("Processing Order with ID: {}", order.getId()); 
+
+		Long id = appRepo.updateOrderStatus(order);
+		if (id != null) {
+			order.setId(id);
+		}
+
+		log.debug("Final Order ID after saveOrUpdate: {}", order.getId()); 
+		return order;
+	}
 }
