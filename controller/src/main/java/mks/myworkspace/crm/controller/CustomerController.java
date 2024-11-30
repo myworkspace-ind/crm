@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,20 +149,31 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/create-customer", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/create-customer", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> saveCustomer(@RequestBody Customer customer, HttpServletRequest request,
-			HttpSession httpSession) {
-		try {
-			storageService.saveOrUpdate(customer);
-			return ResponseEntity.ok().body(Map.of("message", "Khách hàng mới đã được thêm!", "customer", customer));
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errorMessage", e.getMessage()));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
-		}
+	public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request) {
+	    try {
+	        System.out.println("Dữ liệu khách hàng nhận được: " + customer);
+	        customer.setCreatedAt(new Date());
+	        customer.setSiteId(getCurrentSiteId());
+	        
+	        // Lưu khách hàng
+	        Customer savedCustomer = storageService.saveOrUpdate(customer);
+	        
+	        return ResponseEntity.ok()
+	            .body(Map.of(
+	                "message", "Khách hàng mới đã được thêm thành công!", 
+	                "customer", savedCustomer
+	            ));
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.badRequest()
+	            .body(Map.of("errorMessage", e.getMessage()));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	            .body(Map.of("errorMessage", "Có lỗi xảy ra khi thêm khách hàng. Vui lòng thử lại sau!"));
+	    }
 	}
+
 
 	@Transactional
 	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
