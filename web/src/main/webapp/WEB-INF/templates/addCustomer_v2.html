@@ -37,17 +37,10 @@
 	<!-- END COMMON JAVASCRIPT -->
 	
 	<!-- FILE JS BỔ SUNG -->
-	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/addCustomer.js}" defer></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	
 
-	<script type="text/javascript">
-		function addCustomer() {
-			const createdAt = new Date().toISOString();
-			document.getElementById("addCustomerForm").created_at = createdAt;
-		}
-		
-		function goBack() {
-	        window.location.href = '/crm-web/customer/list';
-	    }
-	</script>
+
 </body>
 </html>

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -149,17 +150,40 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/create-customer", method = RequestMethod.POST)
+	@PostMapping("/create-customer")
 	@ResponseBody
 	public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request) {
 	    try {
-	        System.out.println("Dữ liệu khách hàng nhận được: " + customer);
+	       
 	        customer.setCreatedAt(new Date());
 	        customer.setSiteId(getCurrentSiteId());
 	        
 	        // Lưu khách hàng
 	        Customer savedCustomer = storageService.saveOrUpdate(customer);
-	        
+	        log.info("Khách hàng mới đã được thêm thành công:");
+	        log.info("ID: {}", savedCustomer.getId());
+	        log.info("Site ID: {}", savedCustomer.getSiteId());
+	        log.info("Tên công ty: {}", savedCustomer.getCompanyName());
+	        log.info("Người liên hệ: {}", savedCustomer.getContactPerson());
+	        log.info("Email: {}", savedCustomer.getEmail());
+	        log.info("Số điện thoại: {}", savedCustomer.getPhone());
+	        log.info("Địa chỉ: {}", savedCustomer.getAddress());
+	        log.info("Ngày tạo: {}", savedCustomer.getCreatedAt());
+	        log.info("Ghi chú: {}", savedCustomer.getNote());
+
+	        // Nếu có thông tin profession và responsiblePerson
+	        if (savedCustomer.getProfession() != null) {
+	            log.info("Ngành nghề: {}", savedCustomer.getProfession().getName());
+	        } else {
+	            log.info("Ngành nghề: Không có");
+	        }
+
+	        if (savedCustomer.getResponsiblePerson() != null) {
+	            log.info("Người phụ trách: {}", savedCustomer.getResponsiblePerson().getName());
+	        } else {
+	            log.info("Người phụ trách: Không có");
+	        }
+
 	        return ResponseEntity.ok()
 	            .body(Map.of(
 	                "message", "Khách hàng mới đã được thêm thành công!", 
@@ -258,10 +282,10 @@ public class CustomerController extends BaseController {
 //	}
 	
 	// Hiển thị trang thêm mới khách hàng
-	@GetMapping("add")
+	@GetMapping("/add")
 	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
 		//ModelAndView mav = new ModelAndView("addCustomer");
-		ModelAndView mav = new ModelAndView("addCustomer_v2.html");
+		ModelAndView mav = new ModelAndView("addCustomer_v2");
 		
 
 		// Thêm đối tượng Customer mới vào Model để truyền vào form

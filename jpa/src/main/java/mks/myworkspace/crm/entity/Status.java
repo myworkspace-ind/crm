@@ -64,4 +64,10 @@ public class Status implements Serializable {
         return "Status [id=" + id + ", siteId=" + siteId + ", name=" + name + ", backgroundColor=" + backgroundColor
                 + ", mainCustomers=" + mainStatusCustomers + ", subCustomers=" + subStatusCustomers + "]";
     }
+
+	public Status(String id) {
+		this.id = Long.parseLong(id);
+	}
+	
+	
 }
