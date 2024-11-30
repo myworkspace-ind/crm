@@ -12,6 +12,7 @@ import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.repository.OrderCategoryRepository;
 import mks.myworkspace.crm.repository.OrderRepository;
 import mks.myworkspace.crm.service.StorageService;
 
@@ -21,25 +22,30 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	@Getter
 	AppRepository appRepo;
+	
+	@Autowired
+	@Getter
+	OrderCategoryRepository orderCategoryRepository;
 
 	@Autowired
 	@Getter
 	OrderRepository orderRepo;
 
 	@Autowired
+	@Getter
 	CustomerRepository customerRepo;
 
-	@Override
-	public CustomerRepository getCustomerRepo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public CustomerRepository getCustomerRepo() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
-	@Override
-	public AppRepository getAppRepo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public AppRepository getAppRepo() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@Override
 	public Customer saveOrUpdate(Customer customer) {

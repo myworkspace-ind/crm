@@ -20,12 +20,19 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +42,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
+
 import mks.myworkspace.crm.common.model.TableStructure;
+import mks.myworkspace.crm.entity.OrderCategory;
+import mks.myworkspace.crm.service.StorageService;
+import mks.myworkspace.crm.transformer.JpaTransformer_OrderCate_Handsontable;
 
 /**
  * Handles requests for the application home page.
@@ -45,6 +56,11 @@ import mks.myworkspace.crm.common.model.TableStructure;
 //@RequestMapping("/orders-configuration")
 @RequestMapping("/ordersConfigurationCRMOrderType_Bao")
 public class OrderConfigurationController_Bao extends BaseController {
+	@Value("classpath:order-category/order-category-demo.json")
+	private Resource resOrderCategoryDemo;
+
+	@Autowired
+	StorageService storageService;
 
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
@@ -74,6 +90,46 @@ public class OrderConfigurationController_Bao extends BaseController {
 		return mav;
 	}
 	
+	private String getDefaultOrderCateData() throws IOException {
+		return IOUtils.toString(resOrderCategoryDemo.getInputStream(), StandardCharsets.UTF_8);
+	}
+	
+	//Add this method to view data on handsontable
+	@GetMapping("/load")
+	@ResponseBody
+	public Object getOrderCategoryData() throws IOException {
+		log.debug("Get sample data from configuration file.");
+		String jsonOrderCateTable = getDefaultOrderCateData();
+
+		List<OrderCategory> lstOrderCates = storageService.getOrderCategoryRepository().findAll();
+
+		if (lstOrderCates == null || lstOrderCates.isEmpty()) {
+			return jsonOrderCateTable;
+		} else {
+			JSONObject jsonObjTableOrderCate = new JSONObject(jsonOrderCateTable);
+
+			JSONArray jsonObjColWidths = jsonObjTableOrderCate.getJSONArray("colWidths");
+			int len = (jsonObjColWidths != null) ? jsonObjColWidths.length() : 0;
+			int[] colWidths = new int[len];
+			for (int i = 0; i < jsonObjColWidths.length(); i++) {
+				colWidths[i] = jsonObjColWidths.getInt(i);
+			}
+
+			JSONArray jsonObjColHeaders = jsonObjTableOrderCate.getJSONArray("colHeaders");
+			len = (jsonObjColHeaders != null) ? jsonObjColHeaders.length() : 0;
+			String[] colHeaders = new String[len];
+			for (int i = 0; i < jsonObjColHeaders.length(); i++) {
+				colHeaders[i] = jsonObjColHeaders.getString(i);
+			}
+
+			List<Object[]> tblData = JpaTransformer_OrderCate_Handsontable.convert2D(lstOrderCates);
+
+			TableStructure tblOrderCate = new TableStructure(colWidths, colHeaders, tblData);
+
+			return tblOrderCate;
+		}
+	}
+
 	@GetMapping("/statuss")
 	public ModelAndView displayOrderConfigurationStatus(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersConfiguration-StatusCRMScreen");
@@ -108,7 +164,8 @@ public class OrderConfigurationController_Bao extends BaseController {
 		Object[] data17 = new Object[] { "17", "Sản phẩm nghệ thuật", "Tranh vẽ, tượng điêu khắc." };
 		Object[] data18 = new Object[] { "18", "Thiết bị công nghiệp", "Máy móc công nghiệp lớn." };
 		Object[] data19 = new Object[] { "19", "Sản phẩm nông nghiệp", "Hoa quả, rau củ, lúa gạo." };
-		Object[] data20 = new Object[] { "20", "Thực phẩm chức năng", "Sản phẩm bổ sung dinh dưỡng hoặc hỗ trợ sức khỏe." };
+		Object[] data20 = new Object[] { "20", "Thực phẩm chức năng",
+				"Sản phẩm bổ sung dinh dưỡng hoặc hỗ trợ sức khỏe." };
 
 		tblData.add(data1);
 		tblData.add(data2);
@@ -131,14 +188,11 @@ public class OrderConfigurationController_Bao extends BaseController {
 		tblData.add(data19);
 		tblData.add(data20);
 
-
-
-
 		TableStructure tblOrderConfiguration = new TableStructure(colWidths, colHeaders, tblData);
 
 		return tblOrderConfiguration;
 	}
-	
+
 	@GetMapping("/load-statuses")
 	@ResponseBody
 	public Object getOrderConfigurationStatusData() throws IOException {
@@ -150,19 +204,19 @@ public class OrderConfigurationController_Bao extends BaseController {
 		Object[] data2 = new Object[] { "", "", "Đóng gói" };
 		Object[] data3 = new Object[] { "", "", "Vận chuyển" };
 		Object[] data4 = new Object[] { "", "", "Giao hàng" };
-		
+
 		Object[] data5 = new Object[] { "2", "Máy móc", "Nhận đơn" };
 		Object[] data6 = new Object[] { "", "", "Đóng gói" };
 		Object[] data7 = new Object[] { "", "", "Vận chuyển" };
 		Object[] data8 = new Object[] { "", "", "Lưu kho" };
 		Object[] data9 = new Object[] { "", "", "Giao hàng" };
-		
+
 		Object[] data10 = new Object[] { "3", "Thực phẩm", "Nhận đơn" };
 		Object[] data11 = new Object[] { "", "", "Đóng gói" };
 		Object[] data12 = new Object[] { "", "", "Vận chuyển" };
 		Object[] data13 = new Object[] { "", "", "Lưu kho lạnh" };
 		Object[] data14 = new Object[] { "", "", "Giao hàng" };
-		
+
 		tblData.add(data1);
 		tblData.add(data2);
 		tblData.add(data3);
@@ -182,6 +236,8 @@ public class OrderConfigurationController_Bao extends BaseController {
 
 		return tblOrderConfigurationStatus;
 	}
+
+	
 
 //	private String getDefaultOrderData() throws IOException {
 //		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);
