@@ -12,87 +12,86 @@
 						</div>
 						<div class="card-content">
 							<div class="card-body">
-								<form id="addCustomerForm">
-									<div class="form-group">
-										<label for="company_name">Tên Công Ty:</label> <input
-											type="text" class="form-control" id="company_name"
-											name="company_name" required>
-									</div>
+							<form id="addNewCustomerForm">
+								<div class="form-group">
+									<label for="company_name">Tên Công Ty:</label> <input
+										type="text" class="form-control" id="company_name"
+										name="company_name" required>
+								</div>
 
-									<div class="form-group">
-										<label for="contact_person">Người Liên Hệ Chính:</label> <input
-											type="text" class="form-control" id="contact_person"
-											name="contact_person" required>
-									</div>
+								<div class="form-group">
+									<label for="contact_person">Người Liên Hệ Chính:</label> <input
+										type="text" class="form-control" id="contact_person"
+										name="contact_person" required>
+								</div>
 
-									<div class="form-group">
-										<label for="email">Email:</label> <input type="email"
-											class="form-control" id="email" name="email" required>
-									</div>
+								<div class="form-group">
+									<label for="email">Email:</label> <input type="email"
+										class="form-control" id="email" name="email" required>
+								</div>
 
-									<div class="form-group">
-										<label for="phone">Số Điện Thoại:</label> <input type="tel"
-											class="form-control" id="phone" name="phone" required>
-									</div>
+								<div class="form-group">
+									<label for="phone">Số Điện Thoại:</label> <input type="tel"
+										class="form-control" id="phone" name="phone" required>
+								</div>
 
-									<div class="form-group">
-										<label for="address">Địa Chỉ:</label> <input type="text"
-											class="form-control" id="address" name="address">
-									</div>
-									
-									<div class="form-group">
-										<label for="profession">Ngành Nghề:</label> <select
-											class="form-control" id="profession" name="profession">
-											<!-- <option value="">Chọn Ngành Nghề</option> -->
-											<th:block th:each="profession : ${professions}">
-												<option th:value="${profession.id}" th:text="${profession.name}"></option>
-											</th:block>
-										</select>
-									</div>
+								<div class="form-group">
+									<label for="address">Địa Chỉ:</label> <input type="text"
+										class="form-control" id="address" name="address">
+								</div>
 
-									<div class="form-group">
-										<label for="main_status">Trạng Thái Chính:</label> <select
-											class="form-control" id="main_status" name="main_status">
-											<!-- <option value="">Chọn Trạng Thái Chính</option> -->
-											<th:block th:each="status : ${statuses}">
-												<option th:value="${status.id}" th:text="${status.name}"></option>
-											</th:block>
-										</select>
-									</div>
+								<div class="form-group">
+									<label for="profession">Ngành Nghề:</label> <select
+										class="form-control" id="profession" name="profession">
+										<option value="">Chọn Ngành Nghề</option>
+										<th:block th:each="profession : ${professions}">
+											<option th:value="${profession.id}"
+												th:text="${profession.name}"></option>
+										</th:block>
+									</select>
+								</div>
 
-									<div class="form-group">
-										<label for="sub_status">Trạng Thái Phụ:</label> <select
-											class="form-control" id="sub_status" name="sub_status">
-											<!-- <option value="">Chọn Trạng Thái Phụ</option> -->
-											<th:block th:each="status : ${statuses}">
-												<option th:value="${status.id}" th:text="${status.name}"></option>
-											</th:block>
-										</select>
-									</div>
-									
-									<div class="form-group">
-										<label for="responsible_person">Người Phụ Trách:</label> <select
-											class="form-control" id="responsible_person" name="responsible_person">
-											<!-- <option value="">Chọn Người Phụ Trách</option> -->
-											<th:block th:each="person : ${responsiblePersons}">
-												<option th:value="${person.id}" th:text="${person.name}"></option>
-											</th:block>
-										</select>
-									</div>
+								<div class="form-group">
+									<label for="main_status">Trạng Thái Chính:</label> <select
+										class="form-control" id="main_status" name="main_status">
+										<option value="">Chọn Trạng Thái Chính</option>
+										<th:block th:each="status : ${statuses}">
+											<option th:value="${status.id}" th:text="${status.name}"></option>
+										</th:block>
+									</select>
+								</div>
 
-									<div class="form-group">
-										<label for="note">Ghi Chú:</label>
-										<textarea class="form-control" id="note" name="note"></textarea>
-									</div>
+								<div class="form-group">
+									<label for="sub_status">Trạng Thái Phụ:</label> <select
+										class="form-control" id="sub_status" name="sub_status">
+										<option value="">Chọn Trạng Thái Phụ</option>
+										<th:block th:each="status : ${statuses}">
+											<option th:value="${status.id}" th:text="${status.name}"></option>
+										</th:block>
+									</select>
+								</div>
 
-									<button type="submit" class="btn btn-primary"
-										onclick="addCustomer()">Lưu Khách Hàng</button>
+								<div class="form-group">
+									<label for="responsible_person">Người Phụ Trách:</label> <select
+										class="form-control" id="responsible_person"
+										name="responsible_person">
+										<option value="">Chọn Người Phụ Trách</option>
+										<th:block th:each="person : ${responsiblePersons}">
+											<option th:value="${person.id}" th:text="${person.name}"></option>
+										</th:block>
+									</select>
+								</div>
 
-									<button type="button" class="btn btn-secondary"
-										onclick="goBack()">Quay Lại</button>
-
-								</form>
-							</div>
+								<div class="form-group">
+									<label for="note">Ghi Chú:</label>
+									<textarea class="form-control" id="note" name="note"></textarea>
+								</div>
+								<button type="submit" class="btn btn-primary">Lưu Khách
+									Hàng</button>
+								<button type="button" class="btn btn-secondary"
+									onclick="goBack()">Quay Lại</button>
+							</form>
+						</div>
 						</div>
 					</div>
 				</div>
