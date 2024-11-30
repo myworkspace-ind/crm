@@ -14,7 +14,7 @@ $(document).ready(function() {
 function loadTableData() {
 
 	$.ajax({
-		url: _ctx + 'ordersConfigurationCRMOrderType_Bao/load-orders',
+		url: _ctx + 'ordersConfigurationCRMOrderType_Bao/load',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json',
