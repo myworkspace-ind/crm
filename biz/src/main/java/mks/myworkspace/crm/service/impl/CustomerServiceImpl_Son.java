@@ -52,7 +52,7 @@ public class CustomerServiceImpl_Son implements CustomerService_Son {
     }
     
     @Override
-    public List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<String> selectedCareers, String contactPerson, String address, String email) {
+    public List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<Long> selectedCareers, String contactPerson, String address, String email) {
         return repo.advancedSearchCustomers(nameCompany, phone, selectedCareers, contactPerson, address, email);
     }
     

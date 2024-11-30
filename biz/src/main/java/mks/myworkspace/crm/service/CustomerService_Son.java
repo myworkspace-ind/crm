@@ -30,6 +30,6 @@ public interface CustomerService_Son {
 	
 	long getTotalCustomerCount();
 
-	List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<String> selectedCareers,
+	List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<Long> selectedCareers,
 			String contactPerson, String address, String email);
 }

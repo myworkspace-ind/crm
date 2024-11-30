@@ -98,7 +98,7 @@ public class CustomerControllerSon extends BaseController {
 	public ModelAndView displayCustomerListCRMSearch(
 			@RequestParam(value = "nameCompany", required = false) String nameCompany,
 	        @RequestParam(value = "phone", required = false) String phone, 
-	        @RequestParam(value = "careers", required = false) List<String> selectedCareers,
+	        @RequestParam(value = "selectedCareers", required = false) List<Long> selectedCareers,
 	        @RequestParam(value = "contactPerson", required = false) String contactPerson,
 	        @RequestParam(value = "address", required = false) String address,
 	        @RequestParam(value = "email", required = false) String email,
@@ -121,7 +121,7 @@ public class CustomerControllerSon extends BaseController {
 			customers = customerService.getAllCustomersWithStatuses();
 	        log.debug("No keyword or field provided. Fetching all customers.");
 	    } else {
-	    	System.out.println("kkkkk");
+
 	        customers = customerService.findCustomersAdvanced(nameCompany, phone, selectedCareers, contactPerson, address, email);
 	        mav.addObject("nameCompany", nameCompany);
 	        mav.addObject("phone", phone);
