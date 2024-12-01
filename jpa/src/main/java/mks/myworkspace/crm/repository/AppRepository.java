@@ -45,20 +45,63 @@ public class AppRepository {
 	 * @param entities
 	 * @return
 	 */
+//	public Long saveOrUpdate(Customer customer) {
+//		Long id;
+//		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_customer")
+//				.usingGeneratedKeyColumns("id");
+//
+//		if (customer.getId() == null) {
+//			// Save new customer
+//			id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(customer)).longValue();
+//		} else {
+//			// Update existing customer
+//			update(customer);
+//			id = customer.getId();
+//		}
+//
+//		return id;
+//
+//	}
 	public Long saveOrUpdate(Customer customer) {
+		Long id;
+		
+		if (customer.getId() == null) {
+			log.debug("Inserting new customer");
+			id = createCustomer(customer);
+		} else {
+			log.debug("Updating existing customer with ID: {}", customer.getId());
+//			updateCustomer(customer);
+			id = customer.getId();
+		}
+
+		log.debug("Resulting ID after saveOrUpdate: {}", id);
+		return id;
+
+	}
+
+	private Long createCustomer(Customer customer) {
 		Long id;
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_customer")
 				.usingGeneratedKeyColumns("id");
 
-		if (customer.getId() == null) {
-			// Save new customer
-			id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(customer)).longValue();
-		} else {
-			// Update existing customer
-			update(customer);
-			id = customer.getId();
-		}
-
+		Map<String, Object> parameters = new HashMap<>();
+		// Thêm các trường cố định trong entity (không có liên kết bảng)
+		parameters.put("address", customer.getAddress());
+		parameters.put("company_name", customer.getCompanyName());
+		parameters.put("contact_person", customer.getContactPerson());
+		parameters.put("created_at", customer.getCreatedAt());
+		parameters.put("email", customer.getEmail());
+		parameters.put("note", customer.getNote());
+		parameters.put("phone", customer.getPhone());
+		
+		// Thêm các khóa ngoại
+		parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
+		parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
+		parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
+		parameters.put("responsible_person_id", customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
+		
+		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		log.debug("New ID: {}", id);
 		return id;
 
 	}
@@ -106,17 +149,17 @@ public class AppRepository {
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
-	
+
 	public void deleteOrderById(Long orderId) {
-		if(orderId == null) {
+		if (orderId == null) {
 			return;
 		}
-		
+
 		String sql = "DELETE FROM crm_order WHERE id = ?";
 		jdbcTemplate0.update(sql, orderId);
 	}
 
- 	public Long saveOrUpdateOrder(Order order) {
+	public Long saveOrUpdateOrder(Order order) {
 		Long id;
 
 		// Fetch related entities
@@ -248,6 +291,34 @@ public class AppRepository {
 				order.getGoodsCategory() != null ? order.getGoodsCategory().getId()
 						: existingOrder.getGoodsCategory().getId(),
 				order.getId());
+	}
+
+	public Long updateOrderStatus(Order order) {
+		Long id = null;
+
+		if (order.getId() != null){
+			log.debug("Updating existing order with ID: {}", order.getId());
+			updateOrderStatusFunction(order);
+			id = order.getId();
+		}
+
+		log.debug("Resulting ID after saveOrUpdate: {}", id);
+		return id;
+	}
+
+	private void updateOrderStatusFunction(Order order) {
+		if (order == null || order.getOrderStatus() == null || order.getOrderStatus().getId() == null) {
+			throw new IllegalArgumentException("Order or OrderStatus is invalid");
+		}
+		String updateSql = "UPDATE crm_order SET order_status_id = ? WHERE id = ?";
+
+		int rowsUpdated = jdbcTemplate0.update(updateSql, order.getOrderStatus().getId(), order.getId());
+
+		if (rowsUpdated > 0) {
+			log.debug("Order status updated successfully for order ID: {}", order.getId());
+		} else {
+			log.warn("No order found with ID: {}", order.getId());
+		}
 	}
 
 }

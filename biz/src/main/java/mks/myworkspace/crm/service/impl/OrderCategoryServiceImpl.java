@@ -28,4 +28,9 @@ public class OrderCategoryServiceImpl implements OrderCategoryService{
 		return repo.findAllWithOrderStatuses();
 	}
 
+	@Override
+	public List<OrderCategory> findAllOrderCategory() {
+		return repo.findAll();
+	}
+
 }
