@@ -37,70 +37,10 @@
 	<!-- END COMMON JAVASCRIPT -->
 	
 	<!-- FILE JS BỔ SUNG -->
-<<<<<<< HEAD
-	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
-	<script type="text/javascript">
-		/* function addCustomer(event) {
-			const createdAt = new Date().toISOString();
-			document.getElementById("addNewCustomerForm").created_at = createdAt;
-		}   */
-		function goBack() {
-	        window.location.href = '/crm-web/customer/list';
-	    }
-	</script>
-	<script>
-		document.getElementById('addCustomerForm').addEventListener('submit', function (event) {
-		    event.preventDefault(); // Ngăn form gửi yêu cầu mặc định
-	
-		    const getValueOrNull = (id) => {
-	            const value = document.getElementById(id).value.trim();
-	            return value === '' ? null : value;
-	        };
-		    // Thu thập dữ liệu từ form
-		    const formData = {
-		    		company_name: getValueOrNull('company_name'),
-		            contact_person: getValueOrNull('contact_person'),
-		            email: getValueOrNull('email'),
-		            phone: getValueOrNull('phone'),
-		            address: getValueOrNull('address'),
-		            profession: getValueOrNull('profession'),
-		            main_status: getValueOrNull('main_status'),
-		            sub_status: getValueOrNull('sub_status'),
-		            responsible_person: getValueOrNull('responsible_person'),
-		            note: getValueOrNull('note'),
-		    };
-	
-		    // Gửi yêu cầu POST tới API
-		    fetch('/crm-web/customer/create-customer', { 
-		        method: 'POST',
-		        headers: {
-		            'Content-Type': 'application/json',
-		        },
-		        body: JSON.stringify(formData),
-		    })
-		        .then(response => {
-		            if (!response.ok) {
-		                throw new Error('Network response was not ok');
-		            }
-		            return response.json();
-		        })
-		        .then(data => {
-		            alert('Thêm khách hàng thành công!');
-		            console.log('Response:', data);
-		            // Xử lý hành động sau khi lưu thành công, ví dụ chuyển hướng hoặc làm mới form
-		        })
-		        .catch(error => {
-		            console.error('Có lỗi xảy ra:', error);
-		            alert('Không thể thêm khách. Vui lòng thử lại!');
-		        });
-		});
-	</script>
-=======
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/addCustomer.js}" defer></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
 	
 
 
->>>>>>> develop
 </body>
 </html>
