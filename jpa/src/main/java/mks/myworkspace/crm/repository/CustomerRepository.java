@@ -39,6 +39,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("SELECT COALESCE(MAX(c.id), 0) FROM Customer c")
     Long findMaxId();
     
+    @Query("SELECT c FROM Customer c WHERE c.email = :email")
+    Optional<Customer> findByEmail(@Param("email") String email);
+    
     @Query("SELECT c FROM Customer c WHERE c.phone = :phone")
     Optional<Customer> findByPhone(@Param("phone") String phone);
     
