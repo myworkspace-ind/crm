@@ -100,9 +100,9 @@ function saveNewCustomer() {
 			address: address,
 			responsiblePerson: responsiblePerson || null, // Nếu không có người phụ trách thì gửi null
 			note: note || '', // Ghi chú có thể trống
-			profession: profession || '', // Chuyên môn có thể trống
-			mainStatus: mainStatus || '', // Trạng thái chính
-			subStatus: subStatus || '', // Trạng thái phụ
+			profession: profession || null, // Chuyên môn có thể trống
+			mainStatus: mainStatus || null, // Trạng thái chính
+			subStatus: subStatus || null, // Trạng thái phụ
 		};
 		const _ctx = "/crm-web/";
 		// Gửi yêu cầu POST đến server với dữ liệu dạng JSON
@@ -131,5 +131,5 @@ function saveNewCustomer() {
 
 // Hàm quay lại (có thể được thêm vào nếu cần)
 function goBack() {
-	
+	window.location.href = '/crm-web/customer/list';
 }
