@@ -40,6 +40,7 @@ function saveNewCustomer() {
 		profession: profession || null,
 		mainStatus: mainStatus || null,
 		subStatus: subStatus || null,
+		active: true,
 	};
 	const _ctx = "/crm-web/";
 	// Gửi yêu cầu POST đến server với dữ liệu dạng JSON
@@ -63,7 +64,7 @@ function saveNewCustomer() {
 			alert('Khách hàng đã được thêm!');
 			console.log('Khách hàng đã được thêm thành công:', data.customer); 
 			document.getElementById('addNewCustomerForm').reset();
-			window.location.href = '/crm-web/customer/list';
+//			window.location.href = '/crm-web/customer/list';
 		})
 		.catch(error => {
 			// Xử lý lỗi

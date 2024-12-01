@@ -154,9 +154,10 @@ public class CustomerController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request) {
 	    try {
-	       
 	        customer.setCreatedAt(new Date());
 	        customer.setSiteId(getCurrentSiteId());
+	        customer.setIsActive(true);
+	        
 	        
 	        Customer savedCustomer = storageService.saveOrUpdate(customer);
 
