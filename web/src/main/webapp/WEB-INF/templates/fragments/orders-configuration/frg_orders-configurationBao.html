@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<form id="frmOrdersConfiguration" th:action="@{/ordersConfigurationCRMOrderType_Bao/load}" method="get">
+<span>ID sẽ tăng tự động khi một Loại đơn hàng được tạo mới. Vui lòng không nhập ID!</span>
+<form id="frmOrdersConfiguration" th:action="@{/ordersConfigurationCRMOrderType_Bao/save}" method="post">
 	<div id="tblOrderConfiguration"></div>
 	<button type="submit" class="btn btn-primary save-orders-configuration">Save</button>
 	<!-- Message: auto hide -->

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
+import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.OrderCategoryRepository;
@@ -22,7 +23,7 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	@Getter
 	AppRepository appRepo;
-	
+
 	@Autowired
 	@Getter
 	OrderCategoryRepository orderCategoryRepository;
@@ -107,14 +108,27 @@ public class StorageServiceImpl implements StorageService {
 
 	@Override
 	public Order updateOrderStatus(Order order) {
-		log.debug("Processing Order with ID: {}", order.getId()); 
+		log.debug("Processing Order with ID: {}", order.getId());
 
 		Long id = appRepo.updateOrderStatus(order);
 		if (id != null) {
 			order.setId(id);
 		}
 
-		log.debug("Final Order ID after saveOrUpdate: {}", order.getId()); 
+		log.debug("Final Order ID after saveOrUpdate: {}", order.getId());
 		return order;
+	}
+
+	@Override
+	public List<OrderCategory> saveOrUpdateOrderCategory(List<OrderCategory> lstOrderCategories) {
+		List<Long> lstIds = appRepo.saveOrUpdateOrderCategory(lstOrderCategories);
+
+		// Update the Id of saved task
+		int len = (lstIds != null) ? lstIds.size() : 0;
+		for (int i = 0; i < len; i++) {
+			lstOrderCategories.get(i).setId(lstIds.get(i));
+		}
+
+		return lstOrderCategories;
 	}
 }

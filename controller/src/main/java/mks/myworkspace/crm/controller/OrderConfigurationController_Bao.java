@@ -37,6 +37,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,6 +49,7 @@ import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_OrderCate_Handsontable;
+import mks.myworkspace.crm.validate.OrderCategoryValidator;
 
 /**
  * Handles requests for the application home page.
@@ -55,6 +58,7 @@ import mks.myworkspace.crm.transformer.JpaTransformer_OrderCate_Handsontable;
 @Slf4j
 //@RequestMapping("/orders-configuration")
 @RequestMapping("/ordersConfigurationCRMOrderType_Bao")
+
 public class OrderConfigurationController_Bao extends BaseController {
 	@Value("classpath:order-category/order-category-demo.json")
 	private Resource resOrderCategoryDemo;
@@ -129,6 +133,24 @@ public class OrderConfigurationController_Bao extends BaseController {
 
 			return tblOrderCate;
 		}
+	}
+	
+	@PostMapping(value = "/save")
+	@ResponseBody
+	public TableStructure saveOrderCategory(@RequestBody TableStructure tableData) {
+		log.debug("saveOrderCategory...{}", tableData);
+
+		try {
+			List<OrderCategory> lstOrderCategories = OrderCategoryValidator.validateAndCleasing(tableData.getData());
+			lstOrderCategories = storageService.saveOrUpdateOrderCategory(lstOrderCategories);
+
+			List<Object[]> tblData = JpaTransformer_OrderCate_Handsontable.convert2D(lstOrderCategories);
+			tableData.setData(tblData);
+		} catch (Exception ex) {
+			log.error("Could not save task.", ex);
+		}
+
+		return tableData;
 	}
 
 	@GetMapping("/statuss")
