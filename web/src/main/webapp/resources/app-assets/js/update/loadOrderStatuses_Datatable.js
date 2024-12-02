@@ -37,6 +37,37 @@ document.addEventListener("DOMContentLoaded", function() {
 
 })
 
+/*document.addEventListener("DOMContentLoaded", function() {
+	const orderCategory_UpdateStatusSelect = document.getElementById("orderCategoryUpdateStatus");
+	const orderStatus_UpdateStatusSelect = document.getElementById("orderStatusUpdateStatus");
+	const _ctx = "/crm-web/";
+
+	$('#updateOrderStatusModal').on('shown.bs.modal', function() {
+		const categoryId = orderCategory_UpdateStatusSelect.value;
+		if (categoryId) {
+			loadOrderStatuses_ToUpdateStatusOrder(categoryId);
+		}
+	});
+
+	function loadOrderStatuses_ToUpdateStatusOrder(categoryId) {
+		fetch(`${_ctx}orders-datatable/order-statuses?categoryId=${categoryId}`)
+			.then(response => response.json())
+			.then(orderStatuses => {
+				// Xóa tất cả các tùy chọn hiện tại
+				orderStatus_UpdateStatusSelect.innerHTML = "";
+
+				orderStatuses.forEach(status => {
+					const option = document.createElement("option");
+					option.value = status[0];
+					option.textContent = status[1];
+					orderStatus_UpdateStatusSelect.appendChild(option);
+				});
+			})
+			.catch(error => console.error("Error loading order statuses:", error));
+	}
+
+})*/
+
 document.addEventListener("DOMContentLoaded", function() {
 	const orderCategorySelect = document.getElementById("orderCategoryFilter");
 	const orderStatusContainer = document.getElementById("orderStatusFilter");

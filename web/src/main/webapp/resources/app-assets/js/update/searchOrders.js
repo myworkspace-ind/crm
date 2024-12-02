@@ -5,19 +5,24 @@ document.addEventListener('DOMContentLoaded', function() {
 		// Lấy các giá trị từ form
 		const customerId = document.querySelector('#orderCustomerFilter').value;
 		const orderCategoryId = document.querySelector('#orderCategoryFilter').value;
+		const selectedStatuses = [];
+		const checkboxes = document.querySelectorAll('input[name="orderStatus"]:checked');
+		checkboxes.forEach(checkbox => {
+			selectedStatuses.push(parseInt(checkbox.value, 10));
+		});
 		const _ctx = "/crm-web/";
 
-		// Lấy danh sách id từ checkbox của trạng thái
-		/*const selectedStatuses = Array.from(
-			document.querySelectorAll('#orderStatusFilter input[name="orderStatus"]:checked')
-		).map((checkbox) => checkbox.value); */
+		const paramsObject = {
+			customerId: customerId || '',
+			orderCategoryId: orderCategoryId || '',
+			statuses: selectedStatuses.length > 0 ? selectedStatuses : '',
+		};
 
 		// Xây dựng query string từ các tham số
-		const params = new URLSearchParams({
-			customerId: customerId,
-			orderCategoryId: orderCategoryId,
-			//statuses: selectedStatuses.join(','),
-		}).toString(); 
+		const params = new URLSearchParams(paramsObject).toString();
+		const requestUrl = `${_ctx}orders-datatable/search-orders?${params}`;
+
+		console.log("Request URL:", requestUrl);
 
 		fetch(`${_ctx}orders-datatable/search-orders?${params}`, {
 			method: 'GET',
@@ -330,6 +335,111 @@ document.addEventListener('DOMContentLoaded', function() {
 						}
 					});
 				}
+			});
+
+			$('#tblDatatable tbody').off('click', '.updateOrderStatusSearch-btn').on('click', '.updateOrderStatusSearch-btn', function() {
+				var row = table.row($(this).closest('tr')).data();
+				var orderId = row[0];
+
+				console.log('Cập nhật trạng thái đơn hàng ');
+				//document.getElementById("updateOrderStatusModal").style.display = "block";
+				$('#updateOrderStatusModal').modal('show');
+				$('#updateOrderStatusModal').removeAttr('inert');
+
+				console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
+
+				$.ajax({
+					url: _ctx + 'orders-datatable/viewDetails/' + orderId,
+					method: 'GET',
+					success: function(response) {
+						console.log(response);
+						$('#orderIdUpdateStatus').text(response[0]);
+
+						var orderStatusData = response[6]
+						var currentOrderStatusId = response[7];
+
+						var orderCategoryData = response[15];
+						var currentOrderCategoryId = response[16];
+
+						$('#orderCodeUpdateStatus').val(response[1]);
+
+						if (orderCategoryData && orderCategoryData.length > 0) {
+							var options = orderCategoryData.map(function(ordercategory) {
+								var selected = ordercategory[0] === currentOrderCategoryId ? ' selected' : '';
+								return '<option value="' + ordercategory[0] + '"' + selected + '>' + ordercategory[1] + '</option>';
+							}).join('');
+
+							$('#orderCategoryUpdateStatus').html(options);
+							$('#orderCategoryUpdateStatus').css('pointer-events', 'none');
+						}
+
+						if (orderStatusData && orderStatusData.length > 0) {
+							var options = orderStatusData.map(function(status) {
+								var selected = status[0] === currentOrderStatusId ? ' selected' : '';
+								return '<option value="' + status[0] + '"' + selected + '>' + status[1] + '</option>';
+							}).join('');
+
+							$('#orderStatusUpdateStatus').html(options);
+						}
+
+					},
+					error: function(error) {
+						console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
+					}
+				});
+
+			});
+			$('#updateOrderStatusModal').on('hidden.bs.modal', function() {
+				$('#updateOrderStatusModal').attr('inert', true);
+			});
+
+			$(document).on('click', '#saveOrderStatusButton', function() {
+				var button = $(this);
+				button.prop('disabled', true); // Disable button to prevent multiple clicks
+
+				var orderId = $('#orderIdUpdateStatus').text();
+				var orderStatus = $('#orderStatusUpdateStatus').val();
+
+				console.log(orderId); // In ra giá trị orderId
+				console.log(orderStatus); // In ra giá trị orderCode
+
+				if (!orderId) {
+					alert('ID đơn hàng không hợp lệ.');
+					button.prop('disabled', false); // Enable button if id is not valid
+					return;
+				}
+
+				var order = {
+					id: orderId,
+					orderStatus: orderStatus,
+				};
+
+				// In toàn bộ đối tượng order ra console
+				console.log("Order object being sent:", order);
+
+				$.ajax({
+					url: _ctx + '/orders-datatable/saveOrderStatus/',
+					method: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(order),
+
+					success: function(response) {
+						console.log("UDPATE FINAL ORDER STATUS: ", order); // In lại order khi thành công
+						if (response.status === "success") {
+							alert(response.message);
+							document.getElementById("updateOrderStatusModal").style.display = "none";
+							location.reload();
+						} else {
+							alert(response.message);
+						}
+						button.prop('disabled', false); // Re-enable button
+					},
+					error: function(error) {
+						console.error("Error saving order:", error);
+						alert("An error occurred while saving/updating the order.");
+						button.prop('disabled', false); // Re-enable button
+					}
+				});
 			});
 		}
 	}

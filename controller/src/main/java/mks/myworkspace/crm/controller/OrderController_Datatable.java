@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -123,9 +124,8 @@ public class OrderController_Datatable extends BaseController {
 
 	@GetMapping("")
 	public ModelAndView displayDatatableOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
-			 								  @RequestParam(value = "customerId", required = false) Long customerId,
-			 								  //@RequestParam(required = false) List<Long>statuses,
-			 								  HttpServletRequest request, HttpSession httpSession) {
+			@RequestParam(value = "customerId", required = false) Long customerId,
+			@RequestParam(required = false) List<String> statuses, HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersCRMScreen_Datatable");
 		initSession(request, httpSession);
 		List<OrderCategory> orderCategories;
@@ -158,26 +158,35 @@ public class OrderController_Datatable extends BaseController {
 		List<Order> listOrders;
 		listOrders = orderService.getAllOrders();
 		log.debug("Fetched orders: {}", listOrders.toString());
-		
+
 		List<GoodsCategory> allGoodsCategories;
 		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
-		
+
 		List<Customer> allSenders;
 		allSenders = customerService.getAllCustomers();
 		
-		 // Search functionality
-	    List<Order> ordersSearch = (customerId != null & categoryId != null ) ? orderService.searchOrders(customerId, categoryId) : listOrders;
-	    List<GoodsCategory> allGoodsCategoriesSearch = goodsCategoryService.findAllGoodsCategory();
-	    List<Customer> allSendersSearch = customerService.getAllCustomers();
+		List<Long> statusList = (statuses != null && !statuses.isEmpty()) 
+			    ? statuses.stream()
+			              .map(Long::parseLong)
+			              .collect(Collectors.toList())
+			    : null;
 
-	    List<Object[]> dataSet;
-	    //dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
-	    if (customerId == null) {
-	        dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
-	    } else {
-	        dataSet = JpaTransformer_Order.convert2D(ordersSearch, allGoodsCategoriesSearch, allSendersSearch);
-	    }
-		
+		// Search functionality
+		List<Order> ordersSearch = (customerId != null && categoryId != null && statuses != null)
+				? orderService.searchOrders(customerId, categoryId, statusList)
+				: listOrders;
+		List<GoodsCategory> allGoodsCategoriesSearch = goodsCategoryService.findAllGoodsCategory();
+		List<Customer> allSendersSearch = customerService.getAllCustomers();
+
+		List<Object[]> dataSet;
+		// dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories,
+		// allSenders);
+		if (customerId == null && categoryId == null && statuses == null) {
+			dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
+		} else {
+			dataSet = JpaTransformer_Order.convert2D(ordersSearch, allGoodsCategoriesSearch, allSendersSearch);
+		}
+
 		if (dataSet == null) {
 			log.debug("DataSet is null, using demo data.");
 			dataSet = getDemoData();
@@ -200,28 +209,43 @@ public class OrderController_Datatable extends BaseController {
 
 		return mav;
 	}
-	
-	
+
+	//@SuppressWarnings("unlikely-arg-type")
 	@GetMapping("/search-orders")
 	@ResponseBody
-	public List<Object[]> searchOrders(@RequestParam(required = false) Long customerId, 
-									   @RequestParam(required = false) Long orderCategoryId){
-									   //@RequestParam(required = false) List<Long>statuses)
-		List<Order> orders;
-		orders = orderService.searchOrders(customerId, orderCategoryId);
+	public List<Object[]> searchOrders(@RequestParam(required = false) Long customerId,
+			@RequestParam(required = false) Long orderCategoryId,
+			@RequestParam(required = false) List<Long> statuses) {
+
+//		List<Long> statusIds = null;
+//		if (statuses != null && !statuses.isEmpty() && statuses.equals("null")) {
+//		    try {
+//		        statusIds = statuses.stream()
+//		                            .map(Long::parseLong) // Convert from String to Long
+//		                            .collect(Collectors.toList()); // Use Collectors.toList() for older Java versions
+//		    } catch (NumberFormatException e) {
+//		        log.error("Invalid status ID format: {}", statuses, e);
+//		        throw new IllegalArgumentException("Status IDs must be numeric.");
+//		        
+//		    }
+//		}
 		
 		List<GoodsCategory> allGoodsCategories;
 		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
-		
+
 		List<Customer> allSenders;
 		allSenders = customerService.getAllCustomers();
-		
+
+		List<Order> orders;
+		orders = orderService.searchOrders(customerId, orderCategoryId, statuses);
+
+		log.debug("customerId: {} " + customerId);
+		log.debug("orderCategoryId: {} " + orderCategoryId);
+		log.debug("statuses: {} " + statuses);
+
 		return JpaTransformer_OrderSearch.convert2D(orders, allGoodsCategories, allSenders);
-		//List<Object[]> orderData = JpaTransformer_OrderSearch.convert2D(orders, allGoodsCategories, allSenders);
-		//return orderData;
 	}
-	
-	
+
 	@GetMapping("/viewDetails/{id}")
 	@ResponseBody
 	public ResponseEntity<?> displayOrderDetails(@PathVariable("id") Long orderId) {
@@ -230,9 +254,10 @@ public class OrderController_Datatable extends BaseController {
 		List<GoodsCategory> allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
 		List<Customer> allSenders = customerService.getAllCustomers();
 		List<Customer> allReceivers = customerService.getAllCustomers();
+		List<OrderCategory> allOrderCategories = orderCategoryService.findAllOrderCategory();
 		if (order != null) {
 			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order, allOrderStatuses,
-					allGoodsCategories, allSenders, allReceivers);
+					allGoodsCategories, allSenders, allReceivers, allOrderCategories);
 			return ResponseEntity.ok(orderDetailArray);
 		} else {
 			log.debug("CANNOT FIND ORDER!");
@@ -286,6 +311,37 @@ public class OrderController_Datatable extends BaseController {
 
 		return ResponseEntity.ok(response);
 	}
+	
+	@PostMapping(value = "/saveOrderStatus", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> saveOrderStatus(@RequestBody String json) {
+		Map<String, String> response = new HashMap<>();
+
+		try {
+			// Convert JSON string thành đối tượng Order
+			Order order = OrderConverter.convertJsonToOrder_UpdateOrderStatus(json);
+
+			log.debug("Order Details after JSON Conversion:");
+			log.debug("Order ID: {}", order.getId());
+
+			if (order.getOrderStatus() != null) {
+				log.debug("Order Status: {}", order.getOrderStatus().getName());
+			}
+
+			// Lưu hoặc cập nhật đơn hàng
+			Order savedOrderStatus = storageService.updateOrderStatus(order);
+			response.put("status", "success");
+			response.put("message", "OrderStatus " + (order.getId() != null ? "updated" : "created") + " successfully.");
+			log.debug("Order saved with ID: {}", savedOrderStatus.getId()); // Log kết quả ID
+
+		} catch (Exception e) {
+			log.error("Error saving/updating order: ", e);
+			response.put("status", "error");
+			response.put("message", "An error occurred while saving/updating the order.");
+		}
+
+		return ResponseEntity.ok(response);
+	}
 
 	@PostMapping(value = "/create-order", consumes = "application/json", produces = "application/json")
 	@ResponseBody
@@ -309,7 +365,7 @@ public class OrderController_Datatable extends BaseController {
 			System.out.println("OrderCategory: "
 					+ (savedOrder.getOrderCategory() != null ? savedOrder.getOrderCategory().getId() : "null"));
 			response.put("status", "success");
-			response.put("message", "Order " + (order.getId() != null ? "updated" : "created") + " successfully.");
+			response.put("message", "Order created successfully.");
 			log.debug("Order saved with ID: {}", savedOrder.getId()); // Log kết quả ID
 
 			// Redirect to the orders datatable page
@@ -346,8 +402,6 @@ public class OrderController_Datatable extends BaseController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
 		}
 	}
-	
-
 
 //	@GetMapping("/orderDetail")
 //	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long orderId, HttpServletRequest request,

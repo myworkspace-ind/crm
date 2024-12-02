@@ -77,7 +77,9 @@
 
 .child h4{
 	color: white;
-	margin: 0
+	margin: 0;
+	font-size: 16px;
+    font-weight: normal;
 }
 
 .child img {
@@ -118,6 +120,7 @@ button {
     display: flex; 
     align-items: center; 
     justify-content: center; 
+    font-size: 14px;
 }
 
 .all-customers-btn{

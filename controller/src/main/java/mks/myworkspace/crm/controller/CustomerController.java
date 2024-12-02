@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +41,7 @@ import mks.myworkspace.crm.service.StorageService;
  */
 @Controller
 @Slf4j
+@RequestMapping("/customer")
 public class CustomerController extends BaseController {
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
@@ -75,13 +79,13 @@ public class CustomerController extends BaseController {
 	@Autowired
 	ProfessionService professionService;
 
-	@RequestMapping(value = { "/customer-list" }, method = RequestMethod.GET)
+	@GetMapping("list")
 	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
 			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
 			HttpSession httpSession) {
 
 		log.debug("Display Cusomter list with keyword= {}", keyword);
-		ModelAndView mav = new ModelAndView("customerListCRMScreen");
+		ModelAndView mav = new ModelAndView("customer_list_v2");
 		initSession(request, httpSession);
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
@@ -146,20 +150,54 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/create-customer", method = RequestMethod.POST, consumes = "application/json")
+	@PostMapping("/create-customer")
 	@ResponseBody
-	public ResponseEntity<?> saveCustomer(@RequestBody Customer customer, HttpServletRequest request,
-			HttpSession httpSession) {
-		try {
-			storageService.saveOrUpdate(customer);
-			return ResponseEntity.ok().body(Map.of("message", "Khách hàng mới đã được thêm!", "customer", customer));
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errorMessage", e.getMessage()));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!"));
-		}
+	public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request) {
+	    try {
+	       
+	        customer.setCreatedAt(new Date());
+	        customer.setSiteId(getCurrentSiteId());
+	        
+	        // Lưu khách hàng
+	        Customer savedCustomer = storageService.saveOrUpdate(customer);
+	        log.info("Khách hàng mới đã được thêm thành công:");
+	        log.info("ID: {}", savedCustomer.getId());
+	        log.info("Site ID: {}", savedCustomer.getSiteId());
+	        log.info("Tên công ty: {}", savedCustomer.getCompanyName());
+	        log.info("Người liên hệ: {}", savedCustomer.getContactPerson());
+	        log.info("Email: {}", savedCustomer.getEmail());
+	        log.info("Số điện thoại: {}", savedCustomer.getPhone());
+	        log.info("Địa chỉ: {}", savedCustomer.getAddress());
+	        log.info("Ngày tạo: {}", savedCustomer.getCreatedAt());
+	        log.info("Ghi chú: {}", savedCustomer.getNote());
+
+	        // Nếu có thông tin profession và responsiblePerson
+	        if (savedCustomer.getProfession() != null) {
+	            log.info("Ngành nghề: {}", savedCustomer.getProfession().getName());
+	        } else {
+	            log.info("Ngành nghề: Không có");
+	        }
+
+	        if (savedCustomer.getResponsiblePerson() != null) {
+	            log.info("Người phụ trách: {}", savedCustomer.getResponsiblePerson().getName());
+	        } else {
+	            log.info("Người phụ trách: Không có");
+	        }
+
+	        return ResponseEntity.ok()
+	            .body(Map.of(
+	                "message", "Khách hàng mới đã được thêm thành công!", 
+	                "customer", savedCustomer
+	            ));
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.badRequest()
+	            .body(Map.of("errorMessage", e.getMessage()));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	            .body(Map.of("errorMessage", "Có lỗi xảy ra khi thêm khách hàng. Vui lòng thử lại sau!"));
+	    }
 	}
+
 
 	@Transactional
 	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
@@ -244,9 +282,11 @@ public class CustomerController extends BaseController {
 //	}
 	
 	// Hiển thị trang thêm mới khách hàng
-	@RequestMapping(value = { "/add-customer" }, method = RequestMethod.GET)
+	@GetMapping("/add")
 	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("addCustomer");
+		//ModelAndView mav = new ModelAndView("addCustomer");
+		ModelAndView mav = new ModelAndView("addCustomer_v2");
+		
 
 		// Thêm đối tượng Customer mới vào Model để truyền vào form
 		mav.addObject("customer", new Customer());
@@ -269,4 +309,80 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 
+	@GetMapping("interact")
+	public ModelAndView displayCustomerListScreen(@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
+			HttpSession httpSession) {
+
+		log.debug("Display Cusomter list with keyword= {}", keyword);
+		ModelAndView mav = new ModelAndView("customerInteraction");
+		initSession(request, httpSession);
+		
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		List<Customer> customers;
+
+		if (statusId != null) {
+			customers = customerService.findCustomersByStatus(statusId);
+			mav.addObject("statusId", statusId);
+
+		} else if (keyword != null && !keyword.isEmpty()) {
+			customers = customerService.searchCustomers(keyword);
+			mav.addObject("keyword", keyword);
+
+		} else {
+			customers = customerService.getAllCustomersWithStatuses ();
+			log.debug("No keyword or statusId provided. Fetching all customers.");
+		}
+
+		List<Status> statuses = statusService.getAllStatuses();
+		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		List<Profession> professions = professionService.getAllProfessions();
+		
+
+		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
+		
+	    if (statusCounts == null) {
+	        statusCounts = new HashMap<>(); 
+	    }
+	    
+	    long totalCustomerCount = customerService.getTotalCustomerCount();
+	    
+		mav.addObject("customers", customers);
+		mav.addObject("statuses", statuses);
+		mav.addObject("responsiblePersons", responsiblePersons);
+		mav.addObject("professions", professions);
+		mav.addObject("statusCounts", statusCounts);
+		mav.addObject("totalCustomerCount", totalCustomerCount);
+
+		return mav;
+	}
+	
+	/**
+	 * @author Khoa
+	 * @param customerId
+	 * @param request
+	 * @param httpSession
+	 * @return
+	 */
+	@GetMapping("edit")
+	public ModelAndView edit(@RequestParam("id") Long customerId, HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("editCustomerStatus_khoa");
+
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		log.debug("Customer Detail is running....");
+
+		Optional<Customer> customerOpt = customerService.findById(customerId);
+
+		// Check if the customer exists and add to model
+		customerOpt.ifPresentOrElse(customer -> {
+			mav.addObject("customer", customer);
+		}, () -> {
+			mav.addObject("errorMessage", "Customer not found.");
+		});
+
+		return mav;
+	}
 }

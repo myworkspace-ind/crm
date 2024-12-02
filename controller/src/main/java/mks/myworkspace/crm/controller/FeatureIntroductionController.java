@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,19 +34,15 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Controller
 @Slf4j	
-public class HistoryUpdateControllerDi extends BaseController {
+public class FeatureIntroductionController extends BaseController {
  
 	/**
 	 * Simply selects the home view to render by returning its name.
      * @return 
 	 */
-	@GetMapping(value = {"/HistoryUpdate"})
+	@RequestMapping(value = {"/Feature_Introduction"}, method = RequestMethod.GET)
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("historyUpdate");
-
-		
-
+		ModelAndView mav = new ModelAndView("Feature_Introduction");
 		return mav;
-
 	}
 }

@@ -6,10 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.repository.OrderRepository;
 import mks.myworkspace.crm.service.OrderService;
 
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService{
 	
@@ -37,8 +39,19 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<Order> searchOrders(Long customerId, Long orderCategoryId) {
-		return repo.findOrderByCriteria(customerId, orderCategoryId);
+	public List<Order> searchOrders(Long customerId, Long orderCategoryId, List<Long> statuses) {
+		log.debug("CustomerId: {}, Type: {}", customerId, (customerId != null ? customerId.getClass().getName() : "null"));
+		
+	    log.debug("OrderCategoryId: {}, Type: {}", orderCategoryId, (orderCategoryId != null ? orderCategoryId.getClass().getName() : "null"));
+	    if (statuses != null) {
+	        statuses.forEach(status -> log.debug("Status: {}, Type: {}", status, (status != null ? status.getClass().getName() : "null")));
+	    } else {
+	        log.debug("Statuses: null");
+	    }
+	    if (statuses == null || statuses.isEmpty()) {
+	        statuses = null; 
+	    }
+		return repo.findOrderByCriteria(customerId, orderCategoryId, statuses);
 	}
 
 
