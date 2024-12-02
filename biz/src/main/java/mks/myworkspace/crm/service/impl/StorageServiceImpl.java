@@ -10,8 +10,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
+import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.repository.OrderCategoryRepository;
 import mks.myworkspace.crm.repository.OrderRepository;
 import mks.myworkspace.crm.service.StorageService;
 
@@ -24,22 +26,27 @@ public class StorageServiceImpl implements StorageService {
 
 	@Autowired
 	@Getter
+	OrderCategoryRepository orderCategoryRepository;
+
+	@Autowired
+	@Getter
 	OrderRepository orderRepo;
 
 	@Autowired
+	@Getter
 	CustomerRepository customerRepo;
 
-	@Override
-	public CustomerRepository getCustomerRepo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public CustomerRepository getCustomerRepo() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
-	@Override
-	public AppRepository getAppRepo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public AppRepository getAppRepo() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@Override
 	public Customer saveOrUpdate(Customer customer) {
@@ -101,14 +108,27 @@ public class StorageServiceImpl implements StorageService {
 
 	@Override
 	public Order updateOrderStatus(Order order) {
-		log.debug("Processing Order with ID: {}", order.getId()); 
+		log.debug("Processing Order with ID: {}", order.getId());
 
 		Long id = appRepo.updateOrderStatus(order);
 		if (id != null) {
 			order.setId(id);
 		}
 
-		log.debug("Final Order ID after saveOrUpdate: {}", order.getId()); 
+		log.debug("Final Order ID after saveOrUpdate: {}", order.getId());
 		return order;
+	}
+
+	@Override
+	public List<OrderCategory> saveOrUpdateOrderCategory(List<OrderCategory> lstOrderCategories) {
+		List<Long> lstIds = appRepo.saveOrUpdateOrderCategory(lstOrderCategories);
+
+		// Update the Id of saved task
+		int len = (lstIds != null) ? lstIds.size() : 0;
+		for (int i = 0; i < len; i++) {
+			lstOrderCategories.get(i).setId(lstIds.get(i));
+		}
+
+		return lstOrderCategories;
 	}
 }
