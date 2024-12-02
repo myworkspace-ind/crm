@@ -58,6 +58,11 @@ public class CustomerServiceImpl_Son implements CustomerService_Son {
     }
     
     @Override
+    public List<Customer> advancedSearchCustomersNotCareer(String nameCompany, String phone, List<Long> selectedCareers, String contactPerson, String address, String email) {
+        return repo.advancedSearchCustomersNotCareer(nameCompany, phone, selectedCareers, contactPerson, address, email);
+    }
+    
+    @Override
     public List<Customer> findByselectedCareers(List<Long> selectedCareers){
     	if (selectedCareers == null || selectedCareers.isEmpty()) {
             return new ArrayList<>();

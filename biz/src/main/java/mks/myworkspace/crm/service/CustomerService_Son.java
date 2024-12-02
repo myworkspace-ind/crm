@@ -33,5 +33,8 @@ public interface CustomerService_Son {
 	List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<Long> selectedCareers,
 			String contactPerson, String address, String email);
 	
+	List<Customer> advancedSearchCustomersNotCareer(String nameCompany, String phone, List<Long> selectedCareers,
+			String contactPerson, String address, String email);
+	
 	List<Customer> findByselectedCareers(List<Long> selectedCareers);
 }

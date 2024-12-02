@@ -120,13 +120,14 @@ public class CustomerControllerSon extends BaseController {
 				&& (email == null || email.isEmpty())) {
 			customers = customerService.getAllCustomersWithStatuses();
 			log.debug("No keyword or field provided. Fetching all customers.");
-		} else {
-
+		} else if(selectedCareers == null || selectedCareers.isEmpty()){
+			customers = customerService.advancedSearchCustomersNotCareer(nameCompany,phone,selectedCareers,contactPerson, address, email);
 			
-			
+		}
+		
+		else {
 			customers = customerService.findCustomersAdvanced(nameCompany,phone,selectedCareers,contactPerson, address, email);
 
-			/* customers = customerService.findByselectedCareers(selectedCareers); */
 			mav.addObject("nameCompany", nameCompany);
 			mav.addObject("phone", phone);
 			mav.addObject("selectedCareers", selectedCareers);
