@@ -1,129 +1,133 @@
-.left, .right {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background-color: #967ADC;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: white;
-    font-size: 20px;
-    border: none;
-    transition: background-color 0.3s;
+.left,
+.right {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	background-color: #967ADC;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	color: white;
+	font-size: 20px;
+	border: none;
+	transition: background-color 0.3s;
 }
 
 .left::before {
-    content: '←'; 
-    font-size: 20px;
+	content: '←';
+	font-size: 20px;
 }
 
 .right::before {
-    content: '→';
-    font-size: 20px;
+	content: '→';
+	font-size: 20px;
 }
 
-.left:hover, .right:hover {
-    background-color: #8451C1;
+.left:hover,
+.right:hover {
+	background-color: #8451C1;
 }
 
 .left {
-    left: 0px;
-    top: 70%;
-    transform: translateY(-50%);
-    z-index: 10;
+	left: 0px;
+	top: 70%;
+	transform: translateY(-50%);
+	z-index: 10;
 }
 
 .right {
-    right: 0px;
-    top: 70%;
-    transform: translateY(-50%);
-    z-index: 10;
+	right: 0px;
+	top: 70%;
+	transform: translateY(-50%);
+	z-index: 10;
 }
 
 .scroll-images {
-    position: relative;
-    width: calc(100vw - 700px);
-    height: auto;
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    margin: 0px 20px;
-    padding: 10px 0;
-    gap: 5px;
+	position: relative;
+	width: calc(100vw - 700px);
+	height: auto;
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	scroll-behavior: smooth;
+	-webkit-overflow-scrolling: touch;
+	margin: 0px 20px;
+	padding: 10px 0;
+	gap: 5px;
 }
 
 .child {
 	cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    color: white!important;
-    align-items: center;
-    padding: 0px 10px;
-    margin: 1px 5px;
-    border: 1px solid #f1f1f1;
-    overflow: hidden;
-    -webkit-box-shadow: 0px 0px 15px 2px rgb(0 0 0 / 10%);;
-    box-shadow: 0px 0px 15px 2px rgb(0 0 0 / 10%);;
-    border-radius: 7px;
-    min-width: fit-content;
-    position: relative;
-    height: 40px;
+	display: flex;
+	justify-content: space-between;
+	color: white !important;
+	align-items: center;
+	padding: 0px 10px;
+	margin: 1px 5px;
+	border: 1px solid #f1f1f1;
+	overflow: hidden;
+	-webkit-box-shadow: 0px 0px 15px 2px rgb(0 0 0 / 10%);
+	;
+	box-shadow: 0px 0px 15px 2px rgb(0 0 0 / 10%);
+	;
+	border-radius: 7px;
+	min-width: fit-content;
+	position: relative;
+	height: 40px;
 }
 
-.child h4{
+.child h4 {
 	color: white;
 	margin: 0;
 	font-size: 16px;
-    font-weight: normal;
+	font-weight: normal;
 }
 
 .child img {
-    position: absolute;
-    margin-top: -195px;
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 50%;
-    background: #03A9F4;
+	position: absolute;
+	margin-top: -195px;
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+	object-position: center;
+	border-radius: 50%;
+	background: #03A9F4;
 }
 
 .scroll-images::-webkit-scrollbar {
-    width: 5px;
-    height: 8px;
-    background-color: #aaa;
+	width: 5px;
+	height: 8px;
+	background-color: #aaa;
 }
 
 .scroll-images::-webkit-scrollbar-thumb {
-    background-color: black;
+	background-color: black;
 }
 
 button {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 25px;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 25px;
 }
 
 .count-badge {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-    border-radius: 20px;
-    padding: 2px 8px;
-    margin-left: 10px;
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-size: 14px;
+	background-color: rgba(255, 255, 255, 0.2);
+	color: white;
+	border-radius: 20px;
+	padding: 2px 8px;
+	margin-left: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
 }
 
-.all-customers-btn{
+.all-customers-btn {
 	background-color: #967ADC;
 	width: fit-content;
 	margin: 5px 20px;
@@ -131,15 +135,15 @@ button {
 
 .child.selected {
 	border: 3px solid yellow;
-    box-shadow: 0px 0px 10px yellow;
+	box-shadow: 0px 0px 10px yellow;
 }
 
 .cover {
-    position: relative;
-    padding: 10px 30px;
-    margin-top: 20px;
-    background-color: #f8f8f8;
-    border-radius: 10px; 
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
-    left: 20px;
+	position: relative;
+	padding: 10px 30px;
+	margin-top: 20px;
+	background-color: #f8f8f8;
+	border-radius: 10px;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+	left: 20px;
 }

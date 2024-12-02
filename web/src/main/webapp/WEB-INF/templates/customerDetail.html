@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<!-- START COMMON META AND TITLE -->
-<th:block th:include="fragments/common_meta_title"></th:block>
-<!-- END COMMON META AND TITLE -->
+	<!-- START COMMON META AND TITLE -->
+	<th:block th:include="fragments/common_meta_title"></th:block>
+	<!-- END COMMON META AND TITLE -->
 
-<!-- START COMMON CSS -->
-<th:block th:include="fragments/common_css"></th:block>
-<!-- END COMMON CSS -->
+	<!-- START COMMON CSS -->
+	<th:block th:include="fragments/common_css"></th:block>
+	<!-- END COMMON CSS -->
 
-<link rel="stylesheet" type="text/css" href="resources/css/new_style.css">
-<link rel="stylesheet" type="text/css" href="resources/css/customerDetail.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/customerDetail.css}" />
 </head>
 
-<body
-	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
-	data-open="click" data-menu="vertical-compact-menu"
-	data-col="2-columns">
+<body class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar" data-open="click"
+	data-menu="vertical-compact-menu" data-col="2-columns">
 
 	<!-- BEGIN HEADER  -->
-	<th:block th:include="fragments/headerCRM"></th:block>
+	<th:block th:include="fragments/hmenu"></th:block>
 	<!-- END HEADER  -->
 
 	<!-- BEGIN LEFT MENU NAVIGATION -->
-	<th:block th:include="fragments/leftNavCRM"></th:block>
+	<!-- <th:block th:include="fragments/leftNavCRM"></th:block> -->
 	<!-- END LEFT MENU NAVIGATION -->
-	
+
 	<!--  BEGIN CONTENT -->
 	<div class="app-content content">
 		<div class="content-wrapper">
@@ -42,10 +41,8 @@
 					</div>
 				</div>
 				<div class="content-header-right col-md-6 col-12">
-					<fieldset
-						class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-						<input class="form-control" id="iconLeft" type="text"
-							placeholder="Tìm kiếm khách hàng..." />
+					<fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
+						<input class="form-control" id="iconLeft" type="text" placeholder="Tìm kiếm khách hàng..." />
 						<div class="form-control-position">
 							<i class="fa fa-search"></i>
 						</div>
@@ -59,9 +56,7 @@
 				<div class="left-panel">
 					<div class="user-info">
 						<div class="user-avatar">
-							<img
-								src="resources/app-assets/images/portrait/small/avatar-s-10.png"
-								alt="User Avatar">
+							<img th:src="@{/resources/app-assets/images/portrait/small/avatar-s-10.png}" alt="User Avatar">
 						</div>
 						<div class="user-details">
 							<h2 th:text="${customer.companyName}"></h2>
@@ -88,8 +83,12 @@
 					<div class="person-in-charge">
 						<label class="label-bold" for="person-in-charge">Người phụ
 							trách:</label> <select id="person-in-charge">
-							<option value="ngan">Nguyễn Hoàng Phương Ngân</option>
-							<option value="other">Khác</option>
+							<option value="">Chọn Người Phụ Trách</option>
+							<th:block th:each="person : ${responsiblePersons}">
+								<option th:value="${person.id}" th:text="${person.name}"
+									th:selected="${person.id == customer.responsiblePerson.id}">
+								</option>
+							</th:block>
 						</select>
 					</div>
 
@@ -116,7 +115,7 @@
 						<div class="comment">
 							<div class="comment-avatar">
 								<img
-									src="resources/app-assets/images/portrait/small/avatar-s-10.png"
+									th:src="@{/resources/app-assets/images/portrait/small/avatar-s-10.png}"
 									alt="Comment Avatar">
 							</div>
 							<div class="comment-body">
@@ -130,8 +129,9 @@
 						<div class="comment">
 							<div class="comment-avatar">
 								<img
-									src="resources/app-assets/images/portrait/small/avatar-s-11.png"
+									th:src="@{/resources/app-assets/images/portrait/small/avatar-s-11.png}"
 									alt="Comment Avatar">
+
 							</div>
 							<div class="comment-body">
 								<div class="comment-header">Nguyễn Hoàng Phương Ngân</div>
@@ -163,7 +163,7 @@
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
-	<script type="text/javascript"
-		src="resources/app-assets/js/update/navigate.js"></script>
+	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
 </body>
+
 </html>
