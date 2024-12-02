@@ -40,6 +40,9 @@ public class OrderCategory implements Serializable {
 
 	@Column
 	private String name;
+	
+	@Column
+	private String note;
 
 	@OneToMany(mappedBy = "orderCategory", fetch = FetchType.EAGER)	
 	private Set<Order> orders;
@@ -52,13 +55,22 @@ public class OrderCategory implements Serializable {
 	)
 	 private Set<OrderStatus> orderStatuses;
 
-	public OrderCategory(Long id, String siteId, String name, Set<Order> orders, Set<OrderStatus> orderStatuses) {
+	public OrderCategory(Long id, String siteId, String name, String note, Set<Order> orders,
+			Set<OrderStatus> orderStatuses) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
 		this.name = name;
+		this.note = note;
 		this.orders = orders;
 		this.orderStatuses = orderStatuses;
+	}
+
+	public OrderCategory(Long id, String name, String note) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.note = note;
 	}
 
 	

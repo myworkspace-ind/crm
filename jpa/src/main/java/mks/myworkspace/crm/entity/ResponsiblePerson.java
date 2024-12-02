@@ -38,9 +38,16 @@ public class ResponsiblePerson implements Serializable {
         this.name = name;
         this.note = note;
     }
+    
+	public ResponsiblePerson(String id) {
+		this.id = Long.parseLong(id);
+	}
 
     @Override
     public String toString() {
         return "ResponsiblePerson [id=" + id + ", name=" + name + ", note=" + note + "]";
     }
+
+
+
 }

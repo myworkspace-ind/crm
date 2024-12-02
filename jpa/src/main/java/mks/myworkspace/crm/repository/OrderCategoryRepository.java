@@ -12,4 +12,6 @@ import mks.myworkspace.crm.entity.OrderCategory;
 public interface OrderCategoryRepository  extends JpaRepository<OrderCategory, Long>{
 	@Query("SELECT DISTINCT o FROM OrderCategory o LEFT JOIN FETCH o.orderStatuses")
 	List<OrderCategory> findAllWithOrderStatuses();
+	
+	List<OrderCategory> findAll();
 }
