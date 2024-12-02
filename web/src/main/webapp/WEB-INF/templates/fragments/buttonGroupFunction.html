@@ -16,12 +16,31 @@
 </div>
 
 <!-- Modal -->
-<div id="confirmationModal" class="modal">
+<!-- <div id="confirmationModal" class="modal">
     <div class="modal-content model-delete">
         <p>Bạn có chắc chắn muốn xóa?</p>
         <button id="cancelBtn" class="modal-btn">Hủy bỏ</button>
         <button id="confirmDeleteBtn" class="modal-btn">Xóa</button>
     </div>
+</div> -->
+
+
+<!-- Đan làm lại -->
+<div class="modal" tabindex="-1" role="dialog" id="confirmationModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header  text-bg-light">
+        <h5 class="modal-title">Thông báo xác nhận</h5>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn xóa?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="confirmDeleteBtn" class="btn btn-primary modal-btn">Xóa</button>
+        <button type="button" id="cancelBtn" class="btn btn-secondary modal-btn" data-dismiss="modal">Hủy bỏ</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Overlay -->
