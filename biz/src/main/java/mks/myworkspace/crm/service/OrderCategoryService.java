@@ -9,4 +9,6 @@ public interface OrderCategoryService {
 	OrderCategoryRepository getRepo();
 	
 	List<OrderCategory> getAllOrderCategoriesWithOrderStatuses();
+	
+	List<OrderCategory> findAllOrderCategory();
 }

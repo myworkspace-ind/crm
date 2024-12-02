@@ -1,0 +1,40 @@
+{
+	"colWidths": [
+		50,
+		300,
+		300,
+		300
+	],
+	"colHeaders": [
+		"ID",
+		"Loại đơn hàng",
+		"Ghi chú"
+	],
+	"data": [
+		[
+			"1",
+			"Mặc định",
+			"Loại đơn hàng mặc định ban đầu."
+		],
+		[
+			"2",
+			"Máy móc",
+			"Đơn hàng liên quan đến các thiết bị máy móc."
+		],
+		[
+			"4",
+			"Mỹ phẩm",
+			"Sản phẩm chăm sóc sắc đẹp và làm đẹp."
+		],
+		[
+			"5",
+			"Điện tử",
+			"Đơn hàng liên quan đến các thiết bị điện tử."
+		],
+		[
+			"6",
+			"Hàng gia dụng",
+			"Đơn hàng về đồ dùng gia đình như bếp, tủ lạnh."
+		]
+	]
+}

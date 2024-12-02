@@ -38,9 +38,15 @@ public class Profession implements Serializable {
         this.name = name;
         this.note = note;
     }
+    
+	public Profession(String id) {
+		this.id = Long.parseLong(id);
+	}
 
     @Override
     public String toString() {
         return "Profession [id=" + id + ", name=" + name + ", note=" + note + "]";
     }
+
+
 }

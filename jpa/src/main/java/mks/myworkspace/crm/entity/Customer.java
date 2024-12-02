@@ -50,7 +50,7 @@ public class Customer implements Serializable {
 	@Column(name = "address", length = 255)
 	private String address;
 	
-	@ManyToOne(optional = true)
+	@ManyToOne
     @JoinColumn(name = "profession_id")
     private Profession profession;
 	
@@ -62,7 +62,7 @@ public class Customer implements Serializable {
     @JoinColumn(name = "sub_status_id")
     private Status subStatus;
     
-    @ManyToOne(optional = true)
+    @ManyToOne
     @JoinColumn(name = "responsible_person_id")
     private ResponsiblePerson responsiblePerson;
 
