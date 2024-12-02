@@ -132,8 +132,9 @@ public class CustomerController extends BaseController {
 	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
 			HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("customerDetail");
-
+		
 		initSession(request, httpSession);
+		
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 		log.debug("Customer Detail is running....");
@@ -146,7 +147,10 @@ public class CustomerController extends BaseController {
 		}, () -> {
 			mav.addObject("errorMessage", "Customer not found.");
 		});
-
+		
+		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		mav.addObject("responsiblePersons", responsiblePersons);
+		
 		return mav;
 	}
 
