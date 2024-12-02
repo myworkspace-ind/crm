@@ -61,17 +61,17 @@ public class Customer implements Serializable {
     @ManyToOne
     @JoinColumn(name = "sub_status_id")
     private Status subStatus;
-    
-    @ManyToOne
-    @JoinColumn(name = "responsible_person_id")
-    private ResponsiblePerson responsiblePerson;
-
+     
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     private Date createdAt;
 
     @Column(name = "note", length = 255)
     private String note;
+    
+    @ManyToOne
+    @JoinColumn(name = "responsible_person_id")
+    private ResponsiblePerson responsiblePerson;
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
 			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, Date createdAt,
