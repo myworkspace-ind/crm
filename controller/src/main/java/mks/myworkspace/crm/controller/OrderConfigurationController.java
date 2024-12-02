@@ -20,22 +20,35 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
+import mks.myworkspace.crm.entity.OrderCategory;
+import mks.myworkspace.crm.service.StorageService;
+import mks.myworkspace.crm.transformer.JpaTransformer_OrderCate_Handsontable;
+import mks.myworkspace.crm.validate.OrderCategoryValidator;
 
 /**
  * Handles requests for the application home page.
@@ -50,6 +63,12 @@ public class OrderConfigurationController extends BaseController {
 	 * 
 	 * @param binder
 	 */
+	@Autowired
+	StorageService storageService;
+	
+	@Value("classpath:order-category/order-category-demo.json")
+	private Resource resOrderCategoryDemo;
+	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		// Sample init of Custom Editor
@@ -59,7 +78,13 @@ public class OrderConfigurationController extends BaseController {
 //        binder.registerCustomEditor((Class<List<ItemKine>>)(Class<?>)List.class, orderNoteEditor);
 
 	}
+	@GetMapping("/orders")
+	public ModelAndView displayOrderConfiguration(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("ordersConfigurationCRMScreen");
 
+		initSession(request, httpSession);
+		return mav;
+	}
 	@GetMapping("/status")
 	public ModelAndView displayOrderConfigurationStatus(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("ordersConfiguration-StatusCRMScreen");
@@ -67,7 +92,46 @@ public class OrderConfigurationController extends BaseController {
 		initSession(request, httpSession);
 		return mav;
 	}
+	private String getDefaultOrderCateData() throws IOException {
+		return IOUtils.toString(resOrderCategoryDemo.getInputStream(), StandardCharsets.UTF_8);
+	}
+	
+	//Add this method to view data on handsontable
+		@GetMapping("/load")
+		@ResponseBody
+		public Object getOrderCategoryData() throws IOException {
+			log.debug("Get sample data from configuration file.");
+			String jsonOrderCateTable = getDefaultOrderCateData();
 
+			List<OrderCategory> lstOrderCates = storageService.getOrderCategoryRepository().findAll();
+
+			if (lstOrderCates == null || lstOrderCates.isEmpty()) {
+				return jsonOrderCateTable;
+			} else {
+				JSONObject jsonObjTableOrderCate = new JSONObject(jsonOrderCateTable);
+
+				JSONArray jsonObjColWidths = jsonObjTableOrderCate.getJSONArray("colWidths");
+				int len = (jsonObjColWidths != null) ? jsonObjColWidths.length() : 0;
+				int[] colWidths = new int[len];
+				for (int i = 0; i < jsonObjColWidths.length(); i++) {
+					colWidths[i] = jsonObjColWidths.getInt(i);
+				}
+
+				JSONArray jsonObjColHeaders = jsonObjTableOrderCate.getJSONArray("colHeaders");
+				len = (jsonObjColHeaders != null) ? jsonObjColHeaders.length() : 0;
+				String[] colHeaders = new String[len];
+				for (int i = 0; i < jsonObjColHeaders.length(); i++) {
+					colHeaders[i] = jsonObjColHeaders.getString(i);
+				}
+
+				List<Object[]> tblData = JpaTransformer_OrderCate_Handsontable.convert2D(lstOrderCates);
+
+				TableStructure tblOrderCate = new TableStructure(colWidths, colHeaders, tblData);
+
+				return tblOrderCate;
+			}
+		}
+		
 	@GetMapping("/load-orders")
 	@ResponseBody
 	public Object getOrderConfigurationData() throws IOException {
@@ -152,6 +216,23 @@ public class OrderConfigurationController extends BaseController {
 		return tblOrderConfigurationStatus;
 	}
 
+	@PostMapping(value = "/save")
+	@ResponseBody
+	public TableStructure saveOrderCategory(@RequestBody TableStructure tableData) {
+		log.debug("saveOrderCategory...{}", tableData);
+
+		try {
+			List<OrderCategory> lstOrderCategories = OrderCategoryValidator.validateAndCleasing(tableData.getData());
+			lstOrderCategories = storageService.saveOrUpdateOrderCategory(lstOrderCategories);
+
+			List<Object[]> tblData = JpaTransformer_OrderCate_Handsontable.convert2D(lstOrderCategories);
+			tableData.setData(tblData);
+		} catch (Exception ex) {
+			log.error("Could not save task.", ex);
+		}
+
+		return tableData;
+	}
 //	private String getDefaultOrderData() throws IOException {
 //		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);
 //	}
