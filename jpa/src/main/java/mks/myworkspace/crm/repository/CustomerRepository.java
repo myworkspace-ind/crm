@@ -18,23 +18,23 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findAll();
 
     @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss " +
-    	       "WHERE c.isActive = true AND (" +
-    	       "LOWER(c.companyName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-    	       "LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-    	       "LOWER(c.phone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-    	       "LOWER(ms.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-    	       "LOWER(ss.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-    	       "LOWER(c.responsiblePerson) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-    	       "LOWER(c.note) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    	List<Customer> searchCustomers(@Param("keyword") String keyword);
+           "WHERE c.accountStatus = true AND (" +
+           "LOWER(c.companyName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(c.phone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(ms.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(ss.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(c.responsiblePerson) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(c.note) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    List<Customer> searchCustomers(@Param("keyword") String keyword);
 
-    @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE c.isActive = true")
+    @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE c.accountStatus = true")
     List<Customer> findAllWithStatuses();
 
-    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE (c.mainStatus.id = :statusId OR c.subStatus.id = :statusId) AND c.isActive = true")
+    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE (c.mainStatus.id = :statusId OR c.subStatus.id = :statusId) AND c.accountStatus = true")
     List<Customer> findByStatusId(@Param("statusId") Long statusId);
     
-    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE c.id = :id AND c.isActive = true")
+    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE c.id = :id AND c.accountStatus = true")
     Optional<Customer> findById(@Param("id") Long id);
     
     @Query("SELECT COALESCE(MAX(c.id), 0) FROM Customer c")
@@ -52,17 +52,17 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     void deleteAllByIds(@Param("customerIds") List<Long> customerIds);
     
     @Query("SELECT ms.id, COUNT(c.id) " +
-    	       "FROM Customer c LEFT JOIN c.mainStatus ms " +
-    	       "WHERE ms IS NOT NULL AND c.isActive = true " +
-    	       "GROUP BY ms.id")
-    	List<Object[]> countCustomersByMainStatus();
+           "FROM Customer c LEFT JOIN c.mainStatus ms " +
+           "WHERE ms IS NOT NULL AND c.accountStatus = true " +
+           "GROUP BY ms.id")
+    List<Object[]> countCustomersByMainStatus();
 
-    	@Query("SELECT ss.id, COUNT(c.id) " +
-    	       "FROM Customer c LEFT JOIN c.subStatus ss " +
-    	       "WHERE ss IS NOT NULL AND c.isActive = true " +
-    	       "GROUP BY ss.id")
-    	List<Object[]> countCustomersBySubStatus();
-	
-    	@Query("SELECT COUNT(c) FROM Customer c WHERE c.isActive = true")
-    	long countAllCustomers();
+    @Query("SELECT ss.id, COUNT(c.id) " +
+           "FROM Customer c LEFT JOIN c.subStatus ss " +
+           "WHERE ss IS NOT NULL AND c.accountStatus = true " +
+           "GROUP BY ss.id")
+    List<Object[]> countCustomersBySubStatus();
+    
+    @Query("SELECT COUNT(c) FROM Customer c WHERE c.accountStatus = true")
+    long countAllCustomers();
 }

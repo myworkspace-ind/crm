@@ -73,22 +73,13 @@ public class Customer implements Serializable {
     @Column(name = "note", length = 255)
     private String note;
     
-    @Column(name = "is_active")
-    private boolean isActive = true;
+    @Column(name = "account_status")
+    private Boolean accountStatus;
     
- // Getter cho isActive
-    public boolean getIsActive() {
-        return isActive;
-    }
-
-    // Setter cho isActive
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
 			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, Date createdAt,
-			String note, boolean isActive) {
+			String note, Boolean accountStatus) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -103,11 +94,11 @@ public class Customer implements Serializable {
 		this.responsiblePerson = responsiblePerson;
 		this.createdAt = createdAt;
 		this.note = note;
-		this.isActive = isActive;
+		this.accountStatus = accountStatus;
 	}
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			Date createdAt, String note, boolean isActive) {
+			Date createdAt, String note, Boolean accountStatus) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -118,7 +109,7 @@ public class Customer implements Serializable {
 		this.address = address;
 		this.createdAt = createdAt;
 		this.note = note;
-		this.isActive = isActive;
+		this.accountStatus = accountStatus;
 	}
 
 	public Customer(String contactPerson2) {

@@ -35,13 +35,13 @@ function saveNewCustomer() {
 		email: email,
 		phone: phone,
 		address: address,
-		responsiblePerson: responsiblePerson || null,
-		note: note || '',
 		profession: profession || null,
 		mainStatus: mainStatus || null,
 		subStatus: subStatus || null,
-		active: true,
+		responsiblePerson: responsiblePerson || null,
+		note: note || null,
 	};
+	console.log('Dữ liệu gửi lên từ client:', customerData); // Đặt log ở đây để kiểm tra dữ liệu
 	const _ctx = "/crm-web/";
 	// Gửi yêu cầu POST đến server với dữ liệu dạng JSON
 	fetch(`${_ctx}customer/create-customer`, {

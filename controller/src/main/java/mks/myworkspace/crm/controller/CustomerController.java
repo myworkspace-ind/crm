@@ -156,8 +156,7 @@ public class CustomerController extends BaseController {
 	    try {
 	        customer.setCreatedAt(new Date());
 	        customer.setSiteId(getCurrentSiteId());
-	        customer.setIsActive(true);
-	        
+	        customer.setAccountStatus(true);
 	        
 	        Customer savedCustomer = storageService.saveOrUpdate(customer);
 
@@ -174,7 +173,6 @@ public class CustomerController extends BaseController {
 	            .body(Map.of("errorMessage", "Có lỗi xảy ra khi thêm khách hàng. Vui lòng thử lại sau!"));
 	    }
 	}
-
 
 	@Transactional
 	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)

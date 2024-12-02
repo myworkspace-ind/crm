@@ -67,6 +67,7 @@ public class StorageServiceImpl implements StorageService {
 	    if (!isValidEmail(customer.getEmail())) {
 	        throw new IllegalArgumentException("Email không đúng định dạng. Vui lòng nhập lại!");
 	    }
+	    
 	    Long id = appRepo.saveOrUpdate(customer);
 	    if (id != null) {
 	        customer.setId(id);
