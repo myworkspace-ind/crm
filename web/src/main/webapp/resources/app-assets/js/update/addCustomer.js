@@ -41,7 +41,6 @@ function saveNewCustomer() {
 		responsiblePerson: responsiblePerson || null,
 		note: note || null,
 	};
-	console.log('Dữ liệu gửi lên từ client:', customerData); // Đặt log ở đây để kiểm tra dữ liệu
 	const _ctx = "/crm-web/";
 	// Gửi yêu cầu POST đến server với dữ liệu dạng JSON
 	fetch(`${_ctx}customer/create-customer`, {
@@ -64,7 +63,7 @@ function saveNewCustomer() {
 			alert('Khách hàng đã được thêm!');
 			console.log('Khách hàng đã được thêm thành công:', data.customer); 
 			document.getElementById('addNewCustomerForm').reset();
-//			window.location.href = '/crm-web/customer/list';
+			window.location.href = '/crm-web/customer/list';
 		})
 		.catch(error => {
 			// Xử lý lỗi
@@ -74,12 +73,12 @@ function saveNewCustomer() {
 }
 
 function isValidPhoneNumber(phoneNumber) {
-	const phoneRegex = /^[0-9]{10}$/; // Đảm bảo số điện thoại chỉ có 10 chữ số
+	const phoneRegex = /^[0-9]{10}$/;
 	return phoneNumber.match(phoneRegex);
 }
 
 function isValidEmail(email) {
-	const emailRegex = /^[A-Za-z0-9+_.-]+@(.+)$/; // Định dạng email đơn giản
+	const emailRegex = /^[A-Za-z0-9+_.-]+@(.+)$/;
 	return email.match(emailRegex);
 }
 
