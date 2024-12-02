@@ -24,7 +24,7 @@ h4.card-title.search-condition {
 }
 
 fieldset.text-left.ordercate-option,
-fieldset.text-left.delidate-option{
+fieldset.text-left.delidate-option {
 	margin-top: 20px;
 }
 
@@ -33,249 +33,272 @@ fieldset.text-left.delidate-option{
 }
 
 input.custom-checkbox {
-    color: black;
-    background-color: #c8c8fb;
-    margin-right: 10px;
+	color: black;
+	background-color: #c8c8fb;
+	margin-right: 10px;
 }
 
 fieldset.text-left.startdate-option,
 fieldset.text-left.delidate-option {
-    margin-left: 80px;
+	margin-left: 80px;
 }
 
-fieldset.text-left.order-status{
+fieldset.text-left.order-status {
 	margin-left: 120px;
 }
 
 button.search-order {
-    height: 30%;
-    width: 30%;
-    background-color: #967ADC;
-    color: white;
-    border-radius: 2px;
-    border: 1px white;
+	height: 30%;
+	width: 30%;
+	background-color: #967ADC;
+	color: white;
+	border-radius: 2px;
+	border: 1px white;
 }
-.order-screen{
+
+.order-screen {
 	background-color: #efa50b42;
 }
 
 form#frmOrders {
-    margin-left: 75px;
+	margin-left: 75px;
 }
 
 h4.title.order-title {
-    margin-left: 30px;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 20px;
-    padding-top: 20px;
+	margin-left: 30px;
+	font-weight: bold;
+	font-size: 20px;
+	margin-bottom: 20px;
+	padding-top: 20px;
 }
 
 .handsontable a:hover {
-    color: #0b318a !important;
+	color: #0b318a !important;
 }
 
-div#statusModal{
-	display:none; 
-	position:fixed; 
-	top:50%; 
-	left:50%; 
-	bottom:-10%;
+div#statusModal {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	bottom: -10%;
 	width: fit-content !important;
 	height: fit-content !important;
-	transform:translate(-50%, -50%); 
-	background-color:white; 
-	padding:20px; 
-	border:1px solid #ccc; 
-	z-index:1000;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	padding: 20px;
+	border: 1px solid #ccc;
+	z-index: 1000;
 }
 
-div#modalOverlay{
-	display:none; 
-	position:fixed; 
-	top:0; 
-	left:0; 
-	width:100%; 
-	height:100%; 
-	background-color:rgba(0, 0, 0, 0.5); 
-	z-index:999;
+div#modalOverlay {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 999;
 }
 
 select#statusSelect {
-    background-color: white;
-    color: black;
+	background-color: white;
+	color: black;
 }
 
-div#updateOrderModal, div#orderDetailModal, div#createOrderModal{
-	display: none; 
-	position:fixed; 
-	top:50%; 
-	left:50%; 
-	transform:translate(-50%, -50%); 
-	background-color:white; 
-	padding:20px; 
-	border:1px solid #e8868f; 
-	z-index:1000;
+div#updateOrderModal,
+div#orderDetailModal,
+div#createOrderModal {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	padding: 20px;
+	border: 1px solid #e8868f;
+	z-index: 1000;
 	width: 100% !important;
 	max-height: 80vh;
 	overflow-y: auto;
 }
 
-div#updateOrderModal h3, div#orderDetailModal h3, div#createOrderModal h3{
+div#updateOrderModal h3,
+div#orderDetailModal h3,
+div#createOrderModal h3 {
 	color: #DA4453;
 	font-weight: 600;
 }
 
-div#updateOrderModal hr, div#orderDetailModal hr, div#createOrderModal hr{
-    background-color: red;
+div#updateOrderModal hr,
+div#orderDetailModal hr,
+div#createOrderModal hr {
+	background-color: red;
 }
 
 .form-row {
-    margin-left: 30px;
-    margin-top: 20px;
-    margin-bottom: -50px;
+	margin-left: 30px;
+	margin-top: 20px;
+	margin-bottom: -50px;
 }
 
 .row1 {
-    display: flex;
-    margin-left: 30px;
+	display: flex;
+	margin-left: 30px;
 }
 
-.row3{
+.row3 {
 	margin-left: 30px;
 	margin-top: 50px;
 }
 
-input#orderCode,input#orderDate, select#orderStatus {
-    background-color: white;
-    color: black;
+input#orderCode,
+input#orderDate,
+select#orderStatus {
+	background-color: white;
+	color: black;
 }
 
-input#goodsType, input#transportMethod{
+input#goodsType,
+input#transportMethod {
 	/* width: 30.5%; */
 	background-color: white;
-    color: black;
+	color: black;
 }
 
 .container {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 20px;
-    margin-top: 60px;
+	display: flex;
+	justify-content: space-between;
+	margin-left: 20px;
+	margin-top: 60px;
 }
 
 .column {
-    width: 45%; 
+	width: 45%;
 }
 
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 }
 
-table.sender-table, table.receiver-table, td {
-    margin-left: 30px;
-    max-width: 500px;
-    padding: 8px !important;
+table.sender-table,
+table.receiver-table,
+td {
+	margin-left: 30px;
+	max-width: 500px;
+	padding: 8px !important;
 }
 
-table, td {
-    border: 1px solid #939393;
-    /* padding: 8px */
-    padding: 0px;
+table,
+td {
+	border: 1px solid #939393;
+	/* padding: 8px */
+	padding: 0px;
 }
 
 legend {
-    font-weight: 600;
-    font-size: 17px;
+	font-weight: 600;
+	font-size: 17px;
 }
 
-input[type="text"], input[type="email"] {
-    width: 100%;
-    box-sizing: border-box;
-    background-color: white;
-    color: black;
-    border: 1px solid #D4D4D4;
+input[type="text"],
+input[type="email"] {
+	width: 100%;
+	box-sizing: border-box;
+	background-color: white;
+	color: black;
+	border: 1px solid #D4D4D4;
 }
 
-.form-group{
+.form-group {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
 }
+
 .form-container {
-    display: flex;
-    gap: 111px;
+	display: flex;
+	gap: 111px;
 }
+
 .form-control {
 	width: 100%;
 	min-width: 400px;
 	max-width: 800px;
 }
+
 textarea#textAreaExample2 {
-    width: 100%;
+	width: 100%;
 }
 
 .row4 {
-    display: flex; 
-    justify-content: center; 
-    margin-top: 20px; 
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
 }
+
 .row4 button {
-    margin: 0 10px; 
-    padding: 10px 20px; 
-    background-color: #e16471; 
-    color: white; 
-    border: none;
-    border-radius: 5px; 
-    cursor: pointer; 
-    transition: background-color 0.3s; 
+	margin: 0 10px;
+	padding: 10px 20px;
+	background-color: #e16471;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
 }
+
 .row4 button:hover {
-    background-color: #d77a7c; 
+	background-color: #d77a7c;
 }
+
 button.closeBtn {
-    margin: 0 10px;
-    padding: 5px 10px;
-    background-color: #e16471;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-align: right;
+	margin: 0 10px;
+	padding: 5px 10px;
+	background-color: #e16471;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	text-align: right;
 }
 
 .checkbox-spacing {
-    margin-bottom: 8px; 
-    gap: 10px; 
+	margin-bottom: 8px;
+	gap: 10px;
 }
 
 :root.sakaiUserTheme-dark .table {
-    --bs-table-color: none!important;
-    --bs-table-striped-color: none!important;
-    --bs-table-striped-bg: none!important;
-    --bs-table-hover-color: none !important;
+	--bs-table-color: none !important;
+	--bs-table-striped-color: none !important;
+	--bs-table-striped-bg: none !important;
+	--bs-table-hover-color: none !important;
 }
+
 /* Nút search của datatable */
 input[type="search"] {
-    color: black;
+	color: black;
 }
 
 h3#orderIdForUpdate {
-    display: block;
+	display: block;
 }
 
-.detail-btn, .detailOrderSearch-btn,
-.edit-btn, .editOrderSearch-btn,
-.delete-btn, .deleteOrderSearch-btn
-.updateOrderStatus-btn, .updateOrderStatusSearch-btn  {
-    display: inline-block;
-    margin-right: 5px;
+.detail-btn,
+.detailOrderSearch-btn,
+.edit-btn,
+.editOrderSearch-btn,
+.delete-btn,
+.deleteOrderSearch-btn .updateOrderStatus-btn,
+.updateOrderStatusSearch-btn {
+	display: inline-block;
+	margin-right: 5px;
 }
 
 button.btn.btn-success.updateOrderStatusSearch-btn {
-    margin-left: 5px;
+	margin-left: 5px;
 }
-

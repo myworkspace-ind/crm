@@ -1,4 +1,4 @@
-var htOrder;
+var htOrderCategory;
 
 /**
  * Processing after the webpage are loaded in the browser.
@@ -37,7 +37,7 @@ function initTable(colHeaders, colWidths, data) {
     var container = document.getElementById('tblOrderConfiguration');
     
 	if (container) {
-	       htOrder = new Handsontable(container, {
+	       htOrderCategory  = new Handsontable(container, {
 	           data: data,
 	           colHeaders: colHeaders,
 	           colWidths: colWidths,

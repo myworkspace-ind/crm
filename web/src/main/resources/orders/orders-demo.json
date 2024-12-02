@@ -1,36 +1,36 @@
 {
-    "colWidths": [
-        120,
-        120,
-        150,
-        160,
-      	120,
-        50
-    ],
-    "colHeaders": [
-        "Mã đơn hàng",
-        "Ngày giao",
-        "Loại hàng hóa",
-        "Thông tin người gửi",
-        "Phương tiện vận chuyển",
-        "#"
-    ],
-    "data": [
-        [
-            "D123A54",
-            "2024-10-24",
-            "Máy móc",
-            "Nguyễn Văn A",
-            "Xe tải",
-            "..."
-        ],
-        [
- 			"M123543",
-            "2024-10-25",
-            "Thực phẩm",
-            "Nguyễn Văn B",
-            "Xe tải",
-            "..."
-        ]
-    ]
+	"colWidths": [
+		120,
+		120,
+		150,
+		160,
+		120,
+		50
+	],
+	"colHeaders": [
+		"Mã đơn hàng",
+		"Ngày giao",
+		"Loại hàng hóa",
+		"Thông tin người gửi",
+		"Phương tiện vận chuyển",
+		"#"
+	],
+	"data": [
+		[
+			"D123A54",
+			"2024-10-24",
+			"Máy móc",
+			"Nguyễn Văn A",
+			"Xe tải",
+			"..."
+		],
+		[
+			"M123543",
+			"2024-10-25",
+			"Thực phẩm",
+			"Nguyễn Văn B",
+			"Xe tải",
+			"..."
+		]
+	]
 }

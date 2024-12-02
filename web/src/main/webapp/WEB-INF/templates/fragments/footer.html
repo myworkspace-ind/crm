@@ -1,77 +1,88 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .app {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-        .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 1200px;
-            margin: 0 auto;
-        }
-        .father__logo {
-            height: 100% !important;
-        }
-        .logo {
-            height: 100% !important;
-        }
-        .logo strong {
-            height: 100% !important;
-            font-size: 48px; /* Điều chỉnh kích thước chữ CRM */
-        }
-        .list-unstyled li a {
-            display: flex;
-            color: black;
-            margin: 12px 0;
-        }
-        .contact p{
-            display: flex;
-            margin: 10px 0;
-        }
 
-        .col-md-4 > strong {
-            font-size:20px;
-        }
-    </style>
+<head>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		.app {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+
+		.container {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 1200px;
+			margin: 0 auto;
+		}
+
+		.father__logo {
+			height: 100% !important;
+		}
+
+		.logo {
+			height: 100% !important;
+		}
+
+		.logo strong {
+			height: 100% !important;
+			font-size: 48px;
+			/* Điều chỉnh kích thước chữ CRM */
+		}
+
+		.list-unstyled li a {
+			display: flex;
+			color: black;
+			margin: 12px 0;
+		}
+
+		.contact p {
+			display: flex;
+			margin: 10px 0;
+		}
+
+		.col-md-4>strong {
+			font-size: 20px;
+		}
+	</style>
 </head>
+
 <body>
-    <div th:fragment="footer" class="footer" th:align="center">
-        <div class="app">
-            <div class="row container">
-                <div class="col-md-4 father__logo">
-                    <div class="logo">
-                        <strong>CRM</strong>
-                    </div>
-                </div>
-                <div class="col-md-4">
-        			<strong>Links</strong>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About us</a></li>
-                        <li><a href="#">Services</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4 contact">
-                    <strong>Contact</strong>
-                    <p>Address: 1 Vo Van Ngan, Linh Chieu Ward, Thu Duc City</p>
-                    <p>Phone: 0123456789</p>
-                    <p>Email: crmapplication.contact@gmail.com</p>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div th:fragment="footer" class="footer" th:align="center">
+		<div class="app">
+			<div class="row container">
+				<div class="col-md-4 father__logo">
+					<div class="logo">
+						<strong>CRM</strong>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<strong>Links</strong>
+					<ul class="list-unstyled">
+						<li><a href="#">Home</a></li>
+						<li><a href="#">About us</a></li>
+						<li><a href="#">Services</a></li>
+					</ul>
+				</div>
+				<div class="col-md-4 contact">
+					<strong>Contact</strong>
+					<p>Address: 1 Vo Van Ngan, Linh Chieu Ward, Thu Duc City</p>
+					<p>Phone: 0123456789</p>
+					<p>Email: crmapplication.contact@gmail.com</p>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+
 </html>
