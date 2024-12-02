@@ -4,6 +4,7 @@ import java.util.List;
 
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
+import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.OrderCategoryRepository;
@@ -29,5 +30,7 @@ public interface StorageService {
 	void deleteOrderById(Long orderId);
 	
 	public Order updateOrderStatus(Order order);
+	
+	List<OrderCategory> saveOrUpdateOrderCategory(List<OrderCategory> lstOrderCategories);
 
 }

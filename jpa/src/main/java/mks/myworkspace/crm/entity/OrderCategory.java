@@ -66,4 +66,12 @@ public class OrderCategory implements Serializable {
 		this.orderStatuses = orderStatuses;
 	}
 
+	public OrderCategory(Long id, String name, String note) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.note = note;
+	}
+
+	
 }

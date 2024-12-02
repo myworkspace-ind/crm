@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
+import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
 
 @Repository
@@ -62,6 +63,27 @@ public class AppRepository {
 //		return id;
 //
 //	}
+	public List<Long> saveOrUpdateOrderCategory(List<OrderCategory> entities) {
+		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
+		
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_ordercategory").usingGeneratedKeyColumns("id");
+		
+		Long id;
+		for (OrderCategory e : entities) {
+			if (e.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+			} else {
+				//Update
+				//update(e);
+				id = e.getId();
+			}
+
+			ids.add(id);
+		}
+		
+		return ids;
+	}
+	
 	public Long saveOrUpdate(Customer customer) {
 		Long id;
 		
