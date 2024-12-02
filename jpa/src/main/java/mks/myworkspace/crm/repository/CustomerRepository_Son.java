@@ -34,7 +34,7 @@ public interface CustomerRepository_Son extends JpaRepository<Customer, Long> {
     	       "WHERE " +
     	       "(LOWER(c.companyName) LIKE LOWER(CONCAT('%', :nameCompany, '%')) OR :nameCompany IS NULL) AND " +
     	       "(LOWER(c.phone) LIKE LOWER(CONCAT('%', :phone, '%')) OR :phone IS NULL) AND " +
-    	       "(LOWER(c.profession.id) IN :selectedCareers OR :selectedCareers IS NULL OR :selectedCareers = '') AND " +
+    	       "((c.profession.id) IN (:selectedCareers) OR :selectedCareers IS NULL OR :selectedCareers = '') AND " +
     	       "(LOWER(c.contactPerson) LIKE LOWER(CONCAT('%', :contactPerson, '%')) OR :contactPerson IS NULL) AND " +
     	       "(LOWER(c.address) LIKE LOWER(CONCAT('%', :address, '%')) OR :address IS NULL) AND " +
     	       "(LOWER(c.email) LIKE LOWER(CONCAT('%', :email, '%')) OR :email IS NULL)")
@@ -46,7 +46,9 @@ public interface CustomerRepository_Son extends JpaRepository<Customer, Long> {
     	       @Param("address") String address,
     	       @Param("email") String email);
 
-    
+
+    @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE ((c.profession.id) IN (:selectedCareers) OR :selectedCareers IS NULL OR :selectedCareers = '')")
+    List<Customer> findByselectedCareers(@Param("selectedCareers") List<Long> selectedCareers);
     
     @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss")
     List<Customer> findAllWithStatuses();

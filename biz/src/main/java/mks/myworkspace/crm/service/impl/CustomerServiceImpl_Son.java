@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,15 @@ public class CustomerServiceImpl_Son implements CustomerService_Son {
     public List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<Long> selectedCareers, String contactPerson, String address, String email) {
         return repo.advancedSearchCustomers(nameCompany, phone, selectedCareers, contactPerson, address, email);
     }
+    
+    @Override
+    public List<Customer> findByselectedCareers(List<Long> selectedCareers){
+    	if (selectedCareers == null || selectedCareers.isEmpty()) {
+            return new ArrayList<>();
+        }
+    	return repo.findByselectedCareers(selectedCareers);
+    }
+    
     
     @Override
     public Optional<Customer> findById(Long id) {
