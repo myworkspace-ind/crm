@@ -45,18 +45,18 @@
 	<div class="app-content content">
 	
 		<!-- BEGIN CONTENT WRAPPER -->
-		<th:block th:include="@{fragments/ordersContentWrapperCRM}"></th:block>
+		<!-- <th:block th:include="@{fragments/ordersContentWrapperCRM}"></th:block> -->
 		<!-- END CONTENT WRAPPER -->
 		
 	<div class="row">
-	    <div th:replace="~{fragments/horizontalHeader :: header}">Header</div>
+	    <!-- <div th:replace="~{fragments/horizontalHeader :: header}">Header</div> -->
 	</div>
 	
 	<div class="row">
 		 <div class="col-12">
 		 	<div class="order-screen">
 				<h4 class="title order-title">Cấu hình đơn hàng</h4>
-				<th:block th:include="fragments/orders-configuration/frg_orders-configuration.html"></th:block>
+				<th:block th:include="fragments/orders-configuration/frg_orders-configuration_v2.html"></th:block>
 			</div>
 		</div>
 	</div>
