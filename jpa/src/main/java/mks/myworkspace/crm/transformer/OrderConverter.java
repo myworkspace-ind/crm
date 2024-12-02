@@ -146,4 +146,17 @@ public class OrderConverter {
 		Long orderId = jsonObject.getLong("id");
 		return orderId;
 	}
+	
+	public static Order convertJsonToOrder_UpdateOrderStatus(String json) {
+		JSONObject jsonObject = new JSONObject(json);
+		Order order = new Order();
+
+		order.setId(jsonObject.getLong("id"));
+
+		OrderStatus orderStatus = new OrderStatus();
+		orderStatus.setId(jsonObject.getLong("orderStatus"));
+		order.setOrderStatus(orderStatus);
+		
+		return order;
+	}
 }
