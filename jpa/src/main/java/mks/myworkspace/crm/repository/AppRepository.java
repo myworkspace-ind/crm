@@ -76,6 +76,7 @@ public class AppRepository {
 				//Update
 				//update(e);
 				id = e.getId();
+				updateOrderCategory(e);
 			}
 
 			ids.add(id);
@@ -83,7 +84,12 @@ public class AppRepository {
 		
 		return ids;
 	}
-	
+	private void updateOrderCategory(OrderCategory e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_ordercategory SET name = ?, note = ? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
+	}
 	public Long saveOrUpdate(Customer customer) {
 		Long id;
 		if (customer.getAccountStatus() == null) {
