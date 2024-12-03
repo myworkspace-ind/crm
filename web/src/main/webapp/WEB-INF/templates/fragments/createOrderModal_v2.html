@@ -23,6 +23,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/status.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/buttonGroupFunction.css}">
+    
+    <th:block th:include="fragments/head"></th:block>
 </head>
 </head>
 <style>
@@ -148,7 +150,7 @@ document.getElementById("createOrderButton").addEventListener("click", function(
 		return;
 	}
 
-	const _ctx = "/crm-web/";
+	//const _ctx = "/crm-web/";
 	// Gửi request POST tới backend để lưu đơn hàng
 	fetch(`${_ctx}orders-datatable/create-order`, {
 		method: 'POST',
@@ -168,7 +170,8 @@ document.getElementById("createOrderButton").addEventListener("click", function(
 		})
 		.then(data => {
 			alert(data.message);  // Hiển thị thông báo từ backen
-			location.reload();
+			//location.reload();
+			window.location.href = _ctx + 'orders-datatable';
 		})
 		.catch(error => {
 			console.error("Lỗi khi tạo đơn hàng:", error);
