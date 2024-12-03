@@ -11,7 +11,7 @@
 	padding: 10px;
 }
 
-.btn {
+button.btn-btnGroupFunction {
 	background-color: white;
 	border-radius: 10px;
 	color: #2C3E9A;
@@ -21,10 +21,10 @@
 }
 
 .btn-group {
-	margin-top: 15px;
+	margin-top: 17px !important;
 }
 
-.btn:focus, .btn:hover {
+.btn-btnGroupFunction:focus, .btn-btnGroupFunction:hover {
 	color: #2C3E9A;
 	background-color: #E0E6FF;
 	font-weight: bold;

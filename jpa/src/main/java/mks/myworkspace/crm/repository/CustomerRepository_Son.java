@@ -17,15 +17,19 @@ public interface CustomerRepository_Son extends JpaRepository<Customer, Long> {
 
     List<Customer> findAll();
 
-    @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE "
-            + "(LOWER(c.companyName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
-            + "LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
-            + "LOWER(c.phone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
-            + "LOWER(ms.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
-            + "LOWER(ss.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
-            + "LOWER(c.responsiblePerson) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
-            + "LOWER(c.note) LIKE LOWER(CONCAT('%', :keyword, '%')))") 
-    List<Customer> searchCustomers(@Param("keyword") String keyword);
+    @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss " +
+            "WHERE c.accountStatus = true AND (" +
+            "LOWER(c.companyName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.contactPerson) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.phone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(ms.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(ss.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.responsiblePerson.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.profession.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.note) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+     List<Customer> searchCustomers(@Param("keyword") String keyword);
 
     
     @Query("SELECT DISTINCT c FROM Customer c " +
