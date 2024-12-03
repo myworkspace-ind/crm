@@ -41,7 +41,7 @@ function saveNewCustomer() {
 		responsiblePerson: responsiblePerson || null,
 		note: note || null,
 	};
-	const _ctx = "/crm-web/";
+	//const _ctx = "/crm-web/";
 	// Gửi yêu cầu POST đến server với dữ liệu dạng JSON
 	fetch(`${_ctx}customer/create-customer`, {
 		method: 'POST',
