@@ -83,5 +83,7 @@ function isValidEmail(email) {
 }
 
 function goBack() {
-	window.location.href = '/crm-web/customer/list';
+	//window.location.href = '/crm-web/customer/list';
+	window.location.href = _ctx + 'customer/list';
+
 }
