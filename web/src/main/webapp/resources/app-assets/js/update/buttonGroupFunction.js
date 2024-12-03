@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	function deleteCustomers(selectedCustomerIds) {
-		fetch('/crm-web/customer/delete-customers', {
+		//fetch('/crm-web/customer/delete-customers', {
+		fetch(`${_ctx}customer/delete-customers`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',

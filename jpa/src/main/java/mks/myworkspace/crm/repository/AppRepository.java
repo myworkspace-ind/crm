@@ -77,6 +77,7 @@ public class AppRepository {
 				//Update
 				//update(e);
 				id = e.getId();
+				updateOrderCategory(e);
 			}
 
 			ids.add(id);
@@ -84,10 +85,17 @@ public class AppRepository {
 		
 		return ids;
 	}
-	
+	private void updateOrderCategory(OrderCategory e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_ordercategory SET name = ?, note = ? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
+	}
 	public Long saveOrUpdate(Customer customer) {
 		Long id;
-		
+		if (customer.getAccountStatus() == null) {
+			customer.setAccountStatus(true);
+		}
 		if (customer.getId() == null) {
 			log.debug("Inserting new customer");
 			id = createCustomer(customer);
@@ -160,6 +168,7 @@ public class AppRepository {
 		parameters.put("email", customer.getEmail());
 		parameters.put("note", customer.getNote());
 		parameters.put("phone", customer.getPhone());
+		parameters.put("account_status", customer.getAccountStatus());
 		
 		// Thêm các khóa ngoại
 		parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);

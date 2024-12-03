@@ -109,7 +109,8 @@ public class CustomerController extends BaseController {
 			customers = customerService.getAllCustomersWithStatuses ();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
-
+		
+		customers = customerService.getAllCustomers();
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
@@ -163,35 +164,11 @@ public class CustomerController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request) {
 	    try {
-	       
 	        customer.setCreatedAt(new Date());
 	        customer.setSiteId(getCurrentSiteId());
+	        customer.setAccountStatus(true);
 	        
-	        // Lưu khách hàng
 	        Customer savedCustomer = storageService.saveOrUpdate(customer);
-	        log.info("Khách hàng mới đã được thêm thành công:");
-	        log.info("ID: {}", savedCustomer.getId());
-	        log.info("Site ID: {}", savedCustomer.getSiteId());
-	        log.info("Tên công ty: {}", savedCustomer.getCompanyName());
-	        log.info("Người liên hệ: {}", savedCustomer.getContactPerson());
-	        log.info("Email: {}", savedCustomer.getEmail());
-	        log.info("Số điện thoại: {}", savedCustomer.getPhone());
-	        log.info("Địa chỉ: {}", savedCustomer.getAddress());
-	        log.info("Ngày tạo: {}", savedCustomer.getCreatedAt());
-	        log.info("Ghi chú: {}", savedCustomer.getNote());
-
-	        // Nếu có thông tin profession và responsiblePerson
-	        if (savedCustomer.getProfession() != null) {
-	            log.info("Ngành nghề: {}", savedCustomer.getProfession().getName());
-	        } else {
-	            log.info("Ngành nghề: Không có");
-	        }
-
-	        if (savedCustomer.getResponsiblePerson() != null) {
-	            log.info("Người phụ trách: {}", savedCustomer.getResponsiblePerson().getName());
-	        } else {
-	            log.info("Người phụ trách: Không có");
-	        }
 
 	        return ResponseEntity.ok()
 	            .body(Map.of(
@@ -206,7 +183,6 @@ public class CustomerController extends BaseController {
 	            .body(Map.of("errorMessage", "Có lỗi xảy ra khi thêm khách hàng. Vui lòng thử lại sau!"));
 	    }
 	}
-
 
 	@Transactional
 	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
