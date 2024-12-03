@@ -66,10 +66,13 @@
 					</div>
 
 					<div class="actions">
-						<button>
-						    <a th:href="@{editCustomer(id=${customer.id})}">Edit</a>
-						</button>
-						<button th:onclick="'deleteCustomer(' + ${customer.id} + ')'">Delete</button>
+						<a th:href="@{editCustomer(id=${customer.id})}" >
+						    <button type="button"
+						    	style="cursor: pointer;">
+						    Edit
+						    </button>
+						</a>
+						<button style="cursor: pointer; background: #DA4453" th:onclick="'deleteCustomer(' + ${customer.id} + ')'">Delete</button>
 					</div>
 
 					<!-- <div class="relationship-section">

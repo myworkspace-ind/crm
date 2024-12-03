@@ -53,8 +53,12 @@ function saveCustomerChanges() {
             return response.json(); // Chuyển phản hồi sang JSON
         })
         .then(data => {
-            // Xử lý kết quả thành công
-            alert('Khách hàng đã được cập nhật!');
+			// Kiểm tra xem phản hồi có chứa thông điệp thành công hay lỗi
+			    if (data.message) {
+			        alert(data.message); // Nếu có thông điệp thành công
+			    } else if (data.errorMessage) {
+			        alert(data.errorMessage); // Nếu có thông điệp lỗi
+			}
         })
         .catch(error => {
             // Xử lý lỗi

@@ -453,6 +453,7 @@ public class CustomerController extends BaseController {
 
 	        // Cập nhật thông tin khách hàng
 	        Customer existingCustomer = customerOpt.get();
+	        
 	        existingCustomer.setCompanyName(customer.getCompanyName());
 	        existingCustomer.setContactPerson(customer.getContactPerson());
 	        existingCustomer.setEmail(customer.getEmail());
