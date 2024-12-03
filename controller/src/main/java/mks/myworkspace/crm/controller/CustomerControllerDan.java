@@ -85,77 +85,64 @@ public class CustomerControllerDan extends BaseController {
 
 	@PostMapping("/create-customer_dan")
 	public String createCustomer(@ModelAttribute("customer") Customer customer,
-            RedirectAttributes redirectAttributes) {
-//	    try {
-	    	
-	        customer.setCreatedAt(new Date());
-	        customer.setSiteId(getCurrentSiteId());
+            RedirectAttributes redirectAttributes, HttpServletRequest request, HttpSession httpSession) {
 
-//	        boolean hasError = false;
+		customer.setCreatedAt(new Date());
+	    customer.setSiteId(getCurrentSiteId());
 
-//	        // Kiểm tra các trường bắt buộc từ phía client
-//	        if (customer.getCompanyName() == null || customer.getCompanyName().isEmpty()) {
-//	            hasError = true;
-//	            redirectAttributes.addFlashAttribute("alertFailMessage", "Tên công ty không được để trống");
-//	            return "redirect:/customer/add";
-//	        }
-//	        if (customer.getContactPerson() == null || customer.getContactPerson().isEmpty()) {
-//	            hasError = true;
-//	            redirectAttributes.addFlashAttribute("alertFailMessage", "Người liên hệ chính không được để trống");
-//	            return "redirect:/customer/add";
-//	        }
-//	        if (customer.getEmail() == null || customer.getEmail().isEmpty()) {
-//	            hasError = true;
-//	            redirectAttributes.addFlashAttribute("alertFailMessage", "Email không được để trống");
-//	            return "redirect:/customer/add";
-//	        }
-//	        if (customer.getPhone() == null || customer.getPhone().isEmpty()) {
-//	            hasError = true;
-//	            redirectAttributes.addFlashAttribute("alertFailMessage", "Số điện thoại không được để trống");
-//	            return "redirect:/customer/add";
-//	        }
-//	        if (customer.getAddress() == null || customer.getAddress().isEmpty()) {
-//	            hasError = true;
-//	            redirectAttributes.addFlashAttribute("alertFailMessage", "Địa chỉ không được để trống");
-//	            return "redirect:/customer/add";
-//	        }
-//	        if (customer.getProfession() == null || customer.getProfession().getId() == null) {
-//	            hasError = true;
-//	            redirectAttributes.addFlashAttribute("alertFailMessage", "Ngành nghề không được để trống");
-//	            return "redirect:/customer/add";
-//	        }
-//	        if (customer.getMainStatus() == null || customer.getMainStatus().getId() == null) {
-//	            hasError = true;
-//	            redirectAttributes.addFlashAttribute("alertFailMessage", "Trạng thái chính không được để trống");
-//	            return "redirect:/customer/add";
-//	        }
-//	        if (customer.getSubStatus() == null || customer.getSubStatus().getId() == null) {
-//	            hasError = true;
-//	            redirectAttributes.addFlashAttribute("alertFailMessage", "Trạng thái phụ không được để trống");
-//	            return "redirect:/customer/add";
-//	        }
-//	        if (customer.getResponsiblePerson() == null || customer.getResponsiblePerson().getId() == null) {
-//	            hasError = true;
-//	            redirectAttributes.addFlashAttribute("alertFailMessage", "Người phụ trách không được để trống");
-//	            return "redirect:/customer/add";
-//	        }
+	    try {
+	        Customer savedCustomer = storageService.saveOrUpdate(customer);
+	        redirectAttributes.addFlashAttribute("alertSuccessMessage", "Khách hàng đã được tạo thành công!");
+	        redirectAttributes.addFlashAttribute("customer", customer);
+	        return "redirect:/customer/add_dan"; // Chuyển hướng thành công
+	    } catch (DataAccessException e) {
+	        redirectAttributes.addFlashAttribute("alertDataMessage", "Lỗi khi lưu khách hàng vào cơ sở dữ liệu.");
+	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("alertDataMessage", "Vui lòng kiểm tra lại thông tin.");
+	    }
 
-        
-	        // Lưu khách hàng
-	        try {
-	        	Customer savedCustomer = storageService.saveOrUpdate(customer);
-	        	redirectAttributes.addFlashAttribute("alertSuccessMessage", "Khách hàng đã được tạo thành công!");
-	        	return "redirect:/customer/add";
-	        }
-	        catch (DataAccessException e) {
-        // Nếu có lỗi trong quá trình lưu (lỗi database)
-	        	redirectAttributes.addFlashAttribute("alertDataMessage", "Lỗi");
-	        	return "redirect:/customer/add"; // Redirect đến trang thêm khách hàng mới với thông báo lỗi
-	        } catch (Exception e) {
-        // Nếu có bất kỳ lỗi nào khác
-	        	redirectAttributes.addFlashAttribute("alertDataMessage", "Lỗi");
-	        return "redirect:/customer/add"; // Redirect đến trang thêm khách hàng mới với thông báo lỗi chung
-	        }
+	    redirectAttributes.addFlashAttribute("customer", customer); // Lưu lại dữ liệu đã nhập
+	    return "redirect:/customer/add_dan"; // Chuyển hướng kèm dữ liệu
+	}
+	
+	@GetMapping("/add_dan")
+	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession, Model model) {
+		
+		//ModelAndView mav = new ModelAndView("addCustomer");
+		ModelAndView mav = new ModelAndView("addCustomer_v2");
+		
+		// Kiểm tra nếu có dữ liệu customer từ FlashAttributes (khi chuyển hướng từ POST)
+		Customer customer = (Customer) model.asMap().get("customer");
+		Customer customerMap= new Customer();
+		
+	    if (customer != null) {
+	    	customerMap.setCompanyName(customer.getCompanyName());
+	    	customerMap.setContactPerson(customer.getContactPerson());
+	    	customerMap.setPhone(customer.getPhone());
+	    	customerMap.setAddress(customer.getAddress());
+	    	customerMap.setEmail(customer.getEmail());
+	    	customerMap.setNote(customer.getNote());
+//	    	customerMap.setProfession(customer.getProfession());
+	    }
+	    
+		// Thêm đối tượng Customer mới vào Model để truyền vào form
+		mav.addObject("customer", customerMap);
 
+		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
+		List<Status> statuses = statusService.getAllStatuses();
+		mav.addObject("statuses", statuses);
+		
+		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		mav.addObject("responsiblePersons", responsiblePersons);
+		
+		List<Profession> professions = professionService.getAllProfessions();
+		mav.addObject("professions", professions);
+
+		// Thiết lập các thuộc tính của session
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
 	}
 }

@@ -291,9 +291,10 @@ public class CustomerController extends BaseController {
 		//ModelAndView mav = new ModelAndView("addCustomer");
 		ModelAndView mav = new ModelAndView("addCustomer_v2");
 		
+		Customer customer = new Customer();
 
 		// Thêm đối tượng Customer mới vào Model để truyền vào form
-		mav.addObject("customer", new Customer());
+		mav.addObject("customer", customer);
 
 		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
 		List<Status> statuses = statusService.getAllStatuses();

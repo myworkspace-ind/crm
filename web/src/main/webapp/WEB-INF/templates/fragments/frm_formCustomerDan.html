@@ -10,22 +10,18 @@
 						<div class="card-header">
 							<h4 class="card-title">Thêm Khách Hàng Mới</h4>
 						</div>
-						<script th:if="${alertFailMessage}" type="text/javascript">
-        					alert("Vui lòng nhập đầy đủ thông tin");
-    					</script>
-    					<script th:if="${alertSuccessMessage}" type="text/javascript">
-        					alert("Đã lưu khách hàng thành công");
-    					</script>
-    					<script th:if="${alertDataMessage}" type="text/javascript">
-        					alert("Vui lòng kiểm tra lại thông tin");
-    					</script>
+						
+				        <script th:if="${alertSuccessMessage != null}">
+							    alert("[[${alertSuccessMessage}]]");
+							</script>
+							<script th:if="${alertDataMessage != null}">
+							    alert("[[${alertDataMessage}]]");
+							</script>
+				        
 						<div class="card-content">
 							<div class="card-body">
 							<form th:action="@{/customer/create-customer_dan}" method="post" th:object="${customer}">
 							
-							<div th:if="${errorMessage}" style="color: red;">
-        <p th:text="${errorMessage}"></p>
-    </div>
 					            <div class="form-group">
 					                <label for="company_name">Tên Công Ty:</label>
 					                <input type="text" class="form-control" id="company_name" name="companyName" th:field="*{companyName}" required>
@@ -56,7 +52,9 @@
 					                <label for="profession">Ngành Nghề:</label>
 					                <select class="form-control" id="profession" name="profession" th:field="*{profession}" required>
 					                    <option value="">Chọn Ngành Nghề</option>
-					                    <option th:each="profession : ${professions}" th:value="${profession.id}" th:text="${profession.name}"></option>
+					                    <option th:each="profession : ${professions}" th:value="${profession.id}" th:text="${profession.name}"
+					                    th:selected="${profession.id} == 1"
+					                    ></option>
 					                </select>
 					            </div>
 					
