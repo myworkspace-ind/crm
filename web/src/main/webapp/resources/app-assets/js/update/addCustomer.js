@@ -63,7 +63,7 @@ function saveNewCustomer() {
 			alert('Khách hàng đã được thêm!');
 			console.log('Khách hàng đã được thêm thành công:', data.customer); 
 			document.getElementById('addNewCustomerForm').reset();
-			window.location.href = '/crm-web/customer/list';
+			window.location.href = _ctx + 'customer/list';
 		})
 		.catch(error => {
 			// Xử lý lỗi
