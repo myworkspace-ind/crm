@@ -69,6 +69,7 @@
 						<button>Edit</button>
 						<button th:onclick="'deleteCustomer(' + ${customer.id} + ')'">Delete</button>
 					</div>
+					
 
 					<!-- <div class="relationship-section">
 						<label for="relationship">Trạng thái:</label>
@@ -160,6 +161,8 @@
 	<!-- START COMMON JAVASCRIPT -->
 	<th:block th:include="fragments/common_javascript"></th:block>
 	<!-- END COMMON JAVASCRIPT -->
+	
+	<th:block th:include="fragments/frg_ModalConfirmation"></th:block>
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
