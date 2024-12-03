@@ -50,23 +50,41 @@ public class StorageServiceImpl implements StorageService {
 
 	@Override
 	public Customer saveOrUpdate(Customer customer) {
-		// Kiểm tra số điện thoại đã tồn tại chưa
-		Optional<Customer> existingCustomer = customerRepo.findByPhone(customer.getPhone());
+		Optional<Customer> existingEmail = customerRepo.findByEmail(customer.getEmail());
+	    if (existingEmail.isPresent()) {
+	        throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+	    }
+		
+		Optional<Customer> existingPhone = customerRepo.findByPhone(customer.getPhone());
+	    if (existingPhone.isPresent()) {
+	        throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+	    }
+	    
+	    if (!isValidPhoneNumber(customer.getPhone())) {
+	        throw new IllegalArgumentException("Số điện thoại không đúng định dạng. Vui lòng nhập lại!");
+	    }
 
-		if (existingCustomer.isPresent()) {
-			throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
-		}
-
-		if (customer.getPhone().length() != 10) {
-			throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
-		}
-
-		Long id = appRepo.saveOrUpdate(customer);
-		if (id != null) {
-			customer.setId(id);
-		}
-		return customer;
+	    if (!isValidEmail(customer.getEmail())) {
+	        throw new IllegalArgumentException("Email không đúng định dạng. Vui lòng nhập lại!");
+	    }
+	    
+	    Long id = appRepo.saveOrUpdate(customer);
+	    if (id != null) {
+	        customer.setId(id);
+	    }
+	    return customer;
 	}
+
+	private boolean isValidPhoneNumber(String phoneNumber) {
+	    String phoneRegex = "^[0-9]{10}$";
+	    return phoneNumber != null && phoneNumber.matches(phoneRegex);
+	}
+
+	private boolean isValidEmail(String email) {
+	    String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";  
+	    return email != null && email.matches(emailRegex);
+	}
+
 
 	@Override
 	public List<Customer> saveOrUpdate(List<Customer> lstCustomer) {

@@ -1,4 +1,4 @@
-var htOrder;
+var htOrderCategory;
 
 /**
  * Processing after the webpage are loaded in the browser.
@@ -14,7 +14,7 @@ $(document).ready(function() {
 function loadTableData() {
 
 	$.ajax({
-		url: _ctx + 'ordersConfigurationCRMOrderType_Bao/load',
+		url: _ctx + 'orders-configuration/load',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -37,7 +37,7 @@ function initTable(colHeaders, colWidths, data) {
     var container = document.getElementById('tblOrderConfiguration');
     
 	if (container) {
-	       htOrder = new Handsontable(container, {
+	       htOrderCategory  = new Handsontable(container, {
 	           data: data,
 	           colHeaders: colHeaders,
 	           colWidths: colWidths,
