@@ -67,7 +67,7 @@
 
 					<div class="actions">
 						<button>Edit</button>
-						<button>Delete</button>
+						<button th:onclick="'deleteCustomer(' + ${customer.id} + ')'">Delete</button>
 					</div>
 
 					<!-- <div class="relationship-section">
@@ -164,6 +164,8 @@
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
 	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/deleteCustomer.js}" defer></script>
+	
 </body>
 
 </html>

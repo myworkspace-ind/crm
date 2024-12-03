@@ -208,6 +208,7 @@ public class CustomerController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> deleteCustomersByIds(@RequestBody List<Long> customerIds, HttpServletRequest request,
 			HttpSession httpSession) {
+		System.out.println(customerIds.size());
 		try {
 			if (customerIds == null || customerIds.isEmpty()) {
 				return ResponseEntity.badRequest().body(Map.of("errorMessage", "Danh sách ID không được trống."));
