@@ -123,6 +123,11 @@ public class CustomerControllerDan extends BaseController {
 	    	customerMap.setEmail(customer.getEmail());
 	    	customerMap.setNote(customer.getNote());
 //	    	customerMap.setProfession(customer.getProfession());
+	    	mav.addObject("professionSelect", customer.getProfession().getId());
+	    	
+	    }
+	    else {
+	    	mav.addObject("professionSelect",1);
 	    }
 	    
 		// Thêm đối tượng Customer mới vào Model để truyền vào form

@@ -52,9 +52,12 @@
 					                <label for="profession">Ngành Nghề:</label>
 					                <select class="form-control" id="profession" name="profession" th:field="*{profession}" required>
 					                    <option value="">Chọn Ngành Nghề</option>
-					                    <option th:each="profession : ${professions}" th:value="${profession.id}" th:text="${profession.name}"
-					                    th:selected="${profession.id} == 1"
-					                    ></option>
+					                    <th:block th:each="profession : ${professions}">
+											<option 
+												th:value="${profession.id}"
+												th:text="${profession.name}"
+												th:selected="${profession.id == 3}"></option>
+										</th:block>
 					                </select>
 					            </div>
 					
