@@ -52,13 +52,29 @@ public class StorageServiceImpl implements StorageService {
 	public Customer saveOrUpdate(Customer customer) {
 		// Kiểm tra số điện thoại đã tồn tại chưa
 		Optional<Customer> existingCustomer = customerRepo.findByPhone(customer.getPhone());
-
+		
+		// Kiểm tra nếu SDT đã có
 		if (existingCustomer.isPresent()) {
-			throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
-		}
-
-		if (customer.getPhone().length() != 10) {
-			throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
+			//throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			
+			// Nếu SDT đã có, kiểm tra xem SDT này là của khách muốn chỉnh sủa thông tin,
+			// hay là của khách hàng khác
+			
+			// Lấy khách hàng cũ
+			Customer optCustomer = existingCustomer.get();
+			
+			// Nếu đây là thêm mới nhưng trùng sdt khách hàng cũ,
+			if (customer.getId() == null) {
+				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			// hoặc là khách hàng chỉnh sửa sdt trùng khách hàng cũ
+			else if (customer.getId() != optCustomer.getId())
+			{
+				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			if (customer.getPhone().length() != 10) {
+				throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
+			}
 		}
 
 		Long id = appRepo.saveOrUpdate(customer);
