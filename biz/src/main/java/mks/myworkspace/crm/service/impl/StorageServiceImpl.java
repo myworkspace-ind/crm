@@ -195,4 +195,17 @@ public class StorageServiceImpl implements StorageService {
 
 		return lstOrderCategories;
 	}
+
+	@Override
+	public Customer updateCustomerStatus(Customer customer) {
+		log.debug("Processing Customer with ID: {}", customer.getId());
+
+		Long id = appRepo.updateCustomerStatus(customer);
+		if (id != null) {
+			customer.setId(id);
+		}
+
+		log.debug("Final Customer ID : {}", customer.getId());
+		return customer;
+	}
 }

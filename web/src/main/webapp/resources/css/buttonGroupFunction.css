@@ -20,6 +20,11 @@ button.btn-btnGroupFunction {
 	height: fit-content;
 }
 
+button.btn-btnGroupFunction {
+    width: 150px;
+    height: 50px;
+}
+
 .btn-group {
 	margin-top: 17px !important;
 }
