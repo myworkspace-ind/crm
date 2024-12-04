@@ -1,47 +1,153 @@
-<div class="row row2">
-	<div class="btn-group" role="group" aria-label="Button group">
-		<p class="quantity-check">0</p>
-		<p class="check">Đã chọn</p>
-		<p class="quit">Bỏ chọn</p>
-		<button type="button" class="btn-btnGroupFunction">Gửi Email</button>
-		<button type="button" class="btn-btnGroupFunction">Gửi SMS</button>
-		<button type="button" class="btn-btnGroupFunction">Tạo Cơ Hội</button>
-		<button type="button" class="btn-btnGroupFunction">Tạo Công Việc</button>
-		<button type="button" class="btn-btnGroupFunction">Mối Quan Hệ</button>
-		<button type="button" class="btn-btnGroupFunction">Nhóm Khách Hàng</button>
-		<button type="button" class="btn-btnGroupFunction">Nguồn Khách Hàng</button>
-		<button type="button" class="btn-btnGroupFunction">Người Xem</button>
-		<button type="button" class="btn-btnGroupFunction" id="deleteBtn">Xóa Nhiều</button>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:include="fragments/head"></th:block>
+</head>
+<body>
+	<div class="row row2">
+		<div class="btn-group-wrapper">
+			<div class="btn-group" role="group" aria-label="Button group">
+				<p class="quantity-check">0</p>
+				<p class="check">Đã chọn</p>
+				<p class="quit">Bỏ chọn</p>
+				<button type="button" class="btn-btnGroupFunction" id="UpdateStatusCustomerBtn" data-bs-toggle="modal" data-bs-target="#updateStatusCustomerModal">
+					Cập nhật trạng thái
+				</button>
+				<button type="button" class="btn-btnGroupFunction" id="deleteBtn">Xóa Nhiều</button>
+				<button type="button" class="btn-btnGroupFunction">Gửi Email</button>
+				<button type="button" class="btn-btnGroupFunction">Gửi SMS</button>
+				<button type="button" class="btn-btnGroupFunction">Tạo Cơ Hội</button>
+				<button type="button" class="btn-btnGroupFunction">Tạo Công Việc</button>
+				<button type="button" class="btn-btnGroupFunction">Mối Quan Hệ</button>
+				<button type="button" class="btn-btnGroupFunction">Nhóm Khách Hàng</button>
+				<button type="button" class="btn-btnGroupFunction">Nguồn Khách Hàng</button>
+				<button type="button" class="btn-btnGroupFunction">Người Xem</button>
+				
+			</div>
+		</div>
 	</div>
-</div>
+	
+	<!-- Modal Cập nhật trạng thái KH -->
+	<div class="modal fade" id="updateStatusCustomerModal" tabindex="-1" aria-labelledby="updateStatusLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="updateStatusLabel" style="color: white">Cập nhật trạng thái</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form id="updateStatusForm">
+						<div class="mb-3">
+							<label for="customerId" class="form-label">ID khách hàng</label>
+							<input type="text" class="form-control" id="customerId" readonly>
+						</div>
+						<div class="mb-3">
+							<label for="customerPhone" class="form-label">SĐT khách hàng</label>
+							<input type="text" class="form-control" id="customerPhone" readonly>
+						</div>
+						<div class="mb-3">
+							<label for="customerName" class="form-label">Tên khách hàng</label>
+							<input type="text" class="form-control" id="customerName" readonly>
+						</div>
+						<div class="mb-3">
+							<label for="mainStatus" class="form-label">Trạng thái chính</label>
+							<select class="form-select" id="mainStatus">
+								<option value="">Chọn trạng thái chính</option>
+					            <option th:each="status : ${statuses}" th:value="${status.id}" th:text="${status.name}"></option>
+							</select>
+						</div>
+						<div class="mb-3">
+							<label for="subStatus" class="form-label">Trạng thái phụ</label>
+							<select class="form-select" id="subStatus">
+								<option value="">Chọn trạng thái phụ</option>
+					            <option th:each="status : ${statuses}" th:value="${status.id}" th:text="${status.name}"></option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+					<button type="button" class="btn btn-primary" onclick="submitUpdate()">Cập nhật</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Modal -->
+	<!-- <div id="confirmationModal" class="modal">
+	    <div class="modal-content model-delete">
+	        <p>Bạn có chắc chắn muốn xóa?</p>
+	        <button id="cancelBtn" class="modal-btn">Hủy bỏ</button>
+	        <button id="confirmDeleteBtn" class="modal-btn">Xóa</button>
+	    </div>
+	</div> -->
+	
+	<!-- Modal Xóa khách hàng -->
+	<!-- Đan làm lại -->
+	<div class="modal" tabindex="-1" role="dialog" id="confirmationModal" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header  text-bg-light">
+	        <h5 class="modal-title">Thông báo xác nhận</h5>
+	      </div>
+	      <div class="modal-body">
+	        <p>Bạn có chắc chắn muốn xóa?</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" id="confirmDeleteBtn" class="btn btn-primary modal-btn">Xóa</button>
+	        <button type="button" id="cancelBtn" class="btn btn-secondary modal-btn" data-dismiss="modal">Hủy bỏ</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- Overlay -->
+	<div id="overlay" class="overlay"></div>
+	
+	<!-- JAVASCRIPT FOR UPDATE STATUS OF CUSTOMERS -->
+	<script>
+		//Lấy thông tin chi tiết khách hàng và điền vào form
+		function populateCustomerForm(customerId){
+			fetch(`${_ctx}customer/get-customer/${customerId}`)
+			.then(response => response.json())
+			 .then(data => {
+				 console.log('Dữ liệu chi tiết khách hàng:', data);
+	                if (data.errorMessage) {
+	                    alert(data.errorMessage);
+	                } else {
+	                    document.getElementById('customerId').value = data.customer.id;
+	                    document.getElementById('customerPhone').value = data.customer.phone;
+	                    document.getElementById('customerName').value = data.customer.contactPerson;
+	                    // Set trạng thái chính và phụ nếu cần
+	                    const mainStatusSelect = document.getElementById('mainStatus');
+	                    const subStatusSelect = document.getElementById('subStatus');
+	                    
+	                    // Lặp qua các option và chọn giá trị phù hợp
+	                    for (let option of mainStatusSelect.options) {
+	                        if (option.text === data.customer.mainStatus.name) {
+	                            option.selected = true;
+	                            break;
+	                        }
+	                    }
 
-<!-- Modal -->
-<!-- <div id="confirmationModal" class="modal">
-    <div class="modal-content model-delete">
-        <p>Bạn có chắc chắn muốn xóa?</p>
-        <button id="cancelBtn" class="modal-btn">Hủy bỏ</button>
-        <button id="confirmDeleteBtn" class="modal-btn">Xóa</button>
-    </div>
-</div> -->
-
-
-<!-- Đan làm lại -->
-<div class="modal" tabindex="-1" role="dialog" id="confirmationModal" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header  text-bg-light">
-        <h5 class="modal-title">Thông báo xác nhận</h5>
-      </div>
-      <div class="modal-body">
-        <p>Bạn có chắc chắn muốn xóa?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="confirmDeleteBtn" class="btn btn-primary modal-btn">Xóa</button>
-        <button type="button" id="cancelBtn" class="btn btn-secondary modal-btn" data-dismiss="modal">Hủy bỏ</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Overlay -->
-<div id="overlay" class="overlay"></div>
+	                    for (let option of subStatusSelect.options) {
+	                        if (option.text === data.customer.subStatus.name) {
+	                            option.selected = true;
+	                            break;
+	                        }
+	                    }
+	                }
+	            })
+	            .catch(error => {
+	                console.error('Error fetching customer details:', error);
+	            });
+		}
+		$('#UpdateStatusCustomerBtn').on('click', function () {
+		    // Lấy ID khách hàng từ đâu đó, ví dụ từ dữ liệu của nút hoặc một biến toàn cục
+		    const customerId = 1;  // Thay bằng ID khách hàng thực tế
+		    // Khi nút nhấn, mở modal và gọi hàm populateCustomerForm
+		    $('#updateStatusCustomerModal').modal('show');
+		    populateCustomerForm(customerId);  // Gọi hàm điền dữ liệu vào form
+		});
+	</script>
+</body>
+</html>
