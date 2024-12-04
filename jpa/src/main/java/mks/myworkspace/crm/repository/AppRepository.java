@@ -86,7 +86,9 @@ public class AppRepository {
 	
 	public Long saveOrUpdate(Customer customer) {
 		Long id;
-		
+		if (customer.getAccountStatus() == null) {
+			customer.setAccountStatus(true);
+		}
 		if (customer.getId() == null) {
 			log.debug("Inserting new customer");
 			id = createCustomer(customer);
@@ -115,6 +117,7 @@ public class AppRepository {
 		parameters.put("email", customer.getEmail());
 		parameters.put("note", customer.getNote());
 		parameters.put("phone", customer.getPhone());
+		parameters.put("account_status", customer.getAccountStatus());
 		
 		// Thêm các khóa ngoại
 		parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);

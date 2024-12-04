@@ -23,7 +23,7 @@ $(document).ready(function () {
 
         // Gửi AJAX request
         $.ajax({
-            url: _ctx + 'ordersConfigurationCRMOrderType_Bao/save',
+            url: _ctx + 'orders-configuration/save',
             type: 'POST',
             data: formDataJson,
             dataType: "json",
