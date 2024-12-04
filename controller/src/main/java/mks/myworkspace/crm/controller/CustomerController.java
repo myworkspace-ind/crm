@@ -1,6 +1,8 @@
 package mks.myworkspace.crm.controller;
 
 import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -311,9 +313,10 @@ public class CustomerController extends BaseController {
 
 	@GetMapping("interact")
 	public ModelAndView displayCustomerListScreen(@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
+			@RequestParam(value = "statusId", required = false) Long statusId,
+			@RequestParam(value = "week", required = false) String week, HttpServletRequest request,
 			HttpSession httpSession) {
-
+		
 		log.debug("Display Cusomter list with keyword= {}", keyword);
 		ModelAndView mav = new ModelAndView("customerInteraction");
 		initSession(request, httpSession);
@@ -330,8 +333,29 @@ public class CustomerController extends BaseController {
 			customers = customerService.searchCustomers(keyword);
 			mav.addObject("keyword", keyword);
 
-		} else {
-			customers = customerService.getAllCustomersWithStatuses ();
+		} else if (week != null && !week.isEmpty()) {
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		    LocalDate endDate = LocalDate.now();
+		    LocalDate startDate = null;
+		    
+		    if(week.equals("0"))
+		    {
+		    	customers = customerService.getAllCustomersWithStatuses();
+
+		    }
+		    else
+		    {
+		    	startDate = endDate.minusWeeks(Integer.parseInt(week));
+		    	java.sql.Date sqlStartDate = java.sql.Date.valueOf(startDate);
+			    java.sql.Date sqlEndDate = java.sql.Date.valueOf(endDate);
+			    log.debug(""+sqlEndDate);
+			    log.debug(""+sqlStartDate);
+			    customers = customerService.findByInteractDateRange(sqlStartDate, sqlEndDate);
+		    }
+		}
+		else {
+			customers = customerService.getAllCustomersWithStatuses();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
 

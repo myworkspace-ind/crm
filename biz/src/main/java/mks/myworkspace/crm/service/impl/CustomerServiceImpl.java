@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,5 +133,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     public long getTotalCustomerCount() {
         return repo.countAllCustomers();
+    }
+    
+    @Override
+    public List<Customer> findByInteractDateRange(Date startDate, Date enDate) {
+        return repo.findByInteractDateRange(startDate,enDate);
     }
 }

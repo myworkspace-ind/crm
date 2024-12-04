@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Entity
-@Table(name = "crm_profession")
+@Table(name = "customer_interaction")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,6 +31,10 @@ public class Interaction implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  // ID tự động tăng
 	
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+	
 	@Column(name = "interaction_date")
     @Temporal(TemporalType.DATE)
     private Date interactAt;
@@ -41,12 +45,14 @@ public class Interaction implements Serializable {
     @Column(name = "next_plan", columnDefinition = "TEXT")
     private String plan;  
     
-	public Interaction(Long id, Date interactAt ,String content,String plan) {
+    
+	public Interaction(Long id, Date interactAt ,String content,String plan, Customer customer) {
 		super();
 		this.id = id;
 		this.interactAt = interactAt;
 		this.content = content;
 		this.plan = plan;
+		this.customer = customer;
 	}
 
 }

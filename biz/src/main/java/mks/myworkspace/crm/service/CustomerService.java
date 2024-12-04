@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,4 +30,6 @@ public interface CustomerService {
 	Map<Long, Long> getCustomerCountsByStatus();
 	
 	long getTotalCustomerCount();
+	
+	List<Customer> findByInteractDateRange(Date startDate, Date enDate);
 }
