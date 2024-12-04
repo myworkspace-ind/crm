@@ -30,6 +30,7 @@ public interface StorageService {
 	void deleteOrderById(Long orderId);
 	
 	public Order updateOrderStatus(Order order);
+	public Customer updateCustomerStatus (Customer customer);
 	
 	List<OrderCategory> saveOrUpdateOrderCategory(List<OrderCategory> lstOrderCategories);
 
