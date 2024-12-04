@@ -41,7 +41,7 @@ function saveNewCustomer() {
 		responsiblePerson: responsiblePerson || null,
 		note: note || null,
 	};
-	const _ctx = "/crm-web/";
+	//const _ctx = "/crm-web/";
 	// Gửi yêu cầu POST đến server với dữ liệu dạng JSON
 	fetch(`${_ctx}customer/create-customer`, {
 		method: 'POST',
@@ -63,7 +63,7 @@ function saveNewCustomer() {
 			alert('Khách hàng đã được thêm!');
 			console.log('Khách hàng đã được thêm thành công:', data.customer); 
 			document.getElementById('addNewCustomerForm').reset();
-			window.location.href = '/crm-web/customer/list';
+			window.location.href = _ctx + 'customer/list';
 		})
 		.catch(error => {
 			// Xử lý lỗi
@@ -83,5 +83,7 @@ function isValidEmail(email) {
 }
 
 function goBack() {
-	window.location.href = '/crm-web/customer/list';
+	//window.location.href = '/crm-web/customer/list';
+	window.location.href = _ctx + 'customer/list';
+
 }
