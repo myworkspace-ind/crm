@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		checkboxes.forEach(checkbox => {
 			selectedStatuses.push(parseInt(checkbox.value, 10));
 		});
-		const _ctx = "/crm-web/";
+		//const _ctx = "/crm-web/";
 
 		const paramsObject = {
 			customerId: customerId || '',
