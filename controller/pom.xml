@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>mks.myworkspace.crm</groupId>
 			<artifactId>crm-biz</artifactId>
-			<version>${module.version}</version>
+			<version>23.2</version>
 		</dependency>
 		<dependency>
 			<groupId>mks.myworkspace.crm</groupId>
