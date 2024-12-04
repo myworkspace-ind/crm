@@ -222,6 +222,19 @@ public class CustomerController extends BaseController {
 		}
 	}
 
+	@PostMapping("/update-customer-status")
+	@ResponseBody
+	public ResponseEntity<?> updateCustomerStatus(@RequestBody Customer customer) {
+		try {
+			Customer updatedCustomer = storageService.updateCustomerStatus(customer);
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Cập nhật trạng thái thành công!", "customer", updatedCustomer));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật trạng thái"));
+		}
+	}
+
 //	@RequestMapping(value = { "/create-customer" }, method = RequestMethod.POST)
 //	public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, HttpServletRequest request, HttpSession httpSession) {
 //	    ModelAndView mav = new ModelAndView();

@@ -103,51 +103,105 @@
 	<!-- Overlay -->
 	<div id="overlay" class="overlay"></div>
 	
-	<!-- JAVASCRIPT FOR UPDATE STATUS OF CUSTOMERS -->
-	<script>
-		//Lấy thông tin chi tiết khách hàng và điền vào form
-		function populateCustomerForm(customerId){
-			fetch(`${_ctx}customer/get-customer/${customerId}`)
-			.then(response => response.json())
-			 .then(data => {
-				 console.log('Dữ liệu chi tiết khách hàng:', data);
-	                if (data.errorMessage) {
-	                    alert(data.errorMessage);
-	                } else {
-	                    document.getElementById('customerId').value = data.customer.id;
-	                    document.getElementById('customerPhone').value = data.customer.phone;
-	                    document.getElementById('customerName').value = data.customer.contactPerson;
-	                    // Set trạng thái chính và phụ nếu cần
-	                    const mainStatusSelect = document.getElementById('mainStatus');
-	                    const subStatusSelect = document.getElementById('subStatus');
-	                    
-	                    // Lặp qua các option và chọn giá trị phù hợp
-	                    for (let option of mainStatusSelect.options) {
-	                        if (option.text === data.customer.mainStatus.name) {
-	                            option.selected = true;
-	                            break;
-	                        }
-	                    }
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+	    const customerCheckboxes = document.querySelectorAll('.customer-checkbox');
+	
+	    customerCheckboxes.forEach(checkbox => {
+	        checkbox.addEventListener('change', function () {
+	            const selectedCheckboxes = document.querySelectorAll('.customer-checkbox:checked');
+	            if (selectedCheckboxes.length > 0) {
+	                const customerId = selectedCheckboxes[selectedCheckboxes.length - 1].value;
+	                populateCustomerForm(customerId);
+	            } else {
+	                resetCustomerForm();
+	            }
+	        });
+	    });
+	});
 
-	                    for (let option of subStatusSelect.options) {
-	                        if (option.text === data.customer.subStatus.name) {
-	                            option.selected = true;
-	                            break;
-	                        }
-	                    }
-	                }
-	            })
-	            .catch(error => {
-	                console.error('Error fetching customer details:', error);
-	            });
-		}
-		$('#UpdateStatusCustomerBtn').on('click', function () {
-		    // Lấy ID khách hàng từ đâu đó, ví dụ từ dữ liệu của nút hoặc một biến toàn cục
-		    const customerId = 1;  // Thay bằng ID khách hàng thực tế
-		    // Khi nút nhấn, mở modal và gọi hàm populateCustomerForm
-		    $('#updateStatusCustomerModal').modal('show');
-		    populateCustomerForm(customerId);  // Gọi hàm điền dữ liệu vào form
-		});
-	</script>
+	//Lấy thông tin chi tiết khách hàng và điền vào form
+	function populateCustomerForm(customerId) {
+		fetch(`${_ctx}customer/get-customer/${customerId}`)
+			.then(response => response.json())
+			.then(data => {
+				console.log('Dữ liệu chi tiết khách hàng:', data);
+				if (data.errorMessage) {
+					alert(data.errorMessage);
+				} else {
+					document.getElementById('customerId').value = data.customer.id;
+					document.getElementById('customerPhone').value = data.customer.phone;
+					document.getElementById('customerName').value = data.customer.contactPerson;
+					// Set trạng thái chính và phụ nếu cần
+					const mainStatusSelect = document.getElementById('mainStatus');
+					const subStatusSelect = document.getElementById('subStatus');
+
+					// Lặp qua các option và chọn giá trị phù hợp
+					for (let option of mainStatusSelect.options) {
+						if (option.text === data.customer.mainStatus.name) {
+							option.selected = true;
+							break;
+						}
+					}
+
+					for (let option of subStatusSelect.options) {
+						if (option.text === data.customer.subStatus.name) {
+							option.selected = true;
+							break;
+						}
+					}
+				}
+			})
+			.catch(error => {
+				console.error('Error fetching customer details:', error);
+			});
+	}
+	
+	function resetCustomerForm() {
+	    // Reset các trường trong form nếu không có khách hàng nào được chọn
+	    document.getElementById('customerId').value = '';
+	    document.getElementById('customerPhone').value = '';
+	    document.getElementById('customerName').value = '';
+	    document.getElementById('mainStatus').selectedIndex = 0;
+	    document.getElementById('subStatus').selectedIndex = 0;
+	}
+	
+	function submitUpdate() {
+	    // Lấy giá trị từ các trường input
+	    const updatedCustomer = {
+	        id: document.getElementById('customerId').value,
+	        phone: document.getElementById('customerPhone').value,
+	        name: document.getElementById('customerName').value,
+	        mainStatus: document.getElementById('mainStatus').value,
+	        subStatus: document.getElementById('subStatus').value
+	    };
+
+	    // Gửi yêu cầu POST đến API cập nhật trạng thái khách hàng
+	    fetch(`${_ctx}customer/update-customer-status`, {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(updatedCustomer)
+	    })
+	    .then(response => {
+	        if (response.ok) {
+	            return response.json();  // Phân tích dữ liệu JSON nếu trả về thành công
+	        }
+	        throw new Error('Cập nhật thất bại');
+	    })
+	    .then(data => {
+	        alert('Cập nhật thành công!');
+	        window.location.href = _ctx + 'customer/list';
+	        // Bạn có thể thực hiện thêm các thao tác khác, ví dụ như đóng modal
+	        $('#myModal').modal('hide');  // Đóng modal (nếu bạn đang dùng Bootstrap Modal)
+	    })
+	    .catch(error => {
+	        console.error('Error updating status:', error);
+	        alert('Có lỗi xảy ra khi cập nhật');
+	    });
+	}
+	
+</script>
 </body>
 </html>

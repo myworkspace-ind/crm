@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
 	const checkboxes = document.querySelectorAll('.customer-checkbox');
 	const quantityCheck = document.querySelector('.quantity-check');
-	const quitBtn = document.querySelector('.quit'); 
+	const quitBtn = document.querySelector('.quit');
 
 	// Variable to store selected customer IDs
 	let selectedCustomerIds = [];
@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		overlay.style.display = "none";
 		deleteCustomers(selectedCustomerIds);
 	});
-	
-	quitBtn.addEventListener('click', () =>{
+
+	quitBtn.addEventListener('click', () => {
 		selectedCustomerIds = [];
 		quantityCheck.textContent = 0;
-		
-		checkboxes.forEach(checkbox =>{
+
+		checkboxes.forEach(checkbox => {
 			checkbox.checked = false;
 		});
 	});
@@ -95,4 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				alert(`Có lỗi xảy ra khi xóa khách hàng: ${error.message}`);
 			});
 	}
+
+	
 });
