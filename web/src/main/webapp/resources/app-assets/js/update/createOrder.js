@@ -80,7 +80,7 @@ document.getElementById("createOrderButton").addEventListener("click", function(
 		return;
 	}
 
-	const _ctx = "/crm-web/";
+	//const _ctx = "/crm-web/";
 	// Gửi request POST tới backend để lưu đơn hàng
 	fetch(`${_ctx}orders-datatable/create-order`, {
 		method: 'POST',

@@ -28,18 +28,13 @@ public interface CustomerService_Son {
 	
 	Map<Long, Long> getCustomerCountsByStatus();
 	
-	List<Customer> findCustomerByCompanyName(String cpname);
-	
-	List<Customer> findByCompanyName(String keyword);
-	
-	List<Customer> findByContactPerson(String keyword);
-	
-	List<Customer> findByEmail(String keyword);
-	
-	List<Customer> findByPhoneNew(String keyword);
-
-	List<Customer> findByAddress(String keyword);
-
-	
 	long getTotalCustomerCount();
+
+	List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<Long> selectedCareers,
+			String contactPerson, String address, String email);
+	
+	List<Customer> advancedSearchCustomersNotCareer(String nameCompany, String phone, List<Long> selectedCareers,
+			String contactPerson, String address, String email);
+	
+	List<Customer> findByselectedCareers(List<Long> selectedCareers);
 }

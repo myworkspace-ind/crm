@@ -1,16 +1,13 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -43,13 +40,14 @@ public class Status implements Serializable {
 //	@ManyToMany(mappedBy = "statuses")
 //	private Set<Customer> customers = new HashSet<>();
 	
+	//Comment One-to-Many relationship with Customer for main status and sub status tp avoid error: com.fasterxml.jackson.databind.ser.BeanPropertyWriter.serializeAsField(BeanPropertyWriter.java:733)
 	// One-to-Many relationship with Customer for main status
-    @OneToMany(mappedBy = "mainStatus", fetch = FetchType.EAGER)
-    private Set<Customer> mainStatusCustomers = new HashSet<>();
+    //@OneToMany(mappedBy = "mainStatus", fetch = FetchType.EAGER)
+	//private Set<Customer> mainStatusCustomers = new HashSet<>();
 
     // One-to-Many relationship with Customer for sub status
-    @OneToMany(mappedBy = "subStatus", fetch = FetchType.EAGER)
-    private Set<Customer> subStatusCustomers = new HashSet<>();
+	// @OneToMany(mappedBy = "subStatus", fetch = FetchType.EAGER)
+	// private Set<Customer> subStatusCustomers = new HashSet<>();
 
 	public Status(Long id, String siteId, String name, String backgroundColor, Set<Customer> customers) {
 		super();
@@ -58,12 +56,6 @@ public class Status implements Serializable {
 		this.name = name;
 		this.backgroundColor = backgroundColor;
 	}
-
-	@Override
-    public String toString() {
-        return "Status [id=" + id + ", siteId=" + siteId + ", name=" + name + ", backgroundColor=" + backgroundColor
-                + ", mainCustomers=" + mainStatusCustomers + ", subCustomers=" + subStatusCustomers + "]";
-    }
 
 	public Status(String id) {
 		this.id = Long.parseLong(id);
