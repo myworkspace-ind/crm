@@ -78,9 +78,13 @@ public class Customer implements Serializable {
     @Column(name = "note", length = 255)
     private String note;
     
+    @Column(name = "account_status")
+    private Boolean accountStatus;
+    
+    
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
 			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, Date createdAt,
-			String note) {
+			String note, Boolean accountStatus) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -95,10 +99,11 @@ public class Customer implements Serializable {
 		this.responsiblePerson = responsiblePerson;
 		this.createdAt = createdAt;
 		this.note = note;
+		this.accountStatus = accountStatus;
 	}
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			Date createdAt, String note) {
+			Date createdAt, String note, Boolean accountStatus) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -109,6 +114,7 @@ public class Customer implements Serializable {
 		this.address = address;
 		this.createdAt = createdAt;
 		this.note = note;
+		this.accountStatus = accountStatus;
 	}
 
 	public Customer(String contactPerson2) {

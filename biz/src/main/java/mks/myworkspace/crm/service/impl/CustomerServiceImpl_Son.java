@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,29 +53,21 @@ public class CustomerServiceImpl_Son implements CustomerService_Son {
     }
     
     @Override
-    public List<Customer> findCustomerByCompanyName(String cpname){
-    	return repo.findByCpName(cpname);
+    public List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<Long> selectedCareers, String contactPerson, String address, String email) {
+        return repo.advancedSearchCustomers(nameCompany, phone, selectedCareers, contactPerson, address, email);
     }
-
+    
     @Override
-    public List<Customer> findByCompanyName(String key){
-    	return repo.findByCompanyName(key);
+    public List<Customer> advancedSearchCustomersNotCareer(String nameCompany, String phone, List<Long> selectedCareers, String contactPerson, String address, String email) {
+        return repo.advancedSearchCustomersNotCareer(nameCompany, phone, selectedCareers, contactPerson, address, email);
     }
+    
     @Override
-    public List<Customer> findByContactPerson(String key){
-    	return repo.findByContactPerson(key);
-    }
-    @Override
-    public List<Customer> findByEmail(String key){
-    	return repo.findByEmail(key);
-    }
-    @Override
-    public List<Customer> findByPhoneNew(String key){
-    	return repo.findByPhoneNew(key);
-    }
-    @Override
-    public List<Customer> findByAddress(String key){
-    	return repo.findByAddress(key);
+    public List<Customer> findByselectedCareers(List<Long> selectedCareers){
+    	if (selectedCareers == null || selectedCareers.isEmpty()) {
+            return new ArrayList<>();
+        }
+    	return repo.findByselectedCareers(selectedCareers);
     }
     
     
