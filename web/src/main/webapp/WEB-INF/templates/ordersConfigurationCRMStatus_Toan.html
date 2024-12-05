@@ -1,199 +1,163 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<!-- START COMMON META AND TITLE -->
-<th:block th:replace="~{fragments/common_meta_title :: head}"></th:block>
-<!-- END COMMON META AND TITLE -->
+    <!-- START COMMON META AND TITLE -->
+    <th:block th:replace="~{fragments/common_meta_title :: head}"></th:block>
+    <!-- END COMMON META AND TITLE -->
 
-<th:block th:replace="~{fragments/head :: head}"></th:block>
-<link type="text/css" rel="stylesheet"
-	href="/library/webjars/handsontable/handsontable.full.min.css" />
-<script th:inline="javascript"
-	src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
 
-<script>
-	console.log("Handsontable:", typeof Handsontable); //Check Handsontable is available or not
-</script>
+    <!-- Handsontable Styles and Scripts -->
+    <link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+    <script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+    <script>
+        console.log("Handsontable:", typeof Handsontable); // Check Handsontable availability
+    </script>
 
+    <!-- START COMMON CSS -->
+    <th:block th:replace="~{fragments/common_css :: head}"></th:block>
+    <!-- END COMMON CSS -->
 
-<!-- START COMMON CSS -->
-<th:block th:replace="~{fragments/common_css :: head}"></th:block>
-<!-- <th:block th:replace="~{fragments/common_css :: common_css}"></th:block> -->
-<!-- END COMMON CSS -->
+    <!-- Page Specific CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/ordersBtnHorizontalMenu.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/order.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/orders-configuration.css}">
 
-<link rel="stylesheet" type="text/css"
-	th:href="@{/resources/css/ordersBtnHorizontalMenu.css}">
-<link rel="stylesheet" type="text/css"
-	th:href="@{/resources/css/new_style.css}">
-<link rel="stylesheet" type="text/css"
-	th:href="@{/resources/css/order.css}">
-<link rel="stylesheet" type="text/css"
-	th:href="@{/resources/css/orders-configuration.css}">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Custom Styles -->
+    <style>
+        .modal-backdrop {
+            z-index: 1040;
+        }
 
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<style>
-/* Đảm bảo modal-backdrop không che modal */
-.modal-backdrop {
-	z-index: 1040;
-}
-
-.modal {
-	z-index: 1050;
-}
-</style>
-
-
-
+        .modal {
+            z-index: 1050;
+        }
+    </style>
 </head>
 
-<body
-	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
-	data-open="click" data-menu="vertical-compact-menu"
-	data-col="2-columns">
+<body class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar" 
+      data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
-	<!-- BEGIN HEADER -->
-	<!-- <th:block th:include="fragments/headerCRM"></th:block> -->
-	<th:block th:include="fragments/hmenu"></th:block>
-	<!-- END HEADER -->
+    <!-- BEGIN HEADER -->
+    <th:block th:include="fragments/hmenu"></th:block>
+    <!-- END HEADER -->
 
+    <!-- BEGIN CONTENT -->
+    <div class="app-content content">
+        <!-- BEGIN CONTENT WRAPPER -->
+        <th:block th:include="@{fragments/ordersContentWrapperCRM}"></th:block>
+        <!-- END CONTENT WRAPPER -->
 
-	<!-- BEGIN LEFT MENU NAVIGATION -->
-	<!-- <th:block th:include="fragments/leftNavCRM"></th:block> -->
-	<!-- END LEFT MENU NAVIGATION -->
+        <form class="background">
+            <!-- Tiêu đề bảng -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>STT</th>
+                            <th>Yêu cầu</th>
+                            <th>Tên</th>
+                            <th>ID Khách hàng</th>
+                            <th>Trạng thái đơn hàng</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Yêu cầu A</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>KH001</td>
+                            <td>Đang xử lý</td>
+                            <td>
+                                <button class="btn btn-success btn-sm me-2" data-bs-toggle="modal"
+                                    data-bs-target="#updateOrderModal" data-bs-backdrop="false">Cập nhật</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Yêu cầu B</td>
+                            <td>Trần Thị B</td>
+                            <td>KH002</td>
+                            <td>Hoàn thành</td>
+                            <td>
+                                <button class="btn btn-success btn-sm me-2" data-bs-toggle="modal" data-bs-target="#updateOrderModal" data-bs-backdrop="false">Cập nhật</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
 
-	<!--  BEGIN CONTENT -->
-	<div class="app-content content">
+    <!-- Modal -->
+    <div class="modal fade" id="updateOrderModal" tabindex="-1" aria-labelledby="updateOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateOrderModalLabel">Cập nhật trạng thái đơn hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateOrderForm">
+                        <div class="mb-3">
+                            <label for="orderStatus" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="orderStatus" name="orderStatus">
+                                <option value="processing">Đang xử lý</option>
+                                <option value="completed">Hoàn thành</option>
+                                <option value="cancelled">Đã hủy</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="orderNote" class="form-label">Ghi chú</label>
+                            <textarea class="form-control" id="orderNote" name="orderNote" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="saveOrderChanges">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-		<!-- BEGIN CONTENT WRAPPER -->
-		<th:block th:include="@{fragments/ordersContentWrapperCRM}"></th:block>
-		<!-- END CONTENT WRAPPER -->
-		<!-- Tiêu đề bảng -->
-		<div class="table-responsive">
-			<table class="table table-bordered table-striped">
-				<thead class="table-dark">
-					<tr>
-						<th>STT</th>
-						<th>Yêu cầu</th>
-						<th>Tên</th>
-						<th>ID Khách hàng</th>
-						<th>Trạng thái đơn hàng</th>
-						<th>Hành động</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>Yêu cầu A</td>
-						<td>Nguyễn Văn A</td>
-						<td>KH001</td>
-						<td>Đang xử lý</td>
-						<td>
-							<button class="btn btn-success btn-sm me-2"
-								data-bs-toggle="modal" data-bs-target="#updateOrderModal"
-								data-bs-backdrop="false">Cập nhật</button>
-						</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>Yêu cầu B</td>
-						<td>Trần Thị B</td>
-						<td>KH002</td>
-						<td>Hoàn thành</td>
-						<td>
-							<button class="btn btn-success btn-sm me-2"
-								data-bs-toggle="modal" data-bs-target="#updateOrderModal"
-								data-bs-backdrop="false">Cập nhật</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<!-- Modal -->
-	<div class="modal fade" id="updateOrderModal" tabindex="-1"
-		aria-labelledby="updateOrderModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="updateOrderModalLabel">Cập nhật
-						trạng thái đơn hàng</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<form id="updateOrderForm">
-						<div class="mb-3">
-							<label for="orderStatus" class="form-label">Trạng thái</label> <select
-								class="form-select" id="orderStatus" name="orderStatus">
-								<option value="processing">Đang xử lý</option>
-								<option value="completed">Hoàn thành</option>
-								<option value="cancelled">Đã hủy</option>
-							</select>
-						</div>
-						<div class="mb-3">
-							<label for="orderNote" class="form-label">Ghi chú</label>
-							<textarea class="form-control" id="orderNote" name="orderNote"
-								rows="3"></textarea>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal">Hủy</button>
-					<button type="button" class="btn btn-primary" id="saveOrderChanges">Lưu
-						thay đổi</button>
-				</div>
-			</div>
-		</div>
-	</div>
+    <!-- Custom Script -->
+    <script>
+    document.getElementById('saveOrderChanges').addEventListener('click', function () {
+        const orderStatus = document.getElementById('orderStatus').value;
+        const orderNote = document.getElementById('orderNote').value;
 
-	<!-- Script -->
-	<script>
-		document.getElementById('saveOrderChanges')
-				.addEventListener(
-						'click',
-						function() {
-							const orderStatus = document
-									.getElementById('orderStatus').value;
-							const orderNote = document
-									.getElementById('orderNote').value;
+        console.log("Trạng thái:", orderStatus);
+        console.log("Ghi chú:", orderNote);
 
-							console.log("Trạng thái:", orderStatus);
-							console.log("Ghi chú:", orderNote);
+        // Gửi dữ liệu qua API hoặc xử lý logic cần thiết
+        alert('Cập nhật thành công!');
 
-							// Gửi dữ liệu qua API hoặc xử lý theo logic cần thiết
-							alert('Cập nhật thành công!');
+        // Đóng modal sau khi xử lý xong
+        const modal = document.getElementById('updateOrderModal');
+        const bootstrapModal = bootstrap.Modal.getInstance(modal);
+        bootstrapModal.hide();
+    });
 
-							// Đóng modal sau khi xử lý xong
-							const modal = document
-									.getElementById('updateOrderModal');
-							const bootstrapModal = bootstrap.Modal
-									.getInstance(modal);
-							bootstrapModal.hide();
-						});
-	</script>
+    </script>
 
-	<!-- END CONTENT -->
+    <!-- START CUSTOMIZE BUTTON -->
+    <th:block th:include="fragments/customizeButton"></th:block>
+    <!-- END CUSTOMIZE BUTTON -->
 
-	<!-- START CUSTOMIZE BUTTON -->
-	<th:block th:include="fragments/customizeButton"></th:block>
-	<!-- END CUSTOMIZE BUTTON -->
+    <!-- START COMMON JAVASCRIPT -->
+    <th:block th:include="fragments/common_javascript"></th:block>
+    <!-- END COMMON JAVASCRIPT -->
 
-	<!-- START COMMON JAVASCRIPT -->
-	<th:block th:include="fragments/common_javascript"></th:block>
-	<!-- END COMMON JAVASCRIPT -->
-
-	<!-- FILE JS BỔ SUNG -->
-	<script type="text/javascript"
-		th:src="@{/resources/js/orders-configuration/status-init.js}"></script>
-	<script type="text/javascript"
-		th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
-	<!-- Screen Javascripts -->
+    <!-- Additional JS -->
+    <script type="text/javascript" th:src="@{/resources/js/orders-configuration/status-init.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
 </body>
 </html>

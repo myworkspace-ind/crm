@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/ordersConfigurationCRMStatus_Toan")
 public class OrderConfigurationControllerToan extends BaseController {
+	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 

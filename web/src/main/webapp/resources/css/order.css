@@ -302,3 +302,13 @@ h3#orderIdForUpdate {
 button.btn.btn-success.updateOrderStatusSearch-btn {
 	margin-left: 5px;
 }
+
+
+.background {
+    background: rgba(255, 255, 255, 0.9); /* Nền trắng mờ */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+    padding: 30px;
+    width: 100%;
+    max-width: 1300px; /* Độ rộng tối đa */
+}
