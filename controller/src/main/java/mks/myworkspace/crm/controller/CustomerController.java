@@ -108,7 +108,7 @@ public class CustomerController extends BaseController {
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
 		
-		customers = customerService.getAllCustomers();
+		
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
@@ -512,7 +512,7 @@ public class CustomerController extends BaseController {
 	        return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                .body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng thử lại sau!" + customer.getId()));
+	                .body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng kiểm tra lại độ dài SDT!" + customer.getId()));
 	    }
 	}
 
