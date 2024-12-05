@@ -124,10 +124,16 @@ public class CustomerControllerDan extends BaseController {
 	    	customerMap.setNote(customer.getNote());
 //	    	customerMap.setProfession(customer.getProfession());
 	    	mav.addObject("professionSelect", customer.getProfession().getId());
+	    	mav.addObject("subStatusSelect", customer.getProfession().getId());
+	    	mav.addObject("mainStatusSelect", customer.getProfession().getId());
+	    	mav.addObject("repoPerSelect", customer.getResponsiblePerson().getId());
 	    	
 	    }
 	    else {
-	    	mav.addObject("professionSelect",1);
+	    	mav.addObject("professionSelect",0);
+	    	mav.addObject("subStatusSelect", 0);
+	    	mav.addObject("mainStatusSelect", 0);
+	    	mav.addObject("repoPerSelect", 0);
 	    }
 	    
 		// Thêm đối tượng Customer mới vào Model để truyền vào form
