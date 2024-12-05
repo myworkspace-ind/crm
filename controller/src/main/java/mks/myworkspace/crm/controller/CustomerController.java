@@ -474,6 +474,8 @@ public class CustomerController extends BaseController {
 	        
 	        else
 	        {
+	        	customer.setCreatedAt(new Date());
+				customer.setSiteId(getCurrentSiteId());
 	        	updatedCustomer = storageService.saveOrUpdate(customer);
 	        }
 	        
