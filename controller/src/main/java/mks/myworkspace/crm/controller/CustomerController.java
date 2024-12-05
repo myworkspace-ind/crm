@@ -399,61 +399,59 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 	
-	// Hàm edit customer của Tấn Đạt
+	// Hàm edit hoặc add customer của Tấn Đạt
 	@Transactional
 	@RequestMapping(value = "/editCustomer")
 	@ResponseBody
-	public ModelAndView updateCustomer(@RequestParam("id") Long customerId, HttpServletRequest request,
-			HttpSession httpSession) {
+	public ModelAndView updateCustomer(@RequestParam(value = "id", required = false) Long customerId, HttpServletRequest request,
+	                                   HttpSession httpSession) {
 
-	        ModelAndView mav = new ModelAndView("editCustomer_Dat");
-	        // Gọi service để cập nhật thông tin khách hàng
-	        Optional<Customer> customerOpt = customerService.findById(customerId);
+	    ModelAndView mav = new ModelAndView("editCustomer_Dat");
 
-		     // Check if the customer exists and add to model
-		     customerOpt.ifPresentOrElse(customer -> {
-		         mav.addObject("customer", customer);
-		     }, () -> {
-		         mav.addObject("errorMessage", "Customer not found.");
-		     });
+	    // Nếu customerId không tồn tại hoặc không tìm thấy, tạo mới một Customer
+	    Customer customer = (customerId == null) ? new Customer() :
+	                        customerService.findById(customerId).orElse(new Customer());
+	    
+	    
+	    
+	    mav.addObject("customer", customer);
 
-		     // Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
-			List<Status> statuses = statusService.getAllStatuses();
-			mav.addObject("statuses", statuses); 
-		     
-			List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
-			mav.addObject("responsiblePersons", responsiblePersons);
-			
-			List<Profession> professions = professionService.getAllProfessions();
-			mav.addObject("professions", professions);
+	    // Lấy danh sách Status, ResponsiblePersons và Professions
+	    List<Status> statuses = statusService.getAllStatuses();
+	    mav.addObject("statuses", statuses);
 
-			// Thiết lập các thuộc tính của session
-			initSession(request, httpSession);
-			mav.addObject("currentSiteId", getCurrentSiteId());
-			mav.addObject("userDisplayName", getCurrentUserDisplayName());
-			return mav;
+	    List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+	    mav.addObject("responsiblePersons", responsiblePersons);
+
+	    List<Profession> professions = professionService.getAllProfessions();
+	    mav.addObject("professions", professions);
+
+	    // Thiết lập các thuộc tính của session
+	    initSession(request, httpSession);
+	    mav.addObject("currentSiteId", getCurrentSiteId());
+	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+	    return mav;
 	}
+
+
 	
 	// Hàm edit-customer của Đạt
 	@PutMapping("/edit-customer")
 	@ResponseBody
 	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {
 	    System.out.println(customer.getId());
+	    Customer updatedCustomer;
 		try {
-	        // Kiểm tra nếu có khách hàng với ID đã tồn tại
-	        if (customer.getId() == null) {
-	            return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID khách hàng không được để trống"));
-	        }
+	        
 
 	        // Lấy khách hàng cũ từ cơ sở dữ liệu
 	        Optional<Customer> customerOpt = customerService.findById(customer.getId());
 
-	        // Kiểm tra nếu khách hàng không tồn tại
-	        if (!customerOpt.isPresent()) {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                                 .body(Map.of("errorMessage", "Khách hàng không tồn tại"));
-	        }
-
+	        
+	        
+	        if(customerOpt.isPresent()) {
+	        
 	        // Cập nhật thông tin khách hàng
 	        Customer existingCustomer = customerOpt.get();
 	        
@@ -470,8 +468,13 @@ public class CustomerController extends BaseController {
 	        // existingCustomer.setUpdatedAt(new Date()); // Cập nhật thời gian sửa nếu cần
 
 	        // Lưu lại khách hàng đã cập nhật
-	        Customer updatedCustomer = storageService.saveOrUpdate(existingCustomer);
-
+	        updatedCustomer = storageService.saveOrUpdate(existingCustomer);
+	        }
+	        
+	        else
+	        {
+	        	updatedCustomer = storageService.saveOrUpdate(customer);
+	        }
 	        log.info("Khách hàng đã được cập nhật thành công:");
 	        log.info("ID: {}", updatedCustomer.getId());
 	        log.info("Tên công ty: {}", updatedCustomer.getCompanyName());

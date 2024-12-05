@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 	<!-- BEGIN CONTENT -->
 	<div class="app-content content">
 		<div class="content-body">
@@ -8,112 +7,104 @@
 				<div class="col-12">
 					<div class="card">
 						<div class="card-header">
-							<h4 class="card-title">Thêm Khách Hàng Mới</h4>
+							<h4 class="card-title">Chỉnh Sửa Khách Hàng</h4>
 						</div>
-						
-				        <script th:if="${alertSuccessMessage != null}">
-							    alert("[[${alertSuccessMessage}]]");
-							</script>
-							<script th:if="${alertDataMessage != null}">
-							    alert("[[${alertDataMessage}]]");
-							</script>
-				        
 						<div class="card-content">
 							<div class="card-body">
-							<form th:action="@{/customer/create-customer_dan}" method="post" th:object="${customer}">
-							
-					            <div class="form-group">
-					                <label for="company_name">Tên Công Ty:</label>
-					                <input type="text" class="form-control" id="company_name" name="companyName" th:field="*{companyName}" required>
-					            </div>
-								
-								
-					            <div class="form-group">
-					                <label for="contact_person">Người Liên Hệ Chính:</label>
-					                <input type="text" class="form-control" id="contact_person" name="contactPerson" th:field="*{contactPerson}" required>
-					            </div>
-					
-					            <div class="form-group">
-					                <label for="email">Email:</label>
-					                <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required>
-					            </div>
-					
-					            <div class="form-group">
-					                <label for="phone">Số Điện Thoại:</label>
-					                <input type="tel" class="form-control" id="phone" name="phone" th:field="*{phone}" required>
-					            </div>
-					
-					            <div class="form-group">
-					                <label for="address">Địa Chỉ:</label>
-					                <input type="text" class="form-control" id="address" name="address" th:field="*{address}" required>
-					            </div>
-					
-					            <div class="form-group">
-					                <label for="profession">Ngành Nghề:</label>
-					                <select class="form-control" id="profession" name="profession" th:field="*{profession}" required>
-					                    <option value="">Chọn Ngành Nghề</option>
-					                    <th:block th:each="profession : ${professions}">
-											<option 
-												th:value="${profession.id}"
-												th:text="${profession.name}"
-												th:selected="${profession.id == 1}"></option>
-										</th:block>
-										
-					                </select>
-					                
-					            </div>
-					
-					            <div class="form-group">
-					                <label for="main_status">Trạng Thái Chính:</label>
-					                <select class="form-control" id="main_status" name="mainStatus" th:field="*{mainStatus}" required>
-					                    <option value="">Chọn Trạng Thái Chính</option>
-										<th:block th:each="status : ${statuses}">
-											<option th:value="${status.id}" th:text="${status.name}"
-											th:selected="${status.id == 1}"></option>
-										</th:block>
-					                </select>
-					            </div>
-					
-					            <div class="form-group">
-					                <label for="sub_status">Trạng Thái Phụ:</label>
-					                <select class="form-control" id="sub_status" name="subStatus" th:field="*{subStatus}" required>
-					                    <option value="">Chọn Trạng Thái Phụ</option>
-					                    <option th:each="status : ${statuses}" th:value="${status.id}" th:text="${status.name}"></option>
-					                </select>
-					            </div>
-					
-					            <div class="form-group">
-					                <label for="responsible_person">Người Phụ Trách:</label>
-					                <select class="form-control" id="responsible_person" name="responsiblePerson" th:field="*{responsiblePerson}" required>
-					                    <option value="">Chọn Người Phụ Trách</option>
-					                    <option th:each="person : ${responsiblePersons}" th:value="${person.id}" th:text="${person.name}"></option>
-					                </select>
-					            </div>
-					
-					            <div class="form-group">
-					                <label for="note">Ghi Chú:</label>
-					                <textarea class="form-control" id="note" name="note" th:field="*{note}"></textarea>
-					            </div>
-					
-					            <button type="submit" class="btn btn-primary">Lưu Khách Hàng</button>
-					            <a th:href="@{/customer/list}" class="btn btn-secondary">Quay Lại</a>
-					        </form>
-						</div>
+								<form id="updateCustomerForm" th:action="@{/customer/edit-customer}" method="post">
+									<input type="hidden" id="customer_id" name="id" th:value="${customer != null ? customer.id : ''}"> <!-- Giá trị này có thể là ID của khách hàng hiện tại -->
+									<div class="form-group">
+										<label for="company_name">Tên Công Ty:</label>
+										<input type="text" class="form-control" id="company_name" name="company_name"
+										   th:value="${customer.companyName}" required>
+									</div>
+
+									<div class="form-group">
+										<label for="contact_person">Người Liên Hệ Chính:</label>
+										<input type="text" class="form-control" id="contact_person" name="contact_person"
+										   th:value="${customer.contactPerson}" required>
+									</div>
+
+									<div class="form-group">
+										<label for="email">Email:</label>
+										<input type="email" class="form-control" id="email" name="email"
+										   th:value="${customer.email}" required>
+									</div>
+
+									<div class="form-group">
+										<label for="phone">Số Điện Thoại:</label>
+										<input type="tel" class="form-control" id="phone" name="phone"
+										   th:value="${customer.phone}" required>
+									</div>
+
+									<div class="form-group">
+										<label for="address">Địa Chỉ:</label>
+										<input type="text" class="form-control" id="address" name="address"
+										   th:value="${customer.address}">
+									</div>
+
+									<div class="form-group">
+										<label for="profession">Ngành Nghề:</label>
+										<select class="form-control" id="profession" name="profession">
+											<option value="">Chọn Ngành Nghề</option>
+											<th:block th:each="profession : ${professions}">
+												<option th:value="${profession.id}"
+													th:text="${profession.name}"
+													th:selected="${profession.id == customer.profession.id}"></option>
+											</th:block>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="main_status">Trạng Thái Chính:</label>
+										<select class="form-control" id="main_status" name="main_status">
+											<option value="">Chọn Trạng Thái Chính</option>
+											<th:block th:each="status : ${statuses}">
+												<option th:value="${status.id}"
+													th:text="${status.name}"
+													th:selected="${status.id == customer.mainStatus.id}"></option>
+											</th:block>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="sub_status">Trạng Thái Phụ:</label>
+										<select class="form-control" id="sub_status" name="sub_status">
+											<option value="">Chọn Trạng Thái Phụ</option>
+											<th:block th:each="status : ${statuses}">
+												<option th:value="${status.id}"
+													th:text="${status.name}"
+													th:selected="${status.id == customer.subStatus.id}"></option>
+											</th:block>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="responsible_person">Người Phụ Trách:</label>
+										<select class="form-control" id="responsible_person" name="responsible_person">
+											<option value="">Chọn Người Phụ Trách</option>
+											<th:block th:each="person : ${responsiblePersons}">
+												<option th:value="${person.id}"
+													th:text="${person.name}"
+													th:selected="${person.id == customer.responsiblePerson.id}"></option>
+											</th:block>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="note">Ghi Chú:</label>
+										<textarea class="form-control" id="note" name="note" th:text="${customer.note}"></textarea>
+									</div>
+
+									<button type="submit" class="btn btn-primary">Lưu Khách Hàng</button>
+									<button type="button" class="btn btn-secondary" onclick="goBack()">Quay Lại</button>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
 			</section>
 		</div>
 	</div>
-	
-	<script>
-	  document.querySelectorAll("input[required]").forEach((input) => {
-	    const label = input.previousElementSibling;
-	    if (label) {
-	      label.innerHTML += ' <span style="color: red;">*</span>';
-	    }
-	  });
-	</script>
-	
 	<!-- END CONTENT -->
-
+</html>
