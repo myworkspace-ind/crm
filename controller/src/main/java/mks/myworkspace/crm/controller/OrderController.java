@@ -20,7 +20,6 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -29,9 +28,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -58,7 +55,7 @@ import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Order;
-import mks.myworkspace.crm.transformer.JpaTransformer_Order_Handsontable;
+import mks.myworkspace.crm.validate.OrderValidator;
 
 /**
  * Handles requests for Orders.
@@ -219,55 +216,29 @@ public class OrderController extends BaseController {
 		return mav;
 	}
 	
-	private String getDefaultOrderData() throws IOException {
-		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);
-	}
+	
 	
 	@GetMapping("/load")
 	@ResponseBody
 	public Object getOrderData() throws IOException {
-	    log.debug("Get sample data from configuration file.");
-	    
-	    // Lấy dữ liệu mặc định (nếu cần)
-	    String jsonOrderTable = getDefaultOrderData();
+		log.debug("Get sample data from configuration file.");
+		
+		List<Order> orders = orderService.getAllOrders();
+		List<Object[]> tblData = OrderValidator.convertOrdersToTableData(orders);
+		
+//		List<Object[]> tblData = new ArrayList<>();
+//		Object[] data1 = new Object[] { "D123A54", "2024-10-24", "Máy móc", "Nguyễn Văn A", "Xe tải", "" };
+//		Object[] data2 = new Object[] { "M123543", "2024-10-25", "Thực phẩm", "Nguyễn Văn B", "Xe tải", "" };
+//
+//		tblData.add(data1);
+//		tblData.add(data2);
+		int[] colWidths = { 100, 100, 300, 300, 300, 300 };
+		String[] colHeaders = { "Mã đơn hàng", "Ngày giao", "Loại hàng hóa", "Thông tin người gửi",
+				"Phương tiện vận chuyển", "Thao tác", };
+		
+		TableStructure tblOrder = new TableStructure(colWidths, colHeaders, tblData);
 
-	    // Lấy dữ liệu đơn hàng từ repository
-	    List<Order> lstOrders = storageService.getOrderRepo().findAll();
-
-	    if (lstOrders == null || lstOrders.isEmpty()) {
-	        // Nếu không có đơn hàng trong database, trả về dữ liệu mặc định
-	        return jsonOrderTable;
-	    } else {
-	        // Parse JSON mặc định để lấy cấu trúc bảng
-	        JSONObject jsonObjTableOrder = new JSONObject(jsonOrderTable);
-
-	        // Lấy chiều rộng cột từ cấu trúc mặc định
-	        JSONArray jsonObjColWidths = jsonObjTableOrder.getJSONArray("colWidths");
-	        int len = jsonObjColWidths.length();
-	        int[] colWidths = new int[len];
-	        for (int i = 0; i < len; i++) {
-	            colWidths[i] = jsonObjColWidths.getInt(i);
-	        }
-
-	        // Lấy tiêu đề cột từ cấu trúc mặc định
-	        JSONArray jsonObjColHeaders = jsonObjTableOrder.getJSONArray("colHeaders");
-	        len = jsonObjColHeaders.length();
-	        String[] colHeaders = new String[len];
-	        for (int i = 0; i < len; i++) {
-	            colHeaders[i] = jsonObjColHeaders.getString(i);
-	        }
-
-	        // Chuyển đổi danh sách đơn hàng thành dữ liệu dạng bảng 2D
-	        List<Object[]> tblData = JpaTransformer_Order_Handsontable.convert2D(lstOrders);
-
-	        // Tạo cấu trúc bảng với dữ liệu mới
-	        JSONObject tblOrderJson = new JSONObject();
-	        tblOrderJson.put("colHeaders", new JSONArray(colHeaders));
-	        tblOrderJson.put("colWidths", new JSONArray(colWidths));
-	        tblOrderJson.put("data", new JSONArray(tblData));
-
-	        return tblOrderJson.toString();
-	    }
+		return tblOrder;
 	}
 
 
