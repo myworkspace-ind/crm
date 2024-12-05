@@ -11,36 +11,36 @@
 						</div>
 						<div class="card-content">
 							<div class="card-body">
-								<form id="updateCustomerForm" th:action="@{/customer/edit-customer}" method="post">
-									<input type="hidden" id="customer_id" name="id" th:value="${customer != null ? customer.id : ''}"> <!-- Giá trị này có thể là ID của khách hàng hiện tại -->
+								<form id="updateCustomerForm" th:action="@{/customer/newedit-customer}" method="post">
+									<input type="hidden" id="customer_id" name="id" th:value="${customer?.id}"> <!-- Giá trị này có thể là ID của khách hàng hiện tại -->
 									<div class="form-group">
 										<label for="company_name">Tên Công Ty:</label>
 										<input type="text" class="form-control" id="company_name" name="company_name"
-										   th:value="${customer.companyName}" required>
+										   th:value="${customer?.companyName}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="contact_person">Người Liên Hệ Chính:</label>
 										<input type="text" class="form-control" id="contact_person" name="contact_person"
-										   th:value="${customer.contactPerson}" required>
+										   th:value="${customer?.contactPerson}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="email">Email:</label>
 										<input type="email" class="form-control" id="email" name="email"
-										   th:value="${customer.email}" required>
+										   th:value="${customer?.email}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="phone">Số Điện Thoại:</label>
 										<input type="tel" class="form-control" id="phone" name="phone"
-										   th:value="${customer.phone}" required>
+										   th:value="${customer?.phone}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="address">Địa Chỉ:</label>
 										<input type="text" class="form-control" id="address" name="address"
-										   th:value="${customer.address}">
+										   th:value="${customer?.address}">
 									</div>
 
 									<div class="form-group">
@@ -50,7 +50,7 @@
 											<th:block th:each="profession : ${professions}">
 												<option th:value="${profession.id}"
 													th:text="${profession.name}"
-													th:selected="${profession.id == customer.profession.id}"></option>
+													th:selected="${profession.id == customer?.profession?.id}"></option>
 											</th:block>
 										</select>
 									</div>
@@ -62,7 +62,7 @@
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}"
 													th:text="${status.name}"
-													th:selected="${status.id == customer.mainStatus.id}"></option>
+													th:selected="${status.id == customer?.mainStatus?.id}"></option>
 											</th:block>
 										</select>
 									</div>
@@ -74,7 +74,7 @@
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}"
 													th:text="${status.name}"
-													th:selected="${status.id == customer.subStatus.id}"></option>
+													th:selected="${status.id == customer?.subStatus?.id}"></option>
 											</th:block>
 										</select>
 									</div>
@@ -86,14 +86,14 @@
 											<th:block th:each="person : ${responsiblePersons}">
 												<option th:value="${person.id}"
 													th:text="${person.name}"
-													th:selected="${person.id == customer.responsiblePerson.id}"></option>
+													th:selected="${person.id == customer?.responsiblePerson?.id}"></option>
 											</th:block>
 										</select>
 									</div>
 
 									<div class="form-group">
 										<label for="note">Ghi Chú:</label>
-										<textarea class="form-control" id="note" name="note" th:text="${customer.note}"></textarea>
+										<textarea class="form-control" id="note" name="note" th:text="${customer?.note}"></textarea>
 									</div>
 
 									<button type="submit" class="btn btn-primary">Lưu Khách Hàng</button>

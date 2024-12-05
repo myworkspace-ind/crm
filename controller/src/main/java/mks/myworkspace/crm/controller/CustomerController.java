@@ -401,12 +401,12 @@ public class CustomerController extends BaseController {
 	
 	// Hàm edit hoặc add customer của Tấn Đạt
 	@Transactional
-	@RequestMapping(value = "/editCustomer")
+	@RequestMapping(value = "/newEditCustomer")
 	@ResponseBody
-	public ModelAndView updateCustomer(@RequestParam(value = "id", required = false) Long customerId, HttpServletRequest request,
+	public ModelAndView newEditCustomer(@RequestParam(value = "id", required = false) Long customerId, HttpServletRequest request,
 	                                   HttpSession httpSession) {
 
-	    ModelAndView mav = new ModelAndView("editCustomer_Dat");
+	    ModelAndView mav = new ModelAndView("newEditCustomer");
 
 	    // Nếu customerId không tồn tại hoặc không tìm thấy, tạo mới một Customer
 	    Customer customer = (customerId == null) ? new Customer() :
@@ -437,7 +437,7 @@ public class CustomerController extends BaseController {
 
 	
 	// Hàm edit-customer của Đạt
-	@PutMapping("/edit-customer")
+	@PutMapping("/newedit-customer")
 	@ResponseBody
 	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {
 	    System.out.println(customer.getId());
@@ -453,28 +453,30 @@ public class CustomerController extends BaseController {
 	        if(customerOpt.isPresent()) {
 	        
 	        // Cập nhật thông tin khách hàng
-	        Customer existingCustomer = customerOpt.get();
+		        Customer existingCustomer = customerOpt.get();
+		        
+		        existingCustomer.setCompanyName(customer.getCompanyName());
+		        existingCustomer.setContactPerson(customer.getContactPerson());
+		        existingCustomer.setEmail(customer.getEmail());
+		        existingCustomer.setPhone(customer.getPhone());
+		        existingCustomer.setAddress(customer.getAddress());
+		        existingCustomer.setResponsiblePerson(customer.getResponsiblePerson());
+		        existingCustomer.setNote(customer.getNote());
+		        existingCustomer.setProfession(customer.getProfession());
+		        existingCustomer.setMainStatus(customer.getMainStatus());
+		        existingCustomer.setSubStatus(customer.getSubStatus());
+		        // existingCustomer.setUpdatedAt(new Date()); // Cập nhật thời gian sửa nếu cần
+	
+		        // Lưu lại khách hàng đã cập nhật
+		        updatedCustomer = storageService.saveOrUpdate(existingCustomer);
 	        
-	        existingCustomer.setCompanyName(customer.getCompanyName());
-	        existingCustomer.setContactPerson(customer.getContactPerson());
-	        existingCustomer.setEmail(customer.getEmail());
-	        existingCustomer.setPhone(customer.getPhone());
-	        existingCustomer.setAddress(customer.getAddress());
-	        existingCustomer.setResponsiblePerson(customer.getResponsiblePerson());
-	        existingCustomer.setNote(customer.getNote());
-	        existingCustomer.setProfession(customer.getProfession());
-	        existingCustomer.setMainStatus(customer.getMainStatus());
-	        existingCustomer.setSubStatus(customer.getSubStatus());
-	        // existingCustomer.setUpdatedAt(new Date()); // Cập nhật thời gian sửa nếu cần
-
-	        // Lưu lại khách hàng đã cập nhật
-	        updatedCustomer = storageService.saveOrUpdate(existingCustomer);
 	        }
 	        
 	        else
 	        {
 	        	updatedCustomer = storageService.saveOrUpdate(customer);
 	        }
+	        
 	        log.info("Khách hàng đã được cập nhật thành công:");
 	        log.info("ID: {}", updatedCustomer.getId());
 	        log.info("Tên công ty: {}", updatedCustomer.getCompanyName());
