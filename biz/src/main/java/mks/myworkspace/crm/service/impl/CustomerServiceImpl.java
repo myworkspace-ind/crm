@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.Interaction;
+import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.StatusRepository;
 import mks.myworkspace.crm.service.CustomerService;
@@ -19,8 +22,11 @@ import mks.myworkspace.crm.service.CustomerService;
 @Transactional
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
-
-    @Autowired
+	@Autowired
+	@Getter
+	AppRepository appRepo;
+	
+	@Autowired
     private CustomerRepository repo;
     
     @Autowired
@@ -133,4 +139,33 @@ public class CustomerServiceImpl implements CustomerService {
     public long getTotalCustomerCount() {
         return repo.countAllCustomers();
     }
+    
+    @Override
+    public List<Interaction> getAllCustomerInteraction(Long customerId) {
+        return repo.getAllCustomerInteraction(customerId);
+    };
+    
+    @Override
+    public List<Interaction> saveOrUpdateInteraction(List<Interaction> lstInteractions) {
+        // Gọi repository để lưu hoặc cập nhật và lấy danh sách ID sau khi xử lý
+        List<Long> lstIds = appRepo.saveOrUpdateInteraction(lstInteractions);
+
+        // Gán lại ID cho từng Interaction đã lưu hoặc cập nhật
+        for (int i = 0; i < lstIds.size(); i++) {
+            lstInteractions.get(i).setId(lstIds.get(i));
+        }
+
+        return lstInteractions;
+    }
+    
+    @Override
+    public void deleteInteractionById(Long interactionId) {
+        try {     
+            // Gọi repository để xóa Interaction
+            appRepo.deleteInteractionById(interactionId);           
+        } catch (Exception e) {       
+            throw new RuntimeException("Có lỗi xảy ra trong quá trình xóa Interaction.", e);
+        }
+    }
+
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.Interaction;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
@@ -61,5 +62,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
 	@Query("SELECT COUNT(c) FROM Customer c")
 	long countAllCustomers();
+	
+	@Query("SELECT ci FROM Interaction ci WHERE ci.customer.id = :customerId")
+	List<Interaction> getAllCustomerInteraction(@Param("customerId") Long customerId);	
 
 }
