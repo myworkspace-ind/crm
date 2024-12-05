@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- START COMMON META AND TITLE -->
+    <th:block th:include="fragments/common_meta_title"></th:block>
+    <!-- END COMMON META AND TITLE -->
+
+    <!-- START COMMON CSS -->
+    <th:block th:include="fragments/common_css"></th:block>
+    <!-- END COMMON CSS -->
+
+    <link rel="stylesheet" type="text/css" href="resources/css/add-customer-style.css">
+</head>
+<body class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+    data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
+    <!-- BEGIN HEADER -->
+    <th:block th:include="fragments/hmenu"></th:block>
+    <!-- END HEADER -->
+
+    <!-- BEGIN LEFT MENU NAVIGATION -->
+    <!-- <th:block th:include="fragments/leftNavCRM"></th:block> -->
+    <!-- END LEFT MENU NAVIGATION -->
+
+    <th:block th:include="fragments/frm_formCustomerWithValue_Dat"></th:block>
+
+    <!-- START CUSTOMIZE BUTTON -->
+    <th:block th:include="fragments/customizeButton"></th:block>
+    <!-- END CUSTOMIZE BUTTON -->
+	
+    <!-- START COMMON JAVASCRIPT -->
+    <th:block th:include="fragments/common_javascript"></th:block>
+    <!-- END COMMON JAVASCRIPT -->
+
+    <!-- FILE JS BỔ SUNG -->
+    <script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/app-assets/js/update/editCustomer_Dat.js}" defer></script>
+
+	<script type="text/javascript">
+	 document.getElementById('updateCustomerForm').addEventListener('submit', function(event) {
+	        // Ngừng hành động mặc định của form (gửi form)
+	        event.preventDefault();
+	        
+	        // Gọi hàm saveCustomerChanges để xử lý việc gửi dữ liệu
+	        saveCustomerChanges();
+	    });
+	</script>
+</body>
+</html>

@@ -11,16 +11,18 @@
 <!-- START COMMON CSS -->
 <th:block th:include="fragments/common_css"></th:block>
 <!-- END COMMON CSS -->
-
+<th:block th:include="fragments/head"></th:block>
 <link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
 <link rel="stylesheet" type="text/css" th:href="@{/resources/css/status.css}">
 <link rel="stylesheet" type="text/css" th:href="@{/resources/css/buttonGroupFunction.css}">
-</head>
 
+<th:block th:include="fragments/head"></th:block>
+</head>
+<!-- class="vertical-layout vertical-compact-menu menu-expanded fixed-navbar" Bỏ khoảng trống ở dòng bên trái, dòng này đặt ngay dưới "<body" -->
 <body
-	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
+	class="fixed-navbar"
 	data-open="click" data-menu="vertical-compact-menu"
-	data-col="2-columns">
+	data-col="1-columns">
 
 	<!-- BEGIN HEADER  -->
 	
