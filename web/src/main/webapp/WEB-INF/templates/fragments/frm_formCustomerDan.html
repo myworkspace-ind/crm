@@ -14,7 +14,8 @@
         					alert("Vui lòng nhập đầy đủ thông tin");
     					</script>
     					<script th:if="${alertSuccessMessage}" type="text/javascript">
-        					alert("Đã lưu khách hàng thành công");
+        					alert("Đã lưu khách hàng thành công");	
+        					window.location.href = _ctx + 'customer/list';
     					</script>
     					<script th:if="${alertDataMessage}" type="text/javascript">
         					alert("Vui lòng kiểm tra lại thông tin");
@@ -91,7 +92,7 @@
 					            </div>
 					
 					            <button type="submit" class="btn btn-primary">Lưu Khách Hàng</button>
-					            <a href="/" class="btn btn-secondary">Quay Lại</a>
+					            <a th:href="@{/customer/list}" class="btn btn-secondary">Quay Lại</a>
 					        </form>
 						</div>
 						</div>

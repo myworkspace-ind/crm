@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,10 +73,10 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	StatusService statusService;
-	
+
 	@Autowired
 	ResponsiblePersonService responsiblePersonService;
-	
+
 	@Autowired
 	ProfessionService professionService;
 
@@ -87,7 +88,7 @@ public class CustomerController extends BaseController {
 		log.debug("Display Cusomter list with keyword= {}", keyword);
 		ModelAndView mav = new ModelAndView("customer_list_v2");
 		initSession(request, httpSession);
-		
+
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 		List<Customer> customers;
@@ -101,23 +102,22 @@ public class CustomerController extends BaseController {
 			mav.addObject("keyword", keyword);
 
 		} else {
-			customers = customerService.getAllCustomersWithStatuses ();
+			customers = customerService.getAllCustomersWithStatuses();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
 
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
-		
 
 		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
-		
-	    if (statusCounts == null) {
-	        statusCounts = new HashMap<>(); 
-	    }
-	    
-	    long totalCustomerCount = customerService.getTotalCustomerCount();
-	    
+
+		if (statusCounts == null) {
+			statusCounts = new HashMap<>();
+		}
+
+		long totalCustomerCount = customerService.getTotalCustomerCount();
+
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
 		mav.addObject("responsiblePersons", responsiblePersons);
@@ -132,9 +132,9 @@ public class CustomerController extends BaseController {
 	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
 			HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("customerDetail");
-		
+
 		initSession(request, httpSession);
-		
+
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 		log.debug("Customer Detail is running....");
@@ -147,35 +147,31 @@ public class CustomerController extends BaseController {
 		}, () -> {
 			mav.addObject("errorMessage", "Customer not found.");
 		});
-		
+
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		mav.addObject("responsiblePersons", responsiblePersons);
-		
+
 		return mav;
 	}
 
 	@PostMapping("/create-customer")
 	@ResponseBody
 	public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request) {
-	    try {
-	        customer.setCreatedAt(new Date());
-	        customer.setSiteId(getCurrentSiteId());
-	        customer.setAccountStatus(true);
-	        
-	        Customer savedCustomer = storageService.saveOrUpdate(customer);
+		try {
+			customer.setCreatedAt(new Date());
+			customer.setSiteId(getCurrentSiteId());
+			customer.setAccountStatus(true);
 
-	        return ResponseEntity.ok()
-	            .body(Map.of(
-	                "message", "Khách hàng mới đã được thêm thành công!", 
-	                "customer", savedCustomer
-	            ));
-	    } catch (IllegalArgumentException e) {
-	        return ResponseEntity.badRequest()
-	            .body(Map.of("errorMessage", e.getMessage()));
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	            .body(Map.of("errorMessage", "Có lỗi xảy ra khi thêm khách hàng. Vui lòng thử lại sau!"));
-	    }
+			Customer savedCustomer = storageService.saveOrUpdate(customer);
+
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Khách hàng mới đã được thêm thành công!", "customer", savedCustomer));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra khi thêm khách hàng. Vui lòng thử lại sau!"));
+		}
 	}
 
 	@Transactional
@@ -188,10 +184,10 @@ public class CustomerController extends BaseController {
 				return ResponseEntity.badRequest().body(Map.of("errorMessage", "Danh sách ID không được trống."));
 			}
 			// Gọi service để xóa danh sách khách hàng dựa trên ID
-			 storageService.deleteCustomersByIds(customerIds);
-			 
-			 //TODO: Cannot DELETE ONE OR MORE CUSTOMER BECAUSE OF ROLL BACK (CANNOT COMMIT)
-			 //customerService.deleteAllByIds(customerIds); 
+			storageService.deleteCustomersByIds(customerIds);
+
+			// TODO: Cannot DELETE ONE OR MORE CUSTOMER BECAUSE OF ROLL BACK (CANNOT COMMIT)
+			// customerService.deleteAllByIds(customerIds);
 
 			return ResponseEntity.ok()
 					.body(Map.of("message", "Các khách hàng đã được xóa thành công!", "ids", customerIds));
@@ -201,6 +197,41 @@ public class CustomerController extends BaseController {
 			log.debug("Error while deleting customers with IDs: {}. Error: {}", customerIds, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
+		}
+	}
+
+	@GetMapping("/get-customer/{id}")
+	@ResponseBody
+	public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
+		try {
+			if (id == null) {
+				return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID khách hàng không được để trống."));
+			}
+
+			Optional<Customer> customerOpt = customerService.findById(id);
+			if (customerOpt.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(Map.of("errorMessage", "Khách hàng với ID " + id + " không tồn tại."));
+			}
+
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Thông tin khách hàng đã được tìm thấy!", "customer", customerOpt.get()));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
+					"Có lỗi xảy ra khi lấy thông tin khách hàng. Vui lòng thử lại sau!", "details", e.getMessage()));
+		}
+	}
+
+	@PostMapping("/update-customer-status")
+	@ResponseBody
+	public ResponseEntity<?> updateCustomerStatus(@RequestBody Customer customer) {
+		try {
+			Customer updatedCustomer = storageService.updateCustomerStatus(customer);
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Cập nhật trạng thái thành công!", "customer", updatedCustomer));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật trạng thái"));
 		}
 	}
 
@@ -259,13 +290,12 @@ public class CustomerController extends BaseController {
 //	    //mav.addObject("customer", customer); // Thêm khách hàng vào model
 //		return mav;
 //	}
-	
+
 	// Hiển thị trang thêm mới khách hàng
 	@GetMapping("/add")
 	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
-		//ModelAndView mav = new ModelAndView("addCustomer");
+		// ModelAndView mav = new ModelAndView("addCustomer");
 		ModelAndView mav = new ModelAndView("addCustomer_v2");
-		
 
 		// Thêm đối tượng Customer mới vào Model để truyền vào form
 		mav.addObject("customer", new Customer());
@@ -273,10 +303,10 @@ public class CustomerController extends BaseController {
 		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
 		List<Status> statuses = statusService.getAllStatuses();
 		mav.addObject("statuses", statuses);
-		
+
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		mav.addObject("responsiblePersons", responsiblePersons);
-		
+
 		List<Profession> professions = professionService.getAllProfessions();
 		mav.addObject("professions", professions);
 
@@ -300,7 +330,7 @@ public class CustomerController extends BaseController {
 		log.debug("Display Cusomter list with keyword= {}", keyword);
 		ModelAndView mav = new ModelAndView("customerInteraction");
 		initSession(request, httpSession);
-		
+
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 		List<Customer> customers;
@@ -314,23 +344,22 @@ public class CustomerController extends BaseController {
 			mav.addObject("keyword", keyword);
 
 		} else {
-			customers = customerService.getAllCustomersWithStatuses ();
+			customers = customerService.getAllCustomersWithStatuses();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
 
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
-		
 
 		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
-		
-	    if (statusCounts == null) {
-	        statusCounts = new HashMap<>(); 
-	    }
-	    
-	    long totalCustomerCount = customerService.getTotalCustomerCount();
-	    
+
+		if (statusCounts == null) {
+			statusCounts = new HashMap<>();
+		}
+
+		long totalCustomerCount = customerService.getTotalCustomerCount();
+
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
 		mav.addObject("responsiblePersons", responsiblePersons);
@@ -340,7 +369,7 @@ public class CustomerController extends BaseController {
 
 		return mav;
 	}
-	
+
 	/**
 	 * @author Khoa
 	 * @param customerId
