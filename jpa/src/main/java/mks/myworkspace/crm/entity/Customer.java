@@ -3,6 +3,7 @@ package mks.myworkspace.crm.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -67,7 +68,7 @@ public class Customer implements Serializable {
     @ManyToOne
     @JoinColumn(name = "responsible_person_id")
     private ResponsiblePerson responsiblePerson;
-    
+
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     private Date createdAt;

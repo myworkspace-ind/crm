@@ -89,5 +89,5 @@ public class Interaction implements Serializable {
         this.next_plan = plan;
         this.customerId = customerId;
         this.customer = customer;
-    }
+    }      
 }

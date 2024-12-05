@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ import mks.myworkspace.crm.entity.Interaction;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    List<Customer> findAll();
+	List<Customer> findAll();
 
     @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss " +
            "WHERE c.accountStatus = true AND (" +
@@ -72,4 +73,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     
     @Query("SELECT COUNT(c) FROM Customer c WHERE c.accountStatus = true")
     long countAllCustomers();
+    
+	@Query("SELECT c FROM Customer c "
+	        + "LEFT JOIN Interaction ci ON c.id = ci.customer.id "
+	        + "WHERE ci.interaction_date BETWEEN :startDate AND :endDate")
+	List<Customer> findByInteractDateRange(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 }
