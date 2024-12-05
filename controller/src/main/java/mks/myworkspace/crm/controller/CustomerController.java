@@ -498,9 +498,14 @@ public class CustomerController extends BaseController {
 	        } else {
 	            log.info("Người phụ trách: Không có");
 	        }
-
-	        return ResponseEntity.ok()
-	                .body(Map.of("message", "Khách hàng đã được cập nhật thành công!", "customer", updatedCustomer));
+	        if(customerOpt.isPresent()) {
+	        	return ResponseEntity.ok()
+	        			.body(Map.of("message", "Khách hàng đã được cập nhật thành công!", "customer", updatedCustomer));
+	        }
+	        else {
+	        	return ResponseEntity.ok()
+	        			.body(Map.of("message", "Khách hàng đã được thêm mới thành công!", "customer", updatedCustomer));
+	        }
 	    } catch (IllegalArgumentException e) {
 	        return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
 	    } catch (Exception e) {

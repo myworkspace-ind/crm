@@ -7,7 +7,7 @@
 				<div class="col-12">
 					<div class="card">
 						<div class="card-header">
-							<h4 class="card-title">Chỉnh Sửa Khách Hàng</h4>
+							<h4 class="card-title" th:text="${customer?.id != null ? 'Chỉnh Sửa Khách Hàng' : 'Thêm Khách Hàng Mới'}"></h4>
 						</div>
 						<div class="card-content">
 							<div class="card-body">
