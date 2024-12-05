@@ -285,6 +285,10 @@ public class CustomerController extends BaseController {
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 
+		long selectedProfession = 3L;
+		mav.addObject("selectedProfession", selectedProfession);
+		
+		
 		return mav;
 	}
 

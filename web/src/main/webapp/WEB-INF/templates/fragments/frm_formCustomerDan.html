@@ -49,15 +49,16 @@
 					
 					            <div class="form-group">
 					                <label for="address">Địa Chỉ:</label>
-					                <input type="text" class="form-control" id="address" name="address" th:field="*{address}">
+					                <input type="text" class="form-control" id="address" name="address" th:field="*{address}" th:value="aa" required>
 					            </div>
 					
 					            <div class="form-group">
 					                <label for="profession">Ngành Nghề:</label>
 					                <select class="form-control" id="profession" name="profession" th:field="*{profession}" required>
-					                    <option value="">Chọn Ngành Nghề</option>
-					                    <option th:each="profession : ${professions}" th:value="${profession.id}" th:text="${profession.name}"></option>
-					                </select>
+									    <th:block th:each="profession : ${professions}">
+										    <option th:value="${profession.id}" th:text="${profession.name}" th:selected="${profession.id == selectedProfession}"></option>
+									    </th:block>
+									</select>
 					            </div>
 					
 					            <div class="form-group">
