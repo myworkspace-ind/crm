@@ -68,9 +68,15 @@
 					</div>
 
 					<div class="actions">
-						<button>Edit</button>
-						<button>Delete</button>
+						<a th:href="@{newEditCustomer(id=${customer.id})}" >
+						    <button type="button"
+						    	style="cursor: pointer;">
+						    Edit
+						    </button>
+						</a>
+						<button style="cursor: pointer; background: #DA4453" th:onclick="'deleteCustomer(' + ${customer.id} + ')'">Delete</button>
 					</div>
+					
 
 					<!-- <div class="relationship-section">
 						<label for="relationship">Trạng thái:</label>
@@ -162,10 +168,14 @@
 	<!-- START COMMON JAVASCRIPT -->
 	<th:block th:include="fragments/common_javascript"></th:block>
 	<!-- END COMMON JAVASCRIPT -->
+	
+	<th:block th:include="fragments/frg_ModalConfirmation"></th:block>
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
 	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/deleteCustomer.js}" defer></script>
+	
 </body>
 
 </html>
