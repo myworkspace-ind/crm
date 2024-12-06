@@ -1,17 +1,15 @@
-package mks.myworkspace.crm.validate;
+package mks.myworkspace.crm.transformer;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
-import mksgroup.java.common.CommonUtil;
+import mks.myworkspace.crm.entity.OrderCategory;
 
-public class OrderValidator {
-	public static List<Object[]> convertOrdersToTableData(List<Order> orders) {
+
+public class JpaTransformer_Order_Handsontable {
+	public static List<Object[]> convert2D(List<Order> orders) {
 	    List<Object[]> tableData = new ArrayList<>();
 	    
 	    // Định dạng ngày
@@ -27,7 +25,7 @@ public class OrderValidator {
 		            order.getId(),  // Lay id
 	                formattedDate,        // Ngay van chuyen                        
 	                order.getGoodsCategory().getName(),                      
-	                order.getName(),                         
+	                order.getSender().getContactPerson(),                         
 	                order.getTransportationMethod(),                            
 	            };
 

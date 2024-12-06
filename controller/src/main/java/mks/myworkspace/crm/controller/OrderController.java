@@ -28,10 +28,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +52,6 @@ import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Order;
-import mks.myworkspace.crm.validate.OrderValidator;
 
 /**
  * Handles requests for Orders.
@@ -94,10 +90,7 @@ public class OrderController extends BaseController {
 
 	@Autowired
 	StorageService storageService;
-	
-	@Value("classpath:order-category/orders-demo.json")
-	private Resource resOrderDemo;
-	
+
 	@Autowired
 	OrderCategoryService orderCategoryService;
 
@@ -215,32 +208,25 @@ public class OrderController extends BaseController {
 
 		return mav;
 	}
-	
-	
-	
+
 	@GetMapping("/load")
 	@ResponseBody
 	public Object getOrderData() throws IOException {
 		log.debug("Get sample data from configuration file.");
-		
-		List<Order> orders = orderService.getAllOrders();
-		List<Object[]> tblData = OrderValidator.convertOrdersToTableData(orders);
-		
-//		List<Object[]> tblData = new ArrayList<>();
-//		Object[] data1 = new Object[] { "D123A54", "2024-10-24", "Máy móc", "Nguyễn Văn A", "Xe tải", "" };
-//		Object[] data2 = new Object[] { "M123543", "2024-10-25", "Thực phẩm", "Nguyễn Văn B", "Xe tải", "" };
-//
-//		tblData.add(data1);
-//		tblData.add(data2);
 		int[] colWidths = { 100, 100, 300, 300, 300, 300 };
 		String[] colHeaders = { "Mã đơn hàng", "Ngày giao", "Loại hàng hóa", "Thông tin người gửi",
 				"Phương tiện vận chuyển", "Thao tác", };
-		
+		List<Object[]> tblData = new ArrayList<>();
+		Object[] data1 = new Object[] { "D123A54", "2024-10-24", "Máy móc", "Nguyễn Văn A", "Xe tải", "" };
+		Object[] data2 = new Object[] { "M123543", "2024-10-25", "Thực phẩm", "Nguyễn Văn B", "Xe tải", "" };
+
+		tblData.add(data1);
+		tblData.add(data2);
+
 		TableStructure tblOrder = new TableStructure(colWidths, colHeaders, tblData);
 
 		return tblOrder;
 	}
-
 
 	@GetMapping("/list")
 	public ModelAndView displayOrderConfiguration(HttpServletRequest request, HttpSession httpSession) {
