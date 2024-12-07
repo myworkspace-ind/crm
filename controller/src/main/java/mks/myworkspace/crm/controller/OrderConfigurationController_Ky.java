@@ -21,8 +21,10 @@ package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -39,6 +41,9 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Order;
+import mks.myworkspace.crm.entity.OrderCategory;
+import mks.myworkspace.crm.entity.OrderStatus;
+import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderService;
 
 /**
@@ -51,6 +56,9 @@ public class OrderConfigurationController_Ky extends BaseController {
 	
 	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
+	private OrderCategoryService categoryService;
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
 	 * 
@@ -111,8 +119,8 @@ public class OrderConfigurationController_Ky extends BaseController {
 	public Object getOrderConfigurationStatusData() throws IOException {
 		log.debug("Get sample data from configuration file.");
 		int[] colWidths = { 50, 300, 300, };
-		//String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", };
-		String[] colHeaders = { "No", "Tên", "Site_id", };
+		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", };
+		
 		List<Order> orderDataList=orderService.getAllOrders();
 		//Test
 		List<Object[]> orderData=new ArrayList<>();
@@ -121,40 +129,58 @@ public class OrderConfigurationController_Ky extends BaseController {
 			orderData.add(myData);
 		}
 		
-		List<Object[]> tblData = new ArrayList<>();
-		Object[] data1 = new Object[] { "1", "Mặc định", "Nhận đơn" };
-		Object[] data2 = new Object[] { "", "", "Đóng gói" };
-		Object[] data3 = new Object[] { "", "", "Vận chuyển" };
-		Object[] data4 = new Object[] { "", "", "Giao hàng" };
+		List<OrderCategory> orderCategoryStatus=categoryService.getAllOrderCategoriesWithOrderStatuses();
+		List<Object[]> orderStatusData=new ArrayList<>();
+		OrderCategory category=new OrderCategory();
+		Long id;
+		String nameCategory,nameStatus;
+		Set<OrderStatus> orderStatuses=new HashSet<OrderStatus>();
+		for(int i=0;i<orderCategoryStatus.size();i++) {
+			category=orderCategoryStatus.get(i);
+			id=category.getId();
+			nameCategory=category.getName();
+			orderStatuses=category.getOrderStatuses();
+			for(OrderStatus os : orderStatuses) {
+				nameStatus=os.getName();
+				Object[] data=new Object[] {id,nameCategory,nameStatus};
+				orderStatusData.add(data);
+			}
+		}
 		
-		Object[] data5 = new Object[] { "2", "Máy móc", "Nhận đơn" };
-		Object[] data6 = new Object[] { "", "", "Đóng gói" };
-		Object[] data7 = new Object[] { "", "", "Vận chuyển" };
-		Object[] data8 = new Object[] { "", "", "Lưu kho" };
-		Object[] data9 = new Object[] { "", "", "Giao hàng" };
-		
-		Object[] data10 = new Object[] { "3", "Thực phẩm", "Nhận đơn" };
-		Object[] data11 = new Object[] { "", "", "Đóng gói" };
-		Object[] data12 = new Object[] { "", "", "Vận chuyển" };
-		Object[] data13 = new Object[] { "", "", "Lưu kho lạnh" };
-		Object[] data14 = new Object[] { "", "", "Giao hàng" };
-		
-		tblData.add(data1);
-		tblData.add(data2);
-		tblData.add(data3);
-		tblData.add(data4);
-		tblData.add(data5);
-		tblData.add(data6);
-		tblData.add(data7);
-		tblData.add(data8);
-		tblData.add(data9);
-		tblData.add(data10);
-		tblData.add(data11);
-		tblData.add(data12);
-		tblData.add(data13);
-		tblData.add(data14);
+//		List<Object[]> tblData = new ArrayList<>();
+//		Object[] data1 = new Object[] { "1", "Mặc định", "Nhận đơn" };
+//		Object[] data2 = new Object[] { "", "", "Đóng gói" };
+//		Object[] data3 = new Object[] { "", "", "Vận chuyển" };
+//		Object[] data4 = new Object[] { "", "", "Giao hàng" };
+//		
+//		Object[] data5 = new Object[] { "2", "Máy móc", "Nhận đơn" };
+//		Object[] data6 = new Object[] { "", "", "Đóng gói" };
+//		Object[] data7 = new Object[] { "", "", "Vận chuyển" };
+//		Object[] data8 = new Object[] { "", "", "Lưu kho" };
+//		Object[] data9 = new Object[] { "", "", "Giao hàng" };
+//		
+//		Object[] data10 = new Object[] { "3", "Thực phẩm", "Nhận đơn" };
+//		Object[] data11 = new Object[] { "", "", "Đóng gói" };
+//		Object[] data12 = new Object[] { "", "", "Vận chuyển" };
+//		Object[] data13 = new Object[] { "", "", "Lưu kho lạnh" };
+//		Object[] data14 = new Object[] { "", "", "Giao hàng" };
+//		
+//		tblData.add(data1);
+//		tblData.add(data2);
+//		tblData.add(data3);
+//		tblData.add(data4);
+//		tblData.add(data5);
+//		tblData.add(data6);
+//		tblData.add(data7);
+//		tblData.add(data8);
+//		tblData.add(data9);
+//		tblData.add(data10);
+//		tblData.add(data11);
+//		tblData.add(data12);
+//		tblData.add(data13);
+//		tblData.add(data14);
 
-		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, orderData);
+		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, orderStatusData);
 
 		return tblOrderConfigurationStatus;
 	}
