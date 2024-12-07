@@ -37,7 +37,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE (c.mainStatus.id = :statusId OR c.subStatus.id = :statusId) AND c.accountStatus = true")
     List<Customer> findByStatusId(@Param("statusId") Long statusId);
     
-    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE c.id = :id AND c.accountStatus = true")
+    //@Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE c.id = :id AND c.accountStatus = true")
+    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE c.id = :id")
     Optional<Customer> findById(@Param("id") Long id);
     
     @Query("SELECT COALESCE(MAX(c.id), 0) FROM Customer c")

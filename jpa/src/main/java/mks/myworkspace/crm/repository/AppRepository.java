@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -65,31 +66,34 @@ public class AppRepository {
 //	}
 	public List<Long> saveOrUpdateOrderCategory(List<OrderCategory> entities) {
 		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
-		
-		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_ordercategory").usingGeneratedKeyColumns("id");
-		
+
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_ordercategory")
+				.usingGeneratedKeyColumns("id");
+
 		Long id;
 		for (OrderCategory e : entities) {
 			if (e.getId() == null) {
 				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
 			} else {
-				//Update
-				//update(e);
+				// Update
+				// update(e);
 				id = e.getId();
 				updateOrderCategory(e);
 			}
 
 			ids.add(id);
 		}
-		
+
 		return ids;
 	}
+
 	private void updateOrderCategory(OrderCategory e) {
 		// TODO Auto-generated method stub
 		String updateSql = "UPDATE crm_ordercategory SET name = ?, note = ? WHERE id = ?";
 
 		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
 	}
+
 	public Long saveOrUpdate(Customer customer) {
 		Long id;
 		if (customer.getAccountStatus() == null) {
@@ -100,7 +104,7 @@ public class AppRepository {
 			id = createCustomer(customer);
 		} else {
 			log.debug("Updating existing customer with ID: {}", customer.getId());
-//			updateCustomer(customer);
+			updateCustomer(customer);
 			id = customer.getId();
 		}
 
@@ -108,6 +112,50 @@ public class AppRepository {
 		return id;
 
 	}
+
+	private int updateCustomer(Customer customer) {
+	    // Tạo bản đồ chứa các giá trị cần cập nhật
+	    Map<String, Object> parameters = new HashMap<>();
+	    
+	    // Thêm các trường cố định trong entity (không có liên kết bảng)
+	    parameters.put("address", customer.getAddress());
+	    parameters.put("company_name", customer.getCompanyName());
+	    parameters.put("contact_person", customer.getContactPerson());
+	    //parameters.put("updated_at", customer.getUpdatedAt()); // Giả sử bạn có trường `updated_at`
+	    parameters.put("email", customer.getEmail());
+	    parameters.put("note", customer.getNote());
+	    parameters.put("phone", customer.getPhone());
+	    
+	    // Thêm các khóa ngoại
+	    parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
+	    parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
+	    parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
+	    parameters.put("responsible_person_id", customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
+
+	    // Chỉ định điều kiện cập nhật (thường là theo ID)
+	    String sql = "UPDATE crm_customer SET " +
+	                 "address = :address, " +
+	                 "company_name = :company_name, " +
+	                 "contact_person = :contact_person, " +
+	                 //"updated_at = :updated_at, " +
+	                 "email = :email, " +
+	                 "note = :note, " +
+	                 "phone = :phone, " +
+	                 "main_status_id = :main_status_id, " +
+	                 "sub_status_id = :sub_status_id, " +
+	                 "profession_id = :profession_id, " +
+	                 "responsible_person_id = :responsible_person_id " +
+	                 "WHERE id = :id";
+
+	    // Thêm ID vào parameters
+	    parameters.put("id", customer.getId());
+
+	    // Thực thi câu lệnh SQL với NamedParameterJdbcTemplate
+	    int rowsAffected = new NamedParameterJdbcTemplate(jdbcTemplate0).update(sql, parameters);
+	    log.debug("Updated rows: {}", rowsAffected);
+	    return rowsAffected;
+	}
+
 
 	private Long createCustomer(Customer customer) {
 		Long id;
@@ -124,13 +172,14 @@ public class AppRepository {
 		parameters.put("note", customer.getNote());
 		parameters.put("phone", customer.getPhone());
 		parameters.put("account_status", customer.getAccountStatus());
-		
+
 		// Thêm các khóa ngoại
 		parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
 		parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
 		parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
-		parameters.put("responsible_person_id", customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
-		
+		parameters.put("responsible_person_id",
+				customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
+
 		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 		log.debug("New ID: {}", id);
 		return id;
@@ -327,7 +376,7 @@ public class AppRepository {
 	public Long updateOrderStatus(Order order) {
 		Long id = null;
 
-		if (order.getId() != null){
+		if (order.getId() != null) {
 			log.debug("Updating existing order with ID: {}", order.getId());
 			updateOrderStatusFunction(order);
 			id = order.getId();
@@ -349,6 +398,37 @@ public class AppRepository {
 			log.debug("Order status updated successfully for order ID: {}", order.getId());
 		} else {
 			log.warn("No order found with ID: {}", order.getId());
+		}
+	}
+
+	public Long updateCustomerStatus(Customer customer) {
+		Long id = null;
+
+		if (customer.getId() != null) {
+			log.debug("Updating existing customer with ID: {}", customer.getId());
+			updateCustomerStatusFunction(customer);
+			id = customer.getId();
+		}
+
+		log.debug("Resulting ID after saveOrUpdate: {}", id);
+		return id;
+	}
+
+	private void updateCustomerStatusFunction(Customer customer) {
+		if (customer == null || customer.getMainStatus() == null || customer.getMainStatus().getId() == null
+				|| customer.getSubStatus() == null || customer.getSubStatus().getId() == null) {
+			throw new IllegalArgumentException("Customer or Statuses are invalid");
+		}
+
+		String updateSql = "UPDATE crm_customer SET main_status_id = ?, sub_status_id = ? WHERE id = ?";
+
+		int rowsUpdated = jdbcTemplate0.update(updateSql, customer.getMainStatus().getId(),
+				customer.getSubStatus().getId(), customer.getId());
+
+		if (rowsUpdated > 0) {
+			log.debug("Customer statuses updated successfully for customer ID: {}", customer.getId());
+		} else {
+			log.warn("No customer found with ID: {}", customer.getId());
 		}
 	}
 

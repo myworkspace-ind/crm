@@ -21,11 +21,13 @@ package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
+import mks.myworkspace.crm.entity.Order;
+import mks.myworkspace.crm.service.OrderService;
 
 /**
  * Handles requests for the application home page.
@@ -44,7 +48,9 @@ import mks.myworkspace.crm.common.model.TableStructure;
 @Slf4j
 @RequestMapping("/orders-configuration-ky")
 public class OrderConfigurationController_Ky extends BaseController {
-
+	
+	@Autowired
+	private OrderService orderService;
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
 	 * 
@@ -105,7 +111,16 @@ public class OrderConfigurationController_Ky extends BaseController {
 	public Object getOrderConfigurationStatusData() throws IOException {
 		log.debug("Get sample data from configuration file.");
 		int[] colWidths = { 50, 300, 300, };
-		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", };
+		//String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", };
+		String[] colHeaders = { "No", "Tên", "Site_id", };
+		List<Order> orderDataList=orderService.getAllOrders();
+		//Test
+		List<Object[]> orderData=new ArrayList<>();
+		for(int i=0;i<orderDataList.size();i++) {
+			Object[] myData=new Object[] {orderDataList.get(i).getId(),orderDataList.get(i).getName(),orderDataList.get(i).getSiteId()};
+			orderData.add(myData);
+		}
+		
 		List<Object[]> tblData = new ArrayList<>();
 		Object[] data1 = new Object[] { "1", "Mặc định", "Nhận đơn" };
 		Object[] data2 = new Object[] { "", "", "Đóng gói" };
@@ -139,7 +154,7 @@ public class OrderConfigurationController_Ky extends BaseController {
 		tblData.add(data13);
 		tblData.add(data14);
 
-		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, tblData);
+		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, orderData);
 
 		return tblOrderConfigurationStatus;
 	}
