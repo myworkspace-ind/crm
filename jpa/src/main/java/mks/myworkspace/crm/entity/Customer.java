@@ -115,6 +115,7 @@ public class Customer implements Serializable {
 	public Customer(String contactPerson2) {
 		// TODO Auto-generated constructor stub
 	}
+	
 
 	/*
 	 * @Override public String toString() { return "Customer [id=" + id +
