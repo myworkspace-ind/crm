@@ -108,7 +108,6 @@ public class CustomerController extends BaseController {
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
 		
-		customers = customerService.getAllCustomers();
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
