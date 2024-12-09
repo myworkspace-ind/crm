@@ -121,6 +121,7 @@ public class Customer implements Serializable {
 	public Customer(String contactPerson2) {
 		// TODO Auto-generated constructor stub
 	}
+	
 
 	public Customer(Long id) {
 		super();
