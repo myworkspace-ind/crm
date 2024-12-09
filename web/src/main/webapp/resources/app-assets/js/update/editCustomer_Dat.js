@@ -41,7 +41,7 @@ function saveCustomerChanges() {
 
     const _ctx = "/crm-web/";
     // Gửi yêu cầu PUT để cập nhật thông tin khách hàng
-    fetch(`${_ctx}customer/edit-customer`, {
+    fetch(`${_ctx}customer/newedit-customer`, {
         method: 'PUT', // Phải là PUT để cập nhật dữ liệu
         headers: {
             'Content-Type': 'application/json', // Đảm bảo Content-Type là application/json

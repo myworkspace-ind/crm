@@ -14,7 +14,7 @@ $(document).ready(function() {
 function loadTableData() {
 
 	$.ajax({
-		url: _ctx + 'orders/load',
+		url: _ctx + 'orders-vinh/load',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -94,9 +94,37 @@ function edit(row) {
 }
 
 function deleteRow(row) {
-	console.log("Xóa hàng:", row);
-	// Xử lý logic xóa hàng
+    // Lấy ID đơn hàng từ hàng cần xóa
+    const orderId = htOrder.getSourceDataAtRow(row)[0]; // Giả sử cột ID là cột đầu tiên
+
+    // Hiển thị thông báo xác nhận
+    if (confirm(`Bạn có chắc chắn muốn xóa đơn hàng ID: ${orderId}?`)) {
+        // Gửi yêu cầu xóa đến server
+        $.ajax({
+            url: `${_ctx}/orders-vinh/delete?id=${orderId}`, // URL API xóa (thay đổi theo API của bạn)
+            type: 'DELETE',
+            success: function(response) {
+                console.log("Xóa thành công:", response);
+
+                // Xóa hàng trên Handsontable
+                htOrder.alter('remove_row', row);
+
+                // Đảm bảo đồng bộ dữ liệu
+                htOrder.render(); // Cập nhật lại bảng
+
+                // Hiển thị thông báo thành công
+                alert(`Đơn hàng ID: ${orderId} đã được xóa thành công!`);
+            },
+            error: function(error) {
+                console.error("Xóa thất bại:", error);
+
+                // Hiển thị thông báo lỗi
+                alert("Có lỗi xảy ra khi xóa đơn hàng. Vui lòng thử lại sau.");
+            }
+        });
+    }
 }
+
 
 let currentRow;
 

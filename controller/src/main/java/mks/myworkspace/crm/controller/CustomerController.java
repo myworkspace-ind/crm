@@ -299,9 +299,10 @@ public class CustomerController extends BaseController {
 	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
 		// ModelAndView mav = new ModelAndView("addCustomer");
 		ModelAndView mav = new ModelAndView("addCustomer_v2");
+		Customer customer = new Customer();
 
 		// Thêm đối tượng Customer mới vào Model để truyền vào form
-		mav.addObject("customer", new Customer());
+		mav.addObject("customer", customer);
 
 		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
 		List<Status> statuses = statusService.getAllStatuses();
@@ -397,79 +398,86 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 	
-	// Hàm edit customer của Tấn Đạt
+	// Hàm edit hoặc add customer của Tấn Đạt
 	@Transactional
-	@RequestMapping(value = "/editCustomer")
+	@RequestMapping(value = "/newEditCustomer")
 	@ResponseBody
-	public ModelAndView updateCustomer(@RequestParam("id") Long customerId, HttpServletRequest request,
-			HttpSession httpSession) {
+	public ModelAndView newEditCustomer(@RequestParam(value = "id", required = false) Long customerId, HttpServletRequest request,
+	                                   HttpSession httpSession) {
 
-	        ModelAndView mav = new ModelAndView("editCustomer_Dat");
-	        // Gọi service để cập nhật thông tin khách hàng
-	        Optional<Customer> customerOpt = customerService.findById(customerId);
+	    ModelAndView mav = new ModelAndView("newEditCustomer");
 
-		     // Check if the customer exists and add to model
-		     customerOpt.ifPresentOrElse(customer -> {
-		         mav.addObject("customer", customer);
-		     }, () -> {
-		         mav.addObject("errorMessage", "Customer not found.");
-		     });
+	    // Nếu customerId không tồn tại hoặc không tìm thấy, tạo mới một Customer
+	    Customer customer = (customerId == null) ? new Customer() :
+	                        customerService.findById(customerId).orElse(new Customer());
+	    
+	    
+	    
+	    mav.addObject("customer", customer);
 
-		     // Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
-			List<Status> statuses = statusService.getAllStatuses();
-			mav.addObject("statuses", statuses); 
-		     
-			List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
-			mav.addObject("responsiblePersons", responsiblePersons);
-			
-			List<Profession> professions = professionService.getAllProfessions();
-			mav.addObject("professions", professions);
+	    // Lấy danh sách Status, ResponsiblePersons và Professions
+	    List<Status> statuses = statusService.getAllStatuses();
+	    mav.addObject("statuses", statuses);
 
-			// Thiết lập các thuộc tính của session
-			initSession(request, httpSession);
-			mav.addObject("currentSiteId", getCurrentSiteId());
-			mav.addObject("userDisplayName", getCurrentUserDisplayName());
-			return mav;
+	    List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+	    mav.addObject("responsiblePersons", responsiblePersons);
+
+	    List<Profession> professions = professionService.getAllProfessions();
+	    mav.addObject("professions", professions);
+
+	    // Thiết lập các thuộc tính của session
+	    initSession(request, httpSession);
+	    mav.addObject("currentSiteId", getCurrentSiteId());
+	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+	    return mav;
 	}
+
+
 	
 	// Hàm edit-customer của Đạt
-	@PutMapping("/edit-customer")
+	@PutMapping("/newedit-customer")
 	@ResponseBody
 	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {
 	    System.out.println(customer.getId());
+	    Customer updatedCustomer;
 		try {
-	        // Kiểm tra nếu có khách hàng với ID đã tồn tại
-	        if (customer.getId() == null) {
-	            return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID khách hàng không được để trống"));
-	        }
+	        
 
 	        // Lấy khách hàng cũ từ cơ sở dữ liệu
 	        Optional<Customer> customerOpt = customerService.findById(customer.getId());
 
-	        // Kiểm tra nếu khách hàng không tồn tại
-	        if (!customerOpt.isPresent()) {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                                 .body(Map.of("errorMessage", "Khách hàng không tồn tại"));
-	        }
-
-	        // Cập nhật thông tin khách hàng
-	        Customer existingCustomer = customerOpt.get();
 	        
-	        existingCustomer.setCompanyName(customer.getCompanyName());
-	        existingCustomer.setContactPerson(customer.getContactPerson());
-	        existingCustomer.setEmail(customer.getEmail());
-	        existingCustomer.setPhone(customer.getPhone());
-	        existingCustomer.setAddress(customer.getAddress());
-	        existingCustomer.setResponsiblePerson(customer.getResponsiblePerson());
-	        existingCustomer.setNote(customer.getNote());
-	        existingCustomer.setProfession(customer.getProfession());
-	        existingCustomer.setMainStatus(customer.getMainStatus());
-	        existingCustomer.setSubStatus(customer.getSubStatus());
-	        // existingCustomer.setUpdatedAt(new Date()); // Cập nhật thời gian sửa nếu cần
-
-	        // Lưu lại khách hàng đã cập nhật
-	        Customer updatedCustomer = storageService.saveOrUpdate(existingCustomer);
-
+	        
+	        if(customerOpt.isPresent()) {
+	        
+	        // Cập nhật thông tin khách hàng
+		        Customer existingCustomer = customerOpt.get();
+		        
+		        existingCustomer.setCompanyName(customer.getCompanyName());
+		        existingCustomer.setContactPerson(customer.getContactPerson());
+		        existingCustomer.setEmail(customer.getEmail());
+		        existingCustomer.setPhone(customer.getPhone());
+		        existingCustomer.setAddress(customer.getAddress());
+		        existingCustomer.setResponsiblePerson(customer.getResponsiblePerson());
+		        existingCustomer.setNote(customer.getNote());
+		        existingCustomer.setProfession(customer.getProfession());
+		        existingCustomer.setMainStatus(customer.getMainStatus());
+		        existingCustomer.setSubStatus(customer.getSubStatus());
+		        // existingCustomer.setUpdatedAt(new Date()); // Cập nhật thời gian sửa nếu cần
+	
+		        // Lưu lại khách hàng đã cập nhật
+		        updatedCustomer = storageService.saveOrUpdate(existingCustomer);
+	        
+	        }
+	        
+	        else
+	        {
+	        	customer.setCreatedAt(new Date());
+				customer.setSiteId(getCurrentSiteId());
+	        	updatedCustomer = storageService.saveOrUpdate(customer);
+	        }
+	        
 	        log.info("Khách hàng đã được cập nhật thành công:");
 	        log.info("ID: {}", updatedCustomer.getId());
 	        log.info("Tên công ty: {}", updatedCustomer.getCompanyName());
@@ -491,14 +499,19 @@ public class CustomerController extends BaseController {
 	        } else {
 	            log.info("Người phụ trách: Không có");
 	        }
-
-	        return ResponseEntity.ok()
-	                .body(Map.of("message", "Khách hàng đã được cập nhật thành công!", "customer", updatedCustomer));
+	        if(customerOpt.isPresent()) {
+	        	return ResponseEntity.ok()
+	        			.body(Map.of("message", "Khách hàng đã được cập nhật thành công!", "customer", updatedCustomer));
+	        }
+	        else {
+	        	return ResponseEntity.ok()
+	        			.body(Map.of("message", "Khách hàng đã được thêm mới thành công!", "customer", updatedCustomer));
+	        }
 	    } catch (IllegalArgumentException e) {
 	        return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                .body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng thử lại sau!" + customer.getId()));
+	                .body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng kiểm tra lại độ dài SDT!" + customer.getId()));
 	    }
 	}
 

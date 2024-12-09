@@ -24,7 +24,7 @@
     <th:block th:include="fragments/hmenu"></th:block>
 	<!-- Header Section -->
  	<th:block th:include="fragments/home/sidebar"></th:block>
- 	
+ 	<th:block th:include="fragments/home/NavbarForIntro"></th:block>		
 	<!-- Thumbnail Carousel Section -->
 	<th:block th:include="fragments/home/content"></th:block>
 	
@@ -126,19 +126,7 @@
 	</section>
 
 	<!-- Footer Section -->
-	<footer class="text-center py-3 bg-success text-white">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 text-md-start mb-3 mb-md-0">
-					<p>Văn phòng TP Hồ Chí Minh</p>
-					<p>Số 1 Võ Văn Ngân</p>
-					<p>Hotline: 024 7302 5555</p>
-					<p>Email: CRMSPKT@gmail.com</p>
-				</div>
-			</div>
-			<p class="mt-3">&copy; 2024 TEAM CRM.</p>
-		</div>
-	</footer>
+    <th:block th:include="fragments/home/footerForIntro"></th:block>
 </body>
 <th:block th:include="fragments/common_javascript"></th:block>
 </html>
