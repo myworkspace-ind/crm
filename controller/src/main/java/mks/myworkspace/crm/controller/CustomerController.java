@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.controller;
 
+import java.io.Console;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -105,7 +107,8 @@ public class CustomerController extends BaseController {
 			customers = customerService.getAllCustomersWithStatuses();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
-
+		
+		
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
@@ -179,6 +182,7 @@ public class CustomerController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> deleteCustomersByIds(@RequestBody List<Long> customerIds, HttpServletRequest request,
 			HttpSession httpSession) {
+		System.out.println(customerIds.size());
 		try {
 			if (customerIds == null || customerIds.isEmpty()) {
 				return ResponseEntity.badRequest().body(Map.of("errorMessage", "Danh sách ID không được trống."));
@@ -296,9 +300,10 @@ public class CustomerController extends BaseController {
 	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
 		// ModelAndView mav = new ModelAndView("addCustomer");
 		ModelAndView mav = new ModelAndView("addCustomer_v2");
+		Customer customer = new Customer();
 
 		// Thêm đối tượng Customer mới vào Model để truyền vào form
-		mav.addObject("customer", new Customer());
+		mav.addObject("customer", customer);
 
 		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
 		List<Status> statuses = statusService.getAllStatuses();
@@ -393,4 +398,123 @@ public class CustomerController extends BaseController {
 
 		return mav;
 	}
+	
+	// Hàm edit hoặc add customer của Tấn Đạt
+	@Transactional
+	@RequestMapping(value = "/newEditCustomer")
+	@ResponseBody
+	public ModelAndView newEditCustomer(@RequestParam(value = "id", required = false) Long customerId, HttpServletRequest request,
+	                                   HttpSession httpSession) {
+
+	    ModelAndView mav = new ModelAndView("newEditCustomer");
+
+	    // Nếu customerId không tồn tại hoặc không tìm thấy, tạo mới một Customer
+	    Customer customer = (customerId == null) ? new Customer() :
+	                        customerService.findById(customerId).orElse(new Customer());
+	    
+	    
+	    
+	    mav.addObject("customer", customer);
+
+	    // Lấy danh sách Status, ResponsiblePersons và Professions
+	    List<Status> statuses = statusService.getAllStatuses();
+	    mav.addObject("statuses", statuses);
+
+	    List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+	    mav.addObject("responsiblePersons", responsiblePersons);
+
+	    List<Profession> professions = professionService.getAllProfessions();
+	    mav.addObject("professions", professions);
+
+	    // Thiết lập các thuộc tính của session
+	    initSession(request, httpSession);
+	    mav.addObject("currentSiteId", getCurrentSiteId());
+	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+	    return mav;
+	}
+
+
+	
+	// Hàm edit-customer của Đạt
+	@PutMapping("/newedit-customer")
+	@ResponseBody
+	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {
+	    System.out.println(customer.getId());
+	    Customer updatedCustomer;
+		try {
+	        
+
+	        // Lấy khách hàng cũ từ cơ sở dữ liệu
+	        Optional<Customer> customerOpt = customerService.findById(customer.getId());
+
+	        
+	        
+	        if(customerOpt.isPresent()) {
+	        
+	        // Cập nhật thông tin khách hàng
+		        Customer existingCustomer = customerOpt.get();
+		        
+		        existingCustomer.setCompanyName(customer.getCompanyName());
+		        existingCustomer.setContactPerson(customer.getContactPerson());
+		        existingCustomer.setEmail(customer.getEmail());
+		        existingCustomer.setPhone(customer.getPhone());
+		        existingCustomer.setAddress(customer.getAddress());
+		        existingCustomer.setResponsiblePerson(customer.getResponsiblePerson());
+		        existingCustomer.setNote(customer.getNote());
+		        existingCustomer.setProfession(customer.getProfession());
+		        existingCustomer.setMainStatus(customer.getMainStatus());
+		        existingCustomer.setSubStatus(customer.getSubStatus());
+		        // existingCustomer.setUpdatedAt(new Date()); // Cập nhật thời gian sửa nếu cần
+	
+		        // Lưu lại khách hàng đã cập nhật
+		        updatedCustomer = storageService.saveOrUpdate(existingCustomer);
+	        
+	        }
+	        
+	        else
+	        {
+	        	customer.setCreatedAt(new Date());
+				customer.setSiteId(getCurrentSiteId());
+	        	updatedCustomer = storageService.saveOrUpdate(customer);
+	        }
+	        
+	        log.info("Khách hàng đã được cập nhật thành công:");
+	        log.info("ID: {}", updatedCustomer.getId());
+	        log.info("Tên công ty: {}", updatedCustomer.getCompanyName());
+	        log.info("Người liên hệ: {}", updatedCustomer.getContactPerson());
+	        log.info("Email: {}", updatedCustomer.getEmail());
+	        log.info("Số điện thoại: {}", updatedCustomer.getPhone());
+	        log.info("Địa chỉ: {}", updatedCustomer.getAddress());
+	        // log.info("Ngày sửa: {}", updatedCustomer.getUpdatedAt()); // Cập nhật ngày sửa nếu có
+	        log.info("Ghi chú: {}", updatedCustomer.getNote());
+
+	        if (updatedCustomer.getProfession() != null) {
+	            log.info("Ngành nghề: {}", updatedCustomer.getProfession().getName());
+	        } else {
+	            log.info("Ngành nghề: Không có");
+	        }
+
+	        if (updatedCustomer.getResponsiblePerson() != null) {
+	            log.info("Người phụ trách: {}", updatedCustomer.getResponsiblePerson().getName());
+	        } else {
+	            log.info("Người phụ trách: Không có");
+	        }
+	        if(customerOpt.isPresent()) {
+	        	return ResponseEntity.ok()
+	        			.body(Map.of("message", "Khách hàng đã được cập nhật thành công!", "customer", updatedCustomer));
+	        }
+	        else {
+	        	return ResponseEntity.ok()
+	        			.body(Map.of("message", "Khách hàng đã được thêm mới thành công!", "customer", updatedCustomer));
+	        }
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng kiểm tra lại độ dài SDT!" + customer.getId()));
+	    }
+	}
+
+
 }

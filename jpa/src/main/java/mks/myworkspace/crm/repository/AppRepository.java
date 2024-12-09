@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -103,7 +104,7 @@ public class AppRepository {
 			id = createCustomer(customer);
 		} else {
 			log.debug("Updating existing customer with ID: {}", customer.getId());
-//			updateCustomer(customer);
+			updateCustomer(customer);
 			id = customer.getId();
 		}
 
@@ -111,6 +112,50 @@ public class AppRepository {
 		return id;
 
 	}
+
+	private int updateCustomer(Customer customer) {
+	    // Tạo bản đồ chứa các giá trị cần cập nhật
+	    Map<String, Object> parameters = new HashMap<>();
+	    
+	    // Thêm các trường cố định trong entity (không có liên kết bảng)
+	    parameters.put("address", customer.getAddress());
+	    parameters.put("company_name", customer.getCompanyName());
+	    parameters.put("contact_person", customer.getContactPerson());
+	    //parameters.put("updated_at", customer.getUpdatedAt()); // Giả sử bạn có trường `updated_at`
+	    parameters.put("email", customer.getEmail());
+	    parameters.put("note", customer.getNote());
+	    parameters.put("phone", customer.getPhone());
+	    
+	    // Thêm các khóa ngoại
+	    parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
+	    parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
+	    parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
+	    parameters.put("responsible_person_id", customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
+
+	    // Chỉ định điều kiện cập nhật (thường là theo ID)
+	    String sql = "UPDATE crm_customer SET " +
+	                 "address = :address, " +
+	                 "company_name = :company_name, " +
+	                 "contact_person = :contact_person, " +
+	                 //"updated_at = :updated_at, " +
+	                 "email = :email, " +
+	                 "note = :note, " +
+	                 "phone = :phone, " +
+	                 "main_status_id = :main_status_id, " +
+	                 "sub_status_id = :sub_status_id, " +
+	                 "profession_id = :profession_id, " +
+	                 "responsible_person_id = :responsible_person_id " +
+	                 "WHERE id = :id";
+
+	    // Thêm ID vào parameters
+	    parameters.put("id", customer.getId());
+
+	    // Thực thi câu lệnh SQL với NamedParameterJdbcTemplate
+	    int rowsAffected = new NamedParameterJdbcTemplate(jdbcTemplate0).update(sql, parameters);
+	    log.debug("Updated rows: {}", rowsAffected);
+	    return rowsAffected;
+	}
+
 
 	private Long createCustomer(Customer customer) {
 		Long id;
