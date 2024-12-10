@@ -73,15 +73,22 @@ public class AppRepository {
 
 	    // Sử dụng SimpleJdbcInsert để thực hiện lưu bản ghi mới
 	    SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
-	            .withTableName("customer_interaction")
-	            .usingGeneratedKeyColumns("id");
+	    	    .withTableName("customer_interaction")
+	    	    .usingColumns("interaction_date", "content", "next_plan", "customer_id")
+	    	    .usingGeneratedKeyColumns("id");
 
 	    for (Interaction entity : entities) {
 	        Long id;
 
-	        if (entity.getId() == null || entity.getId() == -1) {
+	        MapSqlParameterSource params = new MapSqlParameterSource()
+	                .addValue("interaction_date", entity.getInteractionDate())
+	                .addValue("content", entity.getContent())
+	                .addValue("next_plan", entity.getNextPlan())
+	                .addValue("customer_id", entity.getCustomer() != null ? entity.getCustomer().getId() : null);
+	        
+	        if (entity.getId() == null) {
 	            // Nếu ID của thực thể là null, thực hiện lưu mới
-	            id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(entity)).longValue();
+	            id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
 	        } else {
 
 	        	updateEntity(entity);
@@ -119,9 +126,9 @@ public class AppRepository {
 
 	    // Execute the update using the JdbcTemplate
 	    int rowsUpdated = jdbcTemplate0.update(updateSql,
-	            entity.getInteraction_date(),  
+	            entity.getInteractionDate(),  
 	            entity.getContent(),        
-	            entity.getNext_plan(),      
+	            entity.getNextPlan(),      
 	            entity.getId());            
 
 	    // Log the result
