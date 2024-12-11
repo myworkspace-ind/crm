@@ -72,8 +72,7 @@
 		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="location">
-			<!-- <value>/WEB-INF/app-config.properties</value> -->
-			<value>/WEB-INF/app-config_testing.properties</value>
+			<value>/WEB-INF/app-config.properties</value>
 		</property>
 	</bean>
 
