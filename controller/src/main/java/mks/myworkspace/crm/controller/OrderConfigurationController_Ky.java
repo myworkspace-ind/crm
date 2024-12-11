@@ -135,6 +135,8 @@ public class OrderConfigurationController_Ky extends BaseController {
 		Long id;
 		String nameCategory,nameStatus;
 		Set<OrderStatus> orderStatuses=new HashSet<OrderStatus>();
+		List<int[]> mergeCells = new ArrayList<>(); // Danh sách các nhóm mergeCells
+
 		for (int i = 0; i < orderCategoryStatus.size(); i++) {
 		    category = orderCategoryStatus.get(i);
 		    id = category.getId();
@@ -142,20 +144,30 @@ public class OrderConfigurationController_Ky extends BaseController {
 		    orderStatuses = category.getOrderStatuses();
 
 		    boolean isFirst = true; // Biến kiểm tra phần tử đầu tiên
+		    int startRow = orderStatusData.size(); // Dòng bắt đầu của nhóm hiện tại
 		    for (OrderStatus os : orderStatuses) {
 		        nameStatus = os.getName();
 		        Object[] data;
-		        
+
 		        if (isFirst) {
 		            data = new Object[] { id, nameCategory, nameStatus };
 		            isFirst = false; // Sau phần tử đầu tiên, đặt biến này thành false
 		        } else {
-		            data = new Object[] { id, "", nameStatus }; // nameCategory rỗng
+		            data = new Object[] { "", "", nameStatus }; // Để trống id và nameCategory
 		        }
-		        
+
 		        orderStatusData.add(data);
+		    } 
+		    int endRow = orderStatusData.size() - 1; // Dòng kết thúc của nhóm hiện tại
+
+		    // Nếu nhóm có nhiều hơn 1 dòng, thêm thông tin vào mergeCells
+		    if (endRow > startRow) {
+		        mergeCells.add(new int[] { startRow, 0, endRow - startRow + 1 }); // Merge cột "No"
+		        mergeCells.add(new int[] { startRow, 1, endRow - startRow + 1 }); // Merge cột "Loại đơn hàng"
 		    }
 		}
+
+
 		
 //		List<Object[]> tblData = new ArrayList<>();
 //		Object[] data1 = new Object[] { "1", "Mặc định", "Nhận đơn" };
