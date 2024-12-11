@@ -167,7 +167,6 @@ public class OrderConfigurationController_Ky extends BaseController {
 		    }
 		}
 
-
 		
 //		List<Object[]> tblData = new ArrayList<>();
 //		Object[] data1 = new Object[] { "1", "Mặc định", "Nhận đơn" };
