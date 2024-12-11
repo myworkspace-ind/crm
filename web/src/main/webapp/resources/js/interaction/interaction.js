@@ -61,8 +61,14 @@ function initTable(colHeaders, colWidths, data) {
 						
                         const button = document.createElement('button');
 						button.type = 'button';
-                        button.innerText = '🗑️';
                         button.className = 'delete-button';
+						
+						// Tạo phần tử icon FontAwesome
+				        const icon = document.createElement('i');
+				        icon.className = 'fas fa-trash'; // Lớp FontAwesome cho biểu tượng thùng rác
+				        
+				        button.appendChild(icon);
+						
                         button.onclick = function() {
                             deleteRow(row, value); // Gọi hàm deleteRow khi nhấn nút
                         };

@@ -122,14 +122,16 @@ public class AppRepository {
 	    String updateSql = "UPDATE crm_customer_interaction SET "
 	            + "interaction_date = ?, "
 	            + "content = ?, "
-	            + "next_plan = ? "
+	            + "next_plan = ?, "
+	            + "contact_person = ? "
 	            + "WHERE id = ?";
 
 	    // Execute the update using the JdbcTemplate
 	    int rowsUpdated = jdbcTemplate0.update(updateSql,
 	            entity.getInteractionDate(),  
 	            entity.getContent(),        
-	            entity.getNextPlan(),      
+	            entity.getNextPlan(),    
+	            entity.getContactPerson(),
 	            entity.getId());            
 
 	    // Log the result
