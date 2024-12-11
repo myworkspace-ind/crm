@@ -120,10 +120,9 @@ public class Customer implements Serializable {
 	}
 	
 
-	public Customer(Long id, String contactPerson) {
+	public Customer(Long id) {
 		super();
 		this.id = id;
-		this.contactPerson = contactPerson;
 	}
 	
 	/*

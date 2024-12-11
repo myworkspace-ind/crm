@@ -51,7 +51,7 @@ function initTable(colHeaders, colWidths, data) {
             colHeaders: colHeaders,
             colWidths: colWidths,
             columns: [
-                { type: 'text', readOnly: true }, 
+                { type: 'text' }, 
                 { type: 'date', dateFormat: 'YYYY-MM-DD', correctFormat: true }, 
                 { type: 'text' },
                 { type: 'text' }, 

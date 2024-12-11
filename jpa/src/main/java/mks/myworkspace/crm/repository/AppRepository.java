@@ -74,7 +74,7 @@ public class AppRepository {
 	    // Sử dụng SimpleJdbcInsert để thực hiện lưu bản ghi mới
 	    SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
 	    	    .withTableName("crm_customer_interaction")
-	    	    .usingColumns("interaction_date", "content", "next_plan", "customer_id")
+	    	    .usingColumns("interaction_date", "content", "next_plan", "customer_id", "contact_person")
 	    	    .usingGeneratedKeyColumns("id");
 
 	    for (Interaction entity : entities) {
@@ -84,7 +84,8 @@ public class AppRepository {
 	                .addValue("interaction_date", entity.getInteractionDate())
 	                .addValue("content", entity.getContent())
 	                .addValue("next_plan", entity.getNextPlan())
-	                .addValue("customer_id", entity.getCustomer() != null ? entity.getCustomer().getId() : null);
+	                .addValue("customer_id", entity.getCustomer() != null ? entity.getCustomer().getId() : null)
+	                .addValue("contact_person", entity.getContactPerson());
 	        
 	        if (entity.getId() == null) {
 	            // Nếu ID của thực thể là null, thực hiện lưu mới
