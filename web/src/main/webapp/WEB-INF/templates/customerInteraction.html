@@ -5,8 +5,6 @@
 <th:block th:include="fragments/head"></th:block>
 <th:block th:include="fragments/common_css"></th:block>
 
-<th:block th:include="fragments/head"></th:block>
-
 <link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
 <link rel="stylesheet" type="text/css" th:href="@{/resources/css/buttonGroupFunction.css}">
 	
@@ -42,7 +40,7 @@
 			<form id="frmSearchCustomer" action="interact" method="get">
 					<fieldset
 						class="form-group relative has-icon-left col-12 ">
-						<input class="form-control w-100" name="keyword" id="iconLeft"
+						<input class="form-control" name="keyword" id="iconLeft"
 							type="text" placeholder="Tìm kiếm thông tin..."
 							onkeypress="handleKeyPress(event)">
 						<div class="form-control-position">
@@ -59,7 +57,7 @@
 				<table id="table"
 					class="table table-bordered table-striped table-hover">
 					<thead class="thead">
-						<tr class="bg bg-success">
+						<tr class="bg">
 							<th class="col-stt th1">STT</th>
 							<th class="col-name th2">Tên khách hàng</th>
 							<th class="col-email th3">Email</th>
@@ -80,7 +78,7 @@
 							<td>
 								<div class="d-flex justify-content-center">
 									<a th:href="@{/customer/edit(id=${customer.id})}"
-										class="text-info mr-3 bg-transparent" style="font-size: 20px;">
+										class="text-info mr-1 bg-transparent" style="font-size: 20px;">
 										<i class="fas fa-edit w-100"></i>
 									</a>
 								</div>
