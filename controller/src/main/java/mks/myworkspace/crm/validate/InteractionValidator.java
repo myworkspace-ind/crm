@@ -19,15 +19,15 @@ public class InteractionValidator {
 
 	    for (Interaction interaction : interactions) {
 	        if (interaction != null) {
-	            String formattedDate = interaction.getInteraction_date() != null 
-	                ? sdf.format(interaction.getInteraction_date()) 
+	            String formattedDate = interaction.getInteractionDate() != null 
+	                ? sdf.format(interaction.getInteractionDate()) 
 	                : "";
 
 	            Object[] rowData = new Object[]{
-		            interaction.getCustomer().getContactPerson(),  // Người trao đổi
+		            interaction.getContactPerson(),  // Người trao đổi
 	                formattedDate,                                 // Ngày
 	                interaction.getContent(),                      // Nội dung trao đổi
-	                interaction.getNext_plan(),                         // Kế hoạch tiếp theo
+	                interaction.getNextPlan(),                         // Kế hoạch tiếp theo
 	                interaction.getId(),                            // Hành động (ID để xóa hoặc thực hiện các thao tác khác)
 	            };
 
@@ -45,10 +45,10 @@ public class InteractionValidator {
 	        if (CommonUtil.isNNNE(rowData)) {
 	        	try {
 		            // Parse các trường cần thiết từ rowData
-		        	// Kiểm tra xem rowData[0] có phải là String và chuyển đổi nó thành Date
 	                String dateString = (String) rowData[1]; // Ngày dưới dạng String
 	                Date date = dateFormat.parse(dateString); // Chuyển String thành Date
-	                
+	                Customer customer = new Customer(customerId);
+	                String contactPerson = (String) rowData[0];
 		            String content = (String) rowData[2]; // Nội dung trao đổi
 		            String nextPlan = (String) rowData[3]; // Kế hoạch tiếp theo
 		            Long interactionId = null;
@@ -56,13 +56,9 @@ public class InteractionValidator {
 		            if (rowData[4] != null) {
 			            interactionId = Long.valueOf((Integer) rowData[4]);
 		            }
-		            else
-		            {
-		            	interactionId = -1L;
-		            }
 	
 		            // Tạo đối tượng Interaction từ các trường đã parse
-		            Interaction interaction = new Interaction(interactionId, date, content, nextPlan, customerId);
+		            Interaction interaction = new Interaction(interactionId, date, content, nextPlan, customer, contactPerson);
 	
 		            // Thêm đối tượng vào danh sách kết quả
 		            paramList.add(interaction);
@@ -75,5 +71,4 @@ public class InteractionValidator {
 
 	    return paramList;
 	}
-
 }
