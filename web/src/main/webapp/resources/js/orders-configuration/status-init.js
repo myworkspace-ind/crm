@@ -14,7 +14,7 @@ $(document).ready(function() {
 function loadTableData() {
 
 	$.ajax({
-		url: _ctx + 'orders-configuration/load-statuses',
+		url: _ctx + 'orders-configuration-ky/load-statuses',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json',
