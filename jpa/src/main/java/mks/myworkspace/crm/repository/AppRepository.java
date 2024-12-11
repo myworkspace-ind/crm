@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
+import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
@@ -64,6 +66,72 @@ public class AppRepository {
 //		return id;
 //
 //	}
+	
+	public List<Long> saveOrUpdateInteraction(List<Interaction> entities) {
+	    // Danh sách để lưu trữ các ID của bản ghi sau khi lưu hoặc cập nhật
+	    List<Long> ids = new ArrayList<>();
+
+	    // Sử dụng SimpleJdbcInsert để thực hiện lưu bản ghi mới
+	    SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
+	            .withTableName("customer_interaction")
+	            .usingGeneratedKeyColumns("id");
+
+	    for (Interaction entity : entities) {
+	        Long id;
+
+	        if (entity.getId() == null || entity.getId() == -1) {
+	            // Nếu ID của thực thể là null, thực hiện lưu mới
+	            id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(entity)).longValue();
+	        } else {
+
+	        	updateEntity(entity);
+	            id = entity.getId(); // Lấy ID của bản ghi đã cập nhật
+	        }
+
+	        // Thêm ID vào danh sách kết quả
+	        ids.add(id);
+	    }
+
+	    return ids; // Trả về danh sách ID sau khi xử lý
+	}
+	
+	public void deleteInteractionById(Long interactionId) {
+	    // Tạo câu lệnh DELETE với ID duy nhất
+	    String sql = "DELETE FROM customer_interaction WHERE id = ?";
+
+	    // Thực thi câu lệnh DELETE
+	    int rowsDeleted = jdbcTemplate0.update(sql, interactionId);
+
+	    // Log kết quả
+	    if (rowsDeleted > 0) {
+	        log.debug("Interaction with ID {} deleted successfully.", interactionId);
+	    } else {
+	        log.warn("No interaction found with ID {} to delete.", interactionId);
+	    }
+	}
+
+	private void updateEntity(Interaction entity) {
+	    String updateSql = "UPDATE customer_interaction SET "
+	            + "interaction_date = ?, "
+	            + "content = ?, "
+	            + "next_plan = ? "
+	            + "WHERE id = ?";
+
+	    // Execute the update using the JdbcTemplate
+	    int rowsUpdated = jdbcTemplate0.update(updateSql,
+	            entity.getInteraction_date(),  
+	            entity.getContent(),        
+	            entity.getNext_plan(),      
+	            entity.getId());            
+
+	    // Log the result
+	    if (rowsUpdated > 0) {
+	        log.debug("Interaction updated successfully with ID: {}", entity.getId());
+	    } else {
+	        log.warn("No interaction found with ID: {}", entity.getId());
+	    }
+	}
+	
 	public List<Long> saveOrUpdateOrderCategory(List<OrderCategory> entities) {
 		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
 

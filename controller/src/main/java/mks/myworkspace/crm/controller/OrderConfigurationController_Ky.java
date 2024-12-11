@@ -135,16 +135,26 @@ public class OrderConfigurationController_Ky extends BaseController {
 		Long id;
 		String nameCategory,nameStatus;
 		Set<OrderStatus> orderStatuses=new HashSet<OrderStatus>();
-		for(int i=0;i<orderCategoryStatus.size();i++) {
-			category=orderCategoryStatus.get(i);
-			id=category.getId();
-			nameCategory=category.getName();
-			orderStatuses=category.getOrderStatuses();
-			for(OrderStatus os : orderStatuses) {
-				nameStatus=os.getName();
-				Object[] data=new Object[] {id,nameCategory,nameStatus};
-				orderStatusData.add(data);
-			}
+		for (int i = 0; i < orderCategoryStatus.size(); i++) {
+		    category = orderCategoryStatus.get(i);
+		    id = category.getId();
+		    nameCategory = category.getName();
+		    orderStatuses = category.getOrderStatuses();
+
+		    boolean isFirst = true; // Biến kiểm tra phần tử đầu tiên
+		    for (OrderStatus os : orderStatuses) {
+		        nameStatus = os.getName();
+		        Object[] data;
+		        
+		        if (isFirst) {
+		            data = new Object[] { id, nameCategory, nameStatus };
+		            isFirst = false; // Sau phần tử đầu tiên, đặt biến này thành false
+		        } else {
+		            data = new Object[] { id, "", nameStatus }; // nameCategory rỗng
+		        }
+		        
+		        orderStatusData.add(data);
+		    }
 		}
 		
 //		List<Object[]> tblData = new ArrayList<>();

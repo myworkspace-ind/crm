@@ -1,0 +1,13 @@
+form#frmInteractionConfiguration {
+    margin-left: 75px;
+}
+
+button {
+    background: none; /* Loại bỏ nền */
+    border: none; /* Loại bỏ khung */
+    color: inherit; /* Sử dụng màu chữ mặc định hoặc tùy chỉnh */
+    font: inherit; /* Sử dụng phông chữ mặc định của văn bản xung quanh */
+    padding: 0; /* Loại bỏ khoảng cách */
+    cursor: pointer; /* Thêm hiệu ứng con trỏ khi hover */
+    font-size: 16px;
+}
