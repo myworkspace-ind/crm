@@ -16,6 +16,31 @@
 <link rel="stylesheet" type="text/css" href="resources/css/status.css">
 <link rel="stylesheet" type="text/css" href="resources/css/buttonGroupFunction.css">
 
+<style>
+	.fixed-button {
+	  position: fixed;
+	  left: 10px;
+	  top: 30%; 
+	  transform: translateY(-50%);
+	  width: 50px; 
+	  height: 50px;
+	  background-color: #007bff;
+	  color: #fff;
+	  border: none;
+	  border-radius: 50%;
+	  display: flex;
+	  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	  cursor: pointer;
+	  transition: all 0.3s ease;
+	}
+	
+	.fixed-button:hover {
+	  left: 30px; /* Di chuyển sang phải khi rê chuột vào */
+	  background-color: #0056b3; /* Thay đổi màu nền khi hover */
+	  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Đổ bóng khi hover */
+	}
+</style>
+
 <th:block th:include="fragments/head"></th:block>
 </head>
 
@@ -28,8 +53,8 @@
 	
 	<!-- END HEADER  -->
 	
-	<div class="container mt-5">
-		<button type="button" class="btn btn-primary fixed-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Tìm kiếm" style="border-radius: 50%; justify-content: center; align-items: center;">
+	<!-- <div class="container mt-5">
+		<button type="button" class="btn btn-primary fixed-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Tìm kiếm" style="border-radius: 50%; transition: all 0.3s ease; justify-content: center;align-items: center;">
   			<i class="bi bi-search"></i>
 		</button>
 		<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -94,7 +119,7 @@
 		  </div>
 		</div>
 	
-	</div>
+	</div> -->
 	
 	 <th:block th:include="fragments/hmenu"></th:block>
 	<!-- BEGIN LEFT MENU NAVIGATION -->
