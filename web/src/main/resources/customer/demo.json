@@ -1,22 +1,22 @@
 {
-    "colWidths": [
-        50,
-        130,
-        300,
-        100
-    ],
-    "colHeaders": [
-        "ID",
-        "Name",
-        "Address",
-        "Phone"
-    ],
-    "data": [
-        [
-            "",
-            "Nguyễn Văn Anh",
-            "170 Phan Đăng Lưu, Phường 3, Phú Nhuận, Hồ Chí Minh",
-            "0909353535"
-        ]
-    ]
+	"colWidths": [
+		50,
+		130,
+		300,
+		100
+	],
+	"colHeaders": [
+		"ID",
+		"Name",
+		"Address",
+		"Phone"
+	],
+	"data": [
+		[
+			"",
+			"Nguyễn Văn Anh",
+			"170 Phan Đăng Lưu, Phường 3, Phú Nhuận, Hồ Chí Minh",
+			"0909353535"
+		]
+	]
 }

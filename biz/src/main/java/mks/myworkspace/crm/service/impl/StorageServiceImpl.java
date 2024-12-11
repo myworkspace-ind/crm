@@ -50,23 +50,87 @@ public class StorageServiceImpl implements StorageService {
 
 	@Override
 	public Customer saveOrUpdate(Customer customer) {
-		// Kiểm tra số điện thoại đã tồn tại chưa
-		Optional<Customer> existingCustomer = customerRepo.findByPhone(customer.getPhone());
-
-		if (existingCustomer.isPresent()) {
-			throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+		Optional<Customer> existingCustomerByEmail = customerRepo.findByEmail(customer.getEmail());
+		Optional<Customer> existingCustomerByPhone = customerRepo.findByPhone(customer.getPhone());
+		/*
+		 * if (existingEmail.isPresent()) { throw new
+		 * IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!"
+		 * ); }
+		 * 
+		 * Optional<Customer> existingPhone =
+		 * customerRepo.findByPhone(customer.getPhone()); if (existingPhone.isPresent())
+		 * { throw new
+		 * IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!"
+		 * ); }
+		 * 
+		 * if (!isValidPhoneNumber(customer.getPhone())) { throw new
+		 * IllegalArgumentException("Số điện thoại không đúng định dạng. Vui lòng nhập lại!"
+		 * ); }
+		 */
+		
+		// Kiểm tra nếu SDT đã có
+		if (existingCustomerByPhone.isPresent()) {
+			//throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			
+			// Nếu SDT đã có, kiểm tra xem SDT này là của khách muốn chỉnh sủa thông tin,
+			// hay là của khách hàng khác
+			
+			// Lấy khách hàng cũ
+			Customer optCustomer = existingCustomerByPhone.get();
+			
+			// Nếu đây là thêm mới nhưng trùng sdt khách hàng cũ,
+			if (customer.getId() == null) {
+				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			// hoặc là khách hàng chỉnh sửa sdt trùng khách hàng cũ
+			else if (customer.getId() != optCustomer.getId())
+			{
+				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			if (customer.getPhone().length() != 10) {
+				throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
+			}
 		}
-
-		if (customer.getPhone().length() != 10) {
-			throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
+		if (existingCustomerByEmail.isPresent()) {
+			//throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			
+			// Nếu SDT đã có, kiểm tra xem SDT này là của khách muốn chỉnh sủa thông tin,
+			// hay là của khách hàng khác
+			
+			// Lấy khách hàng cũ
+			Customer optCustomer = existingCustomerByEmail.get();
+			
+			// Nếu đây là thêm mới nhưng trùng email khách hàng cũ,
+			if (customer.getId() == null) {
+				throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			// hoặc là khách hàng chỉnh sửa email trùng khách hàng cũ
+			else if (customer.getId() != optCustomer.getId())
+			{
+				throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			/*
+			 * if (customer.getPhone().length() != 10) { throw new
+			 * IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!"
+			 * ); }
+			 */
 		}
-
 		Long id = appRepo.saveOrUpdate(customer);
 		if (id != null) {
 			customer.setId(id);
 		}
 		return customer;
 	}
+	private boolean isValidPhoneNumber(String phoneNumber) {
+	    String phoneRegex = "^[0-9]{10}$";
+	    return phoneNumber != null && phoneNumber.matches(phoneRegex);
+	}
+
+	private boolean isValidEmail(String email) {
+	    String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";  
+	    return email != null && email.matches(emailRegex);
+	}
+
 
 	@Override
 	public List<Customer> saveOrUpdate(List<Customer> lstCustomer) {
@@ -130,5 +194,18 @@ public class StorageServiceImpl implements StorageService {
 		}
 
 		return lstOrderCategories;
+	}
+
+	@Override
+	public Customer updateCustomerStatus(Customer customer) {
+		log.debug("Processing Customer with ID: {}", customer.getId());
+
+		Long id = appRepo.updateCustomerStatus(customer);
+		if (id != null) {
+			customer.setId(id);
+		}
+
+		log.debug("Final Customer ID : {}", customer.getId());
+		return customer;
 	}
 }

@@ -18,8 +18,9 @@ import javax.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Entity
-@Table(name = "customer_interaction")
+@Table(name = "crm_customer_interaction", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,29 +31,30 @@ public class Interaction implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  // ID tự động tăng
-	
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
-	
-	@Column(name = "interaction_date")
-    @Temporal(TemporalType.DATE)
-    private Date interactAt;
 
-    @Column(name = "content", columnDefinition = "TEXT")
+	@Column(name = "interaction_date")
+    //@Temporal(TemporalType.DATE)
+    private Date interactionDate;
+
+    @Column(name = "content")
     private String content;  
     
-    @Column(name = "next_plan", columnDefinition = "TEXT")
-    private String plan;  
+    @Column(name = "next_plan")
+    private String nextPlan;  
     
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
     
-	public Interaction(Long id, Date interactAt ,String content,String plan, Customer customer) {
-		super();
-		this.id = id;
-		this.interactAt = interactAt;
-		this.content = content;
-		this.plan = plan;
-		this.customer = customer;
-	}
-
+    @Column(name = "contact_person", length = 99) 
+	private String contactPerson;
+  
+    public Interaction(Long id, Date interactionDate, String content, String nextPlan, Customer customer, String contactPerson) {
+        this.id = id;
+        this.interactionDate = interactionDate;
+        this.content = content;
+        this.nextPlan = nextPlan;
+        this.customer = customer;
+        this.contactPerson = contactPerson;
+    }  
 }

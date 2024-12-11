@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -8,7 +8,7 @@
 	<div class="content-wrapper">
 		<div class="content-header row">
 			<div class="content-header-left col-md-6 col-12 mb-2">
-				<h3 class="content-header-title">Khách hàng</h3>
+				<h3 class="content-header-title">Quản lý khách hàng</h3>
 				<div class="row breadcrumbs-top">
 					<div class="breadcrumb-wrapper col-12">
 						<ol class="breadcrumb">
@@ -19,7 +19,7 @@
 				</div>
 			</div>
 			<div class="content-header-right col-md-6 col-12">
-				<form id="frmSearchCustomer" action="list" method="get">
+				<form id="frmSearchCustomer" th:action="@{/customer/list}" method="get">
 					<fieldset
 						class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
 						<input class="form-control" name="keyword" id="iconLeft"

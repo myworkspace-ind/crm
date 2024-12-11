@@ -11,11 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -62,7 +64,11 @@ public class Customer implements Serializable {
     @ManyToOne
     @JoinColumn(name = "sub_status_id")
     private Status subStatus;
-     
+    
+    @ManyToOne
+    @JoinColumn(name = "responsible_person_id")
+    private ResponsiblePerson responsiblePerson;
+
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     private Date createdAt;
@@ -70,13 +76,13 @@ public class Customer implements Serializable {
     @Column(name = "note", length = 255)
     private String note;
     
-    @ManyToOne
-    @JoinColumn(name = "responsible_person_id")
-    private ResponsiblePerson responsiblePerson;
+    @Column(name = "account_status")
+    private Boolean accountStatus;
+    
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
 			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, Date createdAt,
-			String note) {
+			String note, Boolean accountStatus) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -91,10 +97,11 @@ public class Customer implements Serializable {
 		this.responsiblePerson = responsiblePerson;
 		this.createdAt = createdAt;
 		this.note = note;
+		this.accountStatus = accountStatus;
 	}
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			Date createdAt, String note) {
+			Date createdAt, String note, Boolean accountStatus) {
 		super();
 		this.id = id;
 		this.siteId = siteId;
@@ -105,12 +112,19 @@ public class Customer implements Serializable {
 		this.address = address;
 		this.createdAt = createdAt;
 		this.note = note;
+		this.accountStatus = accountStatus;
 	}
 
 	public Customer(String contactPerson2) {
 		// TODO Auto-generated constructor stub
 	}
+	
 
+	public Customer(Long id) {
+		super();
+		this.id = id;
+	}
+	
 	/*
 	 * @Override public String toString() { return "Customer [id=" + id +
 	 * ", siteId=" + siteId + ", companyName=" + companyName + ", contactPerson=" +

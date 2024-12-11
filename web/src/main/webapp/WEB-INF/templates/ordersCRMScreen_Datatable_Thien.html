@@ -17,6 +17,7 @@
 	<link rel="stylesheet" type="text/css" th:href="@{resources/css/ordersBtnHorizontalMenu.css}">	
 	<link rel="stylesheet" type="text/css" th:href="@{resources/css/new_style.css}">
 	<link rel="stylesheet" type="text/css" th:href="@{resources/css/order.css}">
+	<th:block th:include="fragments/head"></th:block>
 </head>
 <body
 	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
@@ -30,7 +31,7 @@
 	<!--  BEGIN CONTENT -->
 	<div class="app-content content">
 		<!-- BEGIN CONTENT WRAPPER -->
-		<th:block th:include="fragments/ordersContentWrapperCRM_Tri"></th:block>
+		<th:block th:include="fragments/ordersContentWrapperCRM"></th:block>
 		<!-- END CONTENT WRAPPER -->
 		
 		<!-- BEGIN SEARCH CONDITION -->
