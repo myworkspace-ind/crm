@@ -48,7 +48,7 @@ public class InteractionValidator {
 		        	// Kiểm tra xem rowData[0] có phải là String và chuyển đổi nó thành Date
 	                String dateString = (String) rowData[1]; // Ngày dưới dạng String
 	                Date date = dateFormat.parse(dateString); // Chuyển String thành Date
-	                Customer customer = new Customer(customerId);
+	                Customer customer = new Customer(customerId, (String) rowData[0]);
 	                
 		            String content = (String) rowData[2]; // Nội dung trao đổi
 		            String nextPlan = (String) rowData[3]; // Kế hoạch tiếp theo

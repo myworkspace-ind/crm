@@ -73,7 +73,7 @@ public class AppRepository {
 
 	    // Sử dụng SimpleJdbcInsert để thực hiện lưu bản ghi mới
 	    SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
-	    	    .withTableName("customer_interaction")
+	    	    .withTableName("crm_customer_interaction")
 	    	    .usingColumns("interaction_date", "content", "next_plan", "customer_id")
 	    	    .usingGeneratedKeyColumns("id");
 
@@ -104,7 +104,7 @@ public class AppRepository {
 	
 	public void deleteInteractionById(Long interactionId) {
 	    // Tạo câu lệnh DELETE với ID duy nhất
-	    String sql = "DELETE FROM customer_interaction WHERE id = ?";
+	    String sql = "DELETE FROM crm_customer_interaction WHERE id = ?";
 
 	    // Thực thi câu lệnh DELETE
 	    int rowsDeleted = jdbcTemplate0.update(sql, interactionId);
@@ -118,7 +118,7 @@ public class AppRepository {
 	}
 
 	private void updateEntity(Interaction entity) {
-	    String updateSql = "UPDATE customer_interaction SET "
+	    String updateSql = "UPDATE crm_customer_interaction SET "
 	            + "interaction_date = ?, "
 	            + "content = ?, "
 	            + "next_plan = ? "

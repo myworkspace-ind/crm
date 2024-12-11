@@ -60,6 +60,7 @@ function initTable(colHeaders, colWidths, data) {
                         Handsontable.dom.empty(td); // Xóa nội dung cũ
 						
                         const button = document.createElement('button');
+						button.type = 'button';
                         button.innerText = '🗑️';
                         button.className = 'delete-button';
                         button.onclick = function() {

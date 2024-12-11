@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "customer_interaction", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
+@Table(name = "crm_customer_interaction", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 @Getter
 @Setter
 @NoArgsConstructor
