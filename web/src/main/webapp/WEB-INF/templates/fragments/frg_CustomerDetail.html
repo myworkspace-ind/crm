@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 	<!--  BEGIN CONTENT -->
-	<div class="app-content content">
-		<div class="content-wrapper">
+	<div class="app-content content w-100 ms-0 p-0">
+		<div class="content-wrapper m-0 p-0">
 			<div class="content-header row">
 				<div class="content-header-left col-md-6 col-12 mb-2">
 					<h3 class="content-header-title">Khách hàng</h3>
@@ -15,30 +15,35 @@
 							</ol>
 						</div>
 					</div>
-				</div>				
+				</div>
 			</div>
-
-			<!-- Left panel -->
-			<div class="left-panel">
-				<div class="user-info">
-					<div class="user-avatar">
-						<img
-							src="resources/app-assets/images/portrait/small/avatar-s-10.png"
-							alt="User Avatar">
+			<div class="container ms-2 w-100 mw-100">
+				<!-- Left panel -->
+				<div class="left-panel">
+					<div class="user-info">
+						<div class="user-avatar">
+							<img
+								th:src="@{/resources/app-assets/images/portrait/small/avatar-s-10.png}"
+								alt="User Avatar">
+						</div>
+						<div class="user-details">
+							<h2 th:text="${customer.companyName}"></h2>
+							<p th:text="${customer.address}"></p>
+							<p th:text="${customer.phone}"></p>
+						</div>
 					</div>
-					<div class="user-details">
-						<h2 th:text="${customer.companyName}"></h2>
-						<p th:text="${customer.address}"></p>
-						<p th:text="${customer.phone}"></p>
+
+					<div class="actions">
+						<a th:href="@{newEditCustomer(id=${customer.id})}" >
+						    <button type="button"
+						    	style="cursor: pointer;">
+						    Edit
+						    </button>
+						</a>
+						<button style="cursor: pointer; background: #DA4453" th:onclick="'deleteCustomer(' + ${customer.id} + ')'">Delete</button>
 					</div>
-				</div>
 
-				<div class="actions">
-					<button>Edit</button>
-					<button>Delete</button>
-				</div>
-
-				<!-- <div class="relationship-section">
+					<!-- <div class="relationship-section">
 					<label for="relationship">Trạng thái:</label>
 					<ul>
 						Lặp qua danh sách trạng thái
@@ -48,31 +53,33 @@
 
 				</div> -->
 
-				<div class="person-in-charge">
-					<label class="label-bold" for="person-in-charge">Người phụ
-						trách:</label> <select id="person-in-charge">
-						<option value="ngan">Nguyễn Hoàng Phương Ngân</option>
-						<option value="other">Khác</option>
-					</select>
+					<div class="person-in-charge">
+						<label class="label-bold" for="person-in-charge">Người phụ
+							trách:</label> <select id="person-in-charge">
+							<option value="ngan">Nguyễn Hoàng Phương Ngân</option>
+							<option value="other">Khác</option>
+						</select>
+					</div>
+
+					<div class="creation-info">
+						<p>
+							<span class="label-bold">Ngày tạo:</span> 9/8/2024 9:00
+						</p>
+						<p>
+							<span class="label-bold">Người tạo:</span> Nguyễn Hoàng Phương
+							Ngân
+						</p>
+						<p>
+							<span class="label-bold">Đã mua:</span> 0 lần
+						</p>
+					</div>
 				</div>
 
-				<div class="creation-info">
-					<p>
-						<span class="label-bold">Ngày tạo:</span> 9/8/2024 9:00
-					</p>
-					<p>
-						<span class="label-bold">Người tạo:</span> Nguyễn Hoàng Phương
-						Ngân
-					</p>
-					<p>
-						<span class="label-bold">Đã mua:</span> 0 lần
-					</p>
+				<div class="right-panel p-0 m-0 w-100">
+					<th:block th:include="fragments/interaction/frg_interaction.html"></th:block>
 				</div>
 			</div>
 
-			<div class="right-panel">
-				<th:block th:include="fragments/interaction/frg_interaction.html"></th:block>
-			</div>
 		</div>
 	</div>
 
