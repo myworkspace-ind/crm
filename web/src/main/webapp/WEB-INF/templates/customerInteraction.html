@@ -40,7 +40,7 @@
 			<form id="frmSearchCustomer" action="interact" method="get">
 					<fieldset
 						class="form-group relative has-icon-left col-12 ">
-						<input class="form-control w-100" name="keyword" id="iconLeft"
+						<input class="form-control" name="keyword" id="iconLeft"
 							type="text" placeholder="Tìm kiếm thông tin..."
 							onkeypress="handleKeyPress(event)">
 						<div class="form-control-position">
@@ -78,7 +78,7 @@
 							<td>
 								<div class="d-flex justify-content-center">
 									<a th:href="@{/customer/edit(id=${customer.id})}"
-										class="text-info mr-3 bg-transparent" style="font-size: 20px;">
+										class="text-info mr-1 bg-transparent" style="font-size: 20px;">
 										<i class="fas fa-edit w-100"></i>
 									</a>
 								</div>
