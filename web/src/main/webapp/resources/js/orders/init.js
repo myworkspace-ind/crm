@@ -47,20 +47,21 @@ function initTable(colHeaders, colWidths, data) {
 			td.style.justifyContent = 'center'; // Căn giữa các nút theo chiều ngang
 			td.style.alignItems = 'center'; // Căn giữa các nút theo chiều dọc
 	        td.innerHTML = `
-	            <div class="btn-group" role="group" aria-label="...">
-	                <button class="btn btn-info btn-view" onclick="viewDetail(${row})" title="Xem chi tiết">
-	                    <i class="fas fa-eye"></i> Xem chi tiết
-	                </button>
-	                <button class="btn btn-warning" onclick="edit(${row})" title="Sửa">
-	                    <i class="fas fa-edit"></i> Sửa
-	                </button>
-	                <button class="btn btn-danger" onclick="deleteRow(${row})" title="Xóa">
-	                    <i class="fas fa-trash"></i> Xóa
-	                </button>
-	                <button class="btn btn-success btn-status" onclick="openStatusModal(${row})" title="Cập nhật trạng thái">
-	                    <i class="fas fa-sync-alt"></i> Cập nhật trạng thái
-	                </button>
-	            </div>
+				<div class="btn-group" role="group" aria-label="...">
+				    <button type="button" class="btn btn-info btn-view" onclick="viewDetail(${row})" title="Xem chi tiết">
+				        <i class="fas fa-eye"></i> Xem chi tiết
+				    </button>
+				    <button type="button" class="btn btn-warning" onclick="edit(${row})" title="Sửa">
+				        <i class="fas fa-edit"></i> Sửa
+				    </button>
+				    <button type="button" class="btn btn-danger" onclick="deleteRow(${row})" title="Xóa">
+				        <i class="fas fa-trash"></i> Xóa
+				    </button>
+				    <button type="button" class="btn btn-success btn-status" onclick="openStatusModal(${row})" title="Cập nhật trạng thái">
+				        <i class="fas fa-sync-alt"></i> Cập nhật trạng thái
+				    </button>
+				</div>
+
 	        `;
 	    } else {
 	        
@@ -174,10 +175,75 @@ function viewDetail(row) {
 }
 
 function edit(row) {
-	changeTitle('Cập nhật đơn hàng');
-	currentRow = row;  // Save current row to update
-	document.getElementById("updateOrderModal").style.display = "block";
-	document.getElementById("modalOverlay").style.display = "block";
+    const orderId = htOrder.getSourceDataAtRow(row)[0];	
+    console.log("Row[0]: ", orderId);
+    console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
+
+    $.ajax({
+        url: _ctx + 'orders-vinh/viewDetails/' + orderId,
+        method: 'GET',
+        success: function(response) {
+            console.log(response);
+
+            var orderStatusData = response[6];
+            var currentOrderStatusId = response[7];
+
+            var orderGoodsCategoryData = response[8];
+            var currentOrderGoodsCategoryId = response[9];
+
+            var orderSenderData = response[10];
+            var currentOrderSenderId = response[11];
+
+            var orderReceiverData = response[12];
+            var currentOrderReceiverId = response[13];
+
+            $('#orderIdUpdate').text(response[0]);
+            $('#orderCodeUpdate').text(response[1]);
+            $('#orderCodeUpdateInput').val(response[1]);
+            $('#orderDeliveryDateUpdate').val(response[2]);
+            $('#orderCreateDateUpdate').val(response[3]);
+            $('#orderTransportUpdate').val(response[4]);
+            $('#orderRequirementUpdate').val(response[5]);
+            $('#orderAddressUpdate').val(response[14]);
+
+            if (orderStatusData && orderStatusData.length > 0) {
+                var options = orderStatusData.map(function(status) {
+                    var selected = status[0] === currentOrderStatusId ? ' selected' : '';
+                    return '<option value="' + status[0] + '"' + selected + '>' + status[1] + '</option>';
+                }).join('');
+                $('#orderStatusUpdate').html(options);
+            }
+
+            if (orderGoodsCategoryData && orderGoodsCategoryData.length > 0) {
+                var options = orderGoodsCategoryData.map(function(goodscategory) {
+                    var selected = goodscategory[0] === currentOrderGoodsCategoryId ? ' selected' : '';
+                    return '<option value="' + goodscategory[0] + '"' + selected + '>' + goodscategory[1] + '</option>';
+                }).join('');
+                $('#orderGoodsUpdate').html(options);
+            }
+
+            if (orderSenderData && orderSenderData.length > 0) {
+                var options = orderSenderData.map(function(sender) {
+                    var selected = sender[0] === currentOrderSenderId ? ' selected' : '';
+                    return '<option value="' + sender[0] + '"' + selected + '>' + sender[1] + '</option>';
+                }).join('');
+                $('#orderSenderNameUpdate').html(options);
+            }
+
+            if (orderReceiverData && orderReceiverData.length > 0) {
+                var options = orderReceiverData.map(function(receiver) {
+                    var selected = receiver[0] === currentOrderReceiverId ? ' selected' : '';
+                    return '<option value="' + receiver[0] + '"' + selected + '>' + receiver[1] + '</option>';
+                }).join('');
+                $('#orderReceiverNameUpdate').html(options);
+            }
+
+            document.getElementById("updateOrderModal").style.display = "block";
+        },
+        error: function(error) {
+            console.error('Có lỗi khi lấy thông tin chi tiết đơn hàng:', error);
+        }
+    });
 }
 
 function deleteRow(row) {

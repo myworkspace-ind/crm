@@ -160,14 +160,14 @@ public class OrderController_Vinh extends BaseController {
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseEntity<?> deleteInteractionById(@RequestParam("id") Long orderId, 
+	public ResponseEntity<?> deleteOrderById(@RequestParam("id") Long orderId, 
 	                                               HttpServletRequest request,
 	                                               HttpSession httpSession) {
 	    try {
 	        if (orderId == null) {
 	            return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID không được để trống."));
 	        }
-	        // Gọi service để xóa Interaction dựa trên ID
+	        
 	        storageService.deleteOrderById(orderId);
 
 	        return ResponseEntity.ok()
