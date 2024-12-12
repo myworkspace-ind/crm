@@ -38,7 +38,7 @@
 						    Edit
 						    </button>
 						</a>
-						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer(' + ${customer.id} + ')'">Hide</button>
+						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer_Interaction(' + ${customer.id} + ')'">Hide</button>
 					</div>
 					
 					
@@ -65,7 +65,7 @@
 
 		</div>
 	</div>
-	
+	<th:block th:include="fragments/frg_ModalConfirmation"></th:block>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/deleteCustomer.js}" defer></script>
 
 	<!-- END CONTENT -->
