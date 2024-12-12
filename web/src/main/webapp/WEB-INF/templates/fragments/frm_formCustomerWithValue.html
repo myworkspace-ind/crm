@@ -40,12 +40,12 @@
 									<div class="form-group">
 										<label for="address">Địa Chỉ:</label>
 										<input type="text" class="form-control" id="address" name="address"
-										   th:value="${customer?.address}">
+										   th:value="${customer?.address}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="profession">Ngành Nghề:</label>
-										<select class="form-control" id="profession" name="profession">
+										<select class="form-control" id="profession" name="profession" required>
 											<option value="">Chọn Ngành Nghề</option>
 											<th:block th:each="profession : ${professions}">
 												<option th:value="${profession.id}"
@@ -57,7 +57,7 @@
 
 									<div class="form-group">
 										<label for="main_status">Trạng Thái Chính:</label>
-										<select class="form-control" id="main_status" name="main_status">
+										<select class="form-control" id="main_status" name="main_status" required>
 											<option value="">Chọn Trạng Thái Chính</option>
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}"
@@ -69,7 +69,7 @@
 
 									<div class="form-group">
 										<label for="sub_status">Trạng Thái Phụ:</label>
-										<select class="form-control" id="sub_status" name="sub_status">
+										<select class="form-control" id="sub_status" name="sub_status" required>
 											<option value="">Chọn Trạng Thái Phụ</option>
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}"
@@ -81,7 +81,7 @@
 
 									<div class="form-group">
 										<label for="responsible_person">Người Phụ Trách:</label>
-										<select class="form-control" id="responsible_person" name="responsible_person">
+										<select class="form-control" id="responsible_person" name="responsible_person" required>
 											<option value="">Chọn Người Phụ Trách</option>
 											<th:block th:each="person : ${responsiblePersons}">
 												<option th:value="${person.id}"
@@ -108,5 +108,13 @@
 			</section>
 		</div>
 	</div>
+	<script>
+	  document.querySelectorAll("input[required], select[required]").forEach((input) => {
+	    const label = input.previousElementSibling;
+	    if (label) {
+	      label.innerHTML += ' <span style="color: red;">*</span>';
+	    }
+	  });
+	</script>
 	<!-- END CONTENT -->
 </html>

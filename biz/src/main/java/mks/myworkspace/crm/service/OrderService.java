@@ -16,4 +16,7 @@ public interface OrderService {
 	Optional<Order> findById(Long orderId);
 	
 	List<Order> searchOrders(Long customerId, Long orderCategoryId, List<Long> statuses);
+	
+	List<String> findAllCodeOrders();
+
 }

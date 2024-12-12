@@ -130,6 +130,7 @@ public class OrderConfigurationController extends BaseController {
 
 				return tblOrderCate;
 			}
+			
 		}
 		
 	@GetMapping("/load-orders")

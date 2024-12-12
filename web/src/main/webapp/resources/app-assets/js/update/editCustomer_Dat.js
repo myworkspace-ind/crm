@@ -33,10 +33,10 @@ function saveCustomerChanges() {
         phone: phone,
         address: address,
         responsiblePerson: responsiblePerson || null,
-        note: note || '',
-        profession: profession || '',
-        mainStatus: mainStatus || '',
-        subStatus: subStatus || '',
+        note: note || null,
+        profession: profession || null,
+        mainStatus: mainStatus || null,
+        subStatus: subStatus || null,
     };
 
     const _ctx = "/crm-web/";
