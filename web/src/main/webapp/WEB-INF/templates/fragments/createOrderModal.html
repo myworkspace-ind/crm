@@ -28,11 +28,16 @@
 			<div class="form-row">
 			    <div class="form-group col-md-6">
 			      <label for="orderCodeUpdateInput">Mã đơn hàng</label>
-			      <input type="text" class="form-control" id=orderCodeInputCreate style="background-color: white; color: black;" >
+			      <input list="orderCodes" type="text" class="form-control" id="orderCodeInputCreate" style="background-color: white; color: black;" oninput="checkSelectionGoodOrder()">
+			      <datalist id="orderCodes">
+			      	<th:block th:each="orderCode : ${orderCodes}">
+						<option th:value="${orderCode}"></option>			      	
+			      	</th:block>
+			      </datalist>
 			    </div>
 			     <div class="form-group col-md-6">
 				    <label for="goodsType">Loại đơn hàng</label>
-				    <input list="orderCategories" id="orderCategoryInput" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng">
+				    <input list="orderCategories" id="orderCategoryCreate" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng">
 				    <datalist id="orderCategories">
 				        <th:block th:each="orderCategory : ${orderCategories}">
 				            <option th:value="${orderCategory.name}" th:data-id="${orderCategory.id}"></option>
@@ -46,7 +51,7 @@
 				    <div class="form-row">
 				        <div class="form-group col-md-6">
 						    <label for="goodsType">Loại hàng hóa</label>
-						    <input list="goodsCategories" id="orderGoodsInput" class="form-control" placeholder="Nhập hoặc chọn loại hàng hóa">
+						    <input list="goodsCategories" id="orderGoodsCreate" class="form-control" placeholder="Nhập hoặc chọn loại hàng hóa">
 						    <datalist id="goodsCategories">
 						        <th:block th:each="goodsCategory : ${listGoodsCategories}">
 						            <option th:value="${goodsCategory.name}" th:data-id="${goodsCategory.id}"></option>
@@ -83,7 +88,7 @@
 				                    <select id="orderSenderNameCreate" class="form-control select2" style="width: 100%; background-color: white; color: black;">
 				                        <option value="" disabled selected>Nhập hoặc chọn tên người gửi</option>
 				                        <th:block th:each="customer : ${listCustomers}">
-				                            <option th:value="${customer.contactPerson}" 
+				                            <option th:value="${customer.id}" 
 				                                    th:data-phone="${customer.phone}" 
 				                                    th:data-email="${customer.email}">
 				                                <span th:text="${customer.contactPerson}"></span>
@@ -114,7 +119,7 @@
 				                    <select id="orderReceiverNameCreate" class="form-control select2" style="width: 100%; background-color: white; color: black;">
 				                        <option value="" disabled selected>Nhập hoặc chọn họ tên</option>
 				                        <th:block th:each="customer : ${listCustomers}">
-				                            <option th:value="${customer.contactPerson}" 
+				                            <option th:value="${customer.id}" 
 				                                    th:data-phone="${customer.phone}" 
 				                                    th:data-email="${customer.email}">
 				                                <span th:text="${customer.contactPerson}"></span>

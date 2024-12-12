@@ -54,5 +54,11 @@ public class OrderServiceImpl implements OrderService{
 		return repo.findOrderByCriteria(customerId, orderCategoryId, statuses);
 	}
 
+	@Override
+	public List<String> findAllCodeOrders() {
+		// TODO Auto-generated method stub
+		return repo.findAllCodeOrders();
+	}
+
 
 }
