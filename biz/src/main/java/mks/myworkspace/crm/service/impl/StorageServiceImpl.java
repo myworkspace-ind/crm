@@ -146,9 +146,8 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public void deleteCustomersByIds(List<Long> customerIds) {
-		appRepo.deleteCustomersByIds(customerIds);
-
+	public void hideCustomersByIds(List<Long> customerIds) {
+		appRepo.hideCustomersByIds(customerIds);
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public interface StorageService {
 	
 	List<Customer> saveOrUpdate(List<Customer> lstCustomers);
 	
-	void deleteCustomersByIds(List<Long> customerIds);
+	void hideCustomersByIds(List<Long> customerIds);
 	
 	public Order saveOrUpdateOrder(Order order);
 	
