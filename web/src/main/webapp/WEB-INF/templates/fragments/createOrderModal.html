@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- CSS của Select2 -->
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-	<!-- JavaScript của Select2 -->
-	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
 	<div id="createOrderModal">
@@ -29,11 +28,16 @@
 			<div class="form-row">
 			    <div class="form-group col-md-6">
 			      <label for="orderCodeUpdateInput">Mã đơn hàng</label>
-			      <input type="text" class="form-control" id=orderCodeInputCreate style="background-color: white; color: black;" >
+			      <input list="orderCodes" type="text" class="form-control" id="orderCodeInputCreate" style="background-color: white; color: black;" oninput="checkSelectionGoodOrder()">
+			      <datalist id="orderCodes">
+			      	<th:block th:each="orderCode : ${orderCodes}">
+						<option th:value="${orderCode}"></option>			      	
+			      	</th:block>
+			      </datalist>
 			    </div>
 			     <div class="form-group col-md-6">
 				    <label for="goodsType">Loại đơn hàng</label>
-				    <input list="orderCategories" id="orderCategoryInput" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng">
+				    <input list="orderCategories" id="orderCategoryCreate" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng">
 				    <datalist id="orderCategories">
 				        <th:block th:each="orderCategory : ${orderCategories}">
 				            <option th:value="${orderCategory.name}" th:data-id="${orderCategory.id}"></option>
@@ -47,7 +51,7 @@
 				    <div class="form-row">
 				        <div class="form-group col-md-6">
 						    <label for="goodsType">Loại hàng hóa</label>
-						    <input list="goodsCategories" id="orderGoodsInput" class="form-control" placeholder="Nhập hoặc chọn loại hàng hóa">
+						    <input list="goodsCategories" id="orderGoodsCreate" class="form-control" placeholder="Nhập hoặc chọn loại hàng hóa">
 						    <datalist id="goodsCategories">
 						        <th:block th:each="goodsCategory : ${listGoodsCategories}">
 						            <option th:value="${goodsCategory.name}" th:data-id="${goodsCategory.id}"></option>
@@ -75,59 +79,67 @@
 		    
 		   <div class="container">
 				<div class="column">
-			        <fieldset>
-			            <legend>Thông tin người gửi</legend>
-			            <table class="sender-table">
-			                <tr>
-							    <td>Họ tên:</td>
-							    <td>
-							        <input list="senderNames" id="orderSenderNameCreate" class="form-control" placeholder="Nhập hoặc chọn họ tên" style="background-color: white; color: black; width: 100%;">
-							        <datalist id="senderNames">
-							            <th:block th:each="customer : ${listCustomers}">
-							                <option th:value="${customer.contactPerson}" th:data-id="${customer.id}" th:data-phone="${customer.phone}" th:data-email="${customer.email}"></option>
-							            </th:block>
-							        </datalist>
-							    </td>
-							</tr>
-							<tr>
-							    <td>SDT:</td>
-							    <td><input type="text" class="input-container" id="orderSenderPhoneCreate" placeholder="(+84) 1234567890" readonly /></td>
-							</tr>
-							<tr>
-							    <td>Email:</td>
-							    <td><input type="text" class="input-container" id="orderSenderEmailCreate" readonly /></td>
-							</tr>
-
-			            </table>
-			        </fieldset>
+				    <fieldset>
+				        <legend>Thông tin người gửi</legend>
+				        <table class="sender-table">
+				            <tr>
+				                <td>Họ tên:</td>
+				                <td>
+				                    <select id="orderSenderNameCreate" class="form-control select2" style="width: 100%; background-color: white; color: black;">
+				                        <option value="" disabled selected>Nhập hoặc chọn tên người gửi</option>
+				                        <th:block th:each="customer : ${listCustomers}">
+				                            <option th:value="${customer.id}" 
+				                                    th:data-phone="${customer.phone}" 
+				                                    th:data-email="${customer.email}">
+				                                <span th:text="${customer.contactPerson}"></span>
+				                            </option>
+				                        </th:block>
+				                    </select>
+				                </td>
+				            </tr>
+				            <tr>
+				                <td>SDT:</td>
+				                <td><input type="text" id="orderSenderPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				            </tr>
+				            <tr>
+				                <td>Email:</td>
+				                <td><input type="email" id="orderSenderEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				            </tr>
+				        </table>
+				    </fieldset>
 				</div>
 	
 				<div class="column col2">
-				        <fieldset>
-				            	<legend>Thông tin người nhận</legend>
-				            <table class="receiver-table">
-				                <tr>
-								    <td>Họ tên:</td>
-								    <td>
-								        <input list="receiverNames" id="orderReceiverNameCreate" class="form-control" placeholder="Nhập hoặc chọn họ tên" style="background-color: white; color: black; width: 100%;">
-								        <datalist id="receiverNames">
-								            <th:block th:each="customer : ${listCustomers}">
-								                <option th:value="${customer.contactPerson}" th:data-id="${customer.id}" th:data-phone="${customer.phone}" th:data-email="${customer.email}"></option>
-								            </th:block>
-								        </datalist>
-								    </td>
-								</tr>
-								<tr>
-								    <td>SDT:</td>
-								    <td><input type="text" class="input-container" id="orderSenderPhoneCreate" placeholder="(+84) 1234567890" readonly /></td>
-								</tr>
-								<tr>
-								    <td>Email:</td>
-								    <td><input type="text" class="input-container" id="orderSenderEmailCreate" readonly /></td>
-								</tr>
-				            </table>
-				        </fieldset>
+				    <fieldset>
+				        <legend>Thông tin người nhận</legend>
+				        <table class="receiver-table">
+				            <tr>
+				                <td>Họ tên:</td>
+				                <td>
+				                    <select id="orderReceiverNameCreate" class="form-control select2" style="width: 100%; background-color: white; color: black;">
+				                        <option value="" disabled selected>Nhập hoặc chọn họ tên</option>
+				                        <th:block th:each="customer : ${listCustomers}">
+				                            <option th:value="${customer.id}" 
+				                                    th:data-phone="${customer.phone}" 
+				                                    th:data-email="${customer.email}">
+				                                <span th:text="${customer.contactPerson}"></span>
+				                            </option>
+				                        </th:block>
+				                    </select>
+				                </td>
+				            </tr>
+				            <tr>
+				                <td>SDT:</td>
+				                <td><input type="text" id="orderReceiverPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				            </tr>
+				            <tr>
+				                <td>Email:</td>
+				                <td><input type="email" id="orderReceiverEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				            </tr>
+				        </table>
+				    </fieldset>
 				</div>
+
 		</div>
 	        
 	        <div class="row2">
@@ -164,31 +176,41 @@
 	</div>
 	<script type="text/javascript" th:src="@{/resources/js/orders/datatable.js}" ></script>
 	<script>
-        document.getElementById("orderSenderNameCreate").addEventListener("input", function() {
-            var input = this.value.toLowerCase();  // Lấy giá trị nhập vào và chuyển thành chữ thường để dễ so sánh
-            var options = document.querySelectorAll("#senderNames option");  // Lấy tất cả các tùy chọn trong datalist
-            // Tìm kiếm tên nhập vào có trong danh sách
-            var found = false; // Cờ báo tìm thấy
-            options.forEach(function(option) {
-                var name = option.value.toLowerCase();  // Lấy tên khách hàng trong option (chuyển thành chữ thường để so sánh)
+		$(document).ready(function () {
+		    // Kích hoạt Select2
+		    $('.select2').select2({
+		        tags: true,
+		        placeholder: "Nhập hoặc chọn tên",
+		        allowClear: true
+		    });
+	
+		    // Cập nhật thông tin "Người gửi"
+		    $('#orderSenderNameCreate').on('select2:select', function () {
+		        let selectedOption = $(this).find(':selected');
+		        $('#orderSenderPhoneCreate').val(selectedOption.data('phone') || '');
+		        $('#orderSenderEmailCreate').val(selectedOption.data('email') || '');
+		    });
+	
+		    // Cập nhật thông tin "Người nhận"
+		    $('#orderReceiverNameCreate').on('select2:select', function () {
+		        let selectedOption = $(this).find(':selected');
+		        $('#orderReceiverPhoneCreate').val(selectedOption.data('phone') || '');
+		        $('#orderReceiverEmailCreate').val(selectedOption.data('email') || '');
+		    });
+	
+		    // Xóa thông tin khi giá trị bị xóa
+		    $('#orderSenderNameCreate').on('select2:unselect', function () {
+		        $('#orderSenderPhoneCreate').val('');
+		        $('#orderSenderEmailCreate').val('');
+		    });
+	
+		    $('#orderReceiverNameCreate').on('select2:unselect', function () {
+		        $('#orderReceiverPhoneCreate').val('');
+		        $('#orderReceiverEmailCreate').val('');
+		    });
+		});
+	</script>
 
-                if (input === name) {  // Nếu tên người dùng nhập đúng
-                    // Cập nhật thông tin SĐT và Email
-                    document.getElementById("orderSenderPhoneCreate").value = option.getAttribute("data-phone");
-                    document.getElementById("orderSenderEmailCreate").value = option.getAttribute("data-email");
-                    found = true;
-                }
-            });
-
-            // Nếu không tìm thấy tên trong danh sách, làm rỗng SĐT và Email
-            if (!found) {
-                document.getElementById("orderSenderPhoneCreate").value = '';
-                document.getElementById("orderSenderEmailCreate").value = '';
-            }
-        });
-        
-
-    </script>
 	
 </body>
 </html>

@@ -39,13 +39,8 @@ $(document).ready(function () {
             contentType: 'application/json',
             success: function (result) {
                 console.log("Server Response:", result); // Log phản hồi từ server
-                updateData(result); // Cập nhật lại bảng với dữ liệu mới
-				
-				alert('Sửa thành công');
-				// Cập nhật lại dữ liệu Handsontable
-			    const urlParams = new URLSearchParams(window.location.search);
-			    const customerId = urlParams.get('id');
-			    loadTableData(customerId);
+                updateData(result); // Cập nhật lại bảng với dữ liệu mới				
+				alert('Cập nhật thành công');
             },
             error: function (xhr) {
                 console.error("AJAX Error:", xhr.responseText); // Log lỗi

@@ -23,10 +23,10 @@ public class JpaTransformer_Interaction_Handsontable {
             Object[] rowData = new Object[5];  // 6 cột trong Handsontable (Ngày, Nội dung, Người trao đổi, Kế hoạch, ID)
             
             // Lấy dữ liệu từ Interaction
-            rowData[1] = interaction.getInteraction_date() != null ? sdf.format(interaction.getInteraction_date()) : ""; // Ngày
+            rowData[1] = interaction.getInteractionDate() != null ? sdf.format(interaction.getInteractionDate()) : ""; // Ngày
             rowData[2] = interaction.getContent();  // Nội dung trao đổi
-            rowData[0] = interaction.getCustomer() != null ? interaction.getCustomer().getContactPerson() : ""; // Người trao đổi
-            rowData[3] = interaction.getNext_plan(); // Kế hoạch tiếp theo
+            rowData[0] = interaction.getContactPerson(); // Người trao đổi
+            rowData[3] = interaction.getNextPlan(); // Kế hoạch tiếp theo
             rowData[4] = interaction.getId(); // ID (để thực hiện các hành động như xóa)
 
             lstObject.add(rowData);

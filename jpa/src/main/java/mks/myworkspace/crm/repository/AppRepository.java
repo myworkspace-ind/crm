@@ -73,15 +73,23 @@ public class AppRepository {
 
 	    // Sử dụng SimpleJdbcInsert để thực hiện lưu bản ghi mới
 	    SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
-	            .withTableName("customer_interaction")
-	            .usingGeneratedKeyColumns("id");
+	    	    .withTableName("crm_customer_interaction")
+	    	    .usingColumns("interaction_date", "content", "next_plan", "customer_id", "contact_person")
+	    	    .usingGeneratedKeyColumns("id");
 
 	    for (Interaction entity : entities) {
 	        Long id;
 
-	        if (entity.getId() == null || entity.getId() == -1) {
+	        MapSqlParameterSource params = new MapSqlParameterSource()
+	                .addValue("interaction_date", entity.getInteractionDate())
+	                .addValue("content", entity.getContent())
+	                .addValue("next_plan", entity.getNextPlan())
+	                .addValue("customer_id", entity.getCustomer() != null ? entity.getCustomer().getId() : null)
+	                .addValue("contact_person", entity.getContactPerson());
+	        
+	        if (entity.getId() == null) {
 	            // Nếu ID của thực thể là null, thực hiện lưu mới
-	            id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(entity)).longValue();
+	            id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
 	        } else {
 
 	        	updateEntity(entity);
@@ -97,7 +105,7 @@ public class AppRepository {
 	
 	public void deleteInteractionById(Long interactionId) {
 	    // Tạo câu lệnh DELETE với ID duy nhất
-	    String sql = "DELETE FROM customer_interaction WHERE id = ?";
+	    String sql = "DELETE FROM crm_customer_interaction WHERE id = ?";
 
 	    // Thực thi câu lệnh DELETE
 	    int rowsDeleted = jdbcTemplate0.update(sql, interactionId);
@@ -111,17 +119,19 @@ public class AppRepository {
 	}
 
 	private void updateEntity(Interaction entity) {
-	    String updateSql = "UPDATE customer_interaction SET "
+	    String updateSql = "UPDATE crm_customer_interaction SET "
 	            + "interaction_date = ?, "
 	            + "content = ?, "
-	            + "next_plan = ? "
+	            + "next_plan = ?, "
+	            + "contact_person = ? "
 	            + "WHERE id = ?";
 
 	    // Execute the update using the JdbcTemplate
 	    int rowsUpdated = jdbcTemplate0.update(updateSql,
-	            entity.getInteraction_date(),  
+	            entity.getInteractionDate(),  
 	            entity.getContent(),        
-	            entity.getNext_plan(),      
+	            entity.getNextPlan(),    
+	            entity.getContactPerson(),
 	            entity.getId());            
 
 	    // Log the result
@@ -290,9 +300,9 @@ public class AppRepository {
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
 
-	public void deleteCustomersByIds(List<Long> customerIds) {
+	public void hideCustomersByIds(List<Long> customerIds) {
 		// deleteCustomerStatusByCustomerIds(customerIds);
-		String sql = "DELETE FROM crm_customer WHERE id IN ("
+		String sql = "UPDATE crm_customer SET account_status = 0 WHERE id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
 		jdbcTemplate0.update(sql, customerIds.toArray());

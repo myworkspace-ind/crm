@@ -27,5 +27,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 		List<Order> findOrderByCriteria(@Param("customerId") Long customerId,
 		                                @Param("orderCategoryId") Long orderCategoryId,
 		                                @Param("statuses") List<Long> statuses);
-	
+	@Query("SELECT DISTINCT code FROM Order")
+	List<String> findAllCodeOrders();
 }
