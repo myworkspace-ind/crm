@@ -28,7 +28,7 @@
 
 let selectedCustomerId; 
 
-function deleteCustomer(customerId) {
+function hideCustomer(customerId) {
     selectedCustomerId = customerId; 
     const modal = document.getElementById('confirmationModal');
     const overlay = document.getElementById('overlay');
@@ -39,10 +39,10 @@ function deleteCustomer(customerId) {
 }
 
 
-document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+document.getElementById('confirmHideBtn').addEventListener('click', function() {
     if (selectedCustomerId) {
-        fetch('/crm-web/customer/delete-customers', {
-            method: 'DELETE',
+        fetch(`${_ctx}customer/hide-customers`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -54,9 +54,9 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', function()
             if (data.errorMessage) {
                 alert("Lỗi: " + data.errorMessage);
             } else {
-                alert("Khách hàng đã được xóa thành công!");
+                alert("Khách hàng đã được ẩn thành công!");
                 // Reload hoặc cập nhật giao diện sau khi xóa
-                location.href = '/crm-web/customer/list';
+                location.href = `${_ctx}customer/list`;
             }
         })
         .catch(error => {

@@ -300,9 +300,9 @@ public class AppRepository {
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
 
-	public void deleteCustomersByIds(List<Long> customerIds) {
+	public void hideCustomersByIds(List<Long> customerIds) {
 		// deleteCustomerStatusByCustomerIds(customerIds);
-		String sql = "DELETE FROM crm_customer WHERE id IN ("
+		String sql = "UPDATE crm_customer SET account_status = 0 WHERE id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
