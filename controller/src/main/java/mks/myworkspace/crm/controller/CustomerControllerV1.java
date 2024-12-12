@@ -172,7 +172,7 @@ public class CustomerControllerV1 extends BaseController {
 				return ResponseEntity.badRequest().body(Map.of("errorMessage", "Danh sách ID không được trống."));
 			}
 			// Gọi service để xóa danh sách khách hàng dựa trên ID
-			 storageService.deleteCustomersByIds(customerIds);
+			 storageService.hideCustomersByIds(customerIds);
 			 
 			 //TODO: Cannot DELETE ONE OR MORE CUSTOMER BECAUSE OF ROLL BACK (CANNOT COMMIT)
 			 //customerService.deleteAllByIds(customerIds); 

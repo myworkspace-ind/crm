@@ -43,11 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		overlay.style.display = "none";
 	});
 
-	confirmDeleteBtn.addEventListener('click', () => {
+	confirmHideBtn.addEventListener('click', () => {
 		console.log("ID khách hàng muốn xóa:", selectedCustomerIds);
 		modal.style.display = "none";
 		overlay.style.display = "none";
-		deleteCustomers(selectedCustomerIds);
+		hideCustomers(selectedCustomerIds);
 	});
 
 	quitBtn.addEventListener('click', () => {
@@ -59,30 +59,42 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	function deleteCustomers(selectedCustomerIds) {
-		//fetch('/crm-web/customer/delete-customers', {
-		fetch(`${_ctx}customer/delete-customers`, {
-			method: 'DELETE',
+	function hideCustomers(selectedCustomerIds) {
+		fetch(`${_ctx}customer/hide-customers`, {
+			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(selectedCustomerIds) // Chuyển đổi danh sách ID thành JSON
+			body: JSON.stringify(selectedCustomerIds) 
 		})
 			.then(response => {
 				if (!response.ok) {
-					throw new Error(`Lỗi xóa khách hàng: ${response.statusText}`);
+					throw new Error(`Lỗi ẩn khách hàng: ${response.statusText}`);
 				}
 				return response.json();
 			})
 			.then(data => {
-				console.log(`Khách hàng với ID ${data.ids} đã được xóa.`);
-
+				alert(`Khách hàng với ID ${data.ids} đã được ẩn.`);
+				location.href = `${_ctx}customer/list`;
 				// Cập nhật giao diện: xóa checkbox và cập nhật số lượng
 				selectedCustomerIds.forEach(id => {
-					const checkbox = document.querySelector(`input[type="checkbox"][value="${id}"]`);
-					if (checkbox) {
-						// Xóa hàng khỏi DOM
-						checkbox.closest('tr').remove(); // Xóa toàn bộ hàng chứa checkbox
+					console.log("Danh sách ID đã chọn:", selectedCustomerIds);
+					
+					const checkbox = document.querySelector(`input[type="checkbox"][value="${id.toString()}"]`);
+					console.log("Checkbox tìm được:", checkbox);  
+
+					if(checkbox){
+						console.log(`Found checkbox with ID: ${id}`);
+						const row = checkbox.closest('tr');
+						if(row){
+							//delete row away from DOM
+							console.log("Đang xóa hàng chứa checkbox với ID:", id);
+							row.remove();
+						} else{
+							console.warn(`Không tìm thấy <tr> chứa checkbox cho ID: ${id}`);
+						}
+					} else{
+						console.warn(`Không tìm thấy checkbox cho ID: ${id}`);
 					}
 				});
 
@@ -96,5 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			});
 	}
 
-	
+
 });
+
+

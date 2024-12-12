@@ -33,10 +33,15 @@
 
 					<div class="actions">
 						<a th:href="@{newEditCustomer(id=${customer.id})}" >
-						    <button type="button" style="cursor: pointer;">Edit</button>
+						    <button type="button"
+						    	style="cursor: pointer;">
+						    Edit
+						    </button>
 						</a>
-						<button style="cursor: pointer; background: #DA4453" th:onclick="'deleteCustomer(' + ${customer.id} + ')'">Delete</button>
+						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer(' + ${customer.id} + ')'">Hide</button>
 					</div>
+					
+					
 
 					<div class="person-in-charge">
 						<label class="label-bold" for="person-in-charge">Người phụ trách:</label> 
@@ -60,6 +65,8 @@
 
 		</div>
 	</div>
+	
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/deleteCustomer.js}" defer></script>
 
 	<!-- END CONTENT -->
 </body>
