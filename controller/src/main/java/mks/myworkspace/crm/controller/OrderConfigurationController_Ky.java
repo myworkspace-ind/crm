@@ -121,13 +121,6 @@ public class OrderConfigurationController_Ky extends BaseController {
 		int[] colWidths = { 50, 300, 300, };
 		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", };
 		
-		List<Order> orderDataList=orderService.getAllOrders();
-		//Test
-		List<Object[]> orderData=new ArrayList<>();
-		for(int i=0;i<orderDataList.size();i++) {
-			Object[] myData=new Object[] {orderDataList.get(i).getId(),orderDataList.get(i).getName(),orderDataList.get(i).getSiteId()};
-			orderData.add(myData);
-		}
 		
 		List<OrderCategory> orderCategoryStatus=categoryService.getAllOrderCategoriesWithOrderStatuses();
 		List<Object[]> orderStatusData=new ArrayList<>();
