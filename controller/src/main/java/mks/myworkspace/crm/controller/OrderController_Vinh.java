@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,7 +66,9 @@ import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Order;
+import mks.myworkspace.crm.transformer.JpaTransformer_OrderDetail;
 import mks.myworkspace.crm.transformer.JpaTransformer_Order_Handsontable;
+import mks.myworkspace.crm.transformer.OrderConverter;
 
 /**
  * Handles requests for Orders.
@@ -173,5 +179,54 @@ public class OrderController_Vinh extends BaseController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 	                .body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
 	    }
+	}
+	@GetMapping("/viewDetails/{id}")
+	@ResponseBody
+	public ResponseEntity<?> displayOrderDetails(@PathVariable("id") Long orderId) {
+		Order order = orderService.getOrderById(orderId);
+		List<OrderStatus> allOrderStatuses = orderStatusService.findAllOrderStatuses();
+		List<GoodsCategory> allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
+		List<Customer> allSenders = customerService.getAllCustomers();
+		List<Customer> allReceivers = customerService.getAllCustomers();
+		List<OrderCategory> allOrderCategories = orderCategoryService.findAllOrderCategory();
+		if (order != null) {
+			Object[] orderDetailArray = JpaTransformer_OrderDetail.convert2D(order, allOrderStatuses,
+					allGoodsCategories, allSenders, allReceivers, allOrderCategories);
+			return ResponseEntity.ok(orderDetailArray);
+		} else {
+			log.debug("CANNOT FIND ORDER!");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
+		}
+
+	}
+	@PostMapping(value = "/saveOrderStatus", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> saveOrderStatus(@RequestBody String json) {
+		Map<String, String> response = new HashMap<>();
+
+		try {
+			// Convert JSON string thành đối tượng Order
+			Order order = OrderConverter.convertJsonToOrder_UpdateOrderStatus(json);
+
+			log.debug("Order Details after JSON Conversion:");
+			log.debug("Order ID: {}", order.getId());
+
+			if (order.getOrderStatus() != null) {
+				log.debug("Order Status: {}", order.getOrderStatus().getName());
+			}
+
+			// Lưu hoặc cập nhật đơn hàng
+			Order savedOrderStatus = storageService.updateOrderStatus(order);
+			response.put("status", "success");
+			response.put("message", "OrderStatus " + (order.getId() != null ? "updated" : "created") + " successfully.");
+			log.debug("Order saved with ID: {}", savedOrderStatus.getId()); // Log kết quả ID
+
+		} catch (Exception e) {
+			log.error("Error saving/updating order: ", e);
+			response.put("status", "error");
+			response.put("message", "An error occurred while saving/updating the order.");
+		}
+
+		return ResponseEntity.ok(response);
 	}
 }
