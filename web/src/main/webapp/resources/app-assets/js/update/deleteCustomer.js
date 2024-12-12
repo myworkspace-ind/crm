@@ -39,6 +39,17 @@ function hideCustomer(customerId) {
 }
 
 
+function hideCustomer_Interaction(customerId) {
+    selectedCustomerId = customerId; 
+    const modal = document.getElementById('confirmationModal');
+    const overlay = document.getElementById('overlay');
+
+    // Hiển thị modal và overlay
+    modal.style.display = 'block';
+    overlay.style.display = 'block';
+}
+
+
 document.getElementById('confirmHideBtn').addEventListener('click', function() {
     if (selectedCustomerId) {
         fetch(`${_ctx}customer/hide-customers`, {
