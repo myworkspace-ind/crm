@@ -39,16 +39,26 @@ function initTable(colHeaders, colWidths, data) {
 	//render for column containing action button
 	function buttonRenderer(instance, td, row, col, prop, value, cellProperties) {
 		td.innerHTML = `
-	        <a href="#" onclick="viewDetail(${row})">- Xem chi tiết</a><br>
-	        <a href="#" onclick="edit(${row})">- Sửa</a><br>
-	        <a href="#" onclick="deleteRow(${row})">- Xóa</a><br>
-	        <a href="#" onclick="openStatusModal(${row})">Cập nhật trạng thái</a>
+		        <div class="btn-group" role="group" aria-label="...">
+		            <button class="btn btn-info btn-view" onclick="viewDetail(${row})" title="Xem chi tiết">
+		                <i class="fas fa-eye"></i> Xem chi tiết
+		            </button>
+		            <button class="btn btn-warning" onclick="edit(${row})" title="Sửa">
+		                <i class="fas fa-edit"></i> Sửa
+		            </button>
+		            <button class="btn btn-danger" onclick="deleteRow(${row})" title="Xóa">
+		                <i class="fas fa-trash"></i> Xóa
+		            </button>
+		            <button class="btn btn-success btn-status" onclick="openStatusModal(${row})" title="Cập nhật trạng thái">
+		                <i class="fas fa-sync-alt"></i> Cập nhật trạng thái
+		            </button>
+		        </div>
 	    `;
-		td.style.textAlign = 'start';
-		td.style.cursor = 'pointer';
+
 		return td;
 	}
-
+	
+	
 	if (container) {
 		htOrder = new Handsontable(container, {
 			data: data,
@@ -64,7 +74,7 @@ function initTable(colHeaders, colWidths, data) {
 			],
 			rowHeaders: true,
 			minRows: 8,
-			height: 2000,
+			height: 1000,
 			currentRowClassName: 'currentRow',
 			currentColClassName: 'currentCol',
 			manualColumnResize: true,
