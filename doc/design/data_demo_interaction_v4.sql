@@ -351,20 +351,21 @@ DROP TABLE IF EXISTS `customer_interaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 
-CREATE TABLE `customer_interaction` (
+CREATE TABLE `crm_customer_interaction` (
   `id` BIGINT AUTO_INCREMENT NOT NULL,
   `customer_id` bigint NOT NULL,
   `interaction_date` DATETIME NOT NULL,
   `content` TEXT NOT NULL,
   `next_plan` TEXT NOT NULL,
+  `contact_person` TEXT NOT NULL,
    PRIMARY KEY (`id`),
    CONSTRAINT `FK_customer_interaction_customer` FOREIGN KEY (`customer_id`) REFERENCES `crm_customer` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-INSERT INTO `customer_interaction` (`customer_id`, `interaction_date`, `content`, `next_plan`) 
+INSERT INTO `crm_customer_interaction` (`customer_id`, `interaction_date`, `content`, `next_plan`, `contact_person`) 
 VALUES
-(1, '2024-12-01 10:30:00', 'Trao đổi về sản phẩm mới', 'Liên hệ lại vào tuần sau để cung cấp thêm thông tin'),
-(2, '2024-12-02 14:00:00', 'Giải quyết khiếu nại về đơn hàng', 'Kiểm tra và hoàn tất xử lý trước ngày 2024-12-05'),
-(3, '2024-12-03 09:15:00', 'Hỗ trợ cài đặt phần mềm', 'Theo dõi kết quả và gọi lại khách hàng vào ngày 2024-12-04');
+(1, '2024-12-01 10:30:00', 'Trao đổi về sản phẩm mới', 'Liên hệ lại vào tuần sau để cung cấp thêm thông tin', 'Thiện'),
+(2, '2024-12-02 14:00:00', 'Giải quyết khiếu nại về đơn hàng', 'Kiểm tra và hoàn tất xử lý trước ngày 2024-12-05', 'Thiện'),
+(3, '2024-12-03 09:15:00', 'Hỗ trợ cài đặt phần mềm', 'Theo dõi kết quả và gọi lại khách hàng vào ngày 2024-12-04', 'Thiện');

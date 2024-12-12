@@ -77,6 +77,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     
 	@Query("SELECT DISTINCT c FROM Customer c "
 	        + "LEFT JOIN Interaction ci ON c.id = ci.customer.id "
-	        + "WHERE ci.interaction_date BETWEEN :startDate AND :endDate")
+	        + "WHERE ci.interactionDate BETWEEN :startDate AND :endDate")
 	List<Customer> findByInteractDateRange(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 }

@@ -72,9 +72,6 @@ public class Customer implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     private Date createdAt;
-    
-    @OneToMany(mappedBy = "customer")
-    private List<Interaction> interactions;
 
     @Column(name = "note", length = 255)
     private String note;
