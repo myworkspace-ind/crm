@@ -41,12 +41,12 @@
 									</button>
 								</a>
 								
-								<a th:href = "@{/customer/newEditCustomer}">
-									<button class="restoreHidedCustomerbtn">
-										<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
-										<i class="fa-solid fa-arrows-rotate"></i> Khôi phục khách hàng bị ẩn
-									</button>
-								</a>
+								
+								<button class="restoreHidedCustomerbtn" id="restoreHidedCustomerbtn" onclick="showHidedCustomers()">
+									<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
+									<i class="fa-solid fa-arrows-rotate"></i> Khôi phục khách hàng bị ẩn
+								</button>
+								 <th:block th:include="fragments/frg_ModalShowHidedCustomersConfirmation"></th:block>
 							</div>
 
 						</div>

@@ -1,10 +1,9 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
-import java.io.Console;
-import java.util.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,6 +208,23 @@ public class CustomerController extends BaseController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
 		} catch (Exception e) {
 			log.debug("Error while deleting customers with IDs: {}. Error: {}", customerIds, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
+		}
+	}
+	
+	@Transactional
+	@RequestMapping(value = "/show-hidedcustomers", method = RequestMethod.PUT)
+	@ResponseBody
+	public ResponseEntity<?> showHidedCustomers( HttpServletRequest request, HttpSession httpSession) {
+		try {
+			storageService.showHidedCustomers();
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Hiển thị các khách hàng bị ẩn thành công!"));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			log.debug("Error while showing all hided. Error: {}", e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
