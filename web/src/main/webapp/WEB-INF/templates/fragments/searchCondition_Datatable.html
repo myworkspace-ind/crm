@@ -23,8 +23,8 @@
 	                               <h5 style="font-size: 15px">Khách hàng</h5>
 	                               <select class="form-control" id="orderCustomerFilter" style="background-color: white; color: black;">
 	                               		<option value="" selected>-- Chọn khách hàng --</option>
-	                               		<th:block th:each="customer : ${listCustomers}">
-											<option th:value="${customer.id}" th:text="${customer.contactPerson}">
+	                               		<th:block th:each="customer : ${listContactPersons}">
+											<option th:text="${contactPerson}">
 											</option>
 										</th:block>
 	                               </select>
