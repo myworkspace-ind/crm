@@ -16,18 +16,19 @@ public class HistoryOrder implements Serializable {
     private Long id; // ID của lịch sử
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order; // Liên kết với đơn hàng
 
-    @Column(name = "order_status")
-    private String orderStatus; // Trạng thái của đơn hàng tại thời điểm cập nhật
+    @ManyToOne(fetch = FetchType.EAGER) // Fetch type có thể thay đổi tùy theo yêu cầu
+    @JoinColumn(name = "order_status_id", nullable = false)
+    private OrderStatus orderStatus; // Liên kết với trạng thái đơn hàng
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Date updatedAt; // Thời gian cập nhật trạng thái
 
     public HistoryOrder() {}
 
-    public HistoryOrder(Order order, String orderStatus, Date updatedAt) {
+    public HistoryOrder(Order order, OrderStatus orderStatus, Date updatedAt) {
         this.order = order;
         this.orderStatus = orderStatus;
         this.updatedAt = updatedAt;
@@ -50,11 +51,11 @@ public class HistoryOrder implements Serializable {
         this.order = order;
     }
 
-    public String getOrderStatus() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 

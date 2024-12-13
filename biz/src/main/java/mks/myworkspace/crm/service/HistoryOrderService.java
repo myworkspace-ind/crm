@@ -8,8 +8,10 @@ public interface HistoryOrderService {
 
 	List<HistoryOrder> findAll();
 
+	void saveHistory(HistoryOrder historyOrder);
+
 	
 
-	void saveHistory(HistoryOrder historyOrder);
+	
 
 }

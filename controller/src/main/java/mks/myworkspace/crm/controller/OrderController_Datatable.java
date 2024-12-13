@@ -337,15 +337,15 @@ public class OrderController_Datatable extends BaseController {
 			// Lưu hoặc cập nhật đơn hàng
 			Order savedOrderStatus = storageService.updateOrderStatus(order);
 			
-			HistoryOrder historyOrder1 = new HistoryOrder(order, order.getOrderStatus().getName(), new Date());
+			HistoryOrder historyOrder = new HistoryOrder(order, order.getOrderStatus(), new Date());
 			// In thông tin của HistoryOrder ra console để kiểm tra
-			log.debug("HistoryOrder Details: ");
-			log.debug("Order ID: {}", historyOrder1.getOrder().getId());
-			log.debug("Order Status: {}", historyOrder1.getOrderStatus());
-			log.debug("Updated At: {}", historyOrder1.getUpdatedAt());
-
-			// Lưu đối tượng HistoryOrder
-			historyOrderService.saveHistory(historyOrder1);
+//			log.debug("HistoryOrder Details: ");
+//			log.debug("Order ID: {}", historyOrder1.getOrder().getId());
+//			log.debug("Order Status: {}", historyOrder1.getOrderStatus());
+//			log.debug("Updated At: {}", historyOrder1.getUpdatedAt());
+//
+//			// Lưu đối tượng HistoryOrder
+			historyOrderService.saveHistory(historyOrder);
 			
 			response.put("status", "success");
 			response.put("message", "OrderStatus " + (order.getId() != null ? "updated" : "created") + " successfully.");

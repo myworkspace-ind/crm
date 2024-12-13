@@ -110,7 +110,7 @@
     </div>
 
     <!-- Bảng dữ liệu -->
-    <table id="historyTable">
+   <!--  <table id="historyTable">
         <thead>
             <tr>
                 <th>STT</th>
@@ -148,6 +148,25 @@
                 <td>Vận chuyển</td>
                 <td>Giao hàng</td>
                 <td>2024-11-22</td>
+            </tr>
+        </tbody>
+    </table> -->
+    <table border="historyTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Mã Đơn Hàng</th>
+                <th>Trạng Thái</th>
+                <th>Thời Gian Cập Nhật</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Lặp qua danh sách historyOrders -->
+            <tr th:each="historyOrder : ${historyOrders}">
+                <td th:text="${historyOrder.id}"></td>
+                <td th:text="${historyOrder.order.code}"></td>
+                <td th:text="${historyOrder.orderStatus.name}"></td>
+                <td th:text="${historyOrder.updatedAt}"></td>
             </tr>
         </tbody>
     </table>
