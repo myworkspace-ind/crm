@@ -1,14 +1,14 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
-import java.io.Console;
-import java.util.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -441,6 +441,12 @@ public class CustomerController extends BaseController {
 
 	    // Lấy tất cả các tương tác của khách hàng từ service
 	    List<Interaction> interactions = customerService.getAllCustomerInteraction(customerId);
+	    
+	    // Lấy danh sách tất cả contactPerson từ các tương tác của khách hàng
+	    List<String> contactPersons = interactions.stream()
+	        .map(Interaction::getContactPerson) // Giả sử bạn có phương thức getContactPerson() trong Interaction
+	        .distinct() // Loại bỏ các giá trị trùng lặp
+	        .collect(Collectors.toList());
 
 	    // Chuyển đổi danh sách Interaction thành dữ liệu bảng
 	    List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
@@ -449,8 +455,15 @@ public class CustomerController extends BaseController {
 	    int[] colWidths = {150, 200, 400, 300, 30};
 	    String[] colHeaders = {"Người trao đổi",  "Ngày", "Nội dung trao đổi", "Kế hoạch tiếp theo", ""};
 
-	    // Trả về đối tượng TableStructure
-	    return new TableStructure(colWidths, colHeaders, tblData);
+	    // Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("colWidths", colWidths);
+	    response.put("colHeaders", colHeaders);
+	    response.put("data", tblData);
+	    response.put("contactPersons", contactPersons);  // Thêm contactPersons vào response
+
+	    // Trả về đối tượng chứa các thông tin bảng và contactPersons
+	    return response;
 	}
 	
 	@PostMapping(value = "/save-interaction")
