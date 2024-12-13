@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetFly Partners</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fafafa;
+            /* background-color: #f8f9fa; */
+        }
+        .title {
+        	color: #233f80;
+        	text-transform: uppercase;
+        	font-weight: 700;
+        	margin-bottom: 50px !important;
+        }
+
+        .sidebar {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px; 
+            
+            padding: 15px;
+        }
+        .sidebar .list-group-item {
+            cursor: pointer;
+            border: none;
+            padding: 10px 0;
+            font-size: 14px;
+            color: #3b4a5b;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .sidebar .list-group-item:hover {
+            color: #ff8c00; /* Màu cam khi hover */
+            
+        }
+        .sidebar .list-group-item.active {
+            font-weight: bold;
+            color: #ff8c00; /* Màu cam của "Tất cả đối tác" */
+            cursor: default;
+            background-color: #fff;
+
+        }
+        .sidebar .list-group-item:last-child {
+            color: #0066cc; /* Màu xanh dương cho "Khác" */
+        }
+        .sidebar h5 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #3b4a5b;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+        .sidebar ul {
+            padding: 0;
+            list-style-type: none;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+           	transform: translate(5px, -5px) ;
+        }
+        
+        .card img {
+    		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   			border-radius: 5px;
+		}
+		.justify-content-center {
+    		justify-content: center !important;
+    		margin-bottom: 50px;
+		}
+
+		.contact-section {
+		    max-width: 900px;
+		    margin: 0 auto; /* Căn giữa phần contact */
+		    padding: 20px; /* Thêm khoảng cách bên trong */
+		    border-radius: 10px; 
+		    margin-bottom: 50px;
+		}
+		.formContact {
+			margin: 0 auto;
+		}
+		
+		.background {
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 50px;
+		    background-color: #21D192;
+		    z-index: -1; /* Đưa nền ra phía sau */
+		}
+		
+		#fixedToolbar {
+    		transition: top 0.3s;
+		}
+			
+	
+			
+    </style>
+</head>
+<body>
+	<div class= "background"></div>
+	<!-- Header Section -->
+ 	<div id="fixedToolbar" class="d-none fixed-top bg-light shadow-sm">
+	    <div class="container d-flex align-items-center">
+	        <img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;">
+	        <th:block th:include="fragments/hmenu"></th:block>
+	    </div>
+	</div>
+ 	
+ 	<div class="container text-center">
+			<img src="resources/Image/intro.png" alt="CRM Banner" class="img-fluid rounded">
+	</div>
+ 	
+    <div class="container d-flex justify-content-center" style="max-width: 1200px; margin-top: 20px;">
+        <div class="row w-100">
+        	<h4 class="title text-center mb-4">ĐỐI TÁC CỦA CRM</h4>
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <h5 class="mb-3">Phân loại nền tảng kết nối</h5>
+                    <ul class="list-group" id="filter-list">
+                        <li class="list-group-item active" data-filter="all">Tất cả đối tác</li>
+                        <li class="list-group-item" data-filter="chatbot">Chatbot</li>
+                        <li class="list-group-item" data-filter="fanpage">Fanpage</li>
+                        <li class="list-group-item" data-filter="zalo">Zalo</li>
+                        <li class="list-group-item" data-filter="tongdai">Tổng đài</li>
+                        <li class="list-group-item" data-filter="tuyendung">Tuyển dụng</li>
+                        <li class="list-group-item" data-filter="khac">Khác</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                
+                <div class="row row-cols-1 row-cols-md-4 g-4" id="partner-list">
+
+                    <div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://mitek.vn" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_mitek.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Sms Brandname</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					<div class="col" data-category="chatbot">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://hana.ai/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_hanaai_chapbot.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Chapbot</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://callio.vn" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_callio_td.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Tổng đài</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://cgvtelecom.vn/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_cgvtele_td.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Tổng đài</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://moccare.com/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_care_td.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Tổng đài</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://www.cloudpbx.vn/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_cloudpbx_td.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Tổng đài</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://cmctelecom.vn/en/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_cmccloud_td.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Tổng đài</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://vfone.vn/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_fone_td.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Tổng đài</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://gcloudpbx.vn/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_gtcgroup_td.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Tổng đài</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+                     
+                    <div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://omicall.com/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_omicall_td.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Tổng đài</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="tongdai">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://southtelecom.vn/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_southtele_td.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Tổng đài</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="cloud">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://www.cloudfone.vn/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_cloudfone.png" alt="Partner Logo" class="img-fluid mb-3">
+								    <h6 class="card-title">Cloud server</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="col" data-category="zalo">
+    					<div class="card text-center" style="cursor: pointer;">
+        				<div class="card-body">
+								<a href="https://www.cloudfone.vn/" target="_blank" style="text-decoration: none;">
+								    <img src="resources/Image/ecosystem_zalo.svg" alt="Partner Logo" class="img-fluid mb-3" width="100" height="100">					    
+								    <h6 class="card-title">Zalo</h6>
+								</a>
+					    </div>
+					    </div>
+					</div>
+                    
+                    <!-- Add more cards as needed -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+ 	<!-- Contact -->
+	<div class="container d-flex justify-content-center contact-section" style="margin-top: 20px;">
+    <div class="row w-100">
+        <h4 class="title text-center mb-4">Đăng ký trở thành đối tác chính thức của CRM</h4>
+        <div class="col-md-9 formContact">
+            <form id="contactForm" action="send_mail.php" method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Tên công ty /Company name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label">Điện thoại/ Contact number*</label>
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="VD: 0123456789" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email*</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="khanh@gmail.com" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="employees" class="form-label">Số Lượng Nhân Viên</label>
+                        <select class="form-select" id="employees" name="employees" required>
+                            <option value="">Chọn số lượng nhân viên</option>
+                            <option value="1-10">1-10</option>
+                            <option value="11-50">11-50</option>
+                            <option value="51-100">51-100</option>
+                            <option value=">100">Hơn 100</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="service" class="form-label">Dịch Vụ</label>
+                        <select class="form-select" id="service" name="service" required>
+                            <option value="">Chọn dịch vụ</option>
+                            <option value="BASIC">BASIC</option>
+                            <option value="PREMIUM">PREMIUM</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="region" class="form-label">Khu Vực</label>
+                        <select class="form-select" id="region" name="region" required>
+                            <option value="">Chọn khu vực</option>
+                            <option value="Khu vực phía Bắc">Khu vực phía Bắc</option>
+                            <option value="Khu vực phía Nam">Khu vực phía Nam</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Nhu cầu/ Your message</label>
+                    <textarea class="form-control" id="message" name="message" rows="4" placeholder="Gửi chúng tôi bất kỳ điều gì bạn mong muốn" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-danger w-100">TƯ VẤN</button>
+            </form>
+        </div>
+    </div>
+</div>
+	
+
+
+	<!-- Footer Section -->
+    <th:block th:include="fragments/home/footerForIntro"></th:block>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('#filter-list .list-group-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('#filter-list .list-group-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const filter = item.getAttribute('data-filter');
+                const cards = document.querySelectorAll('#partner-list .col');
+
+                cards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+	    $(document).ready(function () {
+	        // Loại bỏ thuộc tính 'required' của trường Nhu cầu
+	        $("#message").removeAttr("required");
+	
+	        // Kiểm tra form khi submit
+	        $("#contactForm").on("submit", function (event) {
+	            if (!this.checkValidity()) {
+	                event.preventDefault();
+	                event.stopPropagation();
+	                $(this).addClass("was-validated");
+	            }
+	        });
+	    });
+	</script>
+    
+    <script>
+	    document.addEventListener("DOMContentLoaded", function () {
+	        const toolbar = document.getElementById("fixedToolbar");
+	        window.addEventListener("scroll", function () {
+	            if (window.scrollY > 120) {
+	                toolbar.classList.remove("d-none");
+	                toolbar.classList.add("d-block");
+	            } else {
+	                toolbar.classList.remove("d-block");
+	                toolbar.classList.add("d-none");
+	            }
+	        });
+	    });
+	</script>
+	    
+    <!-- <script>
+	    $("#contactForm").on("submit", function(event) {
+	        if (!this.checkValidity()) {
+	            event.preventDefault();
+	            event.stopPropagation();
+	            $(this).addClass("was-validated");
+	        }
+	    });
+	</script> -->
+</body>
+</html>
