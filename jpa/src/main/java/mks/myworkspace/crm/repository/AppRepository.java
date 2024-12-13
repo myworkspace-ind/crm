@@ -307,6 +307,11 @@ public class AppRepository {
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
+	
+	public void showHidedCustomers() {
+		String sql = "UPDATE crm_customer SET account_status = 1 WHERE account_status = 0";
+		jdbcTemplate0.update(sql);
+	}
 
 	public void deleteOrderById(Long orderId) {
 		if (orderId == null) {
