@@ -25,6 +25,8 @@ public interface StorageService {
 	
 	void hideCustomersByIds(List<Long> customerIds);
 	
+	void showHidedCustomers();
+	
 	public Order saveOrUpdateOrder(Order order);
 	
 	void deleteOrderById(Long orderId);
