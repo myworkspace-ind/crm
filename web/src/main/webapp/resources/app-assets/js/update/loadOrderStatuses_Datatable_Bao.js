@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	if (orderCategorySelect && orderStatusSelect) {
 		orderCategorySelect.addEventListener("change", function() {
-			const categoryId = this.value;
+			const categoryId = getDataIdFromDatalist('orderCategories', orderCategorySelect.value);
 			loadOrderStatuses_ToCreateOrder(categoryId);  // Gọi lại API với categoryId mới
 		});
 	}
