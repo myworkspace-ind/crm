@@ -225,8 +225,6 @@ function initTable(colHeaders, colWidths, data) {
 
 function deleteRow(rowIndex, interactionId) {
     if (confirm(`Bạn có chắc muốn xóa hàng số ${rowIndex + 1}?`)) {
-		// Lưu trạng thái bộ lọc hiện tại trước khi xóa
-		const { startDate, endDate, contactPerson } = currentFilter;
 		
         // Gọi API DELETE với interactionId là query parameter
         $.ajax({
@@ -236,10 +234,13 @@ function deleteRow(rowIndex, interactionId) {
                 console.log('Xóa thành công:', response);			
 												
 				// Xóa hàng khỏi dữ liệu gốc
-                originalData.splice(rowIndex, 1);
+                const actualRowIndex = htInteraction.toPhysicalRow(rowIndex);
 				
-				// Sau khi xóa thành công, xóa hàng trong Handsontable
-				htInteraction.alter('remove_row', rowIndex);
+				// Xóa hàng khỏi Handsontable
+				htInteraction.alter('remove_row', actualRowIndex);
+				
+                originalData.splice(actualRowIndex, 1);
+
             },
             error: function(error) {
                 console.error('Lỗi khi xóa:', error);
