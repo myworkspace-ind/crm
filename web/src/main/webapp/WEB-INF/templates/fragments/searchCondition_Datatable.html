@@ -20,17 +20,17 @@
 	                   <div class="row">
 	                       <div class="col-md-3 col-sm-12">
 	                           <fieldset class="text-left customer-option">
-	                               <h5>Khách hàng</h5>
+	                               <h5 style="font-size: 15px">Khách hàng</h5>
 	                               <select class="form-control" id="orderCustomerFilter" style="background-color: white; color: black;">
 	                               		<option value="" selected>-- Chọn khách hàng --</option>
-	                               		<th:block th:each="customer : ${listCustomers}">
-											<option th:value="${customer.id}" th:text="${customer.contactPerson}">
+	                               		<th:block th:each="customer : ${listContactPersons}">
+											<option th:text="${contactPerson}">
 											</option>
 										</th:block>
 	                               </select>
 	                           </fieldset>
 	                           <fieldset class="text-left ordercate-option">
-	                               <h5>Loại đơn hàng</h5>
+	                               <h5 style="font-size: 15px">Loại đơn hàng</h5>
 	                               <select class="form-control" id="orderCategoryFilter" style="background-color: white; color: black;" >
 						            	<option value="" selected>-- Chọn loại đơn hàng --</option>
 						            	<th:block th:each="orderCategory : ${orderCategories}">
@@ -50,7 +50,7 @@
 	                       <div class="col-md-3 col-sm-12">
 	                        <div id="orderStatusContainer">
 	                            <fieldset class="text-left order-status">
-	                                <h5>Trạng thái đơn hàng</h5>
+	                                <h5 style="font-size: 15px">Trạng thái đơn hàng</h5>
 		                                <div id="orderStatusFilter">
 		                                
 		                                </div>
@@ -64,11 +64,11 @@
 	                       </div>
 	                      	<div class="col-md-3 col-sm-12" style="text-align: left;">
 							    <fieldset class="startdate-option" style="margin-bottom: 10px;">
-							        <h5 style="text-align: left; margin-bottom: 5px;">Ngày lập</h5>
+							        <h5 style="text-align: left; margin-bottom: 5px; font-size: 15px;">Ngày lập</h5>
 							        <input class="form-control" type="date" id="orderDate" style="width: auto; padding: 5px; color: black; background-color: white; display: inline-block;">
 							    </fieldset>
 							    <fieldset class="delidate-option" style="margin-bottom: 10px;">
-							        <h5 style="text-align: left; margin-bottom: 5px;">Ngày giao</h5>
+							        <h5 style="text-align: left; margin-bottom: 5px; font-size: 15px;">Ngày giao</h5>
 							        <input class="form-control" type="date" id="deliveryDate" style="width: auto; padding: 5px; color: black; background-color: white; display: inline-block;">
 							    </fieldset>
 							    <fieldset class="text-right">

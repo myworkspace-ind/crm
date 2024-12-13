@@ -184,6 +184,8 @@ public class OrderController extends BaseController {
 		
 		List<Customer> allSenders;
 		allSenders = customerService.getAllCustomers();
+		
+		List<String> allCodes = orderService.findAllCodeOrders();
 
 		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
 		if (dataSet == null) {
@@ -205,6 +207,7 @@ public class OrderController extends BaseController {
 		mav.addObject("listOrderStatuses", listOrderStatuses);
 		mav.addObject("orderCategories", orderCategories);
 		mav.addObject("listGoodsCategories", listGoodsCategories);
+		mav.addObject("orderCodes", allCodes);
 
 		return mav;
 	}

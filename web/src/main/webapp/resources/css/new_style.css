@@ -5,109 +5,117 @@
 	color: white;
 }
  */
- 
-option{
+.scrollable-table table {
+	width: 100%;
+	table-layout: auto;
+}
+
+.scrollable-table th, .scrollable-table td {
+	padding: 8px; 
+}
+
+option {
 	background-color: #d5c9eb;
 }
 
-
-#register-time, #finalized-time,
-#cancel-time, #complete-time {
+#register-time, #finalized-time, #cancel-time, #complete-time {
 	margin-bottom: 15px;
 }
 
-
 span {
-    display: inline-block;
+	display: inline-block;
 }
 
-#responsible-select, #company-name, #company-address, #representative-name, 
-#email, #phone, #main-status-select, #sub-status-select, #time-filters {
+#responsible-select, #company-name, #company-address,
+	#representative-name, #email, #phone, #main-status-select,
+	#sub-status-select, #time-filters {
 	display: none;
 	margin-bottom: 15px;
 }
 
-.hidden-select{
+.hidden-select {
 	display: none;
 }
 
 .form-control-position {
 	display: flex !important;
 	justify-content: center !important;
-    align-items: center !important;
+	align-items: center !important;
 }
 
 .input-with-icon {
-    position: relative; /* Để tạo vị trí tương đối cho icon */
+	position: relative; /* Để tạo vị trí tương đối cho icon */
 }
 
 .input-with-icon .form-control {
-    padding-left: 35px !important; /* Tạo khoảng cách bên trái cho biểu tượng */
-    padding-right: 10px !important;
+	padding-left: 35px !important;
+	/* Tạo khoảng cách bên trái cho biểu tượng */
+	padding-right: 10px !important;
 }
 
 .input-with-icon .icon-container {
-    position: absolute;
-    left: 10px; /* Điều chỉnh vị trí icon nằm bên trong input */
-    top: 50%;
-    transform: translateY(-50%); /* Căn giữa icon theo chiều dọc */
-    color: #444444;
+	position: absolute;
+	left: 10px; /* Điều chỉnh vị trí icon nằm bên trong input */
+	top: 50%;
+	transform: translateY(-50%); /* Căn giữa icon theo chiều dọc */
+	color: #444444;
 }
 
 .input-with-icon .icon-container i {
-    pointer-events: none; /* Để icon không ảnh hưởng đến việc nhập text */
+	pointer-events: none; /* Để icon không ảnh hưởng đến việc nhập text */
 }
-.fa-filter{
+
+.fa-filter {
 	font-size: 25px;
 }
 
 #filter-toggle {
-    width: 70px;
-    margin-bottom: 10px;
-    background-color: bisque;
-    border: solid;
+	width: 70px;
+	margin-bottom: 10px;
+	background-color: bisque;
+	border: solid;
 }
 
-#filter-box span{
+#filter-box span {
 	margin-bottom: 10px;
 	font-weight: bold;
-	
 }
 
 #filter-box {
 	text-align: center;
-    display: none;
-    flex-direction: column;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 20px;
-    width: 20%;
+	display: none;
+	flex-direction: column;
+	border: 1px solid #ccc;
+	padding: 10px;
+	margin-bottom: 20px;
+	width: 20%;
 }
 
 #filter-box label {
-    display: flex; /* Sử dụng flex để checkbox và tên hiển thị ngang hàng */
-    align-items: center; /* Căn giữa checkbox và văn bản theo chiều dọc */
-    margin-bottom: 5px;
+	display: flex; /* Sử dụng flex để checkbox và tên hiển thị ngang hàng */
+	align-items: center; /* Căn giữa checkbox và văn bản theo chiều dọc */
+	margin-bottom: 5px;
 }
 
 #filter-box input[type="text"] {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
+	width: 100%;
+	padding: 5px;
+	margin-bottom: 10px;
 }
 
 #filter-box button {
-    margin-right: 1px;
+	margin-right: 1px;
 }
+
 .container-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
 }
 
 #filter-box {
-    flex: 1;
-    width: auto;
+	flex: 1;
+	width: auto;
 }
 
 /* tr > th:nth-child(1),
@@ -143,7 +151,7 @@ tr:nth-child(even) td {
   background-color: #f8f9fa; 
 }
  */
- 
+
 /* Đảm bảo cột đầu tiên giữ đúng màu nền khi cuộn */
 /* tr:nth-child(odd) td:nth-child(1),
 tr:nth-child(odd) td:nth-child(2),
@@ -157,29 +165,27 @@ tr:nth-child(even) td:nth-child(3) {
   background-color: #f8f9fa;
 }
  */
-
-
-
 .table-container {
-    flex: 4;
-    min-width: 0;
-    margin-left: 20px;
+	flex: 4;
+	min-width: 0;
+	margin-left: 20px;
 	overflow-x: auto;
 	overflow-y: hidden;
 }
 
-.table-responsive{
-    width: 100%;
-    overflow-x: auto;
+.table-responsive {
+	width: 100%;
+	overflow-x: auto;
 }
 
 .scrollable-table {
-    max-height: 700px; 
-    overflow-y: auto; 
-    overflow-x: auto; 
+	max-height: 700px;
+	overflow-y: auto;
+	overflow-x: auto;
 }
+
 #table {
-    width: 100%; 
+	width: 100%;
 }
 
 /* th, td { */
@@ -187,105 +193,100 @@ tr:nth-child(even) td:nth-child(3) {
 /*   padding: 8px;  */
 /*   border: 1px solid #ddd;  */
 /* } */
+#colorTd {
+	padding: 10px;
+}
 
-
- #colorTd {
-  padding: 10px;
- }
- 
- .btnActions{
- 	display: flex;
- 	align-items: center;
- 	margin-top: 15px;
- }
+.btnActions {
+	display: flex;
+	align-items: center;
+	margin-top: 15px;
+}
 
 .btn-edit, .btn-delete {
-    display: flex !important; /* Hiển thị theo kiểu "inline" để không bị xuống dòng */
-    justify-content: center;
-    align-items: center;
-    background-color: #28a745; /* Màu cho nút edit (xanh lá) */
-    border: none;
-    color: white;
-    padding: 8px 12px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-    margin: 0 10px; /* Khoảng cách giữa hai nút */
-    cursor: pointer;
-    border-radius: 4px;
+	display: flex !important;
+	/* Hiển thị theo kiểu "inline" để không bị xuống dòng */
+	justify-content: center;
+	align-items: center;
+	background-color: #28a745; /* Màu cho nút edit (xanh lá) */
+	border: none;
+	color: white;
+	padding: 8px 12px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 14px;
+	margin: 0 10px; /* Khoảng cách giữa hai nút */
+	cursor: pointer;
+	border-radius: 4px;
 }
 
 .btn-delete {
-    background-color: #dc3545; /* Màu cho nút delete (đỏ) */
+	background-color: #dc3545; /* Màu cho nút delete (đỏ) */
 }
 
 .btn-edit i, .btn-delete i {
-    font-size: 16px; /* Kích thước biểu tượng */
+	font-size: 16px; /* Kích thước biểu tượng */
 }
 
 .btn-edit i, .btn-delete i {
-    font-size: 16px; /* Kích thước biểu tượng */
+	font-size: 16px; /* Kích thước biểu tượng */
 }
 
-
-.checkbox-table-customer{
+.checkbox-table-customer {
 	text-align: center !important;
 }
 
-.checkbox-table-customer label{
+.checkbox-table-customer label {
 	margin-left: 10px;
 	margin-top: 10px;
 }
 
-.checkbox-table-customer input[type="checkbox"]{
-	width: 20px; 
-    height: 20px; 
-    cursor: pointer;
-    margin-top: 4px;
+.checkbox-table-customer input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	margin-top: 4px;
 }
 
-.checkbox-table-customer input[type="checkbox"]:checked{
+.checkbox-table-customer input[type="checkbox"]:checked {
 	accent-color: #62ffb0;
 	color: white;
 }
 
-.checkbox-table-customer input[type="checkbox"]:not(:checked){
-	background-color: #f0f0f0; 
-    border: 2px solid #ccc; 
-    border-radius: 3px; 
+.checkbox-table-customer input[type="checkbox"]:not(:checked) {
+	background-color: #f0f0f0;
+	border: 2px solid #ccc;
+	border-radius: 3px;
 }
 
 .checkbox-table-customer input[type="checkbox"]:hover {
-    background-color: #80ff80 !important; 
+	background-color: #80ff80 !important;
 }
 
 .column {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .filter-container {
-    display: flex;
-    flex-direction: column; 
-    align-items: start; 
-    position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	position: relative;
 }
 
-
 .filter-hidden {
-    display: none;
+	display: none;
 }
 
 .filter-visible {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 form label input[type="checkbox"] {
-    margin-right: 10px;
+	margin-right: 10px;
 }
-
-
 
 /* .card .card-title {
     font-weight: bold;
@@ -372,49 +373,46 @@ form label input[type="checkbox"] {
 	background-color: #ff8448;
 }
  */
-
 .nav-item123 .menu-content123 {
-    display: none!important;
-    width: 280px; 
-    background-color: #fff;
-    border: 1px solid #ccc;
-    z-index: 1000;
-    padding: 5px;
+	display: none !important;
+	width: 280px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	z-index: 1000;
+	padding: 5px;
 }
 
-
-.nav-item123:hover .menu-content123,
-.menu-content123:hover{
- 	position: fixed; 
-   	display: block !important;
-   	left: 100%;
-    padding-top: 10%;
-    white-space: nowrap;
-    float: right;
+.nav-item123:hover .menu-content123, .menu-content123:hover {
+	position: fixed;
+	display: block !important;
+	left: 100%;
+	padding-top: 10%;
+	white-space: nowrap;
+	float: right;
 }
- 
+
 .nav-item123 .menu-content123 li {
-    padding: 5px 10px;
+	padding: 5px 10px;
 }
 
 .nav-item123 .menu-content123 li a {
-    color: #333;
-    text-decoration: none;
-    width: 90%;
-    margin-left: 10px;
-/*     display: block;
+	color: #333;
+	text-decoration: none;
+	width: 90%;
+	margin-left: 10px;
+	/*     display: block;
     padding: 5px; */
 }
 
 .nav-item123 .menu-content123 li a:hover {
-    background-color: #f0f0f0;
+	background-color: #f0f0f0;
 }
 
 .main-menu.menu-light .navigation {
-    background: #d5c9eb;
+	background: #d5c9eb;
 }
 
-.main-menu.menu-light{
+.main-menu.menu-light {
 	background: #d5c9eb;
 }
 
@@ -433,22 +431,22 @@ form label input[type="checkbox"] {
 	font-weight: bold;
 }
 
-.logo-company img{
+.logo-company img {
 	width: 40%;
 	height: 40%;
 	display: block;
 	margin: 0 auto;
 }
 
-.logo-company .name-company{
+.logo-company .name-company {
 	color: #5C6BC0;
 }
 
 a:hover .name-company {
-  color: #1A237E; 
+	color: #1A237E;
 }
 
-.logo-company .name-company::before{
+.logo-company .name-company::before {
 	content: "";
 	position: absolute;
 	left: 10px;
@@ -459,32 +457,33 @@ a:hover .name-company {
 }
 
 .nav-link-expand i.fa-expand:before {
-    font-size:18px;
-    margin-top: 1.5px; 
-    display: block;
+	font-size: 18px;
+	margin-top: 1.5px;
+	display: block;
 }
 
 nav-link-expand i.fa-compress:before {
 	font-size: 18px;
-    margin-top: 1.5px;
-    display: none !important;
-} 
-
-.nav-link-search i.fa-magnifying-glass{
-	font-size: 18px;
-    margin-top: 1.5px;
+	margin-top: 1.5px;
+	display: none !important;
 }
 
-.nav-link-label i.fa-bell{
+.nav-link-search i.fa-magnifying-glass {
 	font-size: 18px;
 	margin-top: 1.5px;
 }
 
-.nav-link-label i.fa-envelope{
+.nav-link-label i.fa-bell {
 	font-size: 18px;
 	margin-top: 1.5px;
 }
-.nav-item123 a{
+
+.nav-link-label i.fa-envelope {
+	font-size: 18px;
+	margin-top: 1.5px;
+}
+
+.nav-item123 a {
 	color: #000;
 	background-color: transparent;
 	padding: 10px;
@@ -494,66 +493,65 @@ nav-link-expand i.fa-compress:before {
 	transition: background-color 2s ease, transform 2s ease;
 }
 
-.nav-item123.active a{
+.nav-item123.active a {
 	background-color: #FFD54F;
 	color: black;
 }
 
-.nav-item123 .has-sub a{
+.nav-item123 .has-sub a {
 	background-color: #FFD54F;
 	color: black;
 }
 
-.nav-item123.hover a{
+.nav-item123.hover a {
 	background-color: #FFECB3;
 	transform: scale(1.1);
 }
 
-.table-bordered th, 
-.table-bordered td {
-    border: 1px solid #dee2e6;
+.table-bordered th, .table-bordered td {
+	border: 1px solid #dee2e6;
 }
 
 .th {
-    background-color: #E9ECEF;
-    color: #1F2A37;
-    font: Roboto, sans-serif;
-    vertical-align: middle;
-    text-align: left;
+	background-color: #E9ECEF;
+	color: #1F2A37;
+	font: Roboto, sans-serif;
+	vertical-align: middle;
+	text-align: left;
 }
 
 .thead {
 	position: sticky;
-    top: 0px;
+	top: 0px;
 }
 
 .bg {
 	background-color: #E9ECEF;
-    color: #1F2A37;
-    font: Roboto, sans-serif;
-    vertical-align: middle;
-    text-align: left;
+	color: #1F2A37;
+	font: Roboto, sans-serif;
+	vertical-align: middle;
+	text-align: left;
 }
 
 .status-cell_main-status {
-    color: white;
-    text-align: center;
-    vertical-align: middle;
+	color: white;
+	text-align: center;
+	vertical-align: middle;
 }
 
-.addCustomerbtn{
+.addCustomerbtn {
 	font-size: 16px;
-    padding: 8px 15px;
-    margin-left: 50px;
-    background-color: #967ADC;
-    border-radius: 10px;
-    color: white;
-    height: fit-content;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+	padding: 8px 15px;
+	margin-left: 50px;
+	background-color: #967ADC;
+	border-radius: 10px;
+	color: white;
+	height: fit-content;
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s;
 }
 
 .addCustomerbtn:hover {
-    background-color: #8451C1;
-    color: #ffffff;
+	background-color: #8451C1;
+	color: #ffffff;
 }

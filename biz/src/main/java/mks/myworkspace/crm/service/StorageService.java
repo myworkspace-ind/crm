@@ -23,13 +23,14 @@ public interface StorageService {
 	
 	List<Customer> saveOrUpdate(List<Customer> lstCustomers);
 	
-	void deleteCustomersByIds(List<Long> customerIds);
+	void hideCustomersByIds(List<Long> customerIds);
 	
 	public Order saveOrUpdateOrder(Order order);
 	
 	void deleteOrderById(Long orderId);
 	
 	public Order updateOrderStatus(Order order);
+	public Customer updateCustomerStatus (Customer customer);
 	
 	List<OrderCategory> saveOrUpdateOrderCategory(List<OrderCategory> lstOrderCategories);
 

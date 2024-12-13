@@ -284,6 +284,10 @@ input[type="search"] {
 	color: black;
 }
 
+.app-content {
+    margin-left: 50px !important;
+}
+
 h3#orderIdForUpdate {
 	display: block;
 }
@@ -301,4 +305,31 @@ h3#orderIdForUpdate {
 
 button.btn.btn-success.updateOrderStatusSearch-btn {
 	margin-left: 5px;
+}
+/* Thay đổi màu nền của các ô chỉ cho tblOrder */
+#tblOrder .handsontable td {
+    background-color: #ffffff; 
+    border: 1px solid #ccc;    
+}
+
+/* Thay đổi màu nền khi hover trên các ô chỉ cho tblOrder */
+#tblOrder .handsontable td:hover {
+    background-color: #f0f0f0; 
+}
+
+/* Thay đổi màu nền khi chọn ô chỉ cho tblOrder */
+#tblOrder .handsontable .current {
+    background-color: #d3e8f7; 
+    color: #333;                
+}
+
+/* Thay đổi màu nền của tiêu đề cột chỉ cho tblOrder */
+#tblOrder .handsontable thead th {
+    background-color: #4e6d7a; 
+    color: #ffffff;           
+}
+
+/* Thay đổi màu nền khi hover trên tiêu đề cột chỉ cho tblOrder */
+#tblOrder .handsontable thead th:hover {
+    background-color: #365060; 
 }

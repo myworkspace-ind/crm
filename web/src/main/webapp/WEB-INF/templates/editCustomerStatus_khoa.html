@@ -14,7 +14,18 @@
 <link rel="stylesheet" type="text/css" th:href="@{/resources/css/editStatusCustomer.css}">
 <link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
 <link rel="stylesheet" type="text/css" th:href="@{/resources/css/customerDetail.css}">
-</head>
+
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/interaction.css}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<!-- Start include Handsontable -->
+<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+
+<script>console.log("Handsontable:", typeof Handsontable); //Check Handsontable is available or not
+</script>
+<!-- End include Handsontable -->
+
 </head>
 <body
 	class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
@@ -30,40 +41,8 @@
 	<!-- BEGIN CustomerDetail -->
 	<th:block th:include="fragments/frg_CustomerDetail"></th:block>
 	<!-- END CustomerDetail -->
-
-
-	<div class="customer-status container mt-5">
-		<!-- Tiêu đề bảng -->
-		<div class="table-title">Tương tác</div>
-
-		<div class="table-responsive">
-			<table class="table table-bordered" id="interactionTable">
-				<thead class="table-light">
-					<tr>
-						<th>Ngày</th>
-						<th>Nội dung trao đổi</th>
-						<th>Người trao đổi</th>
-						<th>Kế hoạch tiếp theo</th>
-						<th>Hành động</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><input type="text" class="form-control"></td>
-						<td><input type="text" class="form-control"></td>
-						<td><input type="text" class="form-control"></td>
-						<td><input type="text" class="form-control"></td>
-						<td>
-							<div class="button-group">
-								<button class="btn btn-success btn-sm me-2">Sửa</button>
-								<button class="btn btn-danger btn-sm">Xóa</button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+		
+	<script type="text/javascript" th:src="@{/resources/js/interaction/interaction.js}"></script>
 	<!-- END CONTENT -->
 
 	<!-- START CUSTOMIZE BUTTON -->
@@ -75,7 +54,7 @@
 	<!-- END COMMON JAVASCRIPT -->
 </body>
 <script>
-    
+
 function addRow() {
     const tableBody = document.querySelector("#interactionTable tbody");
     const newRow = document.createElement("tr");

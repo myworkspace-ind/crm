@@ -23,6 +23,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/status.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/buttonGroupFunction.css}">
+    
+    <th:block th:include="fragments/head"></th:block>
 </head>
 </head>
 <style>
@@ -66,117 +68,8 @@ div#createOrderModal{
 		<!-- BEGIN UPDATE MODAL -->
 		<th:block th:include="fragments/createOrderModal"></th:block>
 	</div>
-	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadOrderStatuses_Datatable.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadOrderStatuses_Datatable_Bao.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadSender-Receiver_Inform_Create.js}"></script>
-<script>
-const openCreateOrderBtn = document.getElementById('openCreateOrderBtn');
-const createOrderModal = document.getElementById('createOrderModal');
-const modalOverlay = document.getElementById('modalOverlay');
-
-openCreateOrderBtn.addEventListener('click', function() {
-	createOrderModal.style.display = 'block';
-	modalOverlay.style.display = 'block';
-})
-
-function closeModal() {
-	createOrderModal.style.display = 'none';
-	modalOverlay.style.display = 'none';
-}
-
-function changeTitle(newTitle) {
-	document.getElementById("title").innerText = newTitle;
-}
-
-document.getElementById("createOrderButton").addEventListener("click", function() {
-	const orderData = {
-		createDate: document.getElementById("orderCreateDateCreate").value,
-		deliveryDate: document.getElementById("orderDeliveryDateCreate").value,
-		orderCode: document.getElementById("orderCodeInputCreate").value,
-		orderCategory: document.getElementById("orderCategoryCreate").value,
-		goodsCategory: document.getElementById("orderGoodsCreate").value,
-		orderStatus: document.getElementById("orderStatusCreate").value,
-		transportMethod: document.getElementById("orderTransportCreate").value,
-		sender: document.getElementById("orderSenderNameCreate").value,
-		receiver: document.getElementById("orderReceiverNameCreate").value,
-		requirement: document.getElementById("orderRequirementCreate").value,
-		address: document.getElementById("orderAddressCreate").value
-	};
-
-	// Kiểm tra nếu dữ liệu đã đầy đủ trước khi gửi
-	if (!orderData.createDate) {
-		alert("Vui lòng điền ngày tạo đơn!");
-		return;
-	}
-	if (!orderData.deliveryDate) {
-		alert("Vui lòng điền ngày giao hàng!");
-		return;
-	}
-	if (!orderData.orderCode) {
-		alert("Vui lòng điền mã đơn hàng!");
-		return;
-	}
-	if (!orderData.orderCategory) {
-		alert("Vui lòng chọn danh mục đơn hàng!");
-		return;
-	}
-	if (!orderData.goodsCategory) {
-		alert("Vui lòng chọn loại hàng hóa!");
-		return;
-	}
-	if (!orderData.orderStatus) {
-		alert("Vui lòng chọn trạng thái đơn hàng!");
-		return;
-	}
-	if (!orderData.transportMethod) {
-		alert("Vui lòng chọn phương thức vận chuyển!");
-		return;
-	}
-	if (!orderData.sender) {
-		alert("Vui lòng điền tên người gửi!");
-		return;
-	}
-	if (!orderData.receiver) {
-		alert("Vui lòng điền tên người nhận!");
-		return;
-	}
-	if (!orderData.requirement) {
-		alert("Vui lòng điền yêu cầu! Nếu không có yêu cầu gì, vui lòng điền 'Không có'");
-		return;
-	}
-	if (!orderData.address) {
-		alert("Vui lòng điền địa chỉ nhận hàng!");
-		return;
-	}
-
-	const _ctx = "/crm-web/";
-	// Gửi request POST tới backend để lưu đơn hàng
-	fetch(`${_ctx}orders-datatable/create-order`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(orderData)
-	})
-		.then(response => {
-			if (!response.ok) {
-				// Nếu response không thành công, ném ra lỗi
-				return response.json().then(err => {
-					throw new Error(err.errorMessage || 'Có lỗi xảy ra.');
-				});
-			}
-			return response.json();
-		})
-		.then(data => {
-			alert(data.message);  // Hiển thị thông báo từ backen
-			location.reload();
-		})
-		.catch(error => {
-			console.error("Lỗi khi tạo đơn hàng:", error);
-			alert("Đã xảy ra lỗi: " + error.message);
-		});
-
-});
-
-</script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/createOrderBaoDi.js}"></script>
 </body>
 </html>
