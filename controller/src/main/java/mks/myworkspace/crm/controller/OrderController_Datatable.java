@@ -22,6 +22,7 @@ package mks.myworkspace.crm.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,11 +54,13 @@ import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
+import mks.myworkspace.crm.entity.HistoryOrder;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.GoodsCategoryService;
+import mks.myworkspace.crm.service.HistoryOrderService;
 import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
@@ -112,6 +115,9 @@ public class OrderController_Datatable extends BaseController {
 
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired 
+	HistoryOrderService historyOrderService;
 
 	@Value("classpath:orders/orders-demo.json")
 	private Resource resOrderDemo;
@@ -330,12 +336,23 @@ public class OrderController_Datatable extends BaseController {
 
 			// Lưu hoặc cập nhật đơn hàng
 			Order savedOrderStatus = storageService.updateOrderStatus(order);
+			
+			HistoryOrder historyOrder = new HistoryOrder(order, order.getOrderStatus(), new Date());
+			// In thông tin của HistoryOrder ra console để kiểm tra
+//			log.debug("HistoryOrder Details: ");
+//			log.debug("Order ID: {}", historyOrder1.getOrder().getId());
+//			log.debug("Order Status: {}", historyOrder1.getOrderStatus());
+//			log.debug("Updated At: {}", historyOrder1.getUpdatedAt());
+//
+//			// Lưu đối tượng HistoryOrder
+			historyOrderService.saveHistory(historyOrder);
+			
 			response.put("status", "success");
 			response.put("message", "OrderStatus " + (order.getId() != null ? "updated" : "created") + " successfully.");
 			log.debug("Order saved with ID: {}", savedOrderStatus.getId()); // Log kết quả ID
 
 		} catch (Exception e) {
-			log.error("Error saving/updating order: ", e);
+			log.error("Error saving/updating order : ", e);
 			response.put("status", "error");
 			response.put("message", "An error occurred while saving/updating the order.");
 		}
@@ -354,6 +371,9 @@ public class OrderController_Datatable extends BaseController {
 
 			// Create Order
 			Order savedOrder = storageService.saveOrUpdateOrder(order);
+			
+			
+			
 			System.out.println("Saved Order: " + savedOrder.toString());
 			System.out.println("Sender: " + (savedOrder.getSender() != null ? savedOrder.getSender().getId() : "null"));
 			System.out.println(
