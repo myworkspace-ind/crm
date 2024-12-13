@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	 <div th:fragment="modalFragment(modalId)" class="w-100">
+        <!-- Modal -->
+        <div class="modal fade"  th:id="${modalId}" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="max-width:77%;">
+                <div class="modal-content mw-100">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <th:block th:include="~{fragments/interaction/frg_interaction.html}"></th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
