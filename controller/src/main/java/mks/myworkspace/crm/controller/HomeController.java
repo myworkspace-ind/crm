@@ -34,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j	
 public class HomeController extends BaseController {
-    
 	/**
 	 * Simply selects the home view to render by returning its name.
      * @return Intro view 

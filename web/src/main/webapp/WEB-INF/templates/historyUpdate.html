@@ -110,44 +110,22 @@
     </div>
 
     <!-- Bảng dữ liệu -->
-    <table id="historyTable">
+    <table id="historyTable" border="1">
         <thead>
             <tr>
-                <th>STT</th>
-                <th>Mã đơn hàng</th>
-                <th>Trạng thái trước</th>
-                <th>Trạng thái sau</th>
-                <th>Ngày cập nhật</th>
+                <th>ID</th>
+                <th>Mã Đơn Hàng</th>
+                <th>Trạng Thái</th>
+                <th>Thời Gian Cập Nhật</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>B123336</td>
-                <td>Nhận đơn</td>
-                <td>Bóc hàng</td>
-                <td>2024-11-20</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>C123455</td>
-                <td>Bóc hàng</td>
-                <td>Trữ lạnh</td>
-                <td>2024-11-21</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>D100012</td>
-                <td>Đóng gói</td>
-                <td>Vận chuyển</td>
-                <td>2024-11-22</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>D100034</td>
-                <td>Vận chuyển</td>
-                <td>Giao hàng</td>
-                <td>2024-11-22</td>
+            <!-- Lặp qua danh sách historyOrders -->
+            <tr th:each="historyOrder : ${historyOrders}">
+                <td th:text="${historyOrder.id}"></td>
+                <td th:text="${historyOrder.order.code}"></td>
+                <td th:text="${historyOrder.orderStatus.name}"></td>
+                <td th:text="${#dates.format(historyOrder.updatedAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
             </tr>
         </tbody>
     </table>
