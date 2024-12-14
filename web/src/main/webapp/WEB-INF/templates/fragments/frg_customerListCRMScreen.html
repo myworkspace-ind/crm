@@ -32,13 +32,22 @@
 <!-- 								<i class="fa-solid fa-plus"></i> Thêm mới khách hàng -->
 <!-- 							</button> -->
 							
+							<div class="addCustomerAndRestoreCustomer">
 							<!-- Thay đổi nút Thêm khách hàng -->
-							<a th:href = "@{/customer/newEditCustomer}">
-								<button class="addCustomerbtn">
+								<a th:href = "@{/customer/newEditCustomer}">
+									<button class="addCustomerbtn">
+										<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
+										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
+									</button>
+								</a>
+								
+								
+								<button class="restoreHidedCustomerbtn" id="restoreHidedCustomerbtn" onclick="showHidedCustomers()">
 									<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
-									<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
+									<i class="fa-solid fa-arrows-rotate"></i> Khôi phục khách hàng bị ẩn
 								</button>
-							</a>
+								 <th:block th:include="fragments/frg_ModalShowHidedCustomersConfirmation"></th:block>
+							</div>
 
 						</div>
 
