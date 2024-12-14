@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
+import mks.myworkspace.crm.entity.HistoryOrder;
 import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
@@ -307,6 +308,11 @@ public class AppRepository {
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
+	
+	public void showHidedCustomers() {
+		String sql = "UPDATE crm_customer SET account_status = 1 WHERE account_status = 0";
+		jdbcTemplate0.update(sql);
+	}
 
 	public void deleteOrderById(Long orderId) {
 		if (orderId == null) {
@@ -509,5 +515,24 @@ public class AppRepository {
 			log.warn("No customer found with ID: {}", customer.getId());
 		}
 	}
+	
+	public void saveHistory(HistoryOrder historyOrder) {
+	    SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
+	            .withTableName("crm_history_order")
+	            .usingGeneratedKeyColumns("id");
+
+	    Map<String, Object> parameters = new HashMap<>();
+	    // Thêm khóa ngoại tới đơn hàng
+	    parameters.put("order_id", historyOrder.getOrder().getId());
+	    // Thêm khóa ngoại tới trạng thái đơn hàng
+	    parameters.put("order_status_id", historyOrder.getOrderStatus().getId());
+	    // Thêm thời gian cập nhật
+	    parameters.put("updated_at", historyOrder.getUpdatedAt());
+
+	    // Thực hiện chèn mà không cần lấy id
+	    simpleJdbcInsert.execute(parameters);
+	    log.debug("History record saved successfully.");
+	}
+
 
 }

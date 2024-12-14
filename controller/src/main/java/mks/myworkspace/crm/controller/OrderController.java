@@ -42,11 +42,13 @@ import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
+import mks.myworkspace.crm.entity.HistoryOrder;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.GoodsCategoryService;
+import mks.myworkspace.crm.service.HistoryOrderService;
 import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
@@ -99,6 +101,10 @@ public class OrderController extends BaseController {
 	
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired 
+	HistoryOrderService historyOrderService;
+	
 
 	@GetMapping("")
 	public ModelAndView displayOrder(@RequestParam(value = "categoryId", required = false) Long categoryId, 
@@ -238,13 +244,17 @@ public class OrderController extends BaseController {
 		initSession(request, httpSession);
 		return mav;
 	}
-	
 	@GetMapping("/history")
-	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("historyUpdate");
+    public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
+        // Lấy tất cả các lịch sử đơn hàng
+        List<HistoryOrder> historyOrders = historyOrderService.findAll();
 
-		return mav;
-	}
+        // Tạo ModelAndView và truyền dữ liệu vào view
+        ModelAndView mav = new ModelAndView("historyUpdate");
+        mav.addObject("historyOrders", historyOrders); // Truyền danh sách historyOrders vào view
+
+        return mav;
+    }
 	
 	private List<Object[]> getDemoData() {
 		List<Object[]> data = new ArrayList<Object[]>();

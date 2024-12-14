@@ -5,6 +5,12 @@
       <div class="main-menu-content center-layout" data-menu="menu-container">
         
         <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+        	<li class="nav-item active" data-page="crm-web/home">
+			    <a class="nav-link" th:href="@{/}" id="homeLink">
+			        <i class="icon-home"></i>
+			        <span class="menu-title" data-i18n="nav.dash.main">Trang chủ</span>
+			    </a>
+			</li>
             <li class="dropdown nav-item active" data-menu="dropdown">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-user-following"></i><span data-i18n="nav.dash.main">Customer</span></a>
                 <ul class="dropdown-menu">
