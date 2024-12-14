@@ -35,7 +35,7 @@ public class OrderStatus implements Serializable {
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
 
-	@Column
+	@Column(name = "name", length = 255)
 	private String name;
 
 //	@OneToMany(mappedBy = "orderStatus", fetch = FetchType.EAGER)

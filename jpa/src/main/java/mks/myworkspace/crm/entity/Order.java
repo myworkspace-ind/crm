@@ -34,13 +34,13 @@ public class Order implements Serializable {
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
 
-	@Column
+	@Column(name = "name", length = 255)
 	private String name;
 
-	@Column
+	@Column(name = "code", length = 255)
 	private String code;
 	
-	@Column
+	@Column(name = "address", length = 255)
 	private String address;
 	
 	@Column(name = "create_date")
@@ -51,10 +51,10 @@ public class Order implements Serializable {
 	//@Temporal(TemporalType.DATE)
 	private Date deliveryDate;
 
-	@Column(name = "transportation_method")
+	@Column(name = "transportation_method", length = 255)
 	private String transportationMethod;
 
-	@Column(name = "customer_requirement")
+	@Column(name = "customer_requirement", length = 255)
 	private String customerRequirement;
 
 	// Relation with OrderCategoryRepository
