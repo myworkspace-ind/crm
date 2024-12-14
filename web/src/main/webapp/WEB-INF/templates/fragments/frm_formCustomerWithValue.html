@@ -15,31 +15,31 @@
 									<input type="hidden" id="customer_id" name="id" th:value="${customer?.id}"> <!-- Giá trị này có thể là ID của khách hàng hiện tại -->
 									<div class="form-group">
 										<label for="company_name">Tên Công Ty:</label>
-										<input type="text" class="form-control" id="company_name" name="company_name"
+										<input type="text" class="form-control" id="company_name" name="company_name"  maxlength="99"
 										   th:value="${customer?.companyName}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="contact_person">Người Liên Hệ Chính:</label>
-										<input type="text" class="form-control" id="contact_person" name="contact_person"
+										<input type="text" class="form-control" id="contact_person" name="contact_person" maxlength="99"
 										   th:value="${customer?.contactPerson}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="email">Email:</label>
-										<input type="email" class="form-control" id="email" name="email"
+										<input type="email" class="form-control" id="email" name="email" maxlength="99"
 										   th:value="${customer?.email}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="phone">Số Điện Thoại:</label>
-										<input type="tel" class="form-control" id="phone" name="phone"
+										<input type="tel" class="form-control" id="phone" name="phone" maxlength="10"
 										   th:value="${customer?.phone}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="address">Địa Chỉ:</label>
-										<input type="text" class="form-control" id="address" name="address"
+										<input type="text" class="form-control" id="address" name="address" maxlength="255"
 										   th:value="${customer?.address}" required>
 									</div>
 
@@ -93,7 +93,7 @@
 
 									<div class="form-group">
 										<label for="note">Ghi Chú:</label>
-										<textarea class="form-control" id="note" name="note" th:text="${customer?.note}"></textarea>
+										<textarea class="form-control" id="note" name="note" maxlength="255" th:text="${customer?.note}"></textarea>
 									</div>
 
 									<button type="submit" class="btn btn-primary">Lưu Khách Hàng</button>
@@ -109,12 +109,14 @@
 		</div>
 	</div>
 	<script>
-	  document.querySelectorAll("input[required], select[required]").forEach((input) => {
-	    const label = input.previousElementSibling;
-	    if (label) {
-	      label.innerHTML += ' <span style="color: red;">*</span>';
-	    }
-	  });
+     // Thêm dấu '*' cho các trường yêu cầu
+     document.querySelectorAll("input[required], select[required], textarea[required]").forEach((element) => {
+         const label = element.previousElementSibling;
+         if (label) {
+             label.innerHTML += ' <span style="color: red;">*</span>';
+         }
+     });
 	</script>
+
 	<!-- END CONTENT -->
 </html>
