@@ -208,7 +208,8 @@ public class StorageServiceImpl implements StorageService {
 		log.debug("Final Customer ID : {}", customer.getId());
 		return customer;
 	}
-	
-	
-	
+	@Override
+	public void showHidedCustomers() {
+		appRepo.showHidedCustomers();
+	}
 }
