@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Xóa dữ liệu trong Local Storage (áp dụng khi submit form hoặc khi vào chế độ edit)
+  // Xóa dữ liệu trong Local Storage
   const clearFormData = () => {
     localStorage.removeItem(storageKey);
   };
