@@ -110,7 +110,7 @@
     </div>
 
     <!-- Bảng dữ liệu -->
-    <table border="historyTable">
+    <table id="historyTable" border="1">
         <thead>
             <tr>
                 <th>ID</th>
@@ -125,7 +125,7 @@
                 <td th:text="${historyOrder.id}"></td>
                 <td th:text="${historyOrder.order.code}"></td>
                 <td th:text="${historyOrder.orderStatus.name}"></td>
-                <td th:text="${historyOrder.updatedAt}"></td>
+                <td th:text="${#dates.format(historyOrder.updatedAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
             </tr>
         </tbody>
     </table>
