@@ -34,6 +34,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -114,21 +116,25 @@ public class OrderConfigurationController_Ky extends BaseController {
 		return tblOrderConfiguration;
 	}
 	
+	@PostMapping("/save-category-status")
+	@ResponseBody
+	public TableStructure saveOrderCategoryStatus(@RequestBody String json) {
+		return null;
+	}
+	
 	@GetMapping("/load-statuses")
 	@ResponseBody
 	public Object getOrderConfigurationStatusData() throws IOException {
 		log.debug("Get sample data from configuration file.");
-		int[] colWidths = { 50, 300, 300, };
-		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", };
-		
+		int[] colWidths = { 50, 300, 300, 200, 200};
+		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", "Id Ma Ma", "Id Loại Đơn Hàng"};
 		
 		List<OrderCategory> orderCategoryStatus=categoryService.getAllOrderCategoriesWithOrderStatuses();
 		List<Object[]> orderStatusData=new ArrayList<>();
 		OrderCategory category=new OrderCategory();
-		Long id;
+		Long id,idTrangThai;
 		String nameCategory,nameStatus;
 		Set<OrderStatus> orderStatuses=new HashSet<OrderStatus>();
-		List<int[]> mergeCells = new ArrayList<>(); // Danh sách các nhóm mergeCells
 
 		for (int i = 0; i < orderCategoryStatus.size(); i++) {
 		    category = orderCategoryStatus.get(i);
@@ -137,27 +143,21 @@ public class OrderConfigurationController_Ky extends BaseController {
 		    orderStatuses = category.getOrderStatuses();
 
 		    boolean isFirst = true; // Biến kiểm tra phần tử đầu tiên
-		    int startRow = orderStatusData.size(); // Dòng bắt đầu của nhóm hiện tại
 		    for (OrderStatus os : orderStatuses) {
 		        nameStatus = os.getName();
+		        idTrangThai=os.getId();
 		        Object[] data;
-
+		        
 		        if (isFirst) {
-		            data = new Object[] { id, nameCategory, nameStatus };
+		            data = new Object[] { id, nameCategory, nameStatus,idTrangThai,id };
 		            isFirst = false; // Sau phần tử đầu tiên, đặt biến này thành false
 		        } else {
-		            data = new Object[] { "", "", nameStatus }; // Để trống id và nameCategory
+		            data = new Object[] { "", "", nameStatus,idTrangThai,id }; // Để trống id và nameCategory
 		        }
 
 		        orderStatusData.add(data);
 		    } 
-		    int endRow = orderStatusData.size() - 1; // Dòng kết thúc của nhóm hiện tại
 
-		    // Nếu nhóm có nhiều hơn 1 dòng, thêm thông tin vào mergeCells
-		    if (endRow > startRow) {
-		        mergeCells.add(new int[] { startRow, 0, endRow - startRow + 1 }); // Merge cột "No"
-		        mergeCells.add(new int[] { startRow, 1, endRow - startRow + 1 }); // Merge cột "Loại đơn hàng"
-		    }
 		}
 
 		
@@ -193,11 +193,14 @@ public class OrderConfigurationController_Ky extends BaseController {
 //		tblData.add(data12);
 //		tblData.add(data13);
 //		tblData.add(data14);
-
+		
+		
 		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, orderStatusData);
 
 		return tblOrderConfigurationStatus;
 	}
+	
+	
 
 //	private String getDefaultOrderData() throws IOException {
 //		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);
