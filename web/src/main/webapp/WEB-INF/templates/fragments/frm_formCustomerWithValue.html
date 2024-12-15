@@ -33,7 +33,7 @@
 
 									<div class="form-group">
 										<label for="phone">Số Điện Thoại:</label>
-										<input type="tel" class="form-control" id="phone" name="phone" maxlength="10"
+										<input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name="phone" maxlength="10"
 										   th:value="${customer?.phone}" required>
 									</div>
 

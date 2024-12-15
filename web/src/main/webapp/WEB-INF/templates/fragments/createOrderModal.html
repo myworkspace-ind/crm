@@ -90,7 +90,8 @@
 				                        <th:block th:each="customer : ${listCustomers}">
 				                            <option th:value="${customer.id}" 
 				                                    th:data-phone="${customer.phone}" 
-				                                    th:data-email="${customer.email}">
+				                                    th:data-email="${customer.email}"
+				                                    th:selected="${customer.id == selectedCustomer?.id}">
 				                                <span th:text="${customer.contactPerson}"></span>
 				                            </option>
 				                        </th:block>
