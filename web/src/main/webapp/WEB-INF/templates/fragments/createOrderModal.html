@@ -181,14 +181,13 @@
 	    // Xóa toàn bộ dữ liệu trong Local Storage
 	    localStorage.clear();
 	  });
+	  document.getElementById("createOrderButton").addEventListener("click", function () {
+	    // Xóa toàn bộ dữ liệu trong Local Storage
+	    localStorage.clear();
+	  });
 	</script>
 	
 	<script>
-		$(window).on('load', function() {
-		    // Gán giá trị chỉ chạy một lần khi trang đã tải xong
-		    $('#orderSenderEmailCreate').val("aa");
-		});
-
 		$(document).ready(function () {
 		    // Kích hoạt Select2
 		    $('.select2').select2({
@@ -208,7 +207,6 @@
 		        $('#orderSenderPhoneCreate').val(phone);
 	            $('#orderSenderEmailCreate').val(email);
 		        
-
 		        // Lưu giá trị select và các trường liên quan vào localStorage
 		        saveData('orderSenderNameCreate', $(this).val());
 		        saveData('orderSenderPhoneCreate', phone);
@@ -230,8 +228,7 @@
 		        // Lưu giá trị select và các trường liên quan vào localStorage
 		        saveData('orderReceiverNameCreate', $(this).val());
 		        saveData('orderReceiverPhoneCreate', phone);
-		        saveData('orderReceiverEmailCreate', email);
-		        
+		        saveData('orderReceiverEmailCreate', email); 		       
 		    });
 
 	
@@ -239,11 +236,15 @@
 		    $('#orderSenderNameCreate').on('select2:unselect', function () {
 		        $('#orderSenderPhoneCreate').val('');
 		        $('#orderSenderEmailCreate').val('');
+		        saveData('orderSenderNameCreate', $(this).val());
+
 		    });
 	
 		    $('#orderReceiverNameCreate').on('select2:unselect', function () {
 		        $('#orderReceiverPhoneCreate').val('');
 		        $('#orderReceiverEmailCreate').val('');
+		        saveData('orderReceiverNameCreate', $(this).val());
+
 		    });
 		});
 	</script>
@@ -259,10 +260,10 @@
 		    'orderStatusCreate',
 		    'orderTransportCreate',
 		    'orderSenderNameCreate',
-/* 		    'orderSenderPhoneCreate',
+ 		    /* 'orderSenderPhoneCreate',
 		    'orderSenderEmailCreate', */
 		    'orderReceiverNameCreate',
-/* 		    'orderReceiverPhoneCreate',
+ 		    /* 'orderReceiverPhoneCreate',
 		    'orderReceiverEmailCreate', */
 		    'orderRequirementCreate',
 		    'orderAddressCreate',
@@ -315,18 +316,8 @@
 		    });
 		    alert(`Email "${localStorage.getItem('orderReceiverEmailCreate')}" đã được lưu`);
 		    orderAddressCreate.value = localStorage.getItem('orderReceiverEmailCreate');
+		    orderReceiverEmailCreate.value = localStorage.getItem('orderReceiverEmailCreate');
 		});
-	</script>
-	<script>
-		document.getElementById('orderReceiverNameCreate').addEventListener('change', function() {
-		    const selectedOption = this.options[this.selectedIndex];
-		    const phone = selectedOption.getAttribute('data-phone');
-		    const email = selectedOption.getAttribute('data-email');
-		    
-		    document.getElementById('orderReceiverPhoneCreate').value = phone || '';
-		    document.getElementById('orderReceiverEmailCreate').value = email || '';
-		});
-
 	</script>
 		
 </body>
