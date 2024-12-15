@@ -4,12 +4,12 @@ document.addEventListener("DOMContentLoaded", function() {
 	const orderSenderEmail = document.getElementById("orderSenderEmailCreate");
 	const _ctx = "/crm-web/";
 	const defaultCustomerId = orderSenderNameSelect.value || 1;
-
 	loadSenderInfo(defaultCustomerId);
 
 	if (orderSenderNameSelect && orderSenderPhone && orderSenderEmail) {
 		orderSenderNameSelect.addEventListener("change", function() {
 			const customerId = this.value;
+			console.log("Selected Customer ID:", customerId); // Log giá trị customerIds
 			loadSenderInfo(customerId);
 		});
 	}
@@ -20,13 +20,13 @@ document.addEventListener("DOMContentLoaded", function() {
 			.then(data => {
 				if (data) {
 					orderSenderPhone.value = data.phone || "";
-					orderSenderEmail.value = data.email || "";
+					orderSenderEmail.value = data.email || "";					
 				}
 			})
 			.catch(error => {
 				console.error("Error fetching sender details:", error);
 			});
-	} 
+	}
 
 });
 
@@ -35,7 +35,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	const orderReceiverPhone = document.getElementById("orderReceiverPhoneCreate");
 	const orderReceiverEmail = document.getElementById("orderReceiverEmailCreate");
 	const _ctx = "/crm-web/";
-	const defaultCustomerId = 1;
+	/*const defaultCustomerId = 1;*/
+	const defaultCustomerId = orderReceiverNameSelect.value || 1;
 
 	loadReceiverInfo(defaultCustomerId);
 
