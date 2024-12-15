@@ -24,12 +24,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -118,16 +120,38 @@ public class OrderConfigurationController_Ky extends BaseController {
 	
 	@PostMapping("/save-category-status")
 	@ResponseBody
-	public TableStructure saveOrderCategoryStatus(@RequestBody String json) {
-		return null;
-	}
+	public ResponseEntity<String> saveCategoryStatus(@RequestBody Map<String, Object> requestBody) {
+        // Lấy danh sách các thay đổi (update)
+        List<List<Object>> updateList = (List<List<Object>>) requestBody.get("update");
+        Integer check = null;
+        // Xử lý dữ liệu
+        for (List<Object> change : updateList) {
+            Integer row = (Integer) change.get(0);
+            Integer col = (Integer) change.get(1);
+            String oldValue = (String) change.get(2);
+            String newValue = (String) change.get(3);
+            Integer idTrangThai = (Integer) change.get(4); // Id Trạng Thái
+            Integer idLoaiDonHang = (Integer) change.get(5); // Id Loại Đơn Hàng
+
+            // Log dữ liệu kiểm tra
+            System.out.println("Row: " + row + ", Col: " + col);
+            System.out.println("Old Value: " + oldValue + ", New Value: " + newValue);
+            System.out.println("Id Trạng Thái: " + idTrangThai + ", Id Loại Đơn Hàng: " + idLoaiDonHang);
+
+            // Thực hiện thao tác lưu hoặc xử lý với các dữ liệu này
+            check=row;
+        }
+
+        // Trả về phản hồi sau khi xử lý thành công
+        return ResponseEntity.ok(check.toString());
+    }
 	
 	@GetMapping("/load-statuses")
 	@ResponseBody
 	public Object getOrderConfigurationStatusData() throws IOException {
 		log.debug("Get sample data from configuration file.");
 		int[] colWidths = { 50, 300, 300, 200, 200};
-		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", "Id Ma Ma", "Id Loại Đơn Hàng"};
+		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", "Id Trạng Thái", "Id Loại Đơn Hàng"};
 		
 		List<OrderCategory> orderCategoryStatus=categoryService.getAllOrderCategoriesWithOrderStatuses();
 		List<Object[]> orderStatusData=new ArrayList<>();
