@@ -28,7 +28,7 @@
 			<div class="form-row">
 			    <div class="form-group col-md-6">
 			      <label for="orderCodeUpdateInput">Mã đơn hàng</label>
-			      <input list="orderCodes" type="text" class="form-control" id="orderCodeInputCreate" style="background-color: white; color: black;" oninput="checkSelectionGoodOrder()">
+			      <input list="orderCodes" type="text" class="form-control" id="orderCodeInputCreate" style="background-color: white; color: black;" oninput="checkSelectionGoodOrder()" maxlength="255">
 			      <datalist id="orderCodes">
 			      	<th:block th:each="orderCode : ${orderCodes}">
 						<option th:value="${orderCode}"></option>			      	
@@ -37,7 +37,7 @@
 			    </div>
 			     <div class="form-group col-md-6">
 				    <label for="goodsType">Loại đơn hàng</label>
-				    <input list="orderCategories" id="orderCategoryCreate" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng">
+				    <input list="orderCategories" id="orderCategoryCreate" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng" maxlength="255">
 				    <datalist id="orderCategories">
 				        <th:block th:each="orderCategory : ${orderCategories}">
 				            <option th:value="${orderCategory.name}" th:data-id="${orderCategory.id}"></option>
@@ -51,7 +51,7 @@
 				    <div class="form-row">
 				        <div class="form-group col-md-6">
 						    <label for="goodsType">Loại hàng hóa</label>
-						    <input list="goodsCategories" id="orderGoodsCreate" class="form-control" placeholder="Nhập hoặc chọn loại hàng hóa">
+						    <input list="goodsCategories" id="orderGoodsCreate" class="form-control" placeholder="Nhập hoặc chọn loại hàng hóa" maxlength="255">
 						    <datalist id="goodsCategories">
 						        <th:block th:each="goodsCategory : ${listGoodsCategories}">
 						            <option th:value="${goodsCategory.name}" th:data-id="${goodsCategory.id}"></option>
@@ -72,7 +72,7 @@
 		    	<div class="form-row">
 			        <div class="form-group col-md-6">
 			            <label for="transportMethod">Phương tiện vận chuyển</label>
-			            <input type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" >
+			            <input type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" maxlength="255">
 			        </div>
 			    </div>
 		   		</div>
@@ -86,11 +86,12 @@
 				                <td>Họ tên:</td>
 				                <td>
 				                    <select id="orderSenderNameCreate" class="form-control select2" style="width: 100%; background-color: white; color: black;">
-				                        <!-- <option value="" disabled selected>Nhập hoặc chọn tên người gửi</option> -->
+				                        <option value="" disabled selected>Nhập hoặc chọn tên người gửi</option>
 				                        <th:block th:each="customer : ${listCustomers}">
 				                            <option th:value="${customer.id}" 
 				                                    th:data-phone="${customer.phone}" 
-				                                    th:data-email="${customer.email}">
+				                                    th:data-email="${customer.email}"
+				                                    th:selected="${customer.id == selectedCustomer?.id}">
 				                                <span th:text="${customer.contactPerson}"></span>
 				                            </option>
 				                        </th:block>
@@ -99,11 +100,11 @@
 				            </tr>
 				            <tr>
 				                <td>SDT:</td>
-				                <td><input type="text" id="orderSenderPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				                <td><input type="text" id="orderSenderPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" maxlength="10"/></td>
 				            </tr>
 				            <tr>
 				                <td>Email:</td>
-				                <td><input type="email" id="orderSenderEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				                <td><input type="email" id="orderSenderEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" maxlength="99"/></td>
 				            </tr>
 				        </table>
 				    </fieldset>
@@ -117,25 +118,26 @@
 				                <td>Họ tên:</td>
 				                <td>
 				                    <select id="orderReceiverNameCreate" class="form-control select2" style="width: 100%; background-color: white; color: black;">
-				                        <!-- <option value="" disabled selected>Nhập hoặc chọn họ tên</option> -->
+				                        <option value="" disabled selected>Nhập hoặc chọn họ tên</option>
 				                        <th:block th:each="customer : ${listCustomers}">
-				                            <option th:value="${customer.id}"
+				                            <option th:value="${customer.id}" 
 				                                    th:data-phone="${customer.phone}" 
 				                                    th:data-email="${customer.email}">
 				                                <span th:text="${customer.contactPerson}"></span>
 				                            </option>
 				                        </th:block>
-				                        
 				                    </select>
 				                </td>
 				            </tr>
 				            <tr>
 				                <td>SDT:</td>
-				                <td><input type="text" id="orderReceiverPhoneCreate" class="input-container" placeholder="Số điện thoại" style="background-color: white; color: black; width: 100%;" /></td>
+				                
+				                <td><input type="text" id="orderReceiverPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" maxlength="10"/></td>
 				            </tr>
 				            <tr>
 				                <td>Email:</td>
-				                <td><input type="email" id="orderReceiverEmailCreate" class="input-container" placeholder="Email" style="background-color: white; color: black; width: 100%;" /></td>
+				                
+				                <td><input type="email" id="orderReceiverEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" maxlength="99"/></td>
 				            </tr>
 				        </table>
 				    </fieldset>
@@ -148,13 +150,14 @@
 				        <div class="form-group col-md-6">
 				            <label for="goodsType">Yêu cầu</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="orderRequirementCreate" rows="8" ></textarea>
+								<textarea class="form-control" id="orderRequirementCreate" rows="8" maxlength="255"></textarea>
 							</div>
 				        </div>
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Địa chỉ</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="orderAddressCreate" rows="8" ></textarea>
+								
+								<textarea class="form-control" id="orderAddressCreate" rows="8" maxlength="255"></textarea>
 							</div>
 				        </div>
 				    </div>
@@ -171,22 +174,11 @@
 		        
 			<div class="row4">
 				<button type="button" id="createOrderButton">Lưu</button>
-	        	<button type="button" id = "closeOrderButton" onclick="closeModal()">Trở về</button>
+	        	<button type="button" onclick="closeModal()">Trở về</button>
 			</div>
 	    </form>
 	</div>
 	<script type="text/javascript" th:src="@{/resources/js/orders/datatable.js}" ></script>
-	<script>
-	  document.getElementById("closeOrderButton").addEventListener("click", function () {
-	    // Xóa toàn bộ dữ liệu trong Local Storage
-	    localStorage.clear();
-	  });
-	  document.getElementById("createOrderButton").addEventListener("click", function () {
-	    // Xóa toàn bộ dữ liệu trong Local Storage
-	    localStorage.clear();
-	  });
-	</script>
-	
 	<script>
 		$(document).ready(function () {
 		    // Kích hoạt Select2
@@ -195,128 +187,34 @@
 		        placeholder: "Nhập hoặc chọn tên",
 		        allowClear: true
 		    });
-		 // Cập nhật thông tin người gửi
+	
+		    // Cập nhật thông tin "Người gửi"
 		    $('#orderSenderNameCreate').on('select2:select', function () {
-		    	let selectedOption = $(this).find(':selected');
-
-		        // Lấy dữ liệu từ các thuộc tính data của <option>
-		        let phone = selectedOption.data('phone') || '';
-		        let email = selectedOption.data('email') || '';
-
-		        // Hiển thị dữ liệu lên input
-		        $('#orderSenderPhoneCreate').val(phone);
-	            $('#orderSenderEmailCreate').val(email);
-		        
-		        // Lưu giá trị select và các trường liên quan vào localStorage
-		        saveData('orderSenderNameCreate', $(this).val());
-		        saveData('orderSenderPhoneCreate', phone);
-		        saveData('orderSenderEmailCreate', email);
+		        let selectedOption = $(this).find(':selected');
+		        $('#orderSenderPhoneCreate').val(selectedOption.data('phone') || '');
+		        $('#orderSenderEmailCreate').val(selectedOption.data('email') || '');
 		    });
-
-		    // Cập nhật thông tin người nhận
+	
+		    // Cập nhật thông tin "Người nhận"
 		    $('#orderReceiverNameCreate').on('select2:select', function () {
-		    	let selectedOption = $(this).find(':selected');
-
-		        // Lấy dữ liệu từ các thuộc tính data của <option>
-		        let phone = selectedOption.data('phone') || '';
-		        let email = selectedOption.data('email') || '';
-
-		        // Hiển thị dữ liệu lên input
-		        $('#orderReceiverPhoneCreate').val(phone);
-		        $('#orderReceiverEmailCreate').val(email);
-
-		        // Lưu giá trị select và các trường liên quan vào localStorage
-		        saveData('orderReceiverNameCreate', $(this).val());
-		        saveData('orderReceiverPhoneCreate', phone);
-		        saveData('orderReceiverEmailCreate', email); 		       
+		        let selectedOption = $(this).find(':selected');
+		        $('#orderReceiverPhoneCreate').val(selectedOption.data('phone') || '');
+		        $('#orderReceiverEmailCreate').val(selectedOption.data('email') || '');
 		    });
-
 	
 		    // Xóa thông tin khi giá trị bị xóa
 		    $('#orderSenderNameCreate').on('select2:unselect', function () {
 		        $('#orderSenderPhoneCreate').val('');
 		        $('#orderSenderEmailCreate').val('');
-		        saveData('orderSenderNameCreate', $(this).val());
-
 		    });
 	
 		    $('#orderReceiverNameCreate').on('select2:unselect', function () {
 		        $('#orderReceiverPhoneCreate').val('');
 		        $('#orderReceiverEmailCreate').val('');
-		        saveData('orderReceiverNameCreate', $(this).val());
-
 		    });
 		});
 	</script>
-	
-	<script>
-		// Danh sách các ID của các trường cần nhập liệu
-		const inputFieldIds = [
-		    'orderCreateDateCreate',
-		    'orderDeliveryDateCreate',
-		    'orderCodeInputCreate',
-		    'orderCategoryCreate',
-		    'orderGoodsCreate',
-		    'orderStatusCreate',
-		    'orderTransportCreate',
-		    'orderSenderNameCreate',
- 		    /* 'orderSenderPhoneCreate',
-		    'orderSenderEmailCreate', */
-		    'orderReceiverNameCreate',
- 		    /* 'orderReceiverPhoneCreate',
-		    'orderReceiverEmailCreate', */
-		    'orderRequirementCreate',
-		    'orderAddressCreate',
-		    'emailCreate',
-		    'zaloCreate',
-		    'smsUpdate'
-		];
-	
-		// Hàm lưu dữ liệu vào localStorage
-		const saveData = (key, value) => {
-		    localStorage.setItem(key, value);
-		};
-	
-		// Lặp qua tất cả các trường để lắng nghe sự kiện nhập liệu
-		inputFieldIds.forEach((id) => {
-		    const input = document.getElementById(id);
-		    if (!input) return;
-	
-		    // Với checkbox, lưu trạng thái checked, các loại khác thì lưu giá trị
-		    if (input.type === 'checkbox') {
-		        input.addEventListener('change', () => {
-		            saveData(id, input.checked);
-		        });
-		    } else {
-		        input.addEventListener('input', () => {
-		            saveData(id, input.value);
-		        });
-		    }
-		});
-	
-		// Tự động khôi phục dữ liệu từ localStorage
-		window.addEventListener('DOMContentLoaded', () => {
-		    inputFieldIds.forEach((id) => {
-		        const input = document.getElementById(id);
-		        if (!input) return;
 
-		        const savedValue = localStorage.getItem(id);
-		        if (savedValue !== null) {
-		            if ($(input).hasClass('select2')) {
-		                // Dùng Select2 API để khôi phục giá trị
-		                $(input).val(savedValue).trigger('change');
-		            } else if (input.type === 'checkbox') {
-		                // Khôi phục trạng thái của checkbox
-		                input.checked = savedValue === 'true';
-		            } else {
-		                // Khôi phục giá trị cho các trường khác
-		                input.value = savedValue;
-		            }
-		        }
-		    });
-
-		});
-	</script>
-		
+	
 </body>
 </html>
