@@ -33,4 +33,10 @@ public class OrderCategoryServiceImpl implements OrderCategoryService{
 		return repo.findAll();
 	}
 
+	@Override
+	public OrderCategory findOrderCategoryById(Long id) {
+		// TODO Auto-generated method stub
+		return repo.findById(id).get();
+	}
+
 }

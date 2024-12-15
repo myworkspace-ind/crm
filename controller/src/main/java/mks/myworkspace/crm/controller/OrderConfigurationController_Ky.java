@@ -21,6 +21,7 @@ package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -49,6 +50,7 @@ import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
 import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderService;
+import mks.myworkspace.crm.service.OrderStatusService;
 
 /**
  * Handles requests for the application home page.
@@ -63,6 +65,10 @@ public class OrderConfigurationController_Ky extends BaseController {
 	
 	@Autowired
 	private OrderCategoryService categoryService;
+	
+	@Autowired
+	private OrderStatusService statusService;
+	
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
 	 * 
@@ -118,33 +124,66 @@ public class OrderConfigurationController_Ky extends BaseController {
 		return tblOrderConfiguration;
 	}
 	
-	@PostMapping("/save-category-status")
+	@PostMapping(value = "/save-category-status")
 	@ResponseBody
-	public ResponseEntity<String> saveCategoryStatus(@RequestBody Map<String, Object> requestBody) {
-        // Lấy danh sách các thay đổi (update)
-        List<List<Object>> updateList = (List<List<Object>>) requestBody.get("update");
-        Integer check = null;
-        // Xử lý dữ liệu
-        for (List<Object> change : updateList) {
-            Integer row = (Integer) change.get(0);
-            Integer col = (Integer) change.get(1);
-            String oldValue = (String) change.get(2);
-            String newValue = (String) change.get(3);
-            Integer idTrangThai = (Integer) change.get(4); // Id Trạng Thái
-            Integer idLoaiDonHang = (Integer) change.get(5); // Id Loại Đơn Hàng
+	public ResponseEntity<Map<String, Object>> saveCategoryStatus(@RequestBody Map<String, Object> requestBody) {
+	    // Lấy danh sách các thay đổi (update)
+	    List<List<Object>> updateList = (List<List<Object>>) requestBody.get("update");
+	    Integer check = null;
 
-            // Log dữ liệu kiểm tra
-            System.out.println("Row: " + row + ", Col: " + col);
-            System.out.println("Old Value: " + oldValue + ", New Value: " + newValue);
-            System.out.println("Id Trạng Thái: " + idTrangThai + ", Id Loại Đơn Hàng: " + idLoaiDonHang);
+	    // Xử lý dữ liệu
+	    for (List<Object> change : updateList) {
+	        Integer row = (Integer) change.get(0);
+	        Integer col = (Integer) change.get(1);
+	        String oldValue = (String) change.get(2);
+	        String newValue = (String) change.get(3);
 
-            // Thực hiện thao tác lưu hoặc xử lý với các dữ liệu này
-            check=row;
-        }
+	        Object value = change.get(4);
+	        Long idTrangThai = null;
 
-        // Trả về phản hồi sau khi xử lý thành công
-        return ResponseEntity.ok(check.toString());
-    }
+	        if (value instanceof Integer) {
+	            idTrangThai = ((Integer) value).longValue();
+	        } else if (value instanceof Long) {
+	            idTrangThai = (Long) value;
+	        }
+
+	        Object value1 = change.get(5);
+	        Long idLoaiDonHang = null;
+
+	        if (value1 instanceof Integer) {
+	            idLoaiDonHang = ((Integer) value1).longValue();
+	        } else if (value1 instanceof Long) {
+	            idLoaiDonHang = (Long) value1;
+	        }
+
+	        // Log dữ liệu kiểm tra
+	        System.out.println("Row: " + row + ", Col: " + col);
+	        System.out.println("Old Value: " + oldValue + ", New Value: " + newValue);
+	        System.out.println("Id Trạng Thái: " + idTrangThai + ", Id Loại Đơn Hàng: " + idLoaiDonHang);
+
+	        // Thực hiện thao tác lưu hoặc xử lý với các dữ liệu này
+	        OrderCategory category = categoryService.findOrderCategoryById(idLoaiDonHang);
+	        if (oldValue != null) {
+	            OrderStatus status = statusService.findStatusById(idTrangThai);
+	            category.getOrderStatuses().remove(status);
+	        }
+	        if (newValue != null) {
+	            OrderStatus status = statusService.findStatusByName(newValue);
+	            if (status != null) {
+	                category.getOrderStatuses().add(status);
+	            }
+	        }
+	    }
+
+	    // Tạo phản hồi JSON
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("success", true);
+	    response.put("message", "Save Successfull");
+
+	    // Trả về phản hồi dưới dạng JSON
+	    return ResponseEntity.ok(response);
+	}
+
 	
 	@GetMapping("/load-statuses")
 	@ResponseBody
