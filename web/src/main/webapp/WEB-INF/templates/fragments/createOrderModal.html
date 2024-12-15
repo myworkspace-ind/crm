@@ -131,7 +131,7 @@
 				            </tr>
 				            <tr>
 				                <td>SDT:</td>
-				                <td><input type="text" id="orderReceiverPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				                <td><input type="text" id="orderReceiverPhoneCreate" class="input-container" placeholder="Số điện thoại" style="background-color: white; color: black; width: 100%;" /></td>
 				            </tr>
 				            <tr>
 				                <td>Email:</td>
@@ -171,11 +171,82 @@
 		        
 			<div class="row4">
 				<button type="button" id="createOrderButton">Lưu</button>
-	        	<button type="button" onclick="closeModal()">Trở về</button>
+	        	<button type="button" id = "closeOrderButton" onclick="closeModal()">Trở về</button>
 			</div>
 	    </form>
 	</div>
 	<script type="text/javascript" th:src="@{/resources/js/orders/datatable.js}" ></script>
+	<script>
+	  document.getElementById("closeOrderButton").addEventListener("click", function () {
+	    // Xóa toàn bộ dữ liệu trong Local Storage
+	    localStorage.clear();
+	  });
+	</script>
+	
+	<script>
+		$(window).on('load', function() {
+		    // Gán giá trị chỉ chạy một lần khi trang đã tải xong
+		    $('#orderSenderEmailCreate').val("aa");
+		});
+
+		$(document).ready(function () {
+		    // Kích hoạt Select2
+		    $('.select2').select2({
+		        tags: true,
+		        placeholder: "Nhập hoặc chọn tên",
+		        allowClear: true
+		    });
+		 // Cập nhật thông tin người gửi
+		    $('#orderSenderNameCreate').on('select2:select', function () {
+		    	let selectedOption = $(this).find(':selected');
+
+		        // Lấy dữ liệu từ các thuộc tính data của <option>
+		        let phone = selectedOption.data('phone') || '';
+		        let email = selectedOption.data('email') || '';
+
+		        // Hiển thị dữ liệu lên input
+		        $('#orderSenderPhoneCreate').val(phone);
+	            $('#orderSenderEmailCreate').val(email);
+		        
+
+		        // Lưu giá trị select và các trường liên quan vào localStorage
+		        saveData('orderSenderNameCreate', $(this).val());
+		        saveData('orderSenderPhoneCreate', phone);
+		        saveData('orderSenderEmailCreate', email);
+		    });
+
+		    // Cập nhật thông tin người nhận
+		    $('#orderReceiverNameCreate').on('select2:select', function () {
+		    	let selectedOption = $(this).find(':selected');
+
+		        // Lấy dữ liệu từ các thuộc tính data của <option>
+		        let phone = selectedOption.data('phone') || '';
+		        let email = selectedOption.data('email') || '';
+
+		        // Hiển thị dữ liệu lên input
+		        $('#orderReceiverPhoneCreate').val(phone);
+		        $('#orderReceiverEmailCreate').val(email);
+
+		        // Lưu giá trị select và các trường liên quan vào localStorage
+		        saveData('orderReceiverNameCreate', $(this).val());
+		        saveData('orderReceiverPhoneCreate', phone);
+		        saveData('orderReceiverEmailCreate', email);
+		        
+		    });
+
+	
+		    // Xóa thông tin khi giá trị bị xóa
+		    $('#orderSenderNameCreate').on('select2:unselect', function () {
+		        $('#orderSenderPhoneCreate').val('');
+		        $('#orderSenderEmailCreate').val('');
+		    });
+	
+		    $('#orderReceiverNameCreate').on('select2:unselect', function () {
+		        $('#orderReceiverPhoneCreate').val('');
+		        $('#orderReceiverEmailCreate').val('');
+		    });
+		});
+	</script>
 	
 	<script>
 		// Danh sách các ID của các trường cần nhập liệu
@@ -188,11 +259,11 @@
 		    'orderStatusCreate',
 		    'orderTransportCreate',
 		    'orderSenderNameCreate',
-		    'orderSenderPhoneCreate',
-		    'orderSenderEmailCreate',
+/* 		    'orderSenderPhoneCreate',
+		    'orderSenderEmailCreate', */
 		    'orderReceiverNameCreate',
-		    'orderReceiverPhoneCreate',
-		    'orderReceiverEmailCreate',
+/* 		    'orderReceiverPhoneCreate',
+		    'orderReceiverEmailCreate', */
 		    'orderRequirementCreate',
 		    'orderAddressCreate',
 		    'emailCreate',
@@ -242,69 +313,20 @@
 		            }
 		        }
 		    });
+		    alert(`Email "${localStorage.getItem('orderReceiverEmailCreate')}" đã được lưu`);
+		    orderAddressCreate.value = localStorage.getItem('orderReceiverEmailCreate');
 		});
-
-
 	</script>
-	
-	
 	<script>
-		$(document).ready(function () {
-		    // Kích hoạt Select2
-		    $('.select2').select2({
-		        tags: true,
-		        placeholder: "Nhập hoặc chọn tên",
-		        allowClear: true
-		    });
-
-		 // Cập nhật thông tin người gửi
-		    $('#orderSenderNameCreate').on('select2:select', function () {
-		    	let selectedOption = $(this).find(':selected');
-
-		        // Lấy dữ liệu từ các thuộc tính data của <option>
-		        let phone = selectedOption.data('phone') || '';
-		        let email = selectedOption.data('email') || '';
-
-		        // Hiển thị dữ liệu lên input
-		        $('#orderSenderPhoneCreate').val(phone);
-		        $('#orderSenderEmailCreate').val(email);
-
-		        // Lưu giá trị select và các trường liên quan vào localStorage
-		        saveData('orderSenderNameCreate', $(this).val());
-		        saveData('orderSenderPhoneCreate', phone);
-		        saveData('orderSenderEmailCreate', email);
-		    });
-
-		    // Cập nhật thông tin người nhận
-		    $('#orderReceiverNameCreate').on('select2:select', function () {
-		    	let selectedOption = $(this).find(':selected');
-
-		        // Lấy dữ liệu từ các thuộc tính data của <option>
-		        let phone = selectedOption.data('phone') || '';
-		        let email = selectedOption.data('email') || '';
-
-		        // Hiển thị dữ liệu lên input
-		        $('#orderReceiverPhoneCreate').val(phone);
-		        $('#orderReceiverEmailCreate').val(email);
-
-		        // Lưu giá trị select và các trường liên quan vào localStorage
-		        saveData('orderReceiverNameCreate', $(this).val());
-		        saveData('orderReceiverPhoneCreate', phone);
-		        saveData('orderReceiverEmailCreate', email);
-		    });
-
-	
-		    // Xóa thông tin khi giá trị bị xóa
-		    $('#orderSenderNameCreate').on('select2:unselect', function () {
-		        $('#orderSenderPhoneCreate').val('');
-		        $('#orderSenderEmailCreate').val('');
-		    });
-	
-		    $('#orderReceiverNameCreate').on('select2:unselect', function () {
-		        $('#orderReceiverPhoneCreate').val('');
-		        $('#orderReceiverEmailCreate').val('');
-		    });
+		document.getElementById('orderReceiverNameCreate').addEventListener('change', function() {
+		    const selectedOption = this.options[this.selectedIndex];
+		    const phone = selectedOption.getAttribute('data-phone');
+		    const email = selectedOption.getAttribute('data-email');
+		    
+		    document.getElementById('orderReceiverPhoneCreate').value = phone || '';
+		    document.getElementById('orderReceiverEmailCreate').value = email || '';
 		});
+
 	</script>
 		
 </body>
