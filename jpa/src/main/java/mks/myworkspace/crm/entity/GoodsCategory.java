@@ -32,7 +32,7 @@ public class GoodsCategory implements Serializable {
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
 
-	@Column
+	@Column(name = "name", length = 255)
 	private String name;
 
 	// Constructor nhận id

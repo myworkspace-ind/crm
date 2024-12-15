@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -151,6 +153,7 @@ public class OrderController extends BaseController {
 
 	@GetMapping("new")
 	public ModelAndView newOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
+			@RequestParam(value = "customerId", required = false) Long customerId,
 			HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("fragments/createOrderModal_v2");
 		initSession(request, httpSession);
@@ -169,6 +172,16 @@ public class OrderController extends BaseController {
 			List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(defaultCategoryId);
 			mav.addObject("orderStatuses", orderStatuses);
 			mav.addObject("selectedCategoryId", defaultCategoryId);
+		}
+		
+		if (customerId != null)
+		{
+			Optional<Customer> customerOpt = customerService.findById(customerId);
+			customerOpt.ifPresentOrElse(customer -> {
+				mav.addObject("selectedCustomer", customer);
+			}, () -> {
+				mav.addObject("errorMessage", "Customer not found.");
+			});
 		}
 
 		List<OrderStatus> listOrderStatuses;

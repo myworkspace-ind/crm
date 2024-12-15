@@ -282,6 +282,7 @@
 																	<th data-field="created_at" class="th12">Thời gian
 																		tạo</th>
 																	<th data-field="note" class="th13">Ghi chú</th>
+																	<th class="th14">Hành động</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -313,6 +314,12 @@
 																	<td
 																		th:text="${customer.createdAt != null ? #dates.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td>
 																	<td th:text="${customer.note != null ? customer.note : ''}"></td>
+																	<td> 
+																		<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><span data-i18n="nav.dash.main">Hành động</span></a>
+														                <ul class="dropdown-menu">
+														                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/new(customerId=${customer.id})}" data-toggle="dropdown">Đơn hàng mới</a></li>
+														                </ul>
+																	</td>
 																</tr>
 															</tbody>
 														</table>
