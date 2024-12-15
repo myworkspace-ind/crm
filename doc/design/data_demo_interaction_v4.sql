@@ -1,14 +1,14 @@
 use crm;
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.13, for Win64 (x86_64)
 --
 -- Host: localhost    Database: crm
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.13
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
+ SET NAMES utf8mb4 ;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -22,76 +22,72 @@ use crm;
 
 DROP TABLE IF EXISTS `crm_customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `crm_customer` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `site_id` VARCHAR(99) DEFAULT NULL,
-  `company_name` VARCHAR(99) DEFAULT NULL,
-  `contact_person` VARCHAR(99) DEFAULT NULL,
-  `email` VARCHAR(99) DEFAULT NULL,
-  `phone` VARCHAR(10) DEFAULT NULL,
-  `address` VARCHAR(255) DEFAULT NULL,
-  `profession_id` VARCHAR(99) DEFAULT NULL,
-  `main_status_id` BIGINT DEFAULT NULL,
-  `sub_status_id` BIGINT DEFAULT NULL,
-  `responsible_person_id` VARCHAR(99) DEFAULT NULL,
-  `created_at` DATETIME(6) DEFAULT NULL,
-  `note` VARCHAR(255) DEFAULT NULL,
-  `account_status` BIT DEFAULT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `account_status` bit(1) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `company_name` varchar(99) DEFAULT NULL,
+  `contact_person` varchar(99) DEFAULT NULL,
+  `created_at` date DEFAULT NULL,
+  `email` varchar(99) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `site_id` varchar(99) DEFAULT NULL,
+  `main_status_id` bigint(20) DEFAULT NULL,
+  `profession_id` bigint(20) DEFAULT NULL,
+  `responsible_person_id` bigint(20) DEFAULT NULL,
+  `sub_status_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_main_status_id` (`main_status_id`),
-  KEY `FK_sub_status_id` (`sub_status_id`),
-  CONSTRAINT `FK_sub_status_id` FOREIGN KEY (`sub_status_id`) REFERENCES `crm_status` (`id`),
-  CONSTRAINT `FK_main_status_id` FOREIGN KEY (`main_status_id`) REFERENCES `crm_status` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
+  KEY `FKkdeyvb8vcb3luc9rjbdq5ked0` (`main_status_id`),
+  KEY `FKioibte5tkd45e6165bugbd7c0` (`profession_id`),
+  KEY `FK1veyaemqknyilm0th61lvqfff` (`responsible_person_id`),
+  KEY `FKfomguaxykk0028fg59gwixnce` (`sub_status_id`),
+  CONSTRAINT `FK1veyaemqknyilm0th61lvqfff` FOREIGN KEY (`responsible_person_id`) REFERENCES `crm_responsible_person` (`id`),
+  CONSTRAINT `FKfomguaxykk0028fg59gwixnce` FOREIGN KEY (`sub_status_id`) REFERENCES `crm_status` (`id`),
+  CONSTRAINT `FKioibte5tkd45e6165bugbd7c0` FOREIGN KEY (`profession_id`) REFERENCES `crm_profession` (`id`),
+  CONSTRAINT `FKkdeyvb8vcb3luc9rjbdq5ked0` FOREIGN KEY (`main_status_id`) REFERENCES `crm_status` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `crm_customer`
 --
 
-INSERT INTO `crm_customer` 
-(`id`, `site_id`, `company_name`, `contact_person`, `email`, `phone`, `address`, `profession_id`, `main_status_id`, `sub_status_id`, `responsible_person_id`, `created_at`, `note`, `account_status`) 
-VALUES 
-(1, NULL, 'Cong ty A', 'Nguyen Van A', 'vananguyen@gmail.com', '0123456789', '1 Vo Van Ngan, Thu Duc', '1', 1, 2, '1', NULL, 'note', b'1'),
-(2, NULL, 'Cong ty B', 'Tran Van B', 'tranvanb@gmail.com', '0987654321', '123 Nguyen Trai, District 1', '2', 3, 5, '2', NULL, 'note for B', b'1'),
-(3, NULL, 'Cong ty C', 'Le Van C', 'levanc@gmail.com', '0912345678', '456 Le Lai, District 3', '3', 2, 4, '3', NULL, 'note for C', b'1'),
-(4, NULL, 'Cong ty D', 'Hoang Van D', 'hoangvand@gmail.com', '0123456780', '789 Hai Ba Trung, District 1', '4', 5, 7, '4', NULL, 'note for D', b'1'),
-(5, NULL, 'Cong ty E', 'Pham Van E', 'phamvane@gmail.com', '0987123456', '101 Tran Hung Dao, District 5', '5', 1, 6, '1', NULL, 'note for E', b'1'),
-(6, NULL, 'Cong ty F', 'Nguyen Van F', 'nguyenvanf@gmail.com', '0934567890', '202 Phan Van Tri, District 6', '6', 4, 3, '2', NULL, 'note for F', b'1'),
-(7, NULL, 'Cong ty G', 'Vu Van G', 'vuvang@gmail.com', '0989123456', '303 Le Van Sy, District 10', '7', 6, 8, '3', NULL, 'note for G', b'1'),
-(8, NULL, 'Cong ty H', 'Ngo Van H', 'ngovan@gmail.com', '0976543210', '404 Nguyen Hue, District 9', '8', 7, 2, '4', NULL, 'note for H', b'1'),
-(9, NULL, 'Cong ty I', 'Vo Van I', 'vovan@gmail.com', '0965432109', '505 Tan Son Nhat, District 11', '9', 9, 1, '1', NULL, 'note for I', b'1'),
-(10, NULL, 'Cong ty J', 'Bui Van J', 'buivan@gmail.com', '0954321098', '606 Le Van Khuyen, District 12', '10', 10, 9, '2', NULL, 'note for J', b'1'),
-(21, NULL, 'Cong ty thanh', 'Nguyen The Thanh', 'thethanh@gmail.com', '0379513457', 'no', '9', 9, 10, '3', NULL, 'no', b'1'),
-(22, NULL, 'Cong ty K', 'Tran Van K', 'tranvank@gmail.com', '0943210987', '707 Pasteur, District 3', '8', 2, 5, '4', NULL, 'note for K', b'1'),
-(23, NULL, 'Cong ty L', 'Le Van L', 'levanl@gmail.com', '0932109876', '808 Tran Quang Khai, District 5', '7', 3, 6, '1', NULL, 'note for L', b'1'),
-(24, NULL, 'Cong ty M', 'Hoang Van M', 'hoangvanm@gmail.com', '0921098765', '909 Ly Chinh Thang, District 10', '6', 4, 7, '2', NULL, 'note for M', b'1'),
-(25, NULL, 'Cong ty N', 'Pham Van N', 'phamvann@gmail.com', '0910987654', '1010 Cach Mang Thang 8, District 11', '5', 5, 8, '3', NULL, 'note for N', b'1'),
-(26, NULL, 'Cong ty O', 'Vo Van O', 'vovano@gmail.com', '0909876543', '2020 Hoang Sa, District 3', '4', 6, 9, '4', NULL, 'note for O', b'1'),
-(27, NULL, 'Cong ty P', 'Bui Van P', 'buivanp@gmail.com', '0898765432', '3030 Truong Sa, District 5', '3', 7, 1, '1', NULL, 'note for P', b'1'),
-(28, NULL, 'Cong ty Q', 'Nguyen Van Q', 'nguyenvanq@gmail.com', '0887654321', '4040 Dinh Tien Hoang, District 9', '2', 8, 2, '2', NULL, 'note for Q', b'1'),
-(29, NULL, 'Cong ty R', 'Tran Van R', 'tranvanr@gmail.com', '0876543210', '5050 Dien Bien Phu, District 1', '1', 9, 3, '3', NULL, 'note for R', b'1'),
-(30, NULL, 'Cong ty S', 'Le Van S', 'levans@gmail.com', '0865432109', '6060 Vo Van Kiet, District 10', '2', 10, 4, '4', NULL, 'note for S', b'1'),
-(31, NULL, 'Cong ty T', 'Hoang Van T', 'hoangvant@gmail.com', '0854321098', '7070 Nguyen Trai, District 7', '3', 1, 5, '1', NULL, 'note for T', b'1'),
-(32, NULL, 'Cong ty U', 'Pham Van U', 'phamvanu@gmail.com', '0843210987', '8080 Tran Hung Dao, District 12', '4', 2, 6, '2', NULL, 'note for U', b'1'),
-(33, NULL, 'Cong ty V', 'Vo Van V', 'vovanv@gmail.com', '0832109876', '9090 To Hien Thanh, District 3', '5', 3, 7, '3', NULL, 'note for V', b'1'),
-(34, NULL, 'Cong ty W', 'Vu Van W', 'vuvan@gmail.com', '0821098765', '1011 Nguyen Thi Minh Khai, District 5', '6', 4, 8, '4', NULL, 'note for W', b'1'),
-(35, NULL, 'Cong ty X', 'Ngo Van X', 'ngovanx@gmail.com', '0810987654', '2021 Hai Ba Trung, District 1', '7', 5, 9, '1', NULL, 'note for X', b'1'),
-(36, NULL, 'Cong ty Y', 'Bui Van Y', 'buivany@gmail.com', '0809876543', '3031 Le Loi, District 7', '8', 6, 1, '2', NULL, 'note for Y', b'1'),
-(37, NULL, 'Cong ty Z', 'Nguyen Van Z', 'nguyenvanz@gmail.com', '0798765432', '4041 Ba Thang Hai, District 10', '9', 7, 2, '3', NULL, 'note for Z', b'1'),
-(38, NULL, 'Cong ty AA', 'Tran Van AA', 'tranvana@gmail.com', '0787654321', '5051 Nguyen Tat Thanh, District 4', '1', 8, 3, '4', NULL, 'note for AA', b'1'),
-(39, NULL, 'Cong ty BB', 'Le Van BB', 'levanbb@gmail.com', '0776543210', '6061 Binh Quoi, District 6', '2', 9, 4, '1', NULL, 'note for BB', b'1'),
-(40, NULL, 'Cong ty CC', 'Hoang Van CC', 'hoangvancc@gmail.com', '0765432109', '7071 Bach Dang, District 2', '3', 10, 5, '2', NULL, 'note for CC', b'1'),
-(41, NULL, 'Cong ty DD', 'Pham Van DD', 'phamvandd@gmail.com', '0754321098', '8081 Kha Van Can, District 1', '4', 1, 6, '3', NULL, 'note for DD', b'1'),
-(42, NULL, 'test null', 'test', 'test@gmail.com', '079867231', '101 tran duc tho', '5', 4, 3, '4', NULL, 'test', b'1'),
-(43, NULL, 'A', NULL, 'a', NULL, 'a', '6', 4, NULL, '1', NULL, NULL, b'1');
-
--- Thêm các dòng dữ liệu còn lại tùy vào yêu cầu của bạn
-
+LOCK TABLES `crm_customer` WRITE;
+/*!40000 ALTER TABLE `crm_customer` DISABLE KEYS */;
+INSERT INTO `crm_customer` VALUES (1,_binary '','B56 Lê Văn Sỹ, Quận 3 TPHCM','Công ty Thiết kế Nội thất TPHCM','Nguyễn Quốc Anhhh','2024-12-09','quocanh.nguyen@gmail.com','nothing','0325678156',NULL,1,5,2,13),(2,_binary '','A123 duong Vo Nguyen Gap','UTE','Nguyen Hoang Phuong Ngan','2024-12-09','phuong.123@gmail.com','asv','0987777777',NULL,6,2,3,13),(3,_binary '','C89 Lê Văn Thọ, Quận 3 TPHCM','Công ty An toàn thực phẩm New Food','Lê Thị Tuyết Ngân','2024-12-09','tngan.nguyen890@gmail.com','New notettt','0345672134',NULL,5,21,2,13),(5,_binary '','Duong Tua Lua, xa Binh Thuong1213','Công ty MeKong Solutionsss','Lê Văn C','2024-12-10','cvanle@gmail.com','Ghi chú mới','0988765432',NULL,5,4,1,6),(6,_binary '','ABC đường DHF, quận Bình Thạnh','Công ty Thiết kế thời trang','Trần Ánh Nguyệt','2024-12-12','anhnguyet@gmail.com',NULL,'9876111111',NULL,7,5,2,13),(10,_binary '','Số 12, Đường Lê Lợi, Quận 1, TP. Hồ Chí Minh','Công ty TNHH Phần Mềm Việt Hưng','Nguyễn Văn Hùng','2024-12-12','hungnv@vietsoftware.vn','Khách hàng mới cần xây dựng quan hệ','0912345678',NULL,10,3,2,13),(11,_binary '','45 Đường Nguyễn Văn Cừ, Quận Long Biên, TP. Hà Nội','Công ty Cổ phần Dịch Vụ FPT','Lê Thanh Tùng','2024-12-12','tunglt@fptservices.vn','Thường xuyên tham gia dự án lớn','0987654321',NULL,8,3,2,2),(12,_binary '','34 Đường Trường Sơn, Quận Tân Bình, TP. Hồ Chí Minh','Công ty TNHH Xuất Nhập Khẩu Đại Dương Xanh','Phạm Văn Hải','2024-12-12','haipv@daiduongxanh.vn','Đang có nhu cầu mở rộng dịch vụ','0934567890',NULL,7,6,3,10);
 /*!40000 ALTER TABLE `crm_customer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_customer_interaction`
+--
+
+DROP TABLE IF EXISTS `crm_customer_interaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `crm_customer_interaction` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `contact_person` varchar(99) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `interaction_date` datetime(6) DEFAULT NULL,
+  `next_plan` varchar(255) DEFAULT NULL,
+  `customer_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKeg3sojlsbai9710ojw37rste6` (`customer_id`),
+  CONSTRAINT `FKeg3sojlsbai9710ojw37rste6` FOREIGN KEY (`customer_id`) REFERENCES `crm_customer` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_customer_interaction`
+--
+
+LOCK TABLES `crm_customer_interaction` WRITE;
+/*!40000 ALTER TABLE `crm_customer_interaction` DISABLE KEYS */;
+INSERT INTO `crm_customer_interaction` VALUES (1,'Phương Ngân','Content 1','2024-12-05 00:00:00.000000','Plan 1',1),(2,'Thế Thành','Content 2','2024-12-03 00:00:00.000000','Plan 2',1),(3,'Trần Anh','Content 1','2024-12-03 00:00:00.000000','Plan 1',2),(4,'Ngọc Thạch','Content 3','2024-11-21 00:00:00.000000','Plan 3',1),(5,'Ngọc Thạch','Content 3','2024-11-21 00:00:00.000000','Plan 3',5);
+/*!40000 ALTER TABLE `crm_customer_interaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -100,13 +96,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `crm_goodscategory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `crm_goodscategory` (
-  `id` varchar(99) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `site_id` varchar(99) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,6 +111,7 @@ CREATE TABLE `crm_goodscategory` (
 
 LOCK TABLES `crm_goodscategory` WRITE;
 /*!40000 ALTER TABLE `crm_goodscategory` DISABLE KEYS */;
+INSERT INTO `crm_goodscategory` VALUES (1,'Mỹ phẩm',NULL),(2,'Trái cây',NULL),(3,'Thực phẩm',NULL),(4,'Thiết bị gia dụng',NULL),(5,'Thiết bị điện tử',NULL),(6,'Đồ dùng văn phòng/học tập',NULL);
 /*!40000 ALTER TABLE `crm_goodscategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,34 +121,34 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `crm_order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `crm_order` (
-  `id` varchar(99) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `address` varchar(255) DEFAULT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  `create_date` datetime(6) DEFAULT NULL,
   `customer_requirement` varchar(255) DEFAULT NULL,
-  `delivery_date` date DEFAULT NULL,
+  `delivery_date` datetime(6) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `site_id` varchar(99) DEFAULT NULL,
   `transportation_method` varchar(255) DEFAULT NULL,
-  `customer_id` bigint DEFAULT NULL,
-  `goods_category_id` varchar(99) DEFAULT NULL,
-  `order_category_id` varchar(99) DEFAULT NULL,
-  `order_status_id` varchar(99) DEFAULT NULL,
-  `code` varchar(255) DEFAULT NULL,
-  `create_date` datetime(6) DEFAULT NULL,
-  `cus_id` bigint DEFAULT NULL,
-  `order_cate_id` bigint DEFAULT NULL,
+  `goods_category_id` bigint(20) DEFAULT NULL,
+  `order_cate_id` bigint(20) DEFAULT NULL,
+  `order_status_id` bigint(20) DEFAULT NULL,
+  `receiver_id` bigint(20) DEFAULT NULL,
+  `sender_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKkqn8njq5u457gy53d60t0wugw` (`customer_id`),
   KEY `FKa7v6uifcdehfy2mcvyapmx8t7` (`goods_category_id`),
-  KEY `FKcxl4s7b1cwrysor1ydb4n950h` (`order_category_id`),
+  KEY `FKsvogcsppdtl21v1467rwciuqo` (`order_cate_id`),
   KEY `FKh8jnbbs91jewbyt7geupryt7x` (`order_status_id`),
-  KEY `FK5hrq5nh3sudxv50bsdv0kf1y2` (`cus_id`),
-  CONSTRAINT `FK5hrq5nh3sudxv50bsdv0kf1y2` FOREIGN KEY (`cus_id`) REFERENCES `crm_customer` (`id`),
+  KEY `FKsf5kc5yjyrhlf5ycrr4faqci0` (`receiver_id`),
+  KEY `FKh3iutx15xrfqfocoaha9r0v87` (`sender_id`),
   CONSTRAINT `FKa7v6uifcdehfy2mcvyapmx8t7` FOREIGN KEY (`goods_category_id`) REFERENCES `crm_goodscategory` (`id`),
-  CONSTRAINT `FKcxl4s7b1cwrysor1ydb4n950h` FOREIGN KEY (`order_category_id`) REFERENCES `crm_ordercategory` (`id`),
+  CONSTRAINT `FKh3iutx15xrfqfocoaha9r0v87` FOREIGN KEY (`sender_id`) REFERENCES `crm_customer` (`id`),
   CONSTRAINT `FKh8jnbbs91jewbyt7geupryt7x` FOREIGN KEY (`order_status_id`) REFERENCES `crm_orderstatus` (`id`),
-  CONSTRAINT `FKkqn8njq5u457gy53d60t0wugw` FOREIGN KEY (`customer_id`) REFERENCES `crm_customer` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `FKsf5kc5yjyrhlf5ycrr4faqci0` FOREIGN KEY (`receiver_id`) REFERENCES `crm_customer` (`id`),
+  CONSTRAINT `FKsvogcsppdtl21v1467rwciuqo` FOREIGN KEY (`order_cate_id`) REFERENCES `crm_ordercategory` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,6 +157,7 @@ CREATE TABLE `crm_order` (
 
 LOCK TABLES `crm_order` WRITE;
 /*!40000 ALTER TABLE `crm_order` DISABLE KEYS */;
+INSERT INTO `crm_order` VALUES (1,'Đầu hẻm B78 đường Nguyễn Đình Chiểuuu','IP6678','2024-12-09 00:00:00.000000','Nothingggg','2024-12-18 00:00:00.000000',NULL,NULL,'Xe hơiiii',1,1,2,2,1),(2,'Trước nhà','B67890','2024-12-10 00:00:00.000000','Đem đến đúng yêu cầu nhé','2024-12-14 00:00:00.000000',NULL,NULL,'Xe chuyên chở',4,2,2,3,2);
 /*!40000 ALTER TABLE `crm_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,13 +167,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `crm_ordercategory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `crm_ordercategory` (
-  `id` varchar(99) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
   `site_id` varchar(99) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,6 +183,7 @@ CREATE TABLE `crm_ordercategory` (
 
 LOCK TABLES `crm_ordercategory` WRITE;
 /*!40000 ALTER TABLE `crm_ordercategory` DISABLE KEYS */;
+INSERT INTO `crm_ordercategory` VALUES (1,'Mặc định','Loại đơn hàng mặc định ban đầu.',NULL),(2,'Máy móc','Đơn hàng liên quan đến các thiết bị máy móc.',NULL),(3,'Mỹ phẩm','Sản phẩm chăm sóc sắc đẹp và làm đẹp.',NULL),(4,'Điện tử','Đơn hàng liên quan đến các thiết bị điện tử.',NULL),(5,'Hàng gia dụng','Đơn hàng về đồ dùng gia đình như bếp, tủ lạnh.',NULL);
 /*!40000 ALTER TABLE `crm_ordercategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -193,13 +193,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `crm_orderstatus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `crm_orderstatus` (
-  `id` varchar(99) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `site_id` varchar(99) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,6 +208,7 @@ CREATE TABLE `crm_orderstatus` (
 
 LOCK TABLES `crm_orderstatus` WRITE;
 /*!40000 ALTER TABLE `crm_orderstatus` DISABLE KEYS */;
+INSERT INTO `crm_orderstatus` VALUES (1,'Nhận đơn',NULL),(2,'Bóc hàng',NULL),(3,'Trữ lạnh',NULL),(4,'Đóng gói',NULL),(5,'Vận chuyển',NULL),(6,'Giao hàng',NULL);
 /*!40000 ALTER TABLE `crm_orderstatus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,13 +218,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `crm_profession`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `crm_profession` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(99) NOT NULL,
   `note` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -232,7 +233,7 @@ CREATE TABLE `crm_profession` (
 
 LOCK TABLES `crm_profession` WRITE;
 /*!40000 ALTER TABLE `crm_profession` DISABLE KEYS */;
-INSERT INTO `crm_profession` VALUES (1,'Giao duc',NULL),(2,'Y te',NULL),(3,'Thuc pham',NULL),(4,'Van phong pham',NULL),(5,'Dien',NULL),(6,'May moc',NULL),(7,'Tin hoc',NULL),(8,'Du lich',NULL),(9,'Kien truc',NULL),(10,'Cong nghe',NULL);
+INSERT INTO `crm_profession` VALUES (1,'Y tế',''),(2,'Giáo dục',''),(3,'Công nghệ',''),(4,'Kinh doanh - Tài chính',''),(5,'Sáng tạo - Nghệ thuật',''),(6,'Công nghiệp - Sản xuất',''),(7,'Luật pháp',''),(8,'Thương mại điện tử',''),(9,'Nông nghiệp',''),(10,'Kỹ thuật - Cơ khí',''),(11,'Hàng không - Vũ trụ',''),(12,'Môi trường',''),(13,'Du lịch - Nhà hàng - Khách sạn',''),(14,'Truyền thông - Marketing',''),(15,'Logistics - Chuỗi cung ứng',''),(16,'Năng lượng',''),(17,'Dịch vụ công',''),(18,'Thể thao - Giải trí',''),(19,'Khoa học - Nghiên cứu',''),(20,'Chăm sóc sắc đẹp',''),(21,'Thực phẩm - Đồ uống','');
 /*!40000 ALTER TABLE `crm_profession` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -242,13 +243,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `crm_responsible_person`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `crm_responsible_person` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(99) NOT NULL,
   `note` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -257,7 +258,7 @@ CREATE TABLE `crm_responsible_person` (
 
 LOCK TABLES `crm_responsible_person` WRITE;
 /*!40000 ALTER TABLE `crm_responsible_person` DISABLE KEYS */;
-INSERT INTO `crm_responsible_person` VALUES (1,'Nguyen The Thanh',NULL),(2,'Nguyen Hoang Phuong Ngan',NULL),(3,'Nguyen Ngoc Cam Hanh',NULL),(4,'Le Ngoc Thach',NULL);
+INSERT INTO `crm_responsible_person` VALUES (1,'Lê Ngọc Thạch',''),(2,'Nguyễn Hoàng Phương Ngân',''),(3,'Nguyễn Thế Thành','');
 /*!40000 ALTER TABLE `crm_responsible_person` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,14 +268,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `crm_status`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `crm_status` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `backgroundColor` varchar(99) DEFAULT NULL,
   `name` varchar(99) DEFAULT NULL,
   `site_id` varchar(99) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -283,34 +284,8 @@ CREATE TABLE `crm_status` (
 
 LOCK TABLES `crm_status` WRITE;
 /*!40000 ALTER TABLE `crm_status` DISABLE KEYS */;
-INSERT INTO `crm_status` VALUES (1,'#c0392b','Mới',NULL),(2,'#e74c3c','Tư vấn',NULL),(3,'#9b59b6','KH tiềm năng',NULL),(4,'#8e44ad','Báo giá khách hàng',NULL),(5,'#2980b9','Đàm phán',NULL),(6,'#2e86c1','Chốt hợp đồng',NULL),(7,'#2e86c1','Báo giá',NULL),(8,'#27ae60','Chốt',NULL),(9,'#27ae60','Data rớt',NULL),(10,'#e67e22','Chăm lại',NULL),(11,'#e67e22','Đến nhưng không ở lại',NULL);
+INSERT INTO `crm_status` VALUES (1,'#c0392b','Mới',NULL),(2,'#e74c3c','Tư vấn',NULL),(3,'#9b59b6','KH tiềm năng',NULL),(4,'#8e44ad','Báo giá khách hàng',NULL),(5,'#2980b9','Đàm phán',NULL),(6,'#2e86c1','Chốt hợp đồng',NULL),(7,'#2e86c1','Báo giá',NULL),(8,'#27ae60','Chốt',NULL),(9,'#27ae60','Data rớt',NULL),(10,'#e67e22','Chăm lại',NULL),(11,'#e67e22','Đến nhưng không ở lại',NULL),(12,'#48484a','Mới cập nhật',NULL),(13,'#48484a','Đừng quên',NULL);
 /*!40000 ALTER TABLE `crm_status` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `customer_status`
---
-
-DROP TABLE IF EXISTS `customer_status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `customer_status` (
-  `customer_id` bigint NOT NULL,
-  `status_id` bigint NOT NULL,
-  PRIMARY KEY (`customer_id`,`status_id`),
-  KEY `FK9mvprs6d1917jaqwckyna9i6d` (`status_id`),
-  CONSTRAINT `FK9mvprs6d1917jaqwckyna9i6d` FOREIGN KEY (`status_id`) REFERENCES `crm_status` (`id`),
-  CONSTRAINT `FKc7o25oslt7rn0qjtvdmr1aq2p` FOREIGN KEY (`customer_id`) REFERENCES `crm_customer` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `customer_status`
---
-
-LOCK TABLES `customer_status` WRITE;
-/*!40000 ALTER TABLE `customer_status` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customer_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -319,12 +294,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `order_category_status`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `order_category_status` (
-  `order_category_id` bigint NOT NULL,
-  `order_status_id` bigint NOT NULL,
-  PRIMARY KEY (`order_category_id`,`order_status_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `order_category_id` bigint(20) NOT NULL,
+  `order_status_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`order_category_id`,`order_status_id`),
+  KEY `FKd3wk4in9sf7su3hdsvufhqs56` (`order_status_id`),
+  CONSTRAINT `FKd3wk4in9sf7su3hdsvufhqs56` FOREIGN KEY (`order_status_id`) REFERENCES `crm_orderstatus` (`id`),
+  CONSTRAINT `FKm2y48411pwtgasyfchuf79jq5` FOREIGN KEY (`order_category_id`) REFERENCES `crm_ordercategory` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -333,6 +311,7 @@ CREATE TABLE `order_category_status` (
 
 LOCK TABLES `order_category_status` WRITE;
 /*!40000 ALTER TABLE `order_category_status` DISABLE KEYS */;
+INSERT INTO `order_category_status` VALUES (1,1),(2,1),(3,1),(1,2),(2,2),(3,2),(2,3),(3,3),(1,4),(2,4),(3,4),(1,5),(2,5),(3,5),(1,6),(2,6),(3,6);
 /*!40000 ALTER TABLE `order_category_status` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -345,27 +324,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-14  1:24:00
-
-DROP TABLE IF EXISTS `customer_interaction`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-
-CREATE TABLE `crm_customer_interaction` (
-  `id` BIGINT AUTO_INCREMENT NOT NULL,
-  `customer_id` bigint NOT NULL,
-  `interaction_date` DATETIME NOT NULL,
-  `content` TEXT NOT NULL,
-  `next_plan` TEXT NOT NULL,
-  `contact_person` TEXT NOT NULL,
-   PRIMARY KEY (`id`),
-   CONSTRAINT `FK_customer_interaction_customer` FOREIGN KEY (`customer_id`) REFERENCES `crm_customer` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-INSERT INTO `crm_customer_interaction` (`customer_id`, `interaction_date`, `content`, `next_plan`, `contact_person`) 
-VALUES
-(1, '2024-12-01 10:30:00', 'Trao đổi về sản phẩm mới', 'Liên hệ lại vào tuần sau để cung cấp thêm thông tin', 'Thiện'),
-(2, '2024-12-02 14:00:00', 'Giải quyết khiếu nại về đơn hàng', 'Kiểm tra và hoàn tất xử lý trước ngày 2024-12-05', 'Thiện'),
-(3, '2024-12-03 09:15:00', 'Hỗ trợ cài đặt phần mềm', 'Theo dõi kết quả và gọi lại khách hàng vào ngày 2024-12-04', 'Thiện');
+-- Dump completed on 2024-12-12 21:59:11

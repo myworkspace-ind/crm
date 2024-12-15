@@ -12,7 +12,10 @@
 
 	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}" />
 	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/customerDetail.css}" />
-	
+	<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+	<script>console.log("Handsontable:", typeof Handsontable); //Check Handsontable is available or not
+</script>
 	<th:block th:include="fragments/head"></th:block>
 </head>
 
@@ -75,6 +78,7 @@
 						    </button>
 						</a>
 						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer(' + ${customer.id} + ')'">Hide</button>
+						<button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Edit Interaction</button>
 					</div>
 					
 
@@ -158,6 +162,8 @@
 			</div>
 		</div>
 	</div>
+	
+	<th:block th:replace="~{fragments/frg_Modal_Interaction :: modalFragment('myModal')}"></th:block>
 
 	<!-- END CONTENT -->
 
@@ -170,11 +176,15 @@
 	<!-- END COMMON JAVASCRIPT -->
 	
 	<th:block th:include="fragments/frg_ModalConfirmation"></th:block>
+	
+	<script type="text/javascript" th:src="@{/resources/js/interaction/interaction.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/js/interaction/interaction-save.js}"></script>
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
 	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/deleteCustomer.js}" defer></script>
+	
 	
 </body>
 

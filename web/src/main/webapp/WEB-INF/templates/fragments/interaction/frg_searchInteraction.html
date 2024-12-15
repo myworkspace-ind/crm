@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        .search-condition {
+            max-width: 800px; /* Giới hạn chiều rộng */
+        }
+        .search-condition h5 {
+            font-size: 14px; /* Giảm kích thước chữ */
+        }
+        .form-control {
+            padding: 5px; /* Giảm khoảng cách padding */
+        }
+        .btn-search-orders {
+            width: auto; /* Để nút vừa đủ nội dung */
+            margin-top: 0; /* Xóa khoảng cách trên */
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title search-condition">Điều kiện tìm kiếm</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body search-condition">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <fieldset class="text-left customer-option">
+                                    <h5>Khách hàng</h5>
+								    <select class="form-control" id="customerSelect">
+								        <option value="" selected>-- Chọn khách hàng --</option>
+								        <!-- Các option sẽ được cập nhật từ JavaScript -->
+								    </select>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <fieldset class="startdate-option">
+                                            <h5>Ngày bắt đầu</h5>
+                                            <input class="form-control" type="date" id="startDateInput">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <fieldset class="delidate-option">
+                                            <h5>Ngày kết thúc</h5>
+                                            <input class="form-control" type="date" id="endDateInput">
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                            	<h5>Tìm Kiếm</h5>                           
+                                <button type="button" class="btn btn-primary btn-search-interaction">
+                                    <i class="fas fa-search"></i> Tìm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
