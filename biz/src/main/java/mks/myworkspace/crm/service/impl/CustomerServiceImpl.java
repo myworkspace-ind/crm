@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -171,5 +173,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     public List<Customer> findByInteractDateRange(Date startDate, Date enDate) {
         return repo.findByInteractDateRange(startDate,enDate);
+    }
+    
+    public Page<Customer> findAllWithStatuses(Pageable pageable)
+    {
+    	return repo.findByAccountStatusTrue(pageable);
     }
 }

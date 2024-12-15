@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -95,13 +98,14 @@ public class CustomerController extends BaseController {
 
 	@GetMapping("list")
 	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
+			@RequestParam(value = "statusId", required = false) Long statusId, @RequestParam(value = "page", required = false) int page, HttpServletRequest request,
 			HttpSession httpSession) {
 
 		log.debug("Display Cusomter list with keyword= {}", keyword);
 		ModelAndView mav = new ModelAndView("customer_list_v2");
 		initSession(request, httpSession);
-
+		Pageable pageable = PageRequest.of(page - 1,10);
+		Page<Customer> pageCustomer = customerService.findAllWithStatuses(pageable);
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 		List<Customer> customers;
@@ -115,7 +119,8 @@ public class CustomerController extends BaseController {
 			mav.addObject("keyword", keyword);
 
 		} else {
-			customers = customerService.getAllCustomersWithStatuses();
+//			customers = customerService.getAllCustomersWithStatuses();
+			customers = pageCustomer.getContent();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
 		

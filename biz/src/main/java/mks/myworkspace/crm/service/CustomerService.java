@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.repository.CustomerRepository;
@@ -38,4 +42,6 @@ public interface CustomerService {
 	void deleteInteractionById(Long interactionId);
 
 	List<Customer> findByInteractDateRange(Date startDate, Date enDate);
+	
+	Page<Customer> findAllWithStatuses(Pageable pageable);
 }
