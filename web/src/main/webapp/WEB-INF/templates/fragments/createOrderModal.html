@@ -179,7 +179,6 @@
 	    </form>
 	</div>
 	<script type="text/javascript" th:src="@{/resources/js/orders/datatable.js}" ></script>
-	
 	<script>
 		document.getElementById("createOrderButton").addEventListener("click", function () {
 		    // Xóa toàn bộ dữ liệu trong Local Storage
@@ -298,8 +297,9 @@
 		                // Khôi phục giá trị cho các trường khác
 		                input.value = savedValue;
 		            }
-		        }
+		        }		        
 		    });
+		    orderSenderNameCreate.value = localStorage.getItem("orderSenderNameCreate");
 		});
 	</script>
 </body>
