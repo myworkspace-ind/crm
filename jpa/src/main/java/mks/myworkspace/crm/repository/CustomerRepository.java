@@ -68,7 +68,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 		
 	@Query("SELECT ci FROM Interaction ci WHERE ci.customer.id = :customerId")
 	List<Interaction> getAllCustomerInteraction(@Param("customerId") Long customerId);	
-
+	
     @Query("SELECT ss.id, COUNT(c.id) " +
            "FROM Customer c LEFT JOIN c.subStatus ss " +
            "WHERE ss IS NOT NULL AND c.accountStatus = true " +

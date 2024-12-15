@@ -30,10 +30,10 @@ public class Status implements Serializable {
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
 
-	@Column(length = 99)
+	@Column(name = "name", length = 99)
 	private String name;
 
-	@Column(length = 99)
+	@Column(name = "backgroundColor", length = 99)
 	private String backgroundColor;
 
 //	// Many-to-Many relationship with Customer

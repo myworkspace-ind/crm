@@ -28,7 +28,7 @@
 			<div class="form-row">
 			    <div class="form-group col-md-6">
 			      <label for="orderCodeUpdateInput">Mã đơn hàng</label>
-			      <input list="orderCodes" type="text" class="form-control" id="orderCodeInputCreate" style="background-color: white; color: black;" oninput="checkSelectionGoodOrder()">
+			      <input list="orderCodes" type="text" class="form-control" id="orderCodeInputCreate" style="background-color: white; color: black;" oninput="checkSelectionGoodOrder()" maxlength="255">
 			      <datalist id="orderCodes">
 			      	<th:block th:each="orderCode : ${orderCodes}">
 						<option th:value="${orderCode}"></option>			      	
@@ -37,7 +37,7 @@
 			    </div>
 			     <div class="form-group col-md-6">
 				    <label for="goodsType">Loại đơn hàng</label>
-				    <input list="orderCategories" id="orderCategoryCreate" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng">
+				    <input list="orderCategories" id="orderCategoryCreate" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng" maxlength="255">
 				    <datalist id="orderCategories">
 				        <th:block th:each="orderCategory : ${orderCategories}">
 				            <option th:value="${orderCategory.name}" th:data-id="${orderCategory.id}"></option>
@@ -51,7 +51,7 @@
 				    <div class="form-row">
 				        <div class="form-group col-md-6">
 						    <label for="goodsType">Loại hàng hóa</label>
-						    <input list="goodsCategories" id="orderGoodsCreate" class="form-control" placeholder="Nhập hoặc chọn loại hàng hóa">
+						    <input list="goodsCategories" id="orderGoodsCreate" class="form-control" placeholder="Nhập hoặc chọn loại hàng hóa" maxlength="255">
 						    <datalist id="goodsCategories">
 						        <th:block th:each="goodsCategory : ${listGoodsCategories}">
 						            <option th:value="${goodsCategory.name}" th:data-id="${goodsCategory.id}"></option>
@@ -72,7 +72,7 @@
 		    	<div class="form-row">
 			        <div class="form-group col-md-6">
 			            <label for="transportMethod">Phương tiện vận chuyển</label>
-			            <input type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" >
+			            <input type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" maxlength="255">
 			        </div>
 			    </div>
 		   		</div>
@@ -90,7 +90,8 @@
 				                        <th:block th:each="customer : ${listCustomers}">
 				                            <option th:value="${customer.id}" 
 				                                    th:data-phone="${customer.phone}" 
-				                                    th:data-email="${customer.email}">
+				                                    th:data-email="${customer.email}"
+				                                    th:selected="${customer.id == selectedCustomer?.id}">
 				                                <span th:text="${customer.contactPerson}"></span>
 				                            </option>
 				                        </th:block>
@@ -99,11 +100,11 @@
 				            </tr>
 				            <tr>
 				                <td>SDT:</td>
-				                <td><input type="text" id="orderSenderPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				                <td><input type="text" id="orderSenderPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" maxlength="10"/></td>
 				            </tr>
 				            <tr>
 				                <td>Email:</td>
-				                <td><input type="email" id="orderSenderEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				                <td><input type="email" id="orderSenderEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" maxlength="99"/></td>
 				            </tr>
 				        </table>
 				    </fieldset>
@@ -130,11 +131,11 @@
 				            </tr>
 				            <tr>
 				                <td>SDT:</td>
-				                <td><input type="text" id="orderReceiverPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				                <td><input type="text" id="orderReceiverPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" maxlength="10"/></td>
 				            </tr>
 				            <tr>
 				                <td>Email:</td>
-				                <td><input type="email" id="orderReceiverEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" /></td>
+				                <td><input type="email" id="orderReceiverEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" maxlength="99"/></td>
 				            </tr>
 				        </table>
 				    </fieldset>
@@ -147,13 +148,13 @@
 				        <div class="form-group col-md-6">
 				            <label for="goodsType">Yêu cầu</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="orderRequirementCreate" rows="8" ></textarea>
+								<textarea class="form-control" id="orderRequirementCreate" rows="8" maxlength="255"></textarea>
 							</div>
 				        </div>
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Địa chỉ</label>
 				            <div data-mdb-input-init class="form-outline">
-								<textarea class="form-control" id="orderAddressCreate" rows="8" ></textarea>
+								<textarea class="form-control" id="orderAddressCreate" rows="8" maxlength="255"></textarea>
 							</div>
 				        </div>
 				    </div>

@@ -1,14 +1,14 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
-import java.io.Console;
-import java.util.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -214,6 +214,23 @@ public class CustomerController extends BaseController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
 		} catch (Exception e) {
 			log.debug("Error while deleting customers with IDs: {}. Error: {}", customerIds, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
+		}
+	}
+	
+	@Transactional
+	@RequestMapping(value = "/show-hidedcustomers", method = RequestMethod.PUT)
+	@ResponseBody
+	public ResponseEntity<?> showHidedCustomers( HttpServletRequest request, HttpSession httpSession) {
+		try {
+			storageService.showHidedCustomers();
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Hiển thị các khách hàng bị ẩn thành công!"));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			log.debug("Error while showing all hided. Error: {}", e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
@@ -446,6 +463,12 @@ public class CustomerController extends BaseController {
 
 	    // Lấy tất cả các tương tác của khách hàng từ service
 	    List<Interaction> interactions = customerService.getAllCustomerInteraction(customerId);
+	    
+	    // Lấy danh sách tất cả contactPerson từ các tương tác của khách hàng
+	    List<String> contactPersons = interactions.stream()
+	        .map(Interaction::getContactPerson) // Giả sử bạn có phương thức getContactPerson() trong Interaction
+	        .distinct() // Loại bỏ các giá trị trùng lặp
+	        .collect(Collectors.toList());
 
 	    // Chuyển đổi danh sách Interaction thành dữ liệu bảng
 	    List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
@@ -454,8 +477,15 @@ public class CustomerController extends BaseController {
 	    int[] colWidths = {150, 200, 400, 300, 30};
 	    String[] colHeaders = {"Người trao đổi",  "Ngày", "Nội dung trao đổi", "Kế hoạch tiếp theo", ""};
 
-	    // Trả về đối tượng TableStructure
-	    return new TableStructure(colWidths, colHeaders, tblData);
+	    // Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("colWidths", colWidths);
+	    response.put("colHeaders", colHeaders);
+	    response.put("data", tblData);
+	    response.put("contactPersons", contactPersons);  // Thêm contactPersons vào response
+
+	    // Trả về đối tượng chứa các thông tin bảng và contactPersons
+	    return response;
 	}
 	
 	@PostMapping(value = "/save-interaction")
