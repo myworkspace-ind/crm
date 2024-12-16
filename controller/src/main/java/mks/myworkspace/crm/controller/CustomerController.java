@@ -1,10 +1,14 @@
 package mks.myworkspace.crm.controller;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,15 +32,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
+import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.service.CustomerService;
+import mks.myworkspace.crm.service.CustomerService_Son;
 import mks.myworkspace.crm.service.ProfessionService;
 import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
+import mks.myworkspace.crm.transformer.JpaTransformer_Interaction_Handsontable;
+import mks.myworkspace.crm.validate.InteractionValidator;
 
 /**
  * Handles requests for Tasks.
@@ -79,6 +89,9 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	ProfessionService professionService;
+	
+	@Autowired
+	CustomerService_Son customerServiceSon;
 
 	@GetMapping("list")
 	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
@@ -105,7 +118,7 @@ public class CustomerController extends BaseController {
 			customers = customerService.getAllCustomersWithStatuses();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
-
+		
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
@@ -175,26 +188,44 @@ public class CustomerController extends BaseController {
 	}
 
 	@Transactional
-	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/hide-customers", method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<?> deleteCustomersByIds(@RequestBody List<Long> customerIds, HttpServletRequest request,
+	public ResponseEntity<?> hideCustomersByIds(@RequestBody List<Long> customerIds, HttpServletRequest request,
 			HttpSession httpSession) {
+		System.out.println(customerIds.size());
 		try {
 			if (customerIds == null || customerIds.isEmpty()) {
 				return ResponseEntity.badRequest().body(Map.of("errorMessage", "Danh sách ID không được trống."));
 			}
 			// Gọi service để xóa danh sách khách hàng dựa trên ID
-			storageService.deleteCustomersByIds(customerIds);
+			storageService.hideCustomersByIds(customerIds);
 
 			// TODO: Cannot DELETE ONE OR MORE CUSTOMER BECAUSE OF ROLL BACK (CANNOT COMMIT)
 			// customerService.deleteAllByIds(customerIds);
 
 			return ResponseEntity.ok()
-					.body(Map.of("message", "Các khách hàng đã được xóa thành công!", "ids", customerIds));
+					.body(Map.of("message", "Các khách hàng đã được ẩn thành công!", "ids", customerIds));
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
 		} catch (Exception e) {
 			log.debug("Error while deleting customers with IDs: {}. Error: {}", customerIds, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
+		}
+	}
+	
+	@Transactional
+	@RequestMapping(value = "/show-hidedcustomers", method = RequestMethod.PUT)
+	@ResponseBody
+	public ResponseEntity<?> showHidedCustomers( HttpServletRequest request, HttpSession httpSession) {
+		try {
+			storageService.showHidedCustomers();
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Hiển thị các khách hàng bị ẩn thành công!"));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			log.debug("Error while showing all hided. Error: {}", e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
@@ -296,9 +327,10 @@ public class CustomerController extends BaseController {
 	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
 		// ModelAndView mav = new ModelAndView("addCustomer");
 		ModelAndView mav = new ModelAndView("addCustomer_v2");
+		Customer customer = new Customer();
 
 		// Thêm đối tượng Customer mới vào Model để truyền vào form
-		mav.addObject("customer", new Customer());
+		mav.addObject("customer", customer);
 
 		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
 		List<Status> statuses = statusService.getAllStatuses();
@@ -315,14 +347,19 @@ public class CustomerController extends BaseController {
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 
+		long selectedProfession = 3L;
+		mav.addObject("selectedProfession", selectedProfession);
+		
+		
 		return mav;
 	}
 
 	@GetMapping("interact")
 	public ModelAndView displayCustomerListScreen(@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
+			@RequestParam(value = "statusId", required = false) Long statusId,
+			@RequestParam(value = "week", required = false) String week, HttpServletRequest request,
 			HttpSession httpSession) {
-
+		
 		log.debug("Display Cusomter list with keyword= {}", keyword);
 		ModelAndView mav = new ModelAndView("customerInteraction");
 		initSession(request, httpSession);
@@ -338,8 +375,28 @@ public class CustomerController extends BaseController {
 		} else if (keyword != null && !keyword.isEmpty()) {
 			customers = customerService.searchCustomers(keyword);
 			mav.addObject("keyword", keyword);
+		} else if (week != null && !week.isEmpty()) {
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-		} else {
+		    LocalDate endDate = LocalDate.now();
+		    LocalDate startDate = null;
+		    
+		    if(week.equals("0"))
+		    {
+		    	customers = customerService.getAllCustomersWithStatuses();
+
+		    }
+		    else
+		    {
+		    	startDate = endDate.minusWeeks(Integer.parseInt(week));
+		    	java.sql.Date sqlStartDate = java.sql.Date.valueOf(startDate);
+			    java.sql.Date sqlEndDate = java.sql.Date.valueOf(endDate);
+			    log.debug(""+sqlEndDate);
+			    log.debug(""+sqlStartDate);
+			    customers = customerService.findByInteractDateRange(sqlStartDate, sqlEndDate);
+		    }
+		}
+		else {
 			customers = customerService.getAllCustomersWithStatuses();
 			log.debug("No keyword or statusId provided. Fetching all customers.");
 		}
@@ -390,6 +447,262 @@ public class CustomerController extends BaseController {
 		}, () -> {
 			mav.addObject("errorMessage", "Customer not found.");
 		});
+
+		return mav;
+	}
+	
+	@GetMapping("/load-interaction")
+	@ResponseBody
+	public Object getInteractionData(@RequestParam("id") Long customerId) throws IOException {
+	    log.debug("Get interaction data for customer with ID: " + customerId);
+
+	    // Lấy tất cả các tương tác của khách hàng từ service
+	    List<Interaction> interactions = customerService.getAllCustomerInteraction(customerId);
+	    
+	    // Lấy danh sách tất cả contactPerson từ các tương tác của khách hàng
+	    List<String> contactPersons = interactions.stream()
+	        .map(Interaction::getContactPerson) // Giả sử bạn có phương thức getContactPerson() trong Interaction
+	        .distinct() // Loại bỏ các giá trị trùng lặp
+	        .collect(Collectors.toList());
+
+	    // Chuyển đổi danh sách Interaction thành dữ liệu bảng
+	    List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
+
+	    // Cấu trúc bảng
+	    int[] colWidths = {150, 200, 400, 300, 30};
+	    String[] colHeaders = {"Người trao đổi",  "Ngày", "Nội dung trao đổi", "Kế hoạch tiếp theo", ""};
+
+	    // Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("colWidths", colWidths);
+	    response.put("colHeaders", colHeaders);
+	    response.put("data", tblData);
+	    response.put("contactPersons", contactPersons);  // Thêm contactPersons vào response
+
+	    // Trả về đối tượng chứa các thông tin bảng và contactPersons
+	    return response;
+	}
+	
+	@PostMapping(value = "/save-interaction")
+	@ResponseBody
+	public TableStructure saveInteraction(@RequestBody TableStructure tableData, @RequestParam("customer_id") Long customerId) {
+	    log.debug("saveInteraction...{}", tableData);
+
+	    try {
+	        List<Interaction> lstInteractions = InteractionValidator.validateAndCleasing(tableData.getData(), customerId);
+	        
+	        // Bước 2: Lưu hoặc cập nhật danh sách Interaction
+	        lstInteractions = customerService.saveOrUpdateInteraction(lstInteractions);
+
+	        // Bước 3: Chuyển đổi dữ liệu Interaction thành định dạng 2D để trả về giao diện
+	        List<Object[]> tblData = JpaTransformer_Interaction_Handsontable.convert2D(lstInteractions);
+	        tableData.setData(tblData);
+	    } catch (Exception ex) {
+	        log.error("Không thể lưu Interaction.", ex);
+	    }
+
+	    return tableData;
+	}
+
+	@RequestMapping(value = "/delete-interaction", method = RequestMethod.DELETE)
+	@ResponseBody
+	public ResponseEntity<?> deleteInteractionById(@RequestParam("id") Long interactionId, 
+	                                               HttpServletRequest request,
+	                                               HttpSession httpSession) {
+	    try {
+	        if (interactionId == null) {
+	            return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID không được để trống."));
+	        }
+	        // Gọi service để xóa Interaction dựa trên ID
+	        customerService.deleteInteractionById(interactionId);
+
+	        return ResponseEntity.ok()
+	                .body(Map.of("message", "Interaction đã được xóa thành công!", "id", interactionId));
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
+	    } catch (Exception e) {
+	        log.debug("Error while deleting interaction with ID: {}. Error: {}", interactionId, e.getMessage());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
+	    }
+	}
+	
+	// Hàm edit hoặc add customer của Tấn Đạt
+	@Transactional
+	@RequestMapping(value = "/newEditCustomer")
+	@ResponseBody
+	public ModelAndView newEditCustomer(@RequestParam(value = "id", required = false) Long customerId, HttpServletRequest request,
+	                                   HttpSession httpSession) {
+
+	    ModelAndView mav = new ModelAndView("newEditCustomer");
+
+	    // Nếu customerId không tồn tại hoặc không tìm thấy, tạo mới một Customer
+	    Customer customer = (customerId == null) ? new Customer() :
+	                        customerService.findById(customerId).orElse(new Customer());
+	    
+	    
+	    
+	    mav.addObject("customer", customer);
+
+	    // Lấy danh sách Status, ResponsiblePersons và Professions
+	    List<Status> statuses = statusService.getAllStatuses();
+	    mav.addObject("statuses", statuses);
+
+	    List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+	    mav.addObject("responsiblePersons", responsiblePersons);
+
+	    List<Profession> professions = professionService.getAllProfessions();
+	    mav.addObject("professions", professions);
+
+	    // Thiết lập các thuộc tính của session
+	    initSession(request, httpSession);
+	    mav.addObject("currentSiteId", getCurrentSiteId());
+	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+	    return mav;
+	}
+
+
+	
+	// Hàm edit-customer của Đạt
+	@PutMapping("/newedit-customer")
+	@ResponseBody
+	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {
+	    System.out.println(customer.getId());
+	    Customer updatedCustomer;
+		try {
+	        
+
+	        // Lấy khách hàng cũ từ cơ sở dữ liệu
+	        Optional<Customer> customerOpt = customerService.findById(customer.getId());
+
+	        
+	        
+	        if(customerOpt.isPresent()) {
+	        
+	        // Cập nhật thông tin khách hàng
+		        Customer existingCustomer = customerOpt.get();
+		        
+		        existingCustomer.setCompanyName(customer.getCompanyName());
+		        existingCustomer.setContactPerson(customer.getContactPerson());
+		        existingCustomer.setEmail(customer.getEmail());
+		        existingCustomer.setPhone(customer.getPhone());
+		        existingCustomer.setAddress(customer.getAddress());
+		        existingCustomer.setResponsiblePerson(customer.getResponsiblePerson());
+		        existingCustomer.setNote(customer.getNote());
+		        existingCustomer.setProfession(customer.getProfession());
+		        existingCustomer.setMainStatus(customer.getMainStatus());
+		        existingCustomer.setSubStatus(customer.getSubStatus());
+		        // existingCustomer.setUpdatedAt(new Date()); // Cập nhật thời gian sửa nếu cần
+	
+		        // Lưu lại khách hàng đã cập nhật
+		        updatedCustomer = storageService.saveOrUpdate(existingCustomer);
+	        
+	        }
+	        
+	        else
+	        {
+	        	customer.setCreatedAt(new Date());
+				customer.setSiteId(getCurrentSiteId());
+	        	updatedCustomer = storageService.saveOrUpdate(customer);
+	        }
+	        
+	        log.info("Khách hàng đã được cập nhật thành công:");
+	        log.info("ID: {}", updatedCustomer.getId());
+	        log.info("Tên công ty: {}", updatedCustomer.getCompanyName());
+	        log.info("Người liên hệ: {}", updatedCustomer.getContactPerson());
+	        log.info("Email: {}", updatedCustomer.getEmail());
+	        log.info("Số điện thoại: {}", updatedCustomer.getPhone());
+	        log.info("Địa chỉ: {}", updatedCustomer.getAddress());
+	        // log.info("Ngày sửa: {}", updatedCustomer.getUpdatedAt()); // Cập nhật ngày sửa nếu có
+	        log.info("Ghi chú: {}", updatedCustomer.getNote());
+
+	        if (updatedCustomer.getProfession() != null) {
+	            log.info("Ngành nghề: {}", updatedCustomer.getProfession().getName());
+	        } else {
+	            log.info("Ngành nghề: Không có");
+	        }
+
+	        if (updatedCustomer.getResponsiblePerson() != null) {
+	            log.info("Người phụ trách: {}", updatedCustomer.getResponsiblePerson().getName());
+	        } else {
+	            log.info("Người phụ trách: Không có");
+	        }
+	        if(customerOpt.isPresent()) {
+	        	return ResponseEntity.ok()
+	        			.body(Map.of("message", "Khách hàng đã được cập nhật thành công!", "customer", updatedCustomer));
+	        }
+	        else {
+	        	return ResponseEntity.ok()
+	        			.body(Map.of("message", "Khách hàng đã được thêm mới thành công!", "customer", updatedCustomer));
+	        }
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng kiểm tra lại độ dài SDT!" + customer.getId()));
+	    }
+	}
+	
+	@RequestMapping(value = { "/customer-list-search-son" }, method = RequestMethod.GET)
+	public ModelAndView displayCustomerListCRMSearch(
+			@RequestParam(value = "nameCompany", required = false) String nameCompany,
+			@RequestParam(value = "phone", required = false) String phone,
+			@RequestParam(value = "selectedCareers", required = false) List<Long> selectedCareers,
+			@RequestParam(value = "contactPerson", required = false) String contactPerson,
+			@RequestParam(value = "address", required = false) String address,
+			@RequestParam(value = "email", required = false) String email, HttpServletRequest request,
+			HttpSession httpSession) {
+
+		ModelAndView mav = new ModelAndView("customer_list_v2");
+		initSession(request, httpSession);
+
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		List<Customer> customers;
+
+		log.debug("Selected Careers: {}", selectedCareers);
+
+
+		if ((nameCompany == null || nameCompany.isEmpty()) && (phone == null || phone.isEmpty())
+				&& (selectedCareers == null || selectedCareers.isEmpty())
+				&& (contactPerson == null || contactPerson.isEmpty()) && (address == null || address.isEmpty())
+				&& (email == null || email.isEmpty())) {
+			customers = customerService.getAllCustomersWithStatuses();
+			log.debug("No keyword or field provided. Fetching all customers.");
+		} else if(selectedCareers == null || selectedCareers.isEmpty()){
+			customers = customerServiceSon.advancedSearchCustomersNotCareer(nameCompany,phone,selectedCareers,contactPerson, address, email);
+			
+		}
+		
+		else {
+			customers = customerServiceSon.findCustomersAdvanced(nameCompany,phone,selectedCareers,contactPerson, address, email);
+
+			mav.addObject("nameCompany", nameCompany);
+			mav.addObject("phone", phone);
+			mav.addObject("selectedCareers", selectedCareers);
+			mav.addObject("contactPerson", contactPerson);
+			mav.addObject("address", address);
+			mav.addObject("email", email);
+		}
+
+		List<Status> statuses = statusService.getAllStatuses();
+		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		List<Profession> professions = professionService.getAllProfessions();
+
+		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
+
+		if (statusCounts == null) {
+			statusCounts = new HashMap<>();
+		}
+		long totalCustomerCount = customerService.getTotalCustomerCount();
+
+		mav.addObject("customers", customers);
+		mav.addObject("statuses", statuses);
+		mav.addObject("responsiblePersons", responsiblePersons);
+		mav.addObject("professions", professions);
+		mav.addObject("statusCounts", statusCounts);
+		mav.addObject("totalCustomerCount", totalCustomerCount);
 
 		return mav;
 	}

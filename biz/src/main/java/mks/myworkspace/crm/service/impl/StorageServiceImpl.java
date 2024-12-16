@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.HistoryOrder;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.repository.AppRepository;
@@ -50,31 +51,77 @@ public class StorageServiceImpl implements StorageService {
 
 	@Override
 	public Customer saveOrUpdate(Customer customer) {
-		Optional<Customer> existingEmail = customerRepo.findByEmail(customer.getEmail());
-	    if (existingEmail.isPresent()) {
-	        throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
-	    }
+		Optional<Customer> existingCustomerByEmail = customerRepo.findByEmail(customer.getEmail());
+		Optional<Customer> existingCustomerByPhone = customerRepo.findByPhone(customer.getPhone());
+		/*
+		 * if (existingEmail.isPresent()) { throw new
+		 * IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!"
+		 * ); }
+		 * 
+		 * Optional<Customer> existingPhone =
+		 * customerRepo.findByPhone(customer.getPhone()); if (existingPhone.isPresent())
+		 * { throw new
+		 * IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!"
+		 * ); }
+		 * 
+		 * if (!isValidPhoneNumber(customer.getPhone())) { throw new
+		 * IllegalArgumentException("Số điện thoại không đúng định dạng. Vui lòng nhập lại!"
+		 * ); }
+		 */
 		
-		Optional<Customer> existingPhone = customerRepo.findByPhone(customer.getPhone());
-	    if (existingPhone.isPresent()) {
-	        throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
-	    }
-	    
-	    if (!isValidPhoneNumber(customer.getPhone())) {
-	        throw new IllegalArgumentException("Số điện thoại không đúng định dạng. Vui lòng nhập lại!");
-	    }
-
-	    if (!isValidEmail(customer.getEmail())) {
-	        throw new IllegalArgumentException("Email không đúng định dạng. Vui lòng nhập lại!");
-	    }
-	    
-	    Long id = appRepo.saveOrUpdate(customer);
-	    if (id != null) {
-	        customer.setId(id);
-	    }
-	    return customer;
+		// Kiểm tra nếu SDT đã có
+		if (existingCustomerByPhone.isPresent()) {
+			//throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			
+			// Nếu SDT đã có, kiểm tra xem SDT này là của khách muốn chỉnh sủa thông tin,
+			// hay là của khách hàng khác
+			
+			// Lấy khách hàng cũ
+			Customer optCustomer = existingCustomerByPhone.get();
+			
+			// Nếu đây là thêm mới nhưng trùng sdt khách hàng cũ,
+			if (customer.getId() == null) {
+				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			// hoặc là khách hàng chỉnh sửa sdt trùng khách hàng cũ
+			else if (customer.getId() != optCustomer.getId())
+			{
+				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			if (customer.getPhone().length() != 10) {
+				throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
+			}
+		}
+		if (existingCustomerByEmail.isPresent()) {
+			//throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+			
+			// Nếu SDT đã có, kiểm tra xem SDT này là của khách muốn chỉnh sủa thông tin,
+			// hay là của khách hàng khác
+			
+			// Lấy khách hàng cũ
+			Customer optCustomer = existingCustomerByEmail.get();
+			
+			// Nếu đây là thêm mới nhưng trùng email khách hàng cũ,
+			if (customer.getId() == null) {
+				throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			// hoặc là khách hàng chỉnh sửa email trùng khách hàng cũ
+			else if (customer.getId() != optCustomer.getId())
+			{
+				throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+			}
+			/*
+			 * if (customer.getPhone().length() != 10) { throw new
+			 * IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!"
+			 * ); }
+			 */
+		}
+		Long id = appRepo.saveOrUpdate(customer);
+		if (id != null) {
+			customer.setId(id);
+		}
+		return customer;
 	}
-
 	private boolean isValidPhoneNumber(String phoneNumber) {
 	    String phoneRegex = "^[0-9]{10}$";
 	    return phoneNumber != null && phoneNumber.matches(phoneRegex);
@@ -100,9 +147,8 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public void deleteCustomersByIds(List<Long> customerIds) {
-		appRepo.deleteCustomersByIds(customerIds);
-
+	public void hideCustomersByIds(List<Long> customerIds) {
+		appRepo.hideCustomersByIds(customerIds);
 	}
 
 	@Override
@@ -161,5 +207,9 @@ public class StorageServiceImpl implements StorageService {
 
 		log.debug("Final Customer ID : {}", customer.getId());
 		return customer;
+	}
+	@Override
+	public void showHidedCustomers() {
+		appRepo.showHidedCustomers();
 	}
 }

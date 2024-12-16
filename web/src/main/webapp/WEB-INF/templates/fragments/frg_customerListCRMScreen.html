@@ -32,13 +32,22 @@
 <!-- 								<i class="fa-solid fa-plus"></i> Thêm mới khách hàng -->
 <!-- 							</button> -->
 							
+							<div class="addCustomerAndRestoreCustomer">
 							<!-- Thay đổi nút Thêm khách hàng -->
-							<a th:href = "@{/customer/add}">
-								<button class="addCustomerbtn">
+								<a th:href = "@{/customer/newEditCustomer}">
+									<button class="addCustomerbtn">
+										<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
+										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
+									</button>
+								</a>
+								
+								
+								<button class="restoreHidedCustomerbtn" id="restoreHidedCustomerbtn" onclick="showHidedCustomers()">
 									<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
-									<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
+									<i class="fa-solid fa-arrows-rotate"></i> Khôi phục khách hàng bị ẩn
 								</button>
-							</a>
+								 <th:block th:include="fragments/frg_ModalShowHidedCustomersConfirmation"></th:block>
+							</div>
 
 						</div>
 
@@ -97,12 +106,12 @@
 										<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
 										<div class="container-flex">
 											<div class="filter-container">
-												<button id="filter-toggle">
+												<button id="filter-toggle" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 													<i class="fa-solid fa-filter"></i>
 												</button>
 
 												<!-- Khung lọc liên hệ theo, ban đầu ẩn -->
-												<div id="filter-box" class="filter-hidden">
+												<!-- <div id="filter-box" class="filter-hidden">
 													<span>Lọc liên hệ theo</span>
 													<div class="input-with-icon">
 														<input class="form-control" id="iconLeft" type="text"
@@ -111,7 +120,7 @@
 															<i class="fa fa-search"></i>
 														</div>
 													</div>
-													<!-- <input type="text" placeholder="Tìm kiếm..."> -->
+													<input type="text" placeholder="Tìm kiếm...">
 													<form>
 														<label> 
 															<input type="checkbox" id="filter-option-1" data-target="#responsible-select">Người phụ trách
@@ -175,7 +184,72 @@
 														<button type="button">Áp dụng lọc</button>
 														<button type="button">Xóa bỏ</button>
 													</form>
+												</div> -->
+												
+												<!-- ADVANCED SEARCH -->
+												<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+												  <div class="modal-dialog modal-lg">
+												    <div class="modal-content">
+												    <!-- <form action="/crm-web/customer-list-search-son" method="get"> -->
+												   	<form th:action="@{/customer/customer-list-search-son}" method="get">
+												      <div class="modal-header">
+												        <h1 class="modal-title fs-5" id="staticBackdropLabel">Tìm kiếm</h1>
+												        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												      </div>
+												      <div class="modal-body w-100">
+												        <div class="row">
+												        	<div class="mb-3 col-4">
+															    <label for="tencty" class="form-label">Tên Công ty</label>
+															    <input type="text" class="form-control" id="tencty" name="nameCompany">
+															</div>
+															<div class="mb-3 col-4">
+															    <label for="sdt" class="form-label">Số điện thoại</label>
+															    <input type="text" class="form-control" id="std" name="phone">
+															</div>
+															<div class="mb-3 col-4">
+															    <label for="ngll" class="form-label">Người liên lạc</label>
+															    <input type="text" class="form-control" id="ngll" name="contactPerson">
+															</div>
+												        </div>
+												        <div class="row">
+												        	
+															<div class="mb-3 col-4">
+															    <label for="dc" class="form-label">Địa chỉ</label>
+															    <input type="text" class="form-control" id="dc" name="address">
+															</div>
+															<div class="mb-3 col-4">
+															    <label for="email" class="form-label">Email</label>
+															    <input type="email" class="form-control" id="dc" name="email">
+															</div>
+															
+												        </div>
+												        <div class="row">
+												        	<div>
+															    <label for="profession" class="form-label">Chọn ngành nghề</label>
+															    <div th:each="profession : ${professions}" class="form-check">
+															        <input 
+															            class="form-check-input" 
+															            type="checkbox" 
+															            th:value="${profession.id}" 
+															            th:id="${profession.id}" 
+															            name="selectedCareers">
+															        <label class="form-check-label" th:for="${profession.id}">
+															            <span th:text="${profession.name}"></span>
+															        </label>
+															    </div>
+															</div>
+												        </div>
+												        
+												      </div>
+												      <div class="modal-footer">
+												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+												        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+												      </div>
+												     </form>
+												    </div>
+												  </div>
 												</div>
+												
 											</div>
 
 											<!-- BEGIN TABLE CUSTOMER LIST -->
@@ -208,6 +282,7 @@
 																	<th data-field="created_at" class="th12">Thời gian
 																		tạo</th>
 																	<th data-field="note" class="th13">Ghi chú</th>
+																	<th class="th14">Hành động</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -239,6 +314,12 @@
 																	<td
 																		th:text="${customer.createdAt != null ? #dates.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td>
 																	<td th:text="${customer.note != null ? customer.note : ''}"></td>
+																	<td> 
+																		<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><span data-i18n="nav.dash.main">Hành động</span></a>
+														                <ul class="dropdown-menu">
+														                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/new(customerId=${customer.id})}" data-toggle="dropdown">Đơn hàng mới</a></li>
+														                </ul>
+																	</td>
 																</tr>
 															</tbody>
 														</table>
