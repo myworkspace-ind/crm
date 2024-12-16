@@ -1,12 +1,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div class="app-content content m-0 p-0">
 	<form id="frmInteractionConfiguration" th:action="@{/customer/save-interaction}" class="w-100 ms-0" method="post">
+		<th:block th:include="fragments/interaction/frg_searchInteraction.html"></th:block>		
 		<div class="container">
 			<h4 class="title order-title justify-content-center">Danh Sách Tương Tác</h4>
+			<div id="success-alert" class="alert alert-success" style="display: none">
+		       <button type="button" class="close" data-dismiss="alert">x</button>
+		       <strong>Success! </strong> Saved.
+		    </div>
 		</div>
 		<div id="tblInteraction"></div>
-		<div class="btn btn-group">
-			<button type="submit" class="btn btn-primary save-orders-configurations-statuses">Save</button>
-		</div>
+		<button type="submit" class="btn btn-primary">Save</button>		
 	</form>
 </div>
