@@ -302,7 +302,8 @@
 		            }
 		        }		        
 		    });
-		    orderSenderNameCreate.value = localStorage.getItem("orderSenderNameCreate");
+		    if (orderSenderNameCreate.value == null)
+		    	orderSenderNameCreate.value = localStorage.getItem("orderSenderNameCreate"); 
 		});
 	</script>
 </body>
