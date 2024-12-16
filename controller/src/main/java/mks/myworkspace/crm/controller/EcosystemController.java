@@ -62,7 +62,7 @@ public class EcosystemController extends BaseController {
 		ModelAndView mav = new ModelAndView("ecosystem");
 
 		initSession(request, httpSession);
-		log.debug("Home CRM Screen Controller is running....");
+		log.debug("Ecosystem CRM Screen Controller is running....");
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
