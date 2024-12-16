@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	const orderCategorySelect = document.getElementById("orderCategoryCreate");
 	const orderStatusSelect = document.getElementById("orderStatusCreate");
 	const _ctx = "/crm-web/";
-	const defaultCategoryId = 1;
+	const defaultCategoryId = 0;
 
 	loadOrderStatuses_ToCreateOrder(defaultCategoryId);
 
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	const orderCategorySelect = document.getElementById("orderCategoryFilter");
 	const orderStatusContainer = document.getElementById("orderStatusFilter");
 	const _ctx = "/crm-web/";
-	const defaultCategoryId = 1;
+	const defaultCategoryId = 0;
 
 	loadOrderStatuses(defaultCategoryId);
 
