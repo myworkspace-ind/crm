@@ -239,6 +239,8 @@
 	</script>
 
 	<script>
+	const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.has('customerId')) {
 		// Danh sách các ID của các trường cần nhập liệu
 		const inputFieldIds = [
 		    'orderCreateDateCreate',
@@ -301,10 +303,9 @@
 		                input.value = savedValue;
 		            }
 		        }		        
-		    });
-		    if (orderSenderNameCreate.value == null)
-		    	orderSenderNameCreate.value = localStorage.getItem("orderSenderNameCreate"); 
+		    });	    	
 		});
+    }
 	</script>
 </body>
 </html>
