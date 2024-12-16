@@ -469,7 +469,7 @@ public class CustomerController extends BaseController {
 	    List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
 
 	    // Cấu trúc bảng
-	    int[] colWidths = {150, 200, 400, 300, 30};
+	    int[] colWidths = {200, 200, 380, 300, 30};
 	    String[] colHeaders = {"Người trao đổi",  "Ngày", "Nội dung trao đổi", "Kế hoạch tiếp theo", ""};
 
 	    // Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
