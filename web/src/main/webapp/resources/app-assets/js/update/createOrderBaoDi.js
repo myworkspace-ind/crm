@@ -57,15 +57,40 @@ document.getElementById("createOrderButton").addEventListener("click", function(
 		address: document.getElementById("orderAddressCreate").value
 	};
 	
+	// Kiểm tra ngày tạo và ngày giao
+	const createDate = new Date(orderData.createDate);
+	const deliveryDate = new Date(orderData.deliveryDate);
+	const currentDate = new Date();
+	
 	// Kiểm tra nếu dữ liệu đã đầy đủ trước khi gửi
 	if (!orderData.createDate) {
 		alert("Vui lòng điền ngày tạo đơn!");
 		return;
 	}
+	
+	// Kiểm tra nếu ngày tạo đơn nhỏ hơn ngày hiện tại
+	if (createDate < currentDate) {
+	    alert("Ngày tạo đơn không được ở quá khứ!");
+	    return;
+	}
+	
 	if (!orderData.deliveryDate) {
 		alert("Vui lòng điền ngày giao hàng!");
 		return;
 	}
+	
+	// Kiểm tra nếu ngày giao hàng nhỏ hơn ngày hiện tại
+	if (deliveryDate < currentDate) {
+	    alert("Ngày giao hàng không được ở quá khứ!");
+	    return;
+	}
+
+	// Kiểm tra nếu ngày tạo lớn hơn ngày giao
+	if (createDate > deliveryDate) {
+	    alert("Ngày tạo đơn không được lớn hơn ngày giao hàng!");
+	    return;
+	}
+	
 	if (!orderData.orderCode) {
 		alert("Vui lòng điền mã đơn hàng!");
 		return;

@@ -13,6 +13,16 @@ document.addEventListener('DOMContentLoaded', function() {
 		const checkboxes = document.querySelectorAll('input[name="orderStatus"]:checked');
 		const orderDate = document.getElementById('orderDate').value;
 	    const deliveryDate = document.getElementById('deliveryDate').value;
+		
+		// Chuyển đổi ngày sang định dạng Date object
+	    const orderDateObj = orderDate ? new Date(orderDate) : null;
+	    const deliveryDateObj = deliveryDate ? new Date(deliveryDate) : null;
+
+	    if (orderDateObj && deliveryDateObj && deliveryDateObj < orderDateObj) {
+	        alert('Ngày giao không được nhỏ hơn ngày lập.');
+	        return; // Dừng lại
+	    }
+		
 		const formattedOrderDate = orderDate ? new Date(orderDate).toISOString().split('T')[0] : '1970-01-01'; // Ngày nhỏ nhất
         const formattedDeliveryDate = deliveryDate ? new Date(deliveryDate).toISOString().split('T')[0] : '9999-12-31'; // Ngày lớn nhất
 		checkboxes.forEach(checkbox => {

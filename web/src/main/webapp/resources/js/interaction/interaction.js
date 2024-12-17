@@ -192,6 +192,12 @@ function filterTableData(startDate, endDate, contactPerson) {
         console.error("Ngày không hợp lệ.");
         return;
     }
+	
+	// Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
+    if (start && end && start > end) {
+        showErrorToast('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
+        return; // Dừng xử lý nếu điều kiện sai
+    }
 
     const filteredData = allData.filter(function (row) {
         const recordDate = new Date(row[1]);
@@ -212,8 +218,23 @@ function filterTableData(startDate, endDate, contactPerson) {
     htInteraction.loadData(filteredData);
 }
 
-function showSuccessToast(message) {
-    const toast = $('#success-alert');
+let isToastVisible = false; // Biến flag để kiểm tra trạng thái hiển thị toast
+
+function showToast(message, type) {
+    if (isToastVisible) return; // Nếu một toast đang hiển thị, không hiển thị toast mới
+    
+    isToastVisible = true; // Đánh dấu là toast đang hiển thị
+    let toast;
+    
+    // Chọn thông báo dựa trên loại (success hoặc warning)
+    if (type === 'success') {
+        toast = $('#success-alert');
+        toast.removeClass('alert-warning').addClass('alert-success');
+    } else if (type === 'warning') {
+        toast = $('#warning-alert');
+        toast.removeClass('alert-success').addClass('alert-warning');
+    }
+
     toast.text(message); // Đặt nội dung của toast
 
     // Hiển thị toast từ đầu
@@ -227,7 +248,16 @@ function showSuccessToast(message) {
 
     // Sau 3 giây (3000ms), ẩn toast (fade-out)
     setTimeout(function () {
-        toast.fadeOut(200);  // 500ms để mờ dần ra
-    }, 500);  // Toast sẽ hiển thị trong 3 giây
+        toast.fadeOut(100);  // 200ms để mờ dần ra
+        isToastVisible = false; // Đánh dấu là toast đã ẩn
+    }, 500);  // Toast sẽ hiển thị trong 0.5 giây
+}
+
+function showSuccessToast(message) {
+    showToast(message, 'success');
+}
+
+function showErrorToast(message) {
+    showToast(message, 'warning');
 }
 
