@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	const orderCategorySelect = document.getElementById("orderCategoryCreate");
 	const orderStatusSelect = document.getElementById("orderStatusCreate");
 	const _ctx = "/crm-web/";
-	const defaultCategoryId = 0;
+	const defaultCategoryId = localStorage.getItem("orderCategoryID")!==null ? localStorage.getItem("orderCategoryID") : 0;
 
 	loadOrderStatuses_ToCreateOrder(defaultCategoryId);
 
