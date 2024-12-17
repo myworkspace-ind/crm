@@ -102,16 +102,41 @@
 		#fixedToolbar {
     		transition: top 0.3s;
 		}
-
+		
+		/* Ẩn tooltip mặc định */
+	    .custom-tooltip {
+	        position: absolute;
+	        bottom: -30px; /* Đặt tooltip bên dưới ảnh */
+	        left: 0;
+	        background-color: rgba(0, 0, 0, 0.8);
+	        color: #fff;
+	        padding: 5px 10px;
+	        font-size: 12px;
+	        z-index:99;
+	        border-radius: 4px;
+	        white-space: nowrap;
+	        opacity: 0;
+	        visibility: hidden;
+	        transform: translateY(10px);
+	        transition: all 0.2s ease-in-out;
+	    }
+	
+	    /* Khi hover vào ảnh, hiển thị tooltip */
+	    a:hover .custom-tooltip {
+	        opacity: 1;
+	        visibility: visible;
+	        transform: translateY(0);
+	    }
     </style>
 </head>
 <body>
 	<!-- Header Section -->
  	<div id="fixedToolbar" class="d-none fixed-top bg-light shadow-sm">
 	    <div class="container d-flex align-items-center">
-	    	<a th:href="@{/}" >
-	        	<img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;" >
-	        </a>
+	    	<a href="/crm-web/" class="position-relative">
+			    <img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;">
+			    <span class="custom-tooltip">Go Home</span>
+			</a>
 	    </div>
 	</div>
  	
@@ -421,7 +446,7 @@
 	    fixedToolbar.classList.remove("d-none");
 	    fixedToolbar.innerHTML = `
 	        <div class="container d-flex align-items-center">
-	            <a href="/crm-web/">
+	            <a href="/crm-web/" class="text-decoration-none d-flex align-items-center position-relative">
 	                <img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;">
 	            </a>
 	            <span></span> <!-- Nội dung sẽ thay đổi khi cuộn -->
