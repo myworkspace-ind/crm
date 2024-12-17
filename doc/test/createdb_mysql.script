@@ -1,0 +1,3 @@
+CREATE database crm_test default character set utf8;
+CREATE user 'crm_test_user'@'%' identified by 'Crm@123';
+GRANT ALL PRIVILEGES ON crm_test.* TO 'crm_test_user'@'%';
