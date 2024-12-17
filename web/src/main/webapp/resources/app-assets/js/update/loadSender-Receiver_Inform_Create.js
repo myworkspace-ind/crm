@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	const orderSenderNameSelect = document.getElementById("orderSenderNameCreate");
 	const orderSenderPhone = document.getElementById("orderSenderPhoneCreate");
 	const orderSenderEmail = document.getElementById("orderSenderEmailCreate");
-	const _ctx = "/crm-web/";
+	//const _ctx = "/crm-web/";
 	const defaultCustomerId = orderSenderNameSelect.value || 2;
 	loadSenderInfo(defaultCustomerId);
 
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	const orderReceiverNameSelect = document.getElementById("orderReceiverNameCreate");
 	const orderReceiverPhone = document.getElementById("orderReceiverPhoneCreate");
 	const orderReceiverEmail = document.getElementById("orderReceiverEmailCreate");
-	const _ctx = "/crm-web/";
+	//const _ctx = "/crm-web/";
 	/*const defaultCustomerId = 1;*/
 	const defaultCustomerId = orderReceiverNameSelect.value || 2;
 
