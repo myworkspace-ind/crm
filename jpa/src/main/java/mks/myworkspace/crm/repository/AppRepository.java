@@ -302,12 +302,12 @@ public class AppRepository {
 	}
 
 	public void hideCustomersByIds(List<Long> customerIds) {
-		// deleteCustomerStatusByCustomerIds(customerIds);
 		String sql = "UPDATE crm_customer SET account_status = 0 WHERE id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
+	
 	
 	public void showHidedCustomers() {
 		String sql = "UPDATE crm_customer SET account_status = 1 WHERE account_status = 0";
