@@ -189,6 +189,10 @@
 		  });
 	</script>
 	<script>
+		// Hàm lưu dữ liệu vào localStorage
+		const saveData = (key, value) => {
+		    localStorage.setItem(key, value);
+		};
 		$(document).ready(function () {
 		    // Kích hoạt Select2
 		    $('.select2').select2({
@@ -200,14 +204,19 @@
 		    $('.select2').on('select2:open', function () {
 		        $('.select2-search__field').attr('placeholder', 'Tìm kiếm...');
 		    });
-	
+		    
+		    $('#orderStatusCreate').on('select2:select', function () {
+		        let selectedOption = $(this).find(':selected');
+		        saveData('orderStatusCreate', $(this).val());
+		    });
+		    
 		    // Cập nhật thông tin "Người gửi"
 		    $('#orderSenderNameCreate').on('select2:select', function () {
 		        let selectedOption = $(this).find(':selected');
 		        $('#orderSenderPhoneCreate').val(selectedOption.data('phone') || '');
 		        $('#orderSenderEmailCreate').val(selectedOption.data('email') || '');
-		        
-		     // Lưu giá trị select và các trường liên quan vào localStorage
+
+		        // Lưu giá trị select và các trường liên quan vào localStorage
 		        saveData('orderSenderNameCreate', $(this).val());
 		        saveData('orderSenderPhoneCreate', phone);
 		        saveData('orderSenderEmailCreate', email);
@@ -239,6 +248,8 @@
 	</script>
 
 	<script>
+	const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.has('customerId')) {
 		// Danh sách các ID của các trường cần nhập liệu
 		const inputFieldIds = [
 		    'orderCreateDateCreate',
@@ -278,6 +289,11 @@
 		        });
 		    } else {
 		        input.addEventListener('input', () => {
+		        	if(id==='orderCategoryCreate'){
+		        		let orderCategoryName = $('#orderCategoryCreate').val();
+		        	    let orderCategoryId = getDataIdFromDatalist('orderCategories', orderCategoryName);
+		        	    saveData("orderCategoryID",orderCategoryId);
+		        	}
 		            saveData(id, input.value);
 		        });
 		    }
@@ -301,9 +317,9 @@
 		                input.value = savedValue;
 		            }
 		        }		        
-		    });
-		    orderSenderNameCreate.value = localStorage.getItem("orderSenderNameCreate");
+		    });	    	
 		});
+    }
 	</script>
 </body>
 </html>
