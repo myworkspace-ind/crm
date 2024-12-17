@@ -39,7 +39,7 @@ function saveCustomerChanges() {
         subStatus: subStatus || null,
     };
 
-    const _ctx = "/crm-web/";
+    // const _ctx = "/crm-web/";
     // Gửi yêu cầu PUT để cập nhật thông tin khách hàng
     fetch(`${_ctx}customer/newedit-customer`, {
         method: 'PUT', // Phải là PUT để cập nhật dữ liệu
