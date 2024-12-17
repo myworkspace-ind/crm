@@ -212,5 +212,9 @@ public class StorageServiceImpl implements StorageService {
 	public void showHidedCustomers() {
 		appRepo.showHidedCustomers();
 	}
+	@Override
+	public void deleteCustomersByIds(List<Long> customerIds) {
+		appRepo.deleteCustomersByIds(customerIds);
+	}
 	
 }

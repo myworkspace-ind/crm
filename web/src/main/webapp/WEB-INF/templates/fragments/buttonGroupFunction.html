@@ -12,7 +12,8 @@
 				<button type="button" class="btn-btnGroupFunction" id="UpdateStatusCustomerBtn" data-bs-toggle="modal" data-bs-target="#updateStatusCustomerModal">
 					Cập nhật trạng thái
 				</button>
-				<button type="button" class="btn-btnGroupFunction" id="deleteBtn">Ẩn khách hàng</button>
+				<button type="button" class="btn-btnGroupFunction" id="hideBtn">Ẩn khách hàng</button>
+				<button type="button" class="btn-btnGroupFunction" id="deleteBtn">Xóa khách hàng</button>
 				<button type="button" class="btn-btnGroupFunction">Gửi Email</button>
 				<button type="button" class="btn-btnGroupFunction">Gửi SMS</button>
 				<button type="button" class="btn-btnGroupFunction">Tạo Cơ Hội</button>
@@ -81,9 +82,9 @@
 	    </div>
 	</div> -->
 	
-	<!-- Modal Xóa khách hàng -->
-	<!-- Đan làm lại -->
-	<div class="modal" tabindex="-1" role="dialog" id="confirmationModal" aria-hidden="true">
+	<!-- Modal Xóa  khách hàng -->
+	<!-- Đan làm lại, Ngân sửa thành Ẩn -->
+	<div class="modal" tabindex="-1" role="dialog" id="hideCustomerConfirmationModal" aria-hidden="true">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header  text-bg-light">
@@ -94,7 +95,25 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" id="confirmHideBtn" class="btn btn-primary modal-btn">Ẩn</button>
-	        <button type="button" id="cancelBtn" class="btn btn-secondary modal-btn" data-dismiss="modal">Hủy bỏ</button>
+	        <button type="button" id="cancelHideBtn" class="btn btn-secondary modal-btn" data-dismiss="modal">Hủy bỏ</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- Modal xác nhận Xóa khách hàng -->
+	<div class="modal" tabindex="-1" role="dialog" id="deleteCustomerConfirmationModal" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header  text-bg-light">
+	        <h5 class="modal-title">Thông báo xác nhận</h5>
+	      </div>
+	      <div class="modal-body">
+	        <p>Bạn có chắc chắn muốn xóa khách hàng? Khi xóa sẽ KHÔNG THỂ KHÔI PHỤC LẠI THÔNG TIN KHÁCH HÀNG. Vui lòng cân nhắc chuyển thành "Ẩn".</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" id="confirmDeleteBtn" class="btn btn-primary modal-btn">Xóa</button>
+	        <button type="button" id="cancelDeleteBtn" class="btn btn-secondary modal-btn" data-dismiss="modal">Hủy bỏ</button>
 	      </div>
 	    </div>
 	  </div>
