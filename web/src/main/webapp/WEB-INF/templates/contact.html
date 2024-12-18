@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8" />
@@ -10,8 +10,10 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <th:block th:include="fragments/head"></th:block>
-</head>
+	<th:block th:include="fragments/common_css"></th:block>
+	<th:block th:include="fragments/common_meta_title"></th:block>
+    <th:block th:include="fragments/head"></th:block><th:block th:include="fragments/head"></th:block>
+
 <style>
     .form-container {
         background-color: #f7f7f7;
@@ -51,18 +53,22 @@
     }
 </style>
 
+	
+</head>
 <body>
-
+	
+	
 	<!-- Header Section -->
 	<div id="headerToolbar" class="bg-light shadow-sm py-2">
 	    <div class="container d-flex align-items-center">
-	        <a href="/crm-web/" class="text-decoration-none d-flex align-items-center position-relative">
+	    	<a href="/crm-web/" class="position-relative">
 			    <img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;">
 			    <span class="custom-tooltip">Go Home</span>
 			</a>
+			<th:block th:include="fragments/hmenu"></th:block>
 	    </div>
 	</div>
-	
+
     <!-- Hero Section -->
     <div class="text-center bg-primary text-white py-5 position-relative">
         <div class="container">
@@ -181,6 +187,12 @@
             </div>
         </div>
     </div>
+
+
+	<th:block th:include="fragments/common_javascript"></th:block>
+
+	<script src="resources/js/task/BackToTop.js"></script>
+	
 </body>
 
     
