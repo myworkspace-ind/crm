@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -133,7 +133,7 @@
 	<!-- Header Section -->
  	<div id="fixedToolbar" class="d-none fixed-top bg-light shadow-sm">
 	    <div class="container d-flex align-items-center">
-	    	<a href="/crm-web/" class="position-relative">
+	    	<a th:href="@{/}" class="position-relative">
 			    <img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;">
 			    <span class="custom-tooltip">Go Home</span>
 			</a>
