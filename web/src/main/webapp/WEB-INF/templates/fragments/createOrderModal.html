@@ -181,11 +181,15 @@
 	<script>
 		document.getElementById("createOrderButton").addEventListener("click", function () {
 		    // Xóa toàn bộ dữ liệu trong Local Storage
-		    localStorage.clear();
+ 		    if(!window.location.href.includes("customerId")){
+		    	localStorage.clear();
+ 		    }
 		  });
 		document.getElementById("closeOrderButton").addEventListener("click", function () {
 		    // Xóa toàn bộ dữ liệu trong Local Storage
-		    localStorage.clear();
+		    if(!window.location.href.includes("customerId")){
+		    	localStorage.clear();
+		    }
 		  });
 	</script>
 	<script>
@@ -217,9 +221,9 @@
 		        $('#orderSenderEmailCreate').val(selectedOption.data('email') || '');
 
 		        // Lưu giá trị select và các trường liên quan vào localStorage
-		        saveData('orderSenderNameCreate', $(this).val());
-		        saveData('orderSenderPhoneCreate', phone);
-		        saveData('orderSenderEmailCreate', email);
+		        if(!window.location.href.includes("customerId")){
+			        saveData('orderSenderNameCreate', $(this).val());
+		        }
 		    });
 	
 		    // Cập nhật thông tin "Người nhận"
@@ -229,9 +233,9 @@
 		        $('#orderReceiverEmailCreate').val(selectedOption.data('email') || '');
 		        
 		     // Lưu giá trị select và các trường liên quan vào localStorage
-		        saveData('orderReceiverNameCreate', $(this).val());
-		        saveData('orderReceiverPhoneCreate', phone);
-		        saveData('orderReceiverEmailCreate', email);
+		     	if(!window.location.href.includes("customerId")){
+		        	saveData('orderReceiverNameCreate', $(this).val());
+		     	}
 		    });
 	
 		    // Xóa thông tin khi giá trị bị xóa
