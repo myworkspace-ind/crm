@@ -51,6 +51,7 @@ import mks.myworkspace.crm.entity.OrderStatus;
 import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
+import mks.myworkspace.crm.service.StorageService;
 
 /**
  * Handles requests for the application home page.
@@ -68,6 +69,9 @@ public class OrderConfigurationController_Ky extends BaseController {
 	
 	@Autowired
 	private OrderStatusService statusService;
+	
+	@Autowired
+	private StorageService storageService;
 	
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
@@ -126,62 +130,10 @@ public class OrderConfigurationController_Ky extends BaseController {
 	
 	@PostMapping(value = "/save-category-status")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> saveCategoryStatus(@RequestBody Map<String, Object> requestBody) {
+	public Object saveCategoryStatus(@RequestBody Map<String, Object> requestBody) throws IOException{
 	    // Lấy danh sách các thay đổi (update)
-	    List<List<Object>> updateList = (List<List<Object>>) requestBody.get("update");
-	    Integer check = null;
-
-	    // Xử lý dữ liệu
-	    for (List<Object> change : updateList) {
-	        Integer row = (Integer) change.get(0);
-	        Integer col = (Integer) change.get(1);
-	        String oldValue = (String) change.get(2);
-	        String newValue = (String) change.get(3);
-
-	        Object value = change.get(4);
-	        Long idTrangThai = null;
-
-	        if (value instanceof Integer) {
-	            idTrangThai = ((Integer) value).longValue();
-	        } else if (value instanceof Long) {
-	            idTrangThai = (Long) value;
-	        }
-
-	        Object value1 = change.get(5);
-	        Long idLoaiDonHang = null;
-
-	        if (value1 instanceof Integer) {
-	            idLoaiDonHang = ((Integer) value1).longValue();
-	        } else if (value1 instanceof Long) {
-	            idLoaiDonHang = (Long) value1;
-	        }
-
-	        // Log dữ liệu kiểm tra
-	        System.out.println("Row: " + row + ", Col: " + col);
-	        System.out.println("Old Value: " + oldValue + ", New Value: " + newValue);
-	        System.out.println("Id Trạng Thái: " + idTrangThai + ", Id Loại Đơn Hàng: " + idLoaiDonHang);
-
-	        // Thực hiện thao tác lưu hoặc xử lý với các dữ liệu này
-	        OrderCategory category = categoryService.findOrderCategoryById(idLoaiDonHang);
-	        if (oldValue != null) {
-	            OrderStatus status = statusService.findStatusById(idTrangThai);
-	            category.getOrderStatuses().remove(status);
-	        }
-	        if (newValue != null) {
-	            OrderStatus status = statusService.findStatusByName(newValue);
-	            if (status != null) {
-	                category.getOrderStatuses().add(status);
-	            }
-	        }
-	    }
-
-	    // Tạo phản hồi JSON
-	    Map<String, Object> response = new HashMap<>();
-	    response.put("success", true);
-	    response.put("message", "Save Successfull");
-
-	    // Trả về phản hồi dưới dạng JSON
-	    return ResponseEntity.ok(response);
+		boolean saveOrUpdate = storageService.saveOrUpdateOrderCategoryStatus(requestBody);
+	    return getOrderConfigurationStatusData();
 	}
 
 	
@@ -220,44 +172,9 @@ public class OrderConfigurationController_Ky extends BaseController {
 
 		        orderStatusData.add(data);
 		    } 
-
+		    orderStatusData.add(new Object[] {"","","Thêm trạng thái mới","",""});
 		}
-
-		
-//		List<Object[]> tblData = new ArrayList<>();
-//		Object[] data1 = new Object[] { "1", "Mặc định", "Nhận đơn" };
-//		Object[] data2 = new Object[] { "", "", "Đóng gói" };
-//		Object[] data3 = new Object[] { "", "", "Vận chuyển" };
-//		Object[] data4 = new Object[] { "", "", "Giao hàng" };
-//		
-//		Object[] data5 = new Object[] { "2", "Máy móc", "Nhận đơn" };
-//		Object[] data6 = new Object[] { "", "", "Đóng gói" };
-//		Object[] data7 = new Object[] { "", "", "Vận chuyển" };
-//		Object[] data8 = new Object[] { "", "", "Lưu kho" };
-//		Object[] data9 = new Object[] { "", "", "Giao hàng" };
-//		
-//		Object[] data10 = new Object[] { "3", "Thực phẩm", "Nhận đơn" };
-//		Object[] data11 = new Object[] { "", "", "Đóng gói" };
-//		Object[] data12 = new Object[] { "", "", "Vận chuyển" };
-//		Object[] data13 = new Object[] { "", "", "Lưu kho lạnh" };
-//		Object[] data14 = new Object[] { "", "", "Giao hàng" };
-//		
-//		tblData.add(data1);
-//		tblData.add(data2);
-//		tblData.add(data3);
-//		tblData.add(data4);
-//		tblData.add(data5);
-//		tblData.add(data6);
-//		tblData.add(data7);
-//		tblData.add(data8);
-//		tblData.add(data9);
-//		tblData.add(data10);
-//		tblData.add(data11);
-//		tblData.add(data12);
-//		tblData.add(data13);
-//		tblData.add(data14);
-		
-		
+		orderStatusData.add(new Object[] {".",".",".","",""});
 		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, orderStatusData);
 
 		return tblOrderConfigurationStatus;

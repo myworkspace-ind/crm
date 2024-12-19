@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.service;
 
 import java.util.List;
+import java.util.Map;
 
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
@@ -23,6 +24,8 @@ public interface StorageService {
 	
 	List<Customer> saveOrUpdate(List<Customer> lstCustomers);
 	
+	void deleteCustomersByIds(List<Long> customerIds);
+	
 	void hideCustomersByIds(List<Long> customerIds);
 	
 	void showHidedCustomers();
@@ -35,5 +38,22 @@ public interface StorageService {
 	public Customer updateCustomerStatus (Customer customer);
 	
 	List<OrderCategory> saveOrUpdateOrderCategory(List<OrderCategory> lstOrderCategories);
+	
+	List<ResponsiblePerson> saveOrUpdateResponsiblePerson(List<ResponsiblePerson> lstResponsiblePerson);
+	
+	List<Profession> saveOrUpdateProfession(List<Profession> lstProfession);
+
+	List<Status> saveOrUpdateStatus(List<Status> lstStatus);
+
+	ResponsiblePersonRepository getResponPersonRepo();
+	ProfessionRepository getProfessionRepo();
+	StatusRepository getStatusRepo();
+	
+	void deleteResponPerson(Long id);
+	void deleteStatusById(Long id);
+	void deleteProfessionById(Long id);
+
+
+	boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody);
 
 }

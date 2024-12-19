@@ -10,6 +10,7 @@ public interface OrderStatusService {
 	
 	List<OrderStatus> findByOrderCategories_Id(Long categoryId);
 	List<OrderStatus> findAllOrderStatuses ();
+	List<OrderStatus> findByOrderCategories_ListId(List<Long> cartegoryIds);
 	OrderStatus findStatusById(Long id);
 	OrderStatus findStatusByName(String name);
 }
