@@ -3,7 +3,7 @@ function loadOrderStatuses_Handsontable() {
 	window.location.href = _ctx + `orders-handsontable?categoryId=${categoryId}`;
 }
 
-/*document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
 	const orderCategorySelect = document.getElementById("orderCategoryCreate");
 	const orderStatusSelect = document.getElementById("orderStatusCreate");
 
@@ -37,7 +37,7 @@ function loadOrderStatuses_Handsontable() {
 			.catch(error => console.error("Error loading order statuses:", error));
 	}
 
-})*/
+})
 
 document.addEventListener("DOMContentLoaded", function() {
 	const customerSuggestions = customerJson;
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	const orderTypeInput = document.getElementById('orderTypeInput');
 	const orderTypeSuggestionsContainer = document.getElementById('order-type-suggestions');
-	const orderTypeChipsContainer = document.getElementById('order-type-chips-container');
+	const orderTypeChipsContainer = document.getElementById('order-type-chips-container-handsontable');
 	const orderStatusContainer = document.getElementById("orderStatusFilterHandsontable");
 
 	//const _ctx = "/crm-web/";

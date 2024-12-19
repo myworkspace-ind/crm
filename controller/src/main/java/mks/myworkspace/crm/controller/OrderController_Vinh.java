@@ -359,4 +359,25 @@ public class OrderController_Vinh extends BaseController {
 
 		return JpaTransformer_OrderSearch.convert2D(orders, allGoodsCategories, allSenders);
 	}
+	
+	@GetMapping("/get-sender-receiver-details")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> getSenderDetails(@RequestParam("customerId") Long customerId) {
+		try {
+			Optional<Customer> customerDetail = customerService.findById(customerId);
+
+			if (customerDetail.isPresent()) {
+				Customer customer = customerDetail.get();
+				Map<String, String> senderDetail = new HashMap<>();
+				senderDetail.put("phone", customer.getPhone());
+				senderDetail.put("email", customer.getEmail());
+
+				return ResponseEntity.ok(senderDetail);
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 }
