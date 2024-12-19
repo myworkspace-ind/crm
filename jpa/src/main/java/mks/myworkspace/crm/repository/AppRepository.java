@@ -26,6 +26,9 @@ import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
+import mks.myworkspace.crm.entity.Profession;
+import mks.myworkspace.crm.entity.ResponsiblePerson;
+import mks.myworkspace.crm.entity.Status;
 
 @Repository
 @Slf4j
@@ -117,6 +120,48 @@ public class AppRepository {
 			log.warn("No interaction found with ID {} to delete.", interactionId);
 		}
 	}
+	public void deletePersonById(Long Id) {
+		// Tạo câu lệnh DELETE với ID duy nhất
+		String sql = "DELETE FROM crm_responsible_person WHERE id = ?";
+
+		// Thực thi câu lệnh DELETE
+		int rowsDeleted = jdbcTemplate0.update(sql, Id);
+
+		// Log kết quả
+		if (rowsDeleted > 0) {
+			log.debug("Interaction with ID {} deleted successfully.", Id);
+		} else {
+			log.warn("No interaction found with ID {} to delete.", Id);
+		}
+	}
+	public void deleteStatusById(Long Id) {
+		// Tạo câu lệnh DELETE với ID duy nhất
+		String sql = "DELETE FROM crm_status WHERE id = ?";
+
+		// Thực thi câu lệnh DELETE
+		int rowsDeleted = jdbcTemplate0.update(sql, Id);
+
+		// Log kết quả
+		if (rowsDeleted > 0) {
+			log.debug("Interaction with ID {} deleted successfully.", Id);
+		} else {
+			log.warn("No interaction found with ID {} to delete.", Id);
+		}
+	}
+	public void deleteProfessionById(Long Id) {
+		// Tạo câu lệnh DELETE với ID duy nhất
+		String sql = "DELETE FROM crm_profession WHERE id = ?";
+
+		// Thực thi câu lệnh DELETE
+		int rowsDeleted = jdbcTemplate0.update(sql, Id);
+
+		// Log kết quả
+		if (rowsDeleted > 0) {
+			log.debug("Interaction with ID {} deleted successfully.", Id);
+		} else {
+			log.warn("No interaction found with ID {} to delete.", Id);
+		}
+	}
 
 	private void updateEntity(Interaction entity) {
 		String updateSql = "UPDATE crm_customer_interaction SET " + "interaction_date = ?, " + "content = ?, "
@@ -163,7 +208,95 @@ public class AppRepository {
 
 		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
 	}
+	public List<Long> saveOrUpdateProfession(List<Profession> entities) {
+		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
 
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_profession")
+				.usingGeneratedKeyColumns("id");
+
+		Long id;
+		for (Profession e : entities) {
+			if (e.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+			} else {
+				// Update
+				// update(e);
+				id = e.getId();
+				updateProfession(e);
+			}
+
+			ids.add(id);
+		}
+
+		return ids;
+	}
+
+	private void updateProfession(Profession e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_profession SET name = ?, note = ? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
+	}
+
+	public List<Long> saveOrUpdateStatus(List<Status> entities) {
+		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
+
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_status")
+				.usingGeneratedKeyColumns("id");
+
+		Long id;
+		for (Status e : entities) {
+			if (e.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+			} else {
+				// Update
+				// update(e);
+				id = e.getId();
+				updateStatus(e);
+			}
+
+			ids.add(id);
+		}
+
+		return ids;
+	}
+
+	private void updateStatus(Status e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_status SET name = ?, backgroundColor = ? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getBackgroundColor(), e.getId());
+	}
+	
+	public List<Long> saveOrUpdateResponsiblePerson(List<ResponsiblePerson> entities) {
+		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
+
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_responsible_person")
+				.usingGeneratedKeyColumns("id");
+
+		Long id;
+		for (ResponsiblePerson e : entities) {
+			if (e.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+			} else {
+				// Update
+				// update(e);
+				id = e.getId();
+				updateResponsiblePerson(e);
+			}
+
+			ids.add(id);
+		}
+
+		return ids;
+	}
+
+	private void updateResponsiblePerson(ResponsiblePerson e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_responsible_person SET name = ?, note = ? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
+	}
 	public Long saveOrUpdate(Customer customer) {
 		Long id;
 		if (customer.getAccountStatus() == null) {
