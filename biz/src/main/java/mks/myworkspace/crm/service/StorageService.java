@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.service;
 
 import java.util.List;
+import java.util.Map;
 
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
@@ -35,5 +36,7 @@ public interface StorageService {
 	public Customer updateCustomerStatus (Customer customer);
 	
 	List<OrderCategory> saveOrUpdateOrderCategory(List<OrderCategory> lstOrderCategories);
+
+	boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody);
 
 }

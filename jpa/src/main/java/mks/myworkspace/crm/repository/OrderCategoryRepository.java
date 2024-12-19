@@ -14,4 +14,6 @@ public interface OrderCategoryRepository  extends JpaRepository<OrderCategory, L
 	List<OrderCategory> findAllWithOrderStatuses();
 	
 	List<OrderCategory> findAll();
+	
+	OrderCategory findByNameIgnoringCase(String name);
 }
