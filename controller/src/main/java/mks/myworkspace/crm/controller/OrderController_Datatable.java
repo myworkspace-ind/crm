@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -202,15 +204,27 @@ public class OrderController_Datatable extends BaseController {
 				log.debug("Row: " + Arrays.toString(row));
 			}
 		}
-
+		 
+		JSONArray jsonArray = new JSONArray();
+		
+	    for (Customer customer : listCustomers) {
+	        JSONObject json = new JSONObject(customer);	        
+	        jsonArray.put(json);
+	    }
+	    List<OrderCategory> listOrderCategoryTransJson = orderCategories.stream()
+	    	    .map(category -> new OrderCategory(category.getId(), category.getName(), category.getNote()))
+	    	    .collect(Collectors.toList());
+	    JSONArray jsonArrayB = new JSONArray(listOrderCategoryTransJson);
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 
 		mav.addObject("dataSet", dataSet);
 		mav.addObject("listOrders", listOrders);
 		mav.addObject("listCustomers", listCustomers);
+		mav.addObject("customersJson", jsonArray.toString());
 		mav.addObject("listOrderStatuses", listOrderStatuses);
 		mav.addObject("orderCategories", orderCategories);
+		mav.addObject("orderCateJson", jsonArrayB.toString());
 		mav.addObject("listGoodsCategories", listGoodsCategories);
 
 		return mav;
@@ -247,6 +261,29 @@ public class OrderController_Datatable extends BaseController {
 
 		log.debug("customerId: {} " + customerId);
 		log.debug("orderCategoryId: {} " + orderCategoryId);
+		log.debug("statuses: {} " + statuses);
+
+		return JpaTransformer_OrderSearch.convert2D(orders, allGoodsCategories, allSenders);
+	}
+	@GetMapping("/search-orders-list")
+	@ResponseBody
+	public List<Object[]> searchOrdersByList(@RequestParam(required = false) List<Long> customerIds,
+			@RequestParam(required = false) List<Long> orderCategoryIds,
+			@RequestParam(required = false) List<Long> statuses,
+			@RequestParam(required = false) Optional<java.sql.Date> create_date,
+			@RequestParam(required = false) Optional<java.sql.Date> delivery_date) {
+		
+		List<GoodsCategory> allGoodsCategories;
+		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
+
+		List<Customer> allSenders;
+		allSenders = customerService.getAllCustomers();
+
+		List<Order> orders;
+		orders = orderService.searchOrdersByList(customerIds, orderCategoryIds, statuses, create_date, delivery_date);
+
+		log.debug("customerId: {} " + customerIds);
+		log.debug("orderCategoryId: {} " + orderCategoryIds);
 		log.debug("statuses: {} " + statuses);
 
 		return JpaTransformer_OrderSearch.convert2D(orders, allGoodsCategories, allSenders);
@@ -460,6 +497,26 @@ public class OrderController_Datatable extends BaseController {
 			return ResponseEntity.ok(jsonCompatibleData);
 		} catch (Exception e) {
 			log.error("Error fetching order statuses for category {}: ", categoryId, e);
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+		}
+	}
+	@GetMapping(value = "/order-statuses-list", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Object> getOrderStatusesByCategoryList(@RequestParam("categoryIds") List<Long> categoryIds) {
+		try {
+			List<OrderStatus> statuses = orderStatusService.findByOrderCategories_ListId(categoryIds);
+			Object[][] orderStatusData = JpaTransformer_OrderDetail.convert2D_OrderStatus(statuses);
+			// Chuyển đổi mảng 2 chiều thành danh sách danh sách để tương thích với JSON
+			List<List<Object>> jsonCompatibleData = new ArrayList<>();
+			for (Object[] row : orderStatusData) {
+				jsonCompatibleData.add(Arrays.asList(row));
+			}
+			log.debug("Fetched order statuses for category {}: {}", categoryIds, jsonCompatibleData);
+
+			return ResponseEntity.ok(jsonCompatibleData);
+		} catch (Exception e) {
+			log.error("Error fetching order statuses for category {}: ", categoryIds, e);
 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
 		}

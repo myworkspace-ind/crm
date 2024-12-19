@@ -33,4 +33,10 @@ public class OrderStatusServiceImpl implements OrderStatusService{
 		return repo.findAll();
 	}
 
+	@Override
+	public List<OrderStatus> findByOrderCategories_ListId(List<Long> cartegoryIds) {
+		// TODO Auto-generated method stub
+		return repo.findByOrderCategoryListId(cartegoryIds);
+	}
+
 }

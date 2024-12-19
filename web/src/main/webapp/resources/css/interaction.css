@@ -1,14 +1,43 @@
-form#frmInteractionConfiguration {
-    margin-left: 75px;
-    padding-left: 30px;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+    background: #fff; /* Nền trắng */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
 }
 
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-right: 50px;
+    color: #007bff; /* Màu xanh dương nhấn */
+}
+
+/* Bảng */
+#tblInteraction {
+    margin: 20px 0px;
+    border: 1px solid #dee2e6; /* Viền bảng */
+    overflow: hidden;
+}
+
+/* Form */
+form#frmInteractionConfiguration {
+    margin-left: 0;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Nút */
 button {
-    background: none; /* Loại bỏ nền */
-    border: none; /* Loại bỏ khung */
-    color: inherit; /* Sử dụng màu chữ mặc định hoặc tùy chỉnh */
-    font: inherit; /* Sử dụng phông chữ mặc định của văn bản xung quanh */
-    padding: 0; /* Loại bỏ khoảng cách */
-    cursor: pointer; /* Thêm hiệu ứng con trỏ khi hover */
+    background: none;
+    border: none;
+    color: #007bff;
+    font: inherit;
+    padding: 0;
+    cursor: pointer;
     font-size: 16px;
+    text-align: center;
 }

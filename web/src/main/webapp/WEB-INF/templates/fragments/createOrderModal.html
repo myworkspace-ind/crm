@@ -37,14 +37,13 @@
 			    </div>
 			     <div class="form-group col-md-6">
 				    <label for="goodsType">Loại đơn hàng</label>
-				    <input list="orderCategories" id="orderCategoryCreate" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng" maxlength="255">
+				    <input list="orderCategories" id="orderCategoryCreate" class="form-control" placeholder="Nhập hoặc chọn loại đơn hàng">
 				    <datalist id="orderCategories">
 				        <th:block th:each="orderCategory : ${orderCategories}">
 				            <option th:value="${orderCategory.name}" th:data-id="${orderCategory.id}"></option>
 				        </th:block>
 				    </datalist>
 				</div>
-
 			</div>
 	    	
 		    <br/><div class="row2">
@@ -86,7 +85,7 @@
 				                <td>Họ tên:</td>
 				                <td>
 				                    <select id="orderSenderNameCreate" class="form-control select2" style="width: 100%; background-color: white; color: black;">
-				                        <option value="" disabled selected>Nhập hoặc chọn tên người gửi</option>
+				                        <!-- <option value="" disabled selected>Nhập hoặc chọn tên người gửi</option> -->
 				                        <th:block th:each="customer : ${listCustomers}">
 				                            <option th:value="${customer.id}" 
 				                                    th:data-phone="${customer.phone}" 
@@ -118,7 +117,7 @@
 				                <td>Họ tên:</td>
 				                <td>
 				                    <select id="orderReceiverNameCreate" class="form-control select2" style="width: 100%; background-color: white; color: black;">
-				                        <option value="" disabled selected>Nhập hoặc chọn họ tên</option>
+				                        <!-- <option value="" disabled selected>Nhập hoặc chọn họ tên</option> -->
 				                        <th:block th:each="customer : ${listCustomers}">
 				                            <option th:value="${customer.id}" 
 				                                    th:data-phone="${customer.phone}" 
@@ -131,10 +130,12 @@
 				            </tr>
 				            <tr>
 				                <td>SDT:</td>
+				                
 				                <td><input type="text" id="orderReceiverPhoneCreate" class="input-container" placeholder="Số điện thoại" readonly style="background-color: white; color: black; width: 100%;" maxlength="10"/></td>
 				            </tr>
 				            <tr>
 				                <td>Email:</td>
+				                
 				                <td><input type="email" id="orderReceiverEmailCreate" class="input-container" placeholder="Email" readonly style="background-color: white; color: black; width: 100%;" maxlength="99"/></td>
 				            </tr>
 				        </table>
@@ -154,6 +155,7 @@
 				        <div class="form-group col-md-6">
 				            <label for="transportMethod">Địa chỉ</label>
 				            <div data-mdb-input-init class="form-outline">
+								
 								<textarea class="form-control" id="orderAddressCreate" rows="8" maxlength="255"></textarea>
 							</div>
 				        </div>
@@ -171,25 +173,57 @@
 		        
 			<div class="row4">
 				<button type="button" id="createOrderButton">Lưu</button>
-	        	<button type="button" onclick="closeModal()">Trở về</button>
+	        	<button type="button" id="closeOrderButton" onclick="closeModal()">Trở về</button>
 			</div>
 	    </form>
 	</div>
 	<script type="text/javascript" th:src="@{/resources/js/orders/datatable.js}" ></script>
 	<script>
+		document.getElementById("createOrderButton").addEventListener("click", function () {
+		    // Xóa toàn bộ dữ liệu trong Local Storage
+ 		    if(!window.location.href.includes("customerId")){
+		    	localStorage.clear();
+ 		    }
+		  });
+		document.getElementById("closeOrderButton").addEventListener("click", function () {
+		    // Xóa toàn bộ dữ liệu trong Local Storage
+		    if(!window.location.href.includes("customerId")){
+		    	localStorage.clear();
+		    }
+		  });
+	</script>
+	<script>
+		// Hàm lưu dữ liệu vào localStorage
+		const saveData = (key, value) => {
+		    localStorage.setItem(key, value);
+		};
 		$(document).ready(function () {
 		    // Kích hoạt Select2
 		    $('.select2').select2({
 		        tags: true,
 		        placeholder: "Nhập hoặc chọn tên",
+		        language: "vi", // Sử dụng ngôn ngữ Tiếng Việt
 		        allowClear: true
 		    });
-	
+		    $('.select2').on('select2:open', function () {
+		        $('.select2-search__field').attr('placeholder', 'Tìm kiếm...');
+		    });
+		    
+		    $('#orderStatusCreate').on('select2:select', function () {
+		        let selectedOption = $(this).find(':selected');
+		        saveData('orderStatusCreate', $(this).val());
+		    });
+		    
 		    // Cập nhật thông tin "Người gửi"
 		    $('#orderSenderNameCreate').on('select2:select', function () {
 		        let selectedOption = $(this).find(':selected');
 		        $('#orderSenderPhoneCreate').val(selectedOption.data('phone') || '');
 		        $('#orderSenderEmailCreate').val(selectedOption.data('email') || '');
+
+		        // Lưu giá trị select và các trường liên quan vào localStorage
+		        if(!window.location.href.includes("customerId")){
+			        saveData('orderSenderNameCreate', $(this).val());
+		        }
 		    });
 	
 		    // Cập nhật thông tin "Người nhận"
@@ -197,6 +231,11 @@
 		        let selectedOption = $(this).find(':selected');
 		        $('#orderReceiverPhoneCreate').val(selectedOption.data('phone') || '');
 		        $('#orderReceiverEmailCreate').val(selectedOption.data('email') || '');
+		        
+		     // Lưu giá trị select và các trường liên quan vào localStorage
+		     	if(!window.location.href.includes("customerId")){
+		        	saveData('orderReceiverNameCreate', $(this).val());
+		     	}
 		    });
 	
 		    // Xóa thông tin khi giá trị bị xóa
@@ -212,6 +251,79 @@
 		});
 	</script>
 
+	<script>
+	const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.has('customerId')) {
+		// Danh sách các ID của các trường cần nhập liệu
+		const inputFieldIds = [
+		    'orderCreateDateCreate',
+		    'orderDeliveryDateCreate',
+		    'orderCodeInputCreate',
+		    'orderCategoryCreate',
+		    'orderGoodsCreate',
+		    'orderStatusCreate',
+		    'orderTransportCreate',
+		    'orderSenderNameCreate',
+		    'orderSenderPhoneCreate',
+		    'orderSenderEmailCreate',
+		    'orderReceiverNameCreate',
+		    'orderReceiverPhoneCreate',
+		    'orderReceiverEmailCreate',
+		    'orderRequirementCreate',
+		    'orderAddressCreate',
+		    'emailCreate',
+		    'zaloCreate',
+		    'smsUpdate'
+		];
 	
+		// Hàm lưu dữ liệu vào localStorage
+		const saveData = (key, value) => {
+		    localStorage.setItem(key, value);
+		};
+	
+		// Lặp qua tất cả các trường để lắng nghe sự kiện nhập liệu
+		inputFieldIds.forEach((id) => {
+		    const input = document.getElementById(id);
+		    if (!input) return;
+	
+		    // Với checkbox, lưu trạng thái checked, các loại khác thì lưu giá trị
+		    if (input.type === 'checkbox') {
+		        input.addEventListener('change', () => {
+		            saveData(id, input.checked);
+		        });
+		    } else {
+		        input.addEventListener('input', () => {
+		        	if(id==='orderCategoryCreate'){
+		        		let orderCategoryName = $('#orderCategoryCreate').val();
+		        	    let orderCategoryId = getDataIdFromDatalist('orderCategories', orderCategoryName);
+		        	    saveData("orderCategoryID",orderCategoryId);
+		        	}
+		            saveData(id, input.value);
+		        });
+		    }
+		});
+	
+		// Tự động khôi phục dữ liệu từ localStorage
+		window.addEventListener('DOMContentLoaded', () => {
+		    inputFieldIds.forEach((id) => {
+		        const input = document.getElementById(id);
+		        if (!input) return;
+		        const savedValue = localStorage.getItem(id);
+		        if (savedValue !== null) {
+		            if ($(input).hasClass('select2')) {
+		                // Dùng Select2 API để khôi phục giá trị
+		                $(input).val(savedValue).trigger('change');
+		            } else if (input.type === 'checkbox') {
+		                // Khôi phục trạng thái của checkbox
+		                input.checked = savedValue === 'true';
+		            } else {
+		                // Khôi phục giá trị cho các trường khác
+		                input.value = savedValue;
+		            }
+		        }		        
+		    });	    	
+		});
+    }
+	</script>
 </body>
 </html>
