@@ -3,6 +3,8 @@ package mks.myworkspace.crm.controller;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +43,7 @@ import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
+import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.CustomerService_Son;
 import mks.myworkspace.crm.service.ProfessionService;
@@ -97,33 +100,46 @@ public class CustomerController extends BaseController {
 	CustomerService_Son customerServiceSon;
 
 	@GetMapping("list")
-	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "statusId", required = false) Long statusId, @RequestParam(value = "page", required = false) int page, HttpServletRequest request,
+	public ModelAndView displayCustomerListCRMScreen(
+			CustomerCriteriaDTO customerCriteriaDTO,
+			HttpServletRequest request,
 			HttpSession httpSession) {
 
-		log.debug("Display Cusomter list with keyword= {}", keyword);
 		ModelAndView mav = new ModelAndView("customer_list_v2");
 		initSession(request, httpSession);
+		int page = 1;
+        try {
+            if(customerCriteriaDTO.getPage().isPresent()){
+                page = Integer.parseInt(customerCriteriaDTO.getPage().get()); 
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        
+        String queryString = request.getQueryString();
+        String updatedQueryString = queryString != null
+                ? Arrays.stream(queryString.split("&"))
+                        .filter(param -> !param.matches("^page=.*$")) // Loại bỏ tham số page
+                        .collect(Collectors.joining("&"))
+                : ""; // Nếu không có query string, gán chuỗi rỗng
+        if(!updatedQueryString.isBlank())
+        {
+        	updatedQueryString = updatedQueryString + "&";
+        }
 		Pageable pageable = PageRequest.of(page - 1,10);
-		Page<Customer> pageCustomer = customerService.findAllWithStatuses(pageable);
+		Page<Customer> pageCustomer;
+        if(customerCriteriaDTO.getKeyword()!=null && customerCriteriaDTO.getKeyword().isPresent())
+        {
+        	pageCustomer = customerService.findAllKeyword(pageable, customerCriteriaDTO.getKeyword().get());
+        }
+        else
+        {
+        	pageCustomer = customerService.findAllWithSpecs(pageable, customerCriteriaDTO);
+        }
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		List<Customer> customers;
 
-		if (statusId != null) {
-			customers = customerService.findCustomersByStatus(statusId);
-			mav.addObject("statusId", statusId);
-
-		} else if (keyword != null && !keyword.isEmpty()) {
-			customers = customerService.searchCustomers(keyword);
-			mav.addObject("keyword", keyword);
-
-		} else {
-//			customers = customerService.getAllCustomersWithStatuses();
-			customers = pageCustomer.getContent();
-			log.debug("No keyword or statusId provided. Fetching all customers.");
-		}
-		
+		List<Customer> customers = pageCustomer.getContent().size() > 0 ?  pageCustomer.getContent() : new ArrayList<Customer>();
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
@@ -135,14 +151,17 @@ public class CustomerController extends BaseController {
 		}
 
 		long totalCustomerCount = customerService.getTotalCustomerCount();
-
+		mav.addObject("filter", updatedQueryString);
+        mav.addObject("currentPage", page);
+        mav.addObject("totalPages", pageCustomer.getTotalPages());
+        mav.addObject("totalCustomerWithSpec", pageCustomer.getTotalElements());
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
 		mav.addObject("responsiblePersons", responsiblePersons);
 		mav.addObject("professions", professions);
 		mav.addObject("statusCounts", statusCounts);
 		mav.addObject("totalCustomerCount", totalCustomerCount);
-
+		mav.addObject("numberOfElementsInCurrentPage", pageCustomer.getNumberOfElements());
 		return mav;
 	}
 

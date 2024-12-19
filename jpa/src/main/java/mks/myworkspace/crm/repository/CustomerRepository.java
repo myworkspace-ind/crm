@@ -6,8 +6,10 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,7 +20,7 @@ import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Interaction;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSpecificationExecutor<Customer> {
 
 	List<Customer> findAll();
 
@@ -83,9 +85,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	        + "WHERE ci.interactionDate BETWEEN :startDate AND :endDate")
 	List<Customer> findByInteractDateRange(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 	
-	@EntityGraph(attributePaths = {"mainStatus", "subStatus"})
-	@Query("SELECT c FROM Customer c WHERE c.accountStatus = true")
-	Page<Customer> findByAccountStatusTrue(Pageable pageable);
-
+	Page<Customer> findAllByAccountStatusTrue(Pageable pageable);
+	
+	Page<Customer> findAll(Specification<Customer> spec, Pageable pageable);
 
 }

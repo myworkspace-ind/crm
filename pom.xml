@@ -34,7 +34,6 @@
 				<version>23.2</version>
 			</dependency>
 
-
 		</dependencies>
 	</dependencyManagement>
 	<properties>
