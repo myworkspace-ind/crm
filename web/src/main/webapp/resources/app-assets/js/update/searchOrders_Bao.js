@@ -95,7 +95,19 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 			});
 	});
-
+	function loadCustomerInfo(customerId, phone, name) {
+		fetch(`${_ctx}orders-datatable/get-sender-receiver-details?customerId=${customerId}`)
+			.then(response => response.json())
+			.then(data => {
+				if (data) {
+					phone.value = data.phone || "";
+					name.value = data.email || "";					
+				}
+			})
+			.catch(error => {
+				console.error("Error fetching sender details:", error);
+			});
+	}
 	function orderTableSearchResult(data) {
 		var tbody = document.querySelector('#tblDatatable tbody');
 		tbody.innerHTML = '';
@@ -223,6 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
 								var selected = sender[0] === currentOrderSenderId ? ' selected' : '';
 								return '<option value="' + sender[0] + '"' + selected + '>' + sender[1] + '</option>';
 							}).join('');
+							loadCustomerInfo(currentOrderSenderId, document.getElementById("orderSenderPhoneUpdate"), document.getElementById("orderSenderEmailUpdate"));
 							$('#orderSenderNameUpdate').html(options);
 						}
 
@@ -231,6 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
 								var selected = receiver[0] === currentOrderReceiverId ? ' selected' : '';
 								return '<option value="' + receiver[0] + '"' + selected + '>' + receiver[1] + '</option>';
 							}).join('');
+							loadCustomerInfo(currentOrderReceiverId, document.getElementById("orderReceiverPhoneUpdate"), document.getElementById("orderReceiverEmailUpdate"));
 							$('#orderReceiverNameUpdate').html(options);
 						}
 
@@ -305,6 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
 								var selected = sender[0] === currentOrderSenderId ? ' selected' : '';
 								return '<option value="' + sender[0] + '"' + selected + '>' + sender[1] + '</option>';
 							}).join('');
+							loadCustomerInfo(currentOrderSenderId, document.getElementById("orderSenderPhoneDetail"), document.getElementById("orderSenderEmailDetail"));
 							$('#orderSenderNameDetail').html(options);
 							$('#orderSenderNameDetail').css('pointer-events', 'none');
 						}
@@ -314,6 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
 								var selected = receiver[0] === currentOrderReceiverId ? ' selected' : '';
 								return '<option value="' + receiver[0] + '"' + selected + '>' + receiver[1] + '</option>';
 							}).join('');
+							loadCustomerInfo(currentOrderReceiverId, document.getElementById("orderReceiverPhoneDetail"), document.getElementById("orderReceiverEmailDetail"));
 							$('#orderReceiverNameDetail').html(options);
 							$('#orderReceiverNameDetail').css('pointer-events', 'none');
 						}
