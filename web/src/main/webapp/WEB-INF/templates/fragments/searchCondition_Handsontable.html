@@ -1,5 +1,53 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<style>
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.4rem 0.8rem;
+      margin: 0.2rem;
+      background-color: #e9ecef;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .chip span {
+      margin-left: 0.5rem;
+      cursor: pointer;
+      color: #dc3545;
+    }
+    .chips-container {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      max-width: 100%;
+    }
+    .chips-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .chips-container::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 10px;
+    }
+    .chips-container::-webkit-scrollbar-track {
+      background-color: #f1f1f1;
+    }
+    #customerInput, #orderTypeInput {
+    width: 250px; /* Tăng chiều rộng của ô input */
+    min-width: 250px; /* Đảm bảo ô input không nhỏ hơn 200px */
+	}
+	/* Tạo thanh cuộn dọc cho container danh sách gợi ý khi có quá 6 phần tử */
+	#customer-suggestions, #order-type-suggestions {
+	  max-height: 200px;  /* Giới hạn chiều cao tối đa của danh sách */
+	  overflow-y: auto;   /* Cho phép cuộn dọc khi cần thiết */
+	}
+		
+	#customer-input-container, #order-type-input-container {
+	    width: auto; /* Cho phép chiều rộng của container tự động điều chỉnh */
+	    min-width: 250px; /* Đảm bảo chiều rộng container không nhỏ hơn 200px */
+	}
+  </style>
+  
 <body>
 	<div class="row">
 	   <div class="col-12">
@@ -20,56 +68,104 @@
 	                   <div class="row">
 	                       <div class="col-md-3 col-sm-12">
 	                           <fieldset class="text-left customer-option">
-	                               <h5>Khách hàng</h5>
-	                               <select style="background-color: white; color: black; width: 100%;">
+	                               <h5 style="font-size: 15px">Khách hàng</h5>
+	                                <!-- <select class="form-control" id="orderCustomerFilter" style="background-color: white; color: black;">
+	                               		<option value="" selected>-- Chọn khách hàng --</option>
 	                               		<th:block th:each="customer : ${listCustomers}">
-											<option th:value="${customer.id}" th:text="${customer.companyName}">
+											<option th:value="${customer.id}" th:text="${customer.contactPerson}">
 											</option>
 										</th:block>
-	                               </select>
+	                               </select> -->
+	                               <div id="customer-input-container-handsontable" class="border p-2 rounded">
+					                  <div id="customer-chips-container-handsontable" class="chips-container"></div>
+					                  <input 
+					                    id="customerInputHandsontable" 
+					                    class="form-control border-0 d-inline-block"
+					                    style="width: auto; min-width: 150px;" 
+					                    type="text" 
+					                    placeholder="Chọn khách hàng..."
+					                  >
+					                </div>
+					                <div id="customer-suggestions" class="list-group position-absolute w-75" style="display: none; z-index: 1000;"></div>
 	                           </fieldset>
 	                           <fieldset class="text-left ordercate-option">
-	                               <h5>Loại đơn hàng</h5>
-	                               <select id="orderCategorySelect" onchange="loadOrderStatuses_Handsontable()" 
+	                               <h5 style="font-size: 15px">Loại đơn hàng</h5>
+	                               <!-- <select class="form-control" id="orderCategoryFilter" style="background-color: white; color: black;" >
+						            	<option value="" selected>-- Chọn loại đơn hàng --</option>
+						            	<th:block th:each="orderCategory : ${orderCategories}">
+								            <option th:value="${orderCategory.id}" th:text="${orderCategory.name}"></option>
+								        </th:block>
+						            </select>	 -->
+						            <div id="order-type-input-container" class="border p-2 rounded">
+					                  <div id="order-type-chips-container" class="chips-container"></div>
+					                  <input 
+					                    id="orderTypeInput" 
+					                    class="form-control border-0 d-inline-block"
+					                    style="width: auto; min-width: 150px;" 
+					                    type="text" 
+					                    placeholder="Chọn loại đơn hàng..."
+					                  >
+					                </div>
+					                <div id="order-type-suggestions" class="list-group position-absolute w-75" style="display: none; z-index: 1000;"></div>	
+	                               <!-- <select id="orderCategorySelect" onchange="loadOrderStatuses_Datatable()" 
 	                               		style="background-color: white; color: black; width: 100%;">
 									<th:block th:each="orderCategory : ${orderCategories}">
 						                <option th:value="${orderCategory.id}" th:text="${orderCategory.name}"
 						                        th:selected="${orderCategory.id == selectedCategoryId}"></option>
 						            </th:block>
-	                               </select>
+	                               </select> -->
 	                           </fieldset>
 	                       </div>
 	                       
 	                       <div class="col-md-3 col-sm-12">
 	                        <div id="orderStatusContainer">
 	                            <fieldset class="text-left order-status">
-	                                <h5>Trạng thái đơn hàng</h5>
-	                                    <th:block th:each="orderStatus : ${orderStatuses}">
+	                                <h5 style="font-size: 15px">Trạng thái đơn hàng</h5>
+		                                <div id="orderStatusFilterHandsontable">
+		                                
+		                                </div>
+	                                    <!-- <th:block th:each="orderStatus : ${orderStatuses}">
 								            <label>
 								                <input type="checkbox" name="orderStatus" th:value="${orderStatus.id}" class="custom-checkbox checkbox-spacing" th:text="${orderStatus.name}"/> 
 								            </label><br/>
-							        	</th:block>
+							        	</th:block> -->
 	                            </fieldset>
 	                        </div>
 	                       </div>
-	                       <div class="col-md-3 col-sm-12">
-	                           <fieldset class="text-left startdate-option">
-	                               <h5>Ngày lập</h5>
-	                               <input type="date" id="orderDate" style="width: 100%; padding: 5px; color: black; background-color: white;">
-	                           </fieldset>
-	                           <fieldset class="text-left delidate-option">
-	                               <h5>Ngày giao</h5>
-	                               <input type="date" id= "deliveryDate" style="width: 100%; padding: 5px; color: black; background-color: white;">
-	                           </fieldset>
-	                           <fieldset class="text-right">
-	                           	<button type="submit" class="search-order" style="margin-top: 10px;">Tìm</button>
-	                           </fieldset>
-	                       </div>
+	                      	<div class="col-md-3 col-sm-12" style="text-align: left;">
+							    <fieldset class="startdate-option" style="margin-bottom: 10px;">
+							        <h5 style="text-align: left; margin-bottom: 5px; font-size: 15px;">Ngày lập</h5>
+							        <input class="form-control" type="date" id="orderDate" placeholder="dd/mm/yyyy" style="width: auto; padding: 5px; color: black; background-color: white; display: inline-block;">
+							    </fieldset>
+							    <fieldset class="delidate-option" style="margin-bottom: 10px;">
+							        <h5 style="text-align: left; margin-bottom: 5px; font-size: 15px;">Ngày giao</h5>
+							        <input class="form-control" type="date" id="deliveryDate" placeholder="dd/mm/yyyy" style="width: auto; padding: 5px; color: black; background-color: white; display: inline-block;">
+							    </fieldset>
+							    <fieldset class="text-right">
+							        <!-- <button type="submit" class="search-order" style="margin-top: 10px; display: inline-block;">Tìm</button> -->
+							        <div class="input-group">
+									  <button type="button" class="btn btn-primary btn-search-orders" data-mdb-ripple-init style="margin-top: 10px; display: inline-block; width: 40%">
+									  	<i class="fas fa-search"></i> Tìm 
+									  </button>
+									</div>
+							    </fieldset>
+							</div>
+	                      	
 	                   </div>
 	               </div>
 	           </div>
 	       </div>
 	   </div>
 	</div>
+	
+	
+	<script th:inline="javascript">
+	const customerJson = JSON.parse(/*[[${customersJson}]]*/ '[]');
+	const orderTypeJson = JSON.parse(/*[[${orderCateJson}]]*/ '[]');
+
+	</script>
+
+	<!-- <script type="text/javascript" th:src="@{/resources/app-assets/js/update/loadOrderStatuses_Handsontable.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/searchOrders_Ngan.js}"></script> -->
 </body>
 </html>
