@@ -24,8 +24,20 @@ function attachEventHandlers() {
 function handleFormSubmit(e) {
     e.preventDefault();
 
+	const tableData = htInteraction.getData().filter(row => 
+	    row.some(cell => cell !== null && cell !== '') // Loại bỏ các dòng hoàn toàn trống
+	);
+
+	const isValid = tableData.every(row => 
+	    [0, 1, 2, 3].every(colIndex => row[colIndex] !== null && row[colIndex] !== '')
+	);
+
+	if (!isValid) {
+	    showErrorToast('Vui lòng nhập đầy đủ thông tin trước khi lưu.');
+	    return;
+	}
+	
     const colHeaders = htInteraction.getColHeader();
-    const tableData = htInteraction.getData();
     const colWidths = [];
 
     for (let i = 0; i < colHeaders.length; i++) {
@@ -132,7 +144,13 @@ function initTable(colHeaders, colWidths, data) {
             colWidths: colWidths,
             columns: [
                 { type: 'text' },
-                { type: 'date', dateFormat: 'YYYY-MM-DD', correctFormat: true },
+				{
+                    type: 'date',
+                    dateFormat: 'YYYY-MM-DD',
+                    correctFormat: true,
+					defaultDate: new Date(),
+					datePickerConfig: { format: 'YYYY-MM-DD' }
+                },
                 { type: 'text' },
                 { type: 'text' },
                 { renderer: deleteButtonRenderer },
