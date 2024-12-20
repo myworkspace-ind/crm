@@ -110,7 +110,7 @@ function deleteRow(rowIndex, id) {
             success: function (response) {
                 console.log('Xóa thành công:', response);
 				alert("Xóa thành công");
-				
+				location.reload();
             },
             error: function (error) {
                 console.error('Lỗi khi xóa:', error);

@@ -41,7 +41,7 @@ $(document).ready(function () {
             success: function (result) {
                 console.log("Server Response:", result); // Log phản hồi từ server
                 updateData(result); // Cập nhật lại bảng với dữ liệu mới
-				//location.reload();
+				location.reload();
             },
             error: function (xhr) {
                 console.error("AJAX Error:", xhr.responseText); // Log lỗi
