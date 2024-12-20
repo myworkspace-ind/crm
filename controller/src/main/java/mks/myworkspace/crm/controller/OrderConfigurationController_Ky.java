@@ -21,19 +21,24 @@ package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,6 +50,8 @@ import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
 import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderService;
+import mks.myworkspace.crm.service.OrderStatusService;
+import mks.myworkspace.crm.service.StorageService;
 
 /**
  * Handles requests for the application home page.
@@ -59,6 +66,13 @@ public class OrderConfigurationController_Ky extends BaseController {
 	
 	@Autowired
 	private OrderCategoryService categoryService;
+	
+	@Autowired
+	private OrderStatusService statusService;
+	
+	@Autowired
+	private StorageService storageService;
+	
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
 	 * 
@@ -114,28 +128,28 @@ public class OrderConfigurationController_Ky extends BaseController {
 		return tblOrderConfiguration;
 	}
 	
+	@PostMapping(value = "/save-category-status")
+	@ResponseBody
+	public Object saveCategoryStatus(@RequestBody Map<String, Object> requestBody) throws IOException{
+	    // Lấy danh sách các thay đổi (update)
+		boolean saveOrUpdate = storageService.saveOrUpdateOrderCategoryStatus(requestBody);
+	    return getOrderConfigurationStatusData();
+	}
+
+	
 	@GetMapping("/load-statuses")
 	@ResponseBody
 	public Object getOrderConfigurationStatusData() throws IOException {
 		log.debug("Get sample data from configuration file.");
-		int[] colWidths = { 50, 300, 300, };
-		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", };
-		
-		List<Order> orderDataList=orderService.getAllOrders();
-		//Test
-		List<Object[]> orderData=new ArrayList<>();
-		for(int i=0;i<orderDataList.size();i++) {
-			Object[] myData=new Object[] {orderDataList.get(i).getId(),orderDataList.get(i).getName(),orderDataList.get(i).getSiteId()};
-			orderData.add(myData);
-		}
+		int[] colWidths = { 50, 300, 300, 200, 200};
+		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", "Id Trạng Thái", "Id Loại Đơn Hàng"};
 		
 		List<OrderCategory> orderCategoryStatus=categoryService.getAllOrderCategoriesWithOrderStatuses();
 		List<Object[]> orderStatusData=new ArrayList<>();
 		OrderCategory category=new OrderCategory();
-		Long id;
+		Long id,idTrangThai;
 		String nameCategory,nameStatus;
 		Set<OrderStatus> orderStatuses=new HashSet<OrderStatus>();
-		List<int[]> mergeCells = new ArrayList<>(); // Danh sách các nhóm mergeCells
 
 		for (int i = 0; i < orderCategoryStatus.size(); i++) {
 		    category = orderCategoryStatus.get(i);
@@ -144,67 +158,29 @@ public class OrderConfigurationController_Ky extends BaseController {
 		    orderStatuses = category.getOrderStatuses();
 
 		    boolean isFirst = true; // Biến kiểm tra phần tử đầu tiên
-		    int startRow = orderStatusData.size(); // Dòng bắt đầu của nhóm hiện tại
 		    for (OrderStatus os : orderStatuses) {
 		        nameStatus = os.getName();
+		        idTrangThai=os.getId();
 		        Object[] data;
-
+		        
 		        if (isFirst) {
-		            data = new Object[] { id, nameCategory, nameStatus };
+		            data = new Object[] { id, nameCategory, nameStatus,idTrangThai,id };
 		            isFirst = false; // Sau phần tử đầu tiên, đặt biến này thành false
 		        } else {
-		            data = new Object[] { "", "", nameStatus }; // Để trống id và nameCategory
+		            data = new Object[] { "", "", nameStatus,idTrangThai,id }; // Để trống id và nameCategory
 		        }
 
 		        orderStatusData.add(data);
 		    } 
-		    int endRow = orderStatusData.size() - 1; // Dòng kết thúc của nhóm hiện tại
-
-		    // Nếu nhóm có nhiều hơn 1 dòng, thêm thông tin vào mergeCells
-		    if (endRow > startRow) {
-		        mergeCells.add(new int[] { startRow, 0, endRow - startRow + 1 }); // Merge cột "No"
-		        mergeCells.add(new int[] { startRow, 1, endRow - startRow + 1 }); // Merge cột "Loại đơn hàng"
-		    }
+		    orderStatusData.add(new Object[] {"","","Thêm trạng thái mới","",""});
 		}
-
-		
-//		List<Object[]> tblData = new ArrayList<>();
-//		Object[] data1 = new Object[] { "1", "Mặc định", "Nhận đơn" };
-//		Object[] data2 = new Object[] { "", "", "Đóng gói" };
-//		Object[] data3 = new Object[] { "", "", "Vận chuyển" };
-//		Object[] data4 = new Object[] { "", "", "Giao hàng" };
-//		
-//		Object[] data5 = new Object[] { "2", "Máy móc", "Nhận đơn" };
-//		Object[] data6 = new Object[] { "", "", "Đóng gói" };
-//		Object[] data7 = new Object[] { "", "", "Vận chuyển" };
-//		Object[] data8 = new Object[] { "", "", "Lưu kho" };
-//		Object[] data9 = new Object[] { "", "", "Giao hàng" };
-//		
-//		Object[] data10 = new Object[] { "3", "Thực phẩm", "Nhận đơn" };
-//		Object[] data11 = new Object[] { "", "", "Đóng gói" };
-//		Object[] data12 = new Object[] { "", "", "Vận chuyển" };
-//		Object[] data13 = new Object[] { "", "", "Lưu kho lạnh" };
-//		Object[] data14 = new Object[] { "", "", "Giao hàng" };
-//		
-//		tblData.add(data1);
-//		tblData.add(data2);
-//		tblData.add(data3);
-//		tblData.add(data4);
-//		tblData.add(data5);
-//		tblData.add(data6);
-//		tblData.add(data7);
-//		tblData.add(data8);
-//		tblData.add(data9);
-//		tblData.add(data10);
-//		tblData.add(data11);
-//		tblData.add(data12);
-//		tblData.add(data13);
-//		tblData.add(data14);
-
+		orderStatusData.add(new Object[] {".",".",".","",""});
 		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, orderStatusData);
 
 		return tblOrderConfigurationStatus;
 	}
+	
+	
 
 //	private String getDefaultOrderData() throws IOException {
 //		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);

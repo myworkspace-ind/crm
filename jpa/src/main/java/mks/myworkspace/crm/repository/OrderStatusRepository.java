@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,7 @@ public interface OrderStatusRepository  extends JpaRepository<OrderStatus, Long>
 	@Query("SELECT os FROM OrderStatus os JOIN os.orderCategories oc WHERE oc.id IN :orderCategoryIds")
 	List<OrderStatus> findByOrderCategoryListId (@Param("orderCategoryIds") List<Long> orderCategoryIds);
 	
+	OrderStatus findByNameIgnoreCase(@Param("orderStatusName") String orderStatusName);
+	
+
 }

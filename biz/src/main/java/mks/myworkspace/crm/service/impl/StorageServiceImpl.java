@@ -1,10 +1,12 @@
 package mks.myworkspace.crm.service.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,9 @@ import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
+import mks.myworkspace.crm.entity.OrderStatus;
+
+
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.OrderCategoryRepository;
@@ -21,6 +26,9 @@ import mks.myworkspace.crm.repository.OrderRepository;
 import mks.myworkspace.crm.repository.ProfessionRepository;
 import mks.myworkspace.crm.repository.ResponsiblePersonRepository;
 import mks.myworkspace.crm.repository.StatusRepository;
+import mks.myworkspace.crm.repository.OrderStatusRepository;
+
+
 import mks.myworkspace.crm.service.StorageService;
 
 @Service
@@ -53,6 +61,12 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	@Getter
 	StatusRepository statusRepo;
+	
+	@Autowired
+	@Getter
+	OrderStatusRepository orderStatusRepository;
+
+
 //	@Override
 //	public CustomerRepository getCustomerRepo() {
 //		// TODO Auto-generated method stub
@@ -282,4 +296,97 @@ public class StorageServiceImpl implements StorageService {
 		appRepo.deleteProfessionById(id);
 	}
 	
+	
+	@Override
+	public boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody) {
+	    try {
+	        // Xử lý cập nhật
+	        List<List<Object>> updateList = (List<List<Object>>) requestBody.get("update");
+	        if (updateList != null && !updateList.isEmpty()) {
+	            processChanges(updateList);
+	        }
+
+	        // Xử lý tạo mới
+	        List<List<Object>> createList = (List<List<Object>>) requestBody.get("create");
+	        if (createList != null && !createList.isEmpty()) {
+	            processChanges(createList);
+	        }
+
+	        return true;
+	    } catch (Exception e) {
+	        System.err.println("Đã xảy ra lỗi: " + e.getMessage());
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+	private void processChanges(List<List<Object>> changesList) {
+	    for (List<Object> change : changesList) {
+	        Integer row = (Integer) change.get(0);
+	        Integer col = (Integer) change.get(1);
+	        String oldValue = (String) change.get(2);
+	        String newValue = (String) change.get(3);
+
+	        Long idTrangThai = extractId(change.get(4));  // Extract ID of TrangThai
+	        Long idLoaiDonHang = extractId(change.get(5));  // Extract ID of LoaiDonHang
+
+	        // Ghi log thông tin
+	        System.out.println("Row: " + row + ", Col: " + col);
+	        System.out.println("Old Value: " + oldValue + ", New Value: " + newValue);
+	        System.out.println("Id Trạng Thái: " + idTrangThai + ", Id Loại Đơn Hàng: " + idLoaiDonHang);
+
+	        // Xử lý dữ liệu tùy theo cột
+	        if (col == 2) {
+	            // Xử lý trạng thái đơn hàng
+	            if (oldValue != null) {
+	                appRepo.deleteOrderCategoryStatus(idLoaiDonHang, idTrangThai);
+	            }
+	            if (newValue != null && checkExitsStatusInCategory(newValue, idLoaiDonHang)) {
+	                OrderStatus newStatus = orderStatusRepository.findByNameIgnoreCase(newValue);
+	                if (newStatus != null) {
+	                    appRepo.insertOrderCategoryStatus(idLoaiDonHang, newStatus.getId());
+	                } else {
+	                    appRepo.createOrderStatus(newValue);
+	                    Long idNewStatus = orderStatusRepository.findByNameIgnoreCase(newValue).getId();
+	                    appRepo.insertOrderCategoryStatus(idLoaiDonHang, idNewStatus);
+	                }
+	            }
+	        } else {
+	            // Xử lý loại đơn hàng
+	            if (newValue != null && idLoaiDonHang != null) {
+	                OrderCategory category = orderCategoryRepository.findById(idLoaiDonHang).get();
+	                category.setName(newValue);
+	                try {
+	                    appRepo.updateOrderCategory(idLoaiDonHang,newValue);
+	                } catch (Exception e) {
+	                    System.err.println("Lỗi khi cập nhật hoặc tạo mới loại đơn hàng: " + e.getMessage());
+	                }
+	            }
+	        }
+	    }
+	}
+
+	private Long extractId(Object value) {
+	    if (value instanceof Integer) {
+	        return ((Integer) value).longValue();
+	    } else if (value instanceof Long) {
+	        return (Long) value;
+	    }
+	    return null;
+	}
+	private boolean checkExitsStatusInCategory(String nameStatus, long idCateory) {
+		OrderStatus status = orderStatusRepository.findByNameIgnoreCase(nameStatus);
+		if(status == null) {
+			return true;
+		}
+		else {
+			OrderCategory category = orderCategoryRepository.findById(idCateory).get();
+			if(category.getOrderStatuses().contains(status)) {
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+	}
 }
