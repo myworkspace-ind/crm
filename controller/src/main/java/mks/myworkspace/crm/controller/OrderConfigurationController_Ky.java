@@ -174,7 +174,15 @@ public class OrderConfigurationController_Ky extends BaseController {
 		    } 
 		    orderStatusData.add(new Object[] {"","","Thêm trạng thái mới","",""});
 		}
+<<<<<<< .mine
 		orderStatusData.add(new Object[] {".",".",".","",""});
+
+
+=======
+
+		
+		orderStatusData.add(new Object[] {".",".",".","."});
+>>>>>>> .theirs
 		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, orderStatusData);
 
 		return tblOrderConfigurationStatus;

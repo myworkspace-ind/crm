@@ -56,4 +56,6 @@ public interface StorageService {
 
 	boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody);
 
+	boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody);
+
 }
