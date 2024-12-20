@@ -71,7 +71,12 @@
 		    	<div class="form-row">
 			        <div class="form-group col-md-6">
 			            <label for="transportMethod">Phương tiện vận chuyển</label>
-			            <input type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" maxlength="255">
+			            <input list="transportMethods" type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" maxlength="255">
+			            <datalist id="transportMethods">
+				        <th:block th:each="transport : ${listTransports}">
+				            <option th:value="${transport}"></option>
+				        </th:block>
+				    </datalist>
 			        </div>
 			    </div>
 		   		</div>
