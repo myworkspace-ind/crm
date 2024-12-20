@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<style>
+	#responsibleModal {
+  		--bs-modal-width: 800px;
+	}
+</style>
 	<!-- BEGIN CONTENT -->
 	<div class="app-content content">
 		<div class="content-body">
@@ -52,6 +57,10 @@
 													th:text="${profession.name}"
 													th:selected="${profession.id == customer?.profession?.id}"></option>
 											</th:block>
+											<option value="customProfession" class="custom-option" id="custom-Customer"
+											  style="font-weight: bold; background-color: #f0f8ff; display: flex; align-items: center; padding-right: 25px;">
+											  Tùy Chỉnh
+											</option>
 										</select>
 									</div>
 
@@ -64,6 +73,10 @@
 													th:text="${status.name}"
 													th:selected="${status.id == customer?.mainStatus?.id}"></option>
 											</th:block>
+											<option value="customStatus" class="custom-option" id="custom-Customer"
+											  style="font-weight: bold; background-color: #f0f8ff; display: flex; align-items: center; padding-right: 25px;">
+											  Tùy Chỉnh
+											</option>
 										</select>
 									</div>
 
@@ -76,6 +89,10 @@
 													th:text="${status.name}"
 													th:selected="${status.id == customer?.subStatus?.id}"></option>
 											</th:block>
+											<option value="customStatus" class="custom-option" id="custom-Customer"
+											  style="font-weight: bold; background-color: #f0f8ff; display: flex; align-items: center; padding-right: 25px;">
+											  Tùy Chỉnh
+											</option>
 										</select>
 									</div>
 
@@ -88,6 +105,10 @@
 													th:text="${person.name}"
 													th:selected="${person.id == customer?.responsiblePerson?.id}"></option>
 											</th:block>
+										<option value="customPerson" class="custom-option" id="custom-Customer"
+										  style="font-weight: bold; background-color: #f0f8ff; display: flex; align-items: center; padding-right: 25px;">
+										  Tùy Chỉnh
+										</option>
 										</select>
 									</div>
 
@@ -108,6 +129,33 @@
 			</section>
 		</div>
 	</div>
+	<!-- Modal CRUD Người phụ trách -->
+	<div class="modal" tabindex="-1" role="dialog" id="responsibleModal" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title text-light" id="responsibleModalLabel" ></h5>
+      	    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-dismiss="modal"></button>
+	      </div>
+	      <div class="modal-body">
+	      		<span>ID sẽ tăng tự động khi được tạo mới. Vui lòng không nhập ID!</span>
+	      	    <div id="responsibleTable"></div>
+	      </div>
+	       <div id="success-alert" class="alert alert-success" style="display: none">
+		       <button type="button" class="close" data-dismiss="alert">x</button>
+		       <strong>Success! </strong> Saved.
+	       </div>
+	      <div class="modal-footer">
+	        <button type="button" id="cancelShowBtn" class="btn btn-secondary modal-btn" data-dismiss="modal">Đóng</button>
+	      	<button type="button" class="btn btn-primary" id="saveDataButton">Lưu</button>
+	      	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- Overlay -->
+	<div id="overlay" class="overlay"></div>
+	
 	<script>
      // Thêm dấu '*' cho các trường yêu cầu
      document.querySelectorAll("input[required], select[required], textarea[required]").forEach((element) => {
@@ -116,6 +164,45 @@
              label.innerHTML += ' <span style="color: red;">*</span>';
          }
      });
+     
+     function handleOpenModal(event) {
+    	// Kiểm tra nếu giá trị được chọn là "custom" (Tùy Chỉnh)
+ 	    if (event.target.value === 'customPerson' ||
+	    		event.target.value === 'customProfession' ||
+	    		event.target.value === 'customStatus') {
+ 	     // Lấy phần tử select
+ 	     let titleModal;
+ 	     if(event.target.value === 'customPerson'){
+ 	    	 titleModal = 'Quản lý người phụ trách';
+ 	     }
+ 	     else if(event.target.value === 'customProfession'){
+ 	    	 titleModal = 'Quản lý ngành nghề';
+ 	     }
+ 	     else{
+ 	    	 titleModal = 'Quản lý trạng thái người dùng';
+ 	     }
+	   	     document.getElementById('responsibleModalLabel').innerText = titleModal;
+	   	  	 loadTableData(event.target.value);
+ 	        // Lựa chọn option đầu tiên 
+ 	        event.target.selectedIndex = 0;
+
+		     const modal = new bootstrap.Modal(document.getElementById('responsibleModal'));
+		     modal.show();
+ 	    }
+     }
+     document.getElementById('responsible_person').addEventListener('change', function(event) {
+    	    handleOpenModal(event);
+    	});
+     document.getElementById('sub_status').addEventListener('change', function(event) {
+ 	    handleOpenModal(event);
+ 		});
+     document.getElementById('main_status').addEventListener('change', function(event) {
+ 	    handleOpenModal(event);
+ 		});
+     document.getElementById('profession').addEventListener('change', function(event) {
+  	    handleOpenModal(event);
+  		});
+
 	</script>
 
 	<!-- END CONTENT -->

@@ -1,8 +1,11 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +16,14 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,9 +45,11 @@ import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Interaction;
+import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
+import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.CustomerService_Son;
 import mks.myworkspace.crm.service.ProfessionService;
@@ -45,7 +57,13 @@ import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Interaction_Handsontable;
+import mks.myworkspace.crm.transformer.JpaTransformer_OrderCate_Handsontable;
+import mks.myworkspace.crm.transformer.JpaTransformer_ResponsiblePerson_Handsontable;
 import mks.myworkspace.crm.validate.InteractionValidator;
+import mks.myworkspace.crm.validate.OrderCategoryValidator;
+import mks.myworkspace.crm.validate.ProfessionValidator;
+import mks.myworkspace.crm.validate.ResponsiblePersonValidator;
+import mks.myworkspace.crm.validate.StatusValidator;
 
 /**
  * Handles requests for Tasks.
@@ -92,33 +110,50 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	CustomerService_Son customerServiceSon;
-
+	
+	@Value("classpath:responsible-person/responsible-person-demo.json")
+	private Resource resResponsiblePersonDemo;
 	@GetMapping("list")
-	public ModelAndView displayCustomerListCRMScreen(@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "statusId", required = false) Long statusId, HttpServletRequest request,
+	public ModelAndView displayCustomerListCRMScreen(
+			CustomerCriteriaDTO customerCriteriaDTO,
+			HttpServletRequest request,
 			HttpSession httpSession) {
 
-		log.debug("Display Cusomter list with keyword= {}", keyword);
 		ModelAndView mav = new ModelAndView("customer_list_v2");
 		initSession(request, httpSession);
-
+		int page = 1;
+        try {
+            if(customerCriteriaDTO.getPage().isPresent()){
+                page = Integer.parseInt(customerCriteriaDTO.getPage().get()); 
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        
+        String queryString = request.getQueryString();
+        String updatedQueryString = queryString != null
+                ? Arrays.stream(queryString.split("&"))
+                        .filter(param -> !param.matches("^page=.*$")) // Loại bỏ tham số page
+                        .collect(Collectors.joining("&"))
+                : ""; // Nếu không có query string, gán chuỗi rỗng
+        if(!updatedQueryString.isBlank())
+        {
+        	updatedQueryString = updatedQueryString + "&";
+        }
+		Pageable pageable = PageRequest.of(page - 1,10);
+		Page<Customer> pageCustomer;
+        if(customerCriteriaDTO.getKeyword()!=null && customerCriteriaDTO.getKeyword().isPresent())
+        {
+        	pageCustomer = customerService.findAllKeyword(pageable, customerCriteriaDTO.getKeyword().get());
+        }
+        else
+        {
+        	pageCustomer = customerService.findAllWithSpecs(pageable, customerCriteriaDTO);
+        }
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		List<Customer> customers;
 
-		if (statusId != null) {
-			customers = customerService.findCustomersByStatus(statusId);
-			mav.addObject("statusId", statusId);
-
-		} else if (keyword != null && !keyword.isEmpty()) {
-			customers = customerService.searchCustomers(keyword);
-			mav.addObject("keyword", keyword);
-
-		} else {
-			customers = customerService.getAllCustomersWithStatuses();
-			log.debug("No keyword or statusId provided. Fetching all customers.");
-		}
-
+		List<Customer> customers = pageCustomer.getContent().size() > 0 ?  pageCustomer.getContent() : new ArrayList<Customer>();
 		List<Status> statuses = statusService.getAllStatuses();
 		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 		List<Profession> professions = professionService.getAllProfessions();
@@ -130,14 +165,17 @@ public class CustomerController extends BaseController {
 		}
 
 		long totalCustomerCount = customerService.getTotalCustomerCount();
-
+		mav.addObject("filter", updatedQueryString);
+        mav.addObject("currentPage", page);
+        mav.addObject("totalPages", pageCustomer.getTotalPages());
+        mav.addObject("totalCustomerWithSpec", pageCustomer.getTotalElements());
 		mav.addObject("customers", customers);
 		mav.addObject("statuses", statuses);
 		mav.addObject("responsiblePersons", responsiblePersons);
 		mav.addObject("professions", professions);
 		mav.addObject("statusCounts", statusCounts);
 		mav.addObject("totalCustomerCount", totalCustomerCount);
-
+		mav.addObject("numberOfElementsInCurrentPage", pageCustomer.getNumberOfElements());
 		return mav;
 	}
 
@@ -583,7 +621,110 @@ public class CustomerController extends BaseController {
 
 		return mav;
 	}
+	
+	private String getDefaultResponsiblePerson() throws IOException {
+		return IOUtils.toString(resResponsiblePersonDemo.getInputStream(), StandardCharsets.UTF_8);
+	}
+	
+	@GetMapping("/load-responsible-person")
+	@ResponseBody
+	public Object getResponsiblePersonData(@RequestParam("type") String type) throws IOException {
+		log.debug("Get sample data from responsible person file.");
+		//String jsonResponPersonTable = getDefaultResponsiblePerson();
+		
+		List<ResponsiblePerson> lstResponPerson;
+		List<Profession> lstProfession;
+		List<Status> lstStatus;
+		int[] colWidths = {50, 300, 300, 100};
+		String[] colHeaders;
+		List<Object[]> tblData;
+		if(type.equals("customPerson")) {
+			lstResponPerson = storageService.getResponPersonRepo().findAll();
+			colHeaders = new String[]{"ID", "Tên người phụ trách", "Ghi chú", "Hành động"};
+			List<String> fields = List.of("id", "name", "note");
+			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstResponPerson, fields);
+		}
+		else if(type.equals("customProfession")) {
+			lstProfession = storageService.getProfessionRepo().findAll();
+			colHeaders = new String[]{"ID", "Tên ngành nghề", "Ghi chú", "Hành động"};
+			List<String> fields = List.of("id", "name", "note");
+			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstProfession, fields);
+		}
+		else {
+			lstStatus = storageService.getStatusRepo().findAll();
+			colHeaders = new String[]{"ID", "Tên trạng thái" , "BackgroundColor","Hành động"};
+			List<String> fields = List.of("id", "name", "backgroundColor");
+			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstStatus, fields);
+		}
+		TableStructure tblOrderCate = new TableStructure(colWidths, colHeaders, tblData);
 
+		return tblOrderCate;
+		
+	}
+	
+	@PostMapping(value = "/save-responsible-person")
+	@ResponseBody
+	public TableStructure saveResponsiblePerson(@RequestBody TableStructure tableData, @RequestParam("type") String type) {
+		log.debug("saveResponsiblePerson...{}", tableData);
+
+		try {
+			List<ResponsiblePerson> lstResponsiblePerson;
+			List<Profession> lstProfession;
+			List<Status> lstStatus;
+			List<Object[]> tblData;
+
+			if(type.equals("customPerson")) {
+				lstResponsiblePerson = ResponsiblePersonValidator.validateAndCleasing(tableData.getData());	
+				lstResponsiblePerson = storageService.saveOrUpdateResponsiblePerson(lstResponsiblePerson);
+				List<String> fields = List.of("id", "name", "note");
+				tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstResponsiblePerson, fields);
+			}
+			else if(type.equals("customProfession")) {
+				lstProfession = ProfessionValidator.validateAndCleasing(tableData.getData());				
+				lstProfession = storageService.saveOrUpdateProfession(lstProfession);
+				List<String> fields = List.of("id", "name", "note");
+				tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstProfession, fields);
+			}
+			else {
+				lstStatus = StatusValidator.validateAndCleasing(tableData.getData());
+				lstStatus = storageService.saveOrUpdateStatus(lstStatus);
+				List<String> fields = List.of("id", "name", "backgroundColor");
+				tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstStatus, fields);
+			}
+
+			tableData.setData(tblData);
+		} catch (Exception ex) {
+			log.error("Could not save task.", ex);
+		}
+		return tableData;
+	}
+	
+	@RequestMapping(value = "/delete-object", method = RequestMethod.DELETE)
+	@ResponseBody
+	public ResponseEntity<?> deleteObjectById(@RequestParam("id") Long id, @RequestParam("type") String type) {
+		try {
+			if (id == null) {
+				return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID không được để trống."));
+			}
+			if(type.equals("customPerson")) {
+				storageService.deleteResponPerson(id);
+			}
+			else if(type.equals("customProfession")) {
+				storageService.deleteProfessionById(id);
+			}
+			else {
+				storageService.deleteStatusById(id);
+			}
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Đã được xóa thành công!", "id", id));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			log.debug("Error while deleting with ID: {}. Error: {}", id, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
+		}
+	}
 	// Hàm edit-customer của Đạt
 	@PutMapping("/newedit-customer")
 	@ResponseBody

@@ -191,7 +191,7 @@
 												  <div class="modal-dialog modal-lg">
 												    <div class="modal-content">
 												    <!-- <form action="/crm-web/customer-list-search-son" method="get"> -->
-												   	<form th:action="@{/customer/customer-list-search-son}" method="get">
+												   	<form th:action="@{/customer/list}" method="get">
 												      <div class="modal-header">
 												        <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Tìm kiếm</h1>
 												        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -232,7 +232,7 @@
 															            type="checkbox" 
 															            th:value="${profession.id}" 
 															            th:id="${profession.id}" 
-															            name="selectedCareers">
+															            name="careers">
 															        <label class="form-check-label" th:for="${profession.id}">
 															            <span th:text="${profession.name}"></span>
 															        </label>
@@ -290,7 +290,7 @@
 																	<td class="th1"><input type="checkbox"
 																		name="customer" th:value="${customer.id}"
 																		class="customer-checkbox" /></td>
-																	<td th:text="${iterStat.index + 1}"></td>
+																	<td th:text="${iterStat.index + 1 + (currentPage-1) * 10}"></td>
 																	<td><a
 																		th:href="@{customerDetail(id=${customer.id})}"
 																		th:text="${customer.companyName != null ? customer.companyName : ''}"></a></td>
@@ -338,33 +338,76 @@
 											<div class="col-sm-12"></div>
 										</div>
 										<div class="row">
-											<div class="col-sm-12 col-md-5">
-												<div class="dataTables_info" id="project-task-list_info"
-													role="status" aria-live="polite">Showing 1 to 10 of
-													28 entries</div>
-											</div>
+											<th:block th:if="${numberOfElementsInCurrentPage > 0}">
+												<div class="col-sm-12 col-md-5">
+													<div class="dataTables_info" id="project-task-list_info"
+														role="status" aria-live="polite">Showing [[${(currentPage != null ? (currentPage - 1) * 10 + 1 : 0)}]] to [[${(numberOfElementsInCurrentPage != null ? (currentPage - 1) * 10 + numberOfElementsInCurrentPage : 0)}]] of [[${(totalCustomerWithSpec != null ? totalCustomerWithSpec : 0)}]] entries</div>
+												</div>
+											</th:block>
 											<div class="col-sm-12 col-md-7">
 												<div class="dataTables_paginate paging_simple_numbers"
 													id="project-task-list_paginate">
-													<ul class="pagination">
-														<li class="paginate_button page-item previous disabled"
-															id="project-task-list_previous"><a href="#"
-															aria-controls="project-task-list" data-dt-idx="0"
-															tabindex="0" class="page-link">Previous</a></li>
-														<li class="paginate_button page-item active"><a
-															href="#" aria-controls="project-task-list"
-															data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-														<li class="paginate_button page-item "><a href="#"
-															aria-controls="project-task-list" data-dt-idx="2"
-															tabindex="0" class="page-link">2</a></li>
-														<li class="paginate_button page-item "><a href="#"
-															aria-controls="project-task-list" data-dt-idx="3"
-															tabindex="0" class="page-link">3</a></li>
-														<li class="paginate_button page-item next"
-															id="project-task-list_next"><a href="#"
-															aria-controls="project-task-list" data-dt-idx="4"
-															tabindex="0" class="page-link">Next</a></li>
+													<ul class="pagination" 
+													th:with="pageUrlPrefix = '/customer/list'"
+													th:if="${totalPages > 0}">
+													
+														 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+													        <a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=1'}">First</a>
+													        
+													    </li>
+													    
+													    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+													        <a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=' + ${currentPage-1}}">Previous</a>
+													    </li>
+														
+													    
+													    <th:block th:if="${totalPages <= 10}">
+													    <li class="page-item" 
+													        th:each="page : ${#numbers.sequence(1, totalPages)}" 
+													        th:classappend="${page == currentPage} ? 'active' : ''">
+													        <a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=' + ${page}}">[[${page}]]</a>
+													    </li>
+													    </th:block>
+													    
+													 	<th:block th:if="${totalPages > 10}">
+														 	<th:block th:if="${currentPage <= 5 || currentPage >= totalPages - 4}">
+														    <li class="page-item" 
+														        th:each="page : ${#numbers.sequence(1, 5)}" 
+														        th:classappend="${page == currentPage} ? 'active' : ''">
+														        <a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=' + ${page}}">[[${page}]]</a>
+														    </li>
+													    
+													    
+													   		<a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=6'}">...</a>
+													   		
+													   		<li class="page-item" 
+														        th:each="page : ${#numbers.sequence(totalPages - 4, totalPages)}"
+														        th:classappend="${page == currentPage} ? 'active' : ''">
+														        <a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=' + ${page}}">[[${page}]]</a>
+														    </li>
+														    </th:block>
+														    
+														    <th:block th:if="${currentPage > 5 && currentPage < totalPages - 4}">
+														    	<a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=' + ${currentPage-5}}">...</a>
+														    	<li class="page-item" 
+														        th:each="page : ${#numbers.sequence(currentPage - 4, currentPage + 4)}"
+														        th:classappend="${page == currentPage} ? 'active' : ''">
+														        <a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=' + ${page}}">[[${page}]]</a>
+														    </li>
+														    	<a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=' + ${currentPage + 5}}">...</a>
+														    </th:block>
+													    </th:block> 
+													
+													    
+													    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+													        <a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=' + ${currentPage+1}}">Next</a>
+													    </li>
+													    
+													    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+													        <a class="page-link" th:href="@{${pageUrlPrefix} + '?' + ${filter} + 'page=' + ${totalPages}}">Last</a>
+													    </li>
 													</ul>
+
 												</div>
 											</div>
 										</div>

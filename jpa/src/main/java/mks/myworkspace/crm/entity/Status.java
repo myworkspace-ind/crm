@@ -60,6 +60,14 @@ public class Status implements Serializable {
 	public Status(String id) {
 		this.id = Long.parseLong(id);
 	}
+
+	public Status(Long id, String name, String backgroundColor) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.backgroundColor = backgroundColor;
+	}
+	
 	
 	
 }
