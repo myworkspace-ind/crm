@@ -40,7 +40,7 @@ public class FeatureIntroductionController extends BaseController {
 	 * Simply selects the home view to render by returning its name.
      * @return 
 	 */
-	@RequestMapping(value = {"/Feature_Introduction"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/feature-introduction"}, method = RequestMethod.GET)
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("Feature_Introduction");
 		return mav;

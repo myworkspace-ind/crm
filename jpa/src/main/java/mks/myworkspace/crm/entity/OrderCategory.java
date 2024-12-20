@@ -38,10 +38,10 @@ public class OrderCategory implements Serializable {
 	@Column(name = "site_id", length = 99)
 	private String siteId; // system field
 
-	@Column
+	@Column(name = "name", length = 255)
 	private String name;
 	
-	@Column
+	@Column(name = "note", length = 255)
 	private String note;
 
 	@OneToMany(mappedBy = "orderCategory", fetch = FetchType.EAGER)	

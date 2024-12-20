@@ -45,19 +45,16 @@ public class Interaction implements Serializable {
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
-  
-    public Interaction(Long id, Date interactionDate, String content, String plan, Customer customer) {
-        this.id = id;
-        this.interactionDate = interactionDate;
-        this.content = content;
-        this.nextPlan = plan;
-        this.customer = customer;
-    }
     
-    public Interaction(Long id, Date interactionDate, String content, String plan) {
+    @Column(name = "contact_person", length = 99) 
+	private String contactPerson;
+  
+    public Interaction(Long id, Date interactionDate, String content, String nextPlan, Customer customer, String contactPerson) {
         this.id = id;
         this.interactionDate = interactionDate;
         this.content = content;
-        this.nextPlan = plan;
-    }    
+        this.nextPlan = nextPlan;
+        this.customer = customer;
+        this.contactPerson = contactPerson;
+    }  
 }

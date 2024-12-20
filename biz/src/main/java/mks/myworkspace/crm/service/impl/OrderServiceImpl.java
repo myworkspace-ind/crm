@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,28 @@ public class OrderServiceImpl implements OrderService{
 	        statuses = null; 
 	    }
 		return repo.findOrderByCriteria(customerId, orderCategoryId, statuses);
+	}
+
+	@Override
+	public List<String> findAllCodeOrders() {
+		// TODO Auto-generated method stub
+		return repo.findAllCodeOrders();
+	}
+
+	@Override
+	public List<Order> searchOrdersByList(List<Long> customerIds, List<Long> orderCategoryIds, List<Long> statuses,
+			Optional<Date> create_date, Optional<Date> delivery_date) {
+		// TODO Auto-generated method stub
+		if (customerIds == null || customerIds.isEmpty()) {
+			customerIds = null; 
+	    }
+		if (orderCategoryIds == null || orderCategoryIds.isEmpty()) {
+			orderCategoryIds = null; 
+	    }
+		if (statuses == null || statuses.isEmpty()) {
+	        statuses = null; 
+	    }
+		return repo.findOrderByList(customerIds, orderCategoryIds, statuses, create_date, delivery_date);
 	}
 
 

@@ -24,7 +24,7 @@ public class InteractionValidator {
 	                : "";
 
 	            Object[] rowData = new Object[]{
-		            interaction.getCustomer().getContactPerson(),  // Người trao đổi
+		            interaction.getContactPerson(),  // Người trao đổi
 	                formattedDate,                                 // Ngày
 	                interaction.getContent(),                      // Nội dung trao đổi
 	                interaction.getNextPlan(),                         // Kế hoạch tiếp theo
@@ -45,11 +45,10 @@ public class InteractionValidator {
 	        if (CommonUtil.isNNNE(rowData)) {
 	        	try {
 		            // Parse các trường cần thiết từ rowData
-		        	// Kiểm tra xem rowData[0] có phải là String và chuyển đổi nó thành Date
 	                String dateString = (String) rowData[1]; // Ngày dưới dạng String
 	                Date date = dateFormat.parse(dateString); // Chuyển String thành Date
-	                Customer customer = new Customer(customerId, (String) rowData[0]);
-	                
+	                Customer customer = new Customer(customerId);
+	                String contactPerson = (String) rowData[0];
 		            String content = (String) rowData[2]; // Nội dung trao đổi
 		            String nextPlan = (String) rowData[3]; // Kế hoạch tiếp theo
 		            Long interactionId = null;
@@ -59,7 +58,7 @@ public class InteractionValidator {
 		            }
 	
 		            // Tạo đối tượng Interaction từ các trường đã parse
-		            Interaction interaction = new Interaction(interactionId, date, content, nextPlan, customer);
+		            Interaction interaction = new Interaction(interactionId, date, content, nextPlan, customer, contactPerson);
 	
 		            // Thêm đối tượng vào danh sách kết quả
 		            paramList.add(interaction);
@@ -72,5 +71,4 @@ public class InteractionValidator {
 
 	    return paramList;
 	}
-
 }

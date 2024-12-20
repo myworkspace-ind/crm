@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,11 +44,13 @@ import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.GoodsCategory;
+import mks.myworkspace.crm.entity.HistoryOrder;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.GoodsCategoryService;
+import mks.myworkspace.crm.service.HistoryOrderService;
 import mks.myworkspace.crm.service.OrderCategoryService;
 import mks.myworkspace.crm.service.OrderService;
 import mks.myworkspace.crm.service.OrderStatusService;
@@ -99,6 +103,10 @@ public class OrderController extends BaseController {
 	
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired 
+	HistoryOrderService historyOrderService;
+	
 
 	@GetMapping("")
 	public ModelAndView displayOrder(@RequestParam(value = "categoryId", required = false) Long categoryId, 
@@ -145,6 +153,7 @@ public class OrderController extends BaseController {
 
 	@GetMapping("new")
 	public ModelAndView newOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
+			@RequestParam(value = "customerId", required = false) Long customerId,
 			HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("fragments/createOrderModal_v2");
 		initSession(request, httpSession);
@@ -163,6 +172,16 @@ public class OrderController extends BaseController {
 			List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(defaultCategoryId);
 			mav.addObject("orderStatuses", orderStatuses);
 			mav.addObject("selectedCategoryId", defaultCategoryId);
+		}
+		
+		if (customerId != null)
+		{
+			Optional<Customer> customerOpt = customerService.findById(customerId);
+			customerOpt.ifPresentOrElse(customer -> {
+				mav.addObject("selectedCustomer", customer);
+			}, () -> {
+				mav.addObject("errorMessage", "Customer not found.");
+			});
 		}
 
 		List<OrderStatus> listOrderStatuses;
@@ -184,6 +203,8 @@ public class OrderController extends BaseController {
 		
 		List<Customer> allSenders;
 		allSenders = customerService.getAllCustomers();
+		
+		List<String> allCodes = orderService.findAllCodeOrders();
 
 		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
 		if (dataSet == null) {
@@ -205,6 +226,7 @@ public class OrderController extends BaseController {
 		mav.addObject("listOrderStatuses", listOrderStatuses);
 		mav.addObject("orderCategories", orderCategories);
 		mav.addObject("listGoodsCategories", listGoodsCategories);
+		mav.addObject("orderCodes", allCodes);
 
 		return mav;
 	}
@@ -235,13 +257,17 @@ public class OrderController extends BaseController {
 		initSession(request, httpSession);
 		return mav;
 	}
-	
 	@GetMapping("/history")
-	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("historyUpdate");
+    public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
+        // Lấy tất cả các lịch sử đơn hàng
+        List<HistoryOrder> historyOrders = historyOrderService.findAll();
 
-		return mav;
-	}
+        // Tạo ModelAndView và truyền dữ liệu vào view
+        ModelAndView mav = new ModelAndView("historyUpdate");
+        mav.addObject("historyOrders", historyOrders); // Truyền danh sách historyOrders vào view
+
+        return mav;
+    }
 	
 	private List<Object[]> getDemoData() {
 		List<Object[]> data = new ArrayList<Object[]>();

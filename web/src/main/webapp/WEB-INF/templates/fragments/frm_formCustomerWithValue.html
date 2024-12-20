@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<style>
+	#responsibleModal {
+  		--bs-modal-width: 800px;
+	}
+</style>
 	<!-- BEGIN CONTENT -->
 	<div class="app-content content">
 		<div class="content-body">
@@ -15,85 +20,101 @@
 									<input type="hidden" id="customer_id" name="id" th:value="${customer?.id}"> <!-- Giá trị này có thể là ID của khách hàng hiện tại -->
 									<div class="form-group">
 										<label for="company_name">Tên Công Ty:</label>
-										<input type="text" class="form-control" id="company_name" name="company_name"
+										<input type="text" class="form-control" id="company_name" name="company_name"  maxlength="99"
 										   th:value="${customer?.companyName}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="contact_person">Người Liên Hệ Chính:</label>
-										<input type="text" class="form-control" id="contact_person" name="contact_person"
+										<input type="text" class="form-control" id="contact_person" name="contact_person" maxlength="99"
 										   th:value="${customer?.contactPerson}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="email">Email:</label>
-										<input type="email" class="form-control" id="email" name="email"
+										<input type="email" class="form-control" id="email" name="email" maxlength="99"
 										   th:value="${customer?.email}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="phone">Số Điện Thoại:</label>
-										<input type="tel" class="form-control" id="phone" name="phone"
+										<input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name="phone" maxlength="10"
 										   th:value="${customer?.phone}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="address">Địa Chỉ:</label>
-										<input type="text" class="form-control" id="address" name="address"
-										   th:value="${customer?.address}">
+										<input type="text" class="form-control" id="address" name="address" maxlength="255"
+										   th:value="${customer?.address}" required>
 									</div>
 
 									<div class="form-group">
 										<label for="profession">Ngành Nghề:</label>
-										<select class="form-control" id="profession" name="profession">
+										<select class="form-control" id="profession" name="profession" required>
 											<option value="">Chọn Ngành Nghề</option>
 											<th:block th:each="profession : ${professions}">
 												<option th:value="${profession.id}"
 													th:text="${profession.name}"
 													th:selected="${profession.id == customer?.profession?.id}"></option>
 											</th:block>
+											<option value="customProfession" class="custom-option" id="custom-Customer"
+											  style="font-weight: bold; background-color: #f0f8ff; display: flex; align-items: center; padding-right: 25px;">
+											  Tùy Chỉnh
+											</option>
 										</select>
 									</div>
 
 									<div class="form-group">
 										<label for="main_status">Trạng Thái Chính:</label>
-										<select class="form-control" id="main_status" name="main_status">
+										<select class="form-control" id="main_status" name="main_status" required>
 											<option value="">Chọn Trạng Thái Chính</option>
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}"
 													th:text="${status.name}"
 													th:selected="${status.id == customer?.mainStatus?.id}"></option>
 											</th:block>
+											<option value="customStatus" class="custom-option" id="custom-Customer"
+											  style="font-weight: bold; background-color: #f0f8ff; display: flex; align-items: center; padding-right: 25px;">
+											  Tùy Chỉnh
+											</option>
 										</select>
 									</div>
 
 									<div class="form-group">
 										<label for="sub_status">Trạng Thái Phụ:</label>
-										<select class="form-control" id="sub_status" name="sub_status">
+										<select class="form-control" id="sub_status" name="sub_status" required>
 											<option value="">Chọn Trạng Thái Phụ</option>
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}"
 													th:text="${status.name}"
 													th:selected="${status.id == customer?.subStatus?.id}"></option>
 											</th:block>
+											<option value="customStatus" class="custom-option" id="custom-Customer"
+											  style="font-weight: bold; background-color: #f0f8ff; display: flex; align-items: center; padding-right: 25px;">
+											  Tùy Chỉnh
+											</option>
 										</select>
 									</div>
 
 									<div class="form-group">
 										<label for="responsible_person">Người Phụ Trách:</label>
-										<select class="form-control" id="responsible_person" name="responsible_person">
+										<select class="form-control" id="responsible_person" name="responsible_person" required>
 											<option value="">Chọn Người Phụ Trách</option>
 											<th:block th:each="person : ${responsiblePersons}">
 												<option th:value="${person.id}"
 													th:text="${person.name}"
 													th:selected="${person.id == customer?.responsiblePerson?.id}"></option>
 											</th:block>
+										<option value="customPerson" class="custom-option" id="custom-Customer"
+										  style="font-weight: bold; background-color: #f0f8ff; display: flex; align-items: center; padding-right: 25px;">
+										  Tùy Chỉnh
+										</option>
 										</select>
 									</div>
 
 									<div class="form-group">
 										<label for="note">Ghi Chú:</label>
-										<textarea class="form-control" id="note" name="note" th:text="${customer?.note}"></textarea>
+										<textarea class="form-control" id="note" name="note" maxlength="255" th:text="${customer?.note}"></textarea>
 									</div>
 
 									<button type="submit" class="btn btn-primary">Lưu Khách Hàng</button>
@@ -108,5 +129,81 @@
 			</section>
 		</div>
 	</div>
+	<!-- Modal CRUD Người phụ trách -->
+	<div class="modal" tabindex="-1" role="dialog" id="responsibleModal" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title text-light" id="responsibleModalLabel" ></h5>
+      	    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-dismiss="modal"></button>
+	      </div>
+	      <div class="modal-body">
+	      		<span>ID sẽ tăng tự động khi được tạo mới. Vui lòng không nhập ID!</span>
+	      	    <div id="responsibleTable"></div>
+	      </div>
+	       <div id="success-alert" class="alert alert-success" style="display: none">
+		       <button type="button" class="close" data-dismiss="alert">x</button>
+		       <strong>Success! </strong> Saved.
+	       </div>
+	      <div class="modal-footer">
+	        <button type="button" id="cancelShowBtn" class="btn btn-secondary modal-btn" data-dismiss="modal">Đóng</button>
+	      	<button type="button" class="btn btn-primary" id="saveDataButton">Lưu</button>
+	      	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- Overlay -->
+	<div id="overlay" class="overlay"></div>
+	
+	<script>
+     // Thêm dấu '*' cho các trường yêu cầu
+     document.querySelectorAll("input[required], select[required], textarea[required]").forEach((element) => {
+         const label = element.previousElementSibling;
+         if (label) {
+             label.innerHTML += ' <span style="color: red;">*</span>';
+         }
+     });
+     
+     function handleOpenModal(event) {
+    	// Kiểm tra nếu giá trị được chọn là "custom" (Tùy Chỉnh)
+ 	    if (event.target.value === 'customPerson' ||
+	    		event.target.value === 'customProfession' ||
+	    		event.target.value === 'customStatus') {
+ 	     // Lấy phần tử select
+ 	     let titleModal;
+ 	     if(event.target.value === 'customPerson'){
+ 	    	 titleModal = 'Quản lý người phụ trách';
+ 	     }
+ 	     else if(event.target.value === 'customProfession'){
+ 	    	 titleModal = 'Quản lý ngành nghề';
+ 	     }
+ 	     else{
+ 	    	 titleModal = 'Quản lý trạng thái người dùng';
+ 	     }
+	   	     document.getElementById('responsibleModalLabel').innerText = titleModal;
+	   	  	 loadTableData(event.target.value);
+ 	        // Lựa chọn option đầu tiên 
+ 	        event.target.selectedIndex = 0;
+
+		     const modal = new bootstrap.Modal(document.getElementById('responsibleModal'));
+		     modal.show();
+ 	    }
+     }
+     document.getElementById('responsible_person').addEventListener('change', function(event) {
+    	    handleOpenModal(event);
+    	});
+     document.getElementById('sub_status').addEventListener('change', function(event) {
+ 	    handleOpenModal(event);
+ 		});
+     document.getElementById('main_status').addEventListener('change', function(event) {
+ 	    handleOpenModal(event);
+ 		});
+     document.getElementById('profession').addEventListener('change', function(event) {
+  	    handleOpenModal(event);
+  		});
+
+	</script>
+
 	<!-- END CONTENT -->
 </html>

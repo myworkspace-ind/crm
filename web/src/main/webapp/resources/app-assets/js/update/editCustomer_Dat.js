@@ -33,13 +33,13 @@ function saveCustomerChanges() {
         phone: phone,
         address: address,
         responsiblePerson: responsiblePerson || null,
-        note: note || '',
-        profession: profession || '',
-        mainStatus: mainStatus || '',
-        subStatus: subStatus || '',
+        note: note || null,
+        profession: profession || null,
+        mainStatus: mainStatus || null,
+        subStatus: subStatus || null,
     };
 
-    const _ctx = "/crm-web/";
+    // const _ctx = "/crm-web/";
     // Gửi yêu cầu PUT để cập nhật thông tin khách hàng
     fetch(`${_ctx}customer/newedit-customer`, {
         method: 'PUT', // Phải là PUT để cập nhật dữ liệu
@@ -47,22 +47,21 @@ function saveCustomerChanges() {
             'Content-Type': 'application/json', // Đảm bảo Content-Type là application/json
         },
         body: JSON.stringify(customerData) // Chuyển dữ liệu thành JSON
-    })
+    	})
         .then(response => {
             console.log("Response status: ", response.status); // Kiểm tra mã trạng thái HTTP
             return response.json(); // Chuyển phản hồi sang JSON
         })
-        .then(data => {
-			// Kiểm tra xem phản hồi có chứa thông điệp thành công hay lỗi
-			    if (data.message) {
-			        alert(data.message); // Nếu có thông điệp thành công
-			    } else if (data.errorMessage) {
-			        alert(data.errorMessage); // Nếu có thông điệp lỗi
-			}
-        })
-        .catch(error => {
-            // Xử lý lỗi
-            console.error('Có lỗi xảy ra:', error);
-            alert('Có lỗi xảy ra khi cập nhật khách hàng.');
-        });
+		.then(data => {
+		            if (data.message) {
+		                alert(data.message); // Nếu có thông điệp thành công
+		            } else if (data.errorMessage) {
+		                alert(data.errorMessage); // Nếu có thông điệp lỗi
+		            }
+		        })
+		        .catch(error => {
+		            // Xử lý lỗi
+		            console.error('Có lỗi xảy ra:', error);
+		            alert('Có lỗi xảy ra khi cập nhật khách hàng.');
+		        });
 }
