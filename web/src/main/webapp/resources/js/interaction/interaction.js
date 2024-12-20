@@ -99,8 +99,9 @@ function loadTableData(customerId) {
             return;
         }
 		
-        const url = `${_ctx}/customer/load-interaction?id=${customerId}`;
-
+//        const url = `${_ctx}/customer/load-interaction?id=${customerId}`;
+		//Không thêm / trước customer vì trong _ctx đã có /sẵn rồi
+		const url = `${_ctx}customer/load-interaction?id=${customerId}`;
         $.ajax({
             url: url,
             type: 'GET',
@@ -186,7 +187,7 @@ function deleteButtonRenderer(instance, td, row, col, prop, value, cellPropertie
 function deleteRow(rowIndex, interactionId) {
     if (confirm(`Bạn có chắc muốn xóa hàng số ${rowIndex + 1}?`)) {
         $.ajax({
-            url: `${_ctx}/customer/delete-interaction?id=${interactionId}`,
+            url: `${_ctx}customer/delete-interaction?id=${interactionId}`,
             type: 'DELETE',
             success: function (response) {
                 console.log('Xóa thành công:', response);

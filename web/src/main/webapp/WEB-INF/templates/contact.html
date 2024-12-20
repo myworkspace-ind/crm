@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
     <meta charset="UTF-8" />
@@ -56,7 +56,7 @@
 	<!-- Header Section -->
 	<div id="headerToolbar" class="bg-light shadow-sm py-2">
 	    <div class="container d-flex align-items-center">
-	        <a href="/crm-web/" class="text-decoration-none d-flex align-items-center position-relative">
+	        <a th:href= "@{/}" class="text-decoration-none d-flex align-items-center position-relative">
 			    <img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;">
 			    <span class="custom-tooltip">Go Home</span>
 			</a>
