@@ -33,7 +33,7 @@ $(document).ready(function () {
 
         // Gửi AJAX request
         $.ajax({
-            url: _ctx + `/customer/save-responsible-person?type=${type}`,
+            url: _ctx + `customer/save-responsible-person?type=${type}`,
             type: 'POST',
             data: formDataJson,
             dataType: "json",

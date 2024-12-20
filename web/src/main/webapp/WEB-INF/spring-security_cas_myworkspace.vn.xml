@@ -18,29 +18,19 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 	<!-- Uncomment this authentication for Development environment -->
 	<!-- <http auto-config="true"> -->
 	<!-- <access-denied-handler error-page="/403" /> -->
-	<!-- <intercept-url pattern="/recovery" access="ROLE_ANONYMOUS" /> -->
-	<!-- <intercept-url pattern="/recovery/**" access="ROLE_ANONYMOUS" /> -->
-	<!-- <intercept-url pattern="/recoverAccount" access="ROLE_ADMIN,ROLE_USER,ROLE_ANONYMOUS" 
-		/> -->
-	<!-- <intercept-url pattern="/forgetPassword" access="ROLE_ADMIN,ROLE_USER,ROLE_ANONYMOUS" 
-		/> -->
-	<!-- <intercept-url pattern="/changePassword" access="ROLE_ADMIN,ROLE_USER,ROLE_ANONYMOUS" 
-		/> -->
-	<!-- <intercept-url pattern="/checkInfo" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" 
-		/> -->
-	<!-- <intercept-url pattern="/checkPhoneInfo" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" 
-		/> -->
-	<!-- <intercept-url pattern="/login" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" 
-		/> -->
-	<!-- <intercept-url pattern="/register" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" 
-		/> -->
-	<!-- <intercept-url pattern="/resources/**" access="ROLE_ADMIN,ROLE_USER,ROLE_ANONYMOUS,ROLE_MANAGER" 
-		/> -->
-	<!-- <intercept-url pattern="/**" access="ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" 
-		/> -->
-	<!-- <form-login login-page="/login" default-target-url="/home" -->
-	<!-- authentication-failure-url="/login?error"/> -->
-	<!-- <logout logout-success-url="/login?logout" invalidate-session="true"/> -->
+	<!-- <intercept-url pattern="/recovery" access="ROLE_ANONYMOUS" />
+	<intercept-url pattern="/recovery/**" access="ROLE_ANONYMOUS" />
+	<intercept-url pattern="/recoverAccount" access="ROLE_ADMIN,ROLE_USER,ROLE_ANONYMOUS" />
+	<intercept-url pattern="/forgetPassword" access="ROLE_ADMIN,ROLE_USER,ROLE_ANONYMOUS" />
+	<intercept-url pattern="/changePassword" access="ROLE_ADMIN,ROLE_USER,ROLE_ANONYMOUS" />
+	<intercept-url pattern="/checkInfo" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" />
+	<intercept-url pattern="/checkPhoneInfo" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" />
+	<intercept-url pattern="/login" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" /> 
+	<intercept-url pattern="/register" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" />
+	<intercept-url pattern="/resources/**" access="ROLE_ADMIN,ROLE_USER,ROLE_ANONYMOUS,ROLE_MANAGER" />
+	<intercept-url pattern="/**" access="ROLE_ADMIN,ROLE_USER,ROLE_MANAGER" /> -->
+	<!-- <form-login login-page="/login" default-target-url="/home" authentication-failure-url="/login?error"/>
+	<logout logout-success-url="/login?logout" invalidate-session="true"/> -->
 	<!-- </http> -->
 
 	<!-- Uncomment this authentication for Development environment -->
@@ -91,27 +81,51 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 	<!-- Enable security, let the casAuthenticationEntryPoint handle all intercepted 
 		urls. The CAS_FILTER needs to be in the right position within the filter 
 		chain. -->
+		
 	<!-- Uncomment this entry-point-refer to use CAS for authentication -->
 	<!-- <http entry-point-ref="casAuthenticationEntryPoint" auto-config="true"> -->
 	<!-- <intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY"></intercept-url> -->
 	<!-- <custom-filter position="CAS_FILTER" ref="casAuthenticationFilter"></custom-filter> -->
 	<!-- </http> -->
-	<http entry-point-ref="casAuthenticationEntryPoint"
+	<!-- <http entry-point-ref="casAuthenticationEntryPoint"
 		use-expressions="true">
 		<intercept-url pattern="/j_spring_cas_security_check" access="permitAll" />
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/**" access="permitAll" />
+		
 		<intercept-url pattern="/orders/list/**" access="isAuthenticated()" />
+		
 		<intercept-url pattern="/logout" access="permitAll" />
+		<intercept-url pattern="/logout-handler" access="permitAll" />
 		<custom-filter ref="singleLogoutFilter" before="LOGOUT_FILTER" />
 		<custom-filter ref="casAuthenticationFilter" position="CAS_FILTER" />
 
 		<logout logout-url="/logout"
 			logout-success-url="https://myworkspace.vn/cas/logout?service=http://localhost:8080/crm-web" />
 			
-			<form-login default-target-url="/" />
+		<form-login default-target-url="/" />
+	</http> -->
+	
+	<http entry-point-ref="casAuthenticationEntryPoint" use-expressions="true">
+		<!-- Tắt CSRF -->
+	    <csrf disabled="true" />
+	    
+	    <!-- Các URL cụ thể hơn cần được định nghĩa trước -->
+	    <intercept-url pattern="/j_spring_cas_security_check" access="permitAll" />
+	    <intercept-url pattern="/resources/**" access="permitAll" />
+	    <intercept-url pattern="/logout" access="permitAll" />
+	    <intercept-url pattern="/" access="permitAll" />
+	
+	    <!-- Cuối cùng là URL phổ quát -->
+	    <intercept-url pattern="/**" access="permitAll" />
+	
+	    <custom-filter ref="singleLogoutFilter" before="LOGOUT_FILTER" />
+	    <custom-filter ref="casAuthenticationFilter" position="CAS_FILTER" />
+	    <logout logout-url="/logout" logout-success-url="https://myworkspace.vn/cas/logout?service=http://localhost:8080/crm-web" />
+	    <form-login default-target-url="/" />
 	</http>
+	
 
 	<!-- Required for the casProcessingFilter, so define it explicitly set and 
 		specify an Id Even though the authenticationManager is created by default 

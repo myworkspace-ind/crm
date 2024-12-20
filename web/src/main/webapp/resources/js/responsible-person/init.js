@@ -8,8 +8,9 @@ var htResponsiblePerson;
  * Load column width, header, initTable()
  */
 function loadTableData(type) {
+	console.log("Biến ctx:", _ctx);
 	$.ajax({
-		url: _ctx + `/customer/load-responsible-person?type=${type}`,
+		url: _ctx + `customer/load-responsible-person?type=${type}`,
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -105,7 +106,7 @@ function deleteRow(rowIndex, id) {
 	}
     if (confirm(`Bạn có chắc muốn xóa hàng số ${rowIndex + 1}?`)) {
         $.ajax({
-            url: `${_ctx}/customer/delete-object?id=${id}&type=${type}`,
+            url: `${_ctx}customer/delete-object?id=${id}&type=${type}`,
             type: 'DELETE',
             success: function (response) {
                 console.log('Xóa thành công:', response);
