@@ -6,8 +6,10 @@ function loadOrderStatuses_Datatable() {
 document.addEventListener("DOMContentLoaded", function() {
 	const orderCategorySelect = document.getElementById("orderCategoryCreate");
 	const orderStatusSelect = document.getElementById("orderStatusCreate");
-	const _ctx = "/crm-web/";
-	const defaultCategoryId = 0;
+
+	//const _ctx = "/crm-web/";
+
+	const defaultCategoryId = localStorage.getItem("orderCategoryID")!==null ? localStorage.getItem("orderCategoryID") : 0;
 
 	loadOrderStatuses_ToCreateOrder(defaultCategoryId);
 
@@ -80,7 +82,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	const orderTypeSuggestionsContainer = document.getElementById('order-type-suggestions');
 	const orderTypeChipsContainer = document.getElementById('order-type-chips-container');
 	const orderStatusContainer = document.getElementById("orderStatusFilter");
-	const _ctx = "/crm-web/";
+
+	//const _ctx = "/crm-web/";
 
 	function showSuggestions(input, suggestions, container, type) {
 	    container.innerHTML = '';

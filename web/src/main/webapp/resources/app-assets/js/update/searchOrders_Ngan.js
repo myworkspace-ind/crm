@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 	const searchButton = document.querySelector('.btn-search-orders');
-	const customerChipsContainer = document.getElementById('customer-chips-container');
-	const orderTypeChipsContainer = document.getElementById('order-type-chips-container');
+	const customerChipsContainer = document.getElementById('customer-input-container-handsontable');
+	const orderTypeChipsContainer = document.getElementById('order-type-chips-container-handsontable');
 
 	searchButton.addEventListener('click', function() {
 		const customerIds = Array.from(customerChipsContainer.querySelectorAll('.chip')).map(chip => chip.dataset.id);
@@ -39,11 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		// Xây dựng query string từ các tham số
 		const params = new URLSearchParams(paramsObject).toString();
-		const requestUrl = `${_ctx}orders-datatable/search-orders-list?${params}`;
+		const requestUrl = `${_ctx}orders-handsontable/search-orders-list?${params}`;
 
 		console.log("Request URL:", requestUrl);
 
-		fetch(`${_ctx}orders-datatable/search-orders-list?${params}`, {
+		fetch(`${_ctx}orders-handsontable/search-orders-list?${params}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -91,12 +91,12 @@ document.addEventListener('DOMContentLoaded', function() {
 						resultContainer.parentElement.parentElement.insertBefore(newMessage, resultContainer.parentElement);
 					}
 				} else {
-					console.error('#tblDatatable tbody không tồn tại.');
+					console.error('#Handsontable tbody không tồn tại.');
 				}
 			});
 	});
 	function loadCustomerInfo(customerId, phone, name) {
-		fetch(`${_ctx}orders-datatable/get-sender-receiver-details?customerId=${customerId}`)
+		fetch(`${_ctx}orders-handsontable/get-sender-receiver-details?customerId=${customerId}`)
 			.then(response => response.json())
 			.then(data => {
 				if (data) {

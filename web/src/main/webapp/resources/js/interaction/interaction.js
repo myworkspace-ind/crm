@@ -24,8 +24,20 @@ function attachEventHandlers() {
 function handleFormSubmit(e) {
     e.preventDefault();
 
+	const tableData = htInteraction.getData().filter(row => 
+	    row.some(cell => cell !== null && cell !== '') // Loại bỏ các dòng hoàn toàn trống
+	);
+
+	const isValid = tableData.every(row => 
+	    [0, 1, 2, 3].every(colIndex => row[colIndex] !== null && row[colIndex] !== '')
+	);
+
+	if (!isValid) {
+	    showErrorToast('Vui lòng nhập đầy đủ thông tin trước khi lưu.');
+	    return;
+	}
+	
     const colHeaders = htInteraction.getColHeader();
-    const tableData = htInteraction.getData();
     const colWidths = [];
 
     for (let i = 0; i < colHeaders.length; i++) {
@@ -87,8 +99,9 @@ function loadTableData(customerId) {
             return;
         }
 		
-        const url = `${_ctx}/customer/load-interaction?id=${customerId}`;
-
+//        const url = `${_ctx}/customer/load-interaction?id=${customerId}`;
+		//Không thêm / trước customer vì trong _ctx đã có /sẵn rồi
+		const url = `${_ctx}customer/load-interaction?id=${customerId}`;
         $.ajax({
             url: url,
             type: 'GET',
@@ -132,7 +145,13 @@ function initTable(colHeaders, colWidths, data) {
             colWidths: colWidths,
             columns: [
                 { type: 'text' },
-                { type: 'date', dateFormat: 'YYYY-MM-DD', correctFormat: true },
+				{
+                    type: 'date',
+                    dateFormat: 'YYYY-MM-DD',
+                    correctFormat: true,
+					defaultDate: new Date(),
+					datePickerConfig: { format: 'YYYY-MM-DD' }
+                },
                 { type: 'text' },
                 { type: 'text' },
                 { renderer: deleteButtonRenderer },
@@ -168,7 +187,7 @@ function deleteButtonRenderer(instance, td, row, col, prop, value, cellPropertie
 function deleteRow(rowIndex, interactionId) {
     if (confirm(`Bạn có chắc muốn xóa hàng số ${rowIndex + 1}?`)) {
         $.ajax({
-            url: `${_ctx}/customer/delete-interaction?id=${interactionId}`,
+            url: `${_ctx}customer/delete-interaction?id=${interactionId}`,
             type: 'DELETE',
             success: function (response) {
                 console.log('Xóa thành công:', response);

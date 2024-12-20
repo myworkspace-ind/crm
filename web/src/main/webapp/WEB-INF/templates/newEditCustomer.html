@@ -10,6 +10,9 @@
     <!-- END COMMON CSS -->
 
     <link rel="stylesheet" type="text/css" href="resources/css/add-customer-style.css">
+    <th:block th:include="fragments/head"></th:block>
+    <link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
 </head>
 <body class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
     data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
@@ -35,6 +38,8 @@
     <script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
     <script type="text/javascript" th:src="@{/resources/app-assets/js/update/editCustomer_Dat.js}" defer></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/localStorageNewCustomer.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/responsible-person/init.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/responsible-person/responsiblePerson-save.js}"></script>
 	
 	<script type="text/javascript">
 	 document.getElementById('updateCustomerForm').addEventListener('submit', function(event) {

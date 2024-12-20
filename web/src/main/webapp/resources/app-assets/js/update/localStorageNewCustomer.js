@@ -27,7 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = {};
       Array.from(form.elements).forEach(input => {
         if (input.name) {
-          formData[input.name] = input.value;
+			if(input.value!=="custom"){
+				formData[input.name] = input.value;
+			}
         }
       });
       localStorage.setItem(storageKey, JSON.stringify(formData));

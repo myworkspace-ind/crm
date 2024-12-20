@@ -71,7 +71,12 @@
 		    	<div class="form-row">
 			        <div class="form-group col-md-6">
 			            <label for="transportMethod">Phương tiện vận chuyển</label>
-			            <input type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" maxlength="255">
+			            <input list="transportMethods" type="text" class="form-control" id="orderTransportCreate" style="background-color: white; color: black;" maxlength="255">
+			            <datalist id="transportMethods">
+				        <th:block th:each="transport : ${listTransports}">
+				            <option th:value="${transport}"></option>
+				        </th:block>
+				    </datalist>
 			        </div>
 			    </div>
 		   		</div>
@@ -181,14 +186,22 @@
 	<script>
 		document.getElementById("createOrderButton").addEventListener("click", function () {
 		    // Xóa toàn bộ dữ liệu trong Local Storage
-		    localStorage.clear();
+ 		    if(!window.location.href.includes("customerId")){
+		    	localStorage.clear();
+ 		    }
 		  });
 		document.getElementById("closeOrderButton").addEventListener("click", function () {
 		    // Xóa toàn bộ dữ liệu trong Local Storage
-		    localStorage.clear();
+		    if(!window.location.href.includes("customerId")){
+		    	localStorage.clear();
+		    }
 		  });
 	</script>
 	<script>
+		// Hàm lưu dữ liệu vào localStorage
+		const saveData = (key, value) => {
+		    localStorage.setItem(key, value);
+		};
 		$(document).ready(function () {
 		    // Kích hoạt Select2
 		    $('.select2').select2({
@@ -200,17 +213,22 @@
 		    $('.select2').on('select2:open', function () {
 		        $('.select2-search__field').attr('placeholder', 'Tìm kiếm...');
 		    });
-	
+		    
+		    $('#orderStatusCreate').on('select2:select', function () {
+		        let selectedOption = $(this).find(':selected');
+		        saveData('orderStatusCreate', $(this).val());
+		    });
+		    
 		    // Cập nhật thông tin "Người gửi"
 		    $('#orderSenderNameCreate').on('select2:select', function () {
 		        let selectedOption = $(this).find(':selected');
 		        $('#orderSenderPhoneCreate').val(selectedOption.data('phone') || '');
 		        $('#orderSenderEmailCreate').val(selectedOption.data('email') || '');
-		        
-		     // Lưu giá trị select và các trường liên quan vào localStorage
-		        saveData('orderSenderNameCreate', $(this).val());
-		        saveData('orderSenderPhoneCreate', phone);
-		        saveData('orderSenderEmailCreate', email);
+
+		        // Lưu giá trị select và các trường liên quan vào localStorage
+		        if(!window.location.href.includes("customerId")){
+			        saveData('orderSenderNameCreate', $(this).val());
+		        }
 		    });
 	
 		    // Cập nhật thông tin "Người nhận"
@@ -220,9 +238,9 @@
 		        $('#orderReceiverEmailCreate').val(selectedOption.data('email') || '');
 		        
 		     // Lưu giá trị select và các trường liên quan vào localStorage
-		        saveData('orderReceiverNameCreate', $(this).val());
-		        saveData('orderReceiverPhoneCreate', phone);
-		        saveData('orderReceiverEmailCreate', email);
+		     	if(!window.location.href.includes("customerId")){
+		        	saveData('orderReceiverNameCreate', $(this).val());
+		     	}
 		    });
 	
 		    // Xóa thông tin khi giá trị bị xóa
@@ -280,6 +298,11 @@
 		        });
 		    } else {
 		        input.addEventListener('input', () => {
+		        	if(id==='orderCategoryCreate'){
+		        		let orderCategoryName = $('#orderCategoryCreate').val();
+		        	    let orderCategoryId = getDataIdFromDatalist('orderCategories', orderCategoryName);
+		        	    saveData("orderCategoryID",orderCategoryId);
+		        	}
 		            saveData(id, input.value);
 		        });
 		    }

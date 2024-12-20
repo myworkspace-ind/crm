@@ -9,13 +9,18 @@ import org.springframework.stereotype.Service;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
-import mks.myworkspace.crm.entity.HistoryOrder;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
+import mks.myworkspace.crm.entity.Profession;
+import mks.myworkspace.crm.entity.ResponsiblePerson;
+import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.OrderCategoryRepository;
 import mks.myworkspace.crm.repository.OrderRepository;
+import mks.myworkspace.crm.repository.ProfessionRepository;
+import mks.myworkspace.crm.repository.ResponsiblePersonRepository;
+import mks.myworkspace.crm.repository.StatusRepository;
 import mks.myworkspace.crm.service.StorageService;
 
 @Service
@@ -36,7 +41,18 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	@Getter
 	CustomerRepository customerRepo;
-
+	
+	@Autowired
+	@Getter
+	ResponsiblePersonRepository responPersonRepo;
+	
+	@Autowired
+	@Getter
+	ProfessionRepository professionRepo;
+	
+	@Autowired
+	@Getter
+	StatusRepository statusRepo;
 //	@Override
 //	public CustomerRepository getCustomerRepo() {
 //		// TODO Auto-generated method stub
@@ -212,4 +228,58 @@ public class StorageServiceImpl implements StorageService {
 	public void showHidedCustomers() {
 		appRepo.showHidedCustomers();
 	}
+	@Override
+	public void deleteCustomersByIds(List<Long> customerIds) {
+		appRepo.deleteCustomersByIds(customerIds);
+	}
+	@Override
+	public List<ResponsiblePerson> saveOrUpdateResponsiblePerson(List<ResponsiblePerson> lstResponsiblePerson) {
+		List<Long> lstIds = appRepo.saveOrUpdateResponsiblePerson(lstResponsiblePerson);
+
+		// Update the Id of saved task
+		int len = (lstIds != null) ? lstIds.size() : 0;
+		for (int i = 0; i < len; i++) {
+			lstResponsiblePerson.get(i).setId(lstIds.get(i));
+		}
+
+		return lstResponsiblePerson;
+	}
+	@Override
+	public List<Profession> saveOrUpdateProfession(List<Profession> lstProfession) {
+		List<Long> lstIds = appRepo.saveOrUpdateProfession(lstProfession);
+
+		// Update the Id of saved task
+		int len = (lstIds != null) ? lstIds.size() : 0;
+		for (int i = 0; i < len; i++) {
+			lstProfession.get(i).setId(lstIds.get(i));
+		}
+
+		return lstProfession;
+	}
+	@Override
+	public List<Status> saveOrUpdateStatus(List<Status> lstStatus) {
+		List<Long> lstIds = appRepo.saveOrUpdateStatus(lstStatus);
+
+		// Update the Id of saved task
+		int len = (lstIds != null) ? lstIds.size() : 0;
+		for (int i = 0; i < len; i++) {
+			lstStatus.get(i).setId(lstIds.get(i));
+		}
+
+		return lstStatus;
+	}
+	@Override
+	public void deleteResponPerson(Long id) {
+		appRepo.deletePersonById(id);
+	}
+	@Override
+	public void deleteStatusById(Long id) {
+		appRepo.deleteStatusById(id);
+		
+	}
+	@Override
+	public void deleteProfessionById(Long id) {
+		appRepo.deleteProfessionById(id);
+	}
+	
 }
