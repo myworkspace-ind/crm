@@ -605,13 +605,13 @@ public class CustomerController extends BaseController {
 		mav.addObject("customer", customer);
 
 		// Lấy danh sách Status, ResponsiblePersons và Professions
-		List<Status> statuses = statusService.getAllStatuses();
+		List<Status> statuses = statusService.getRepo().findAllOrderBySeqno();
 		mav.addObject("statuses", statuses);
 
-		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getRepo().findAllOrderBySeqno();
 		mav.addObject("responsiblePersons", responsiblePersons);
 
-		List<Profession> professions = professionService.getAllProfessions();
+		List<Profession> professions = professionService.getRepo().findAllOrderBySeqno();
 		mav.addObject("professions", professions);
 
 		// Thiết lập các thuộc tính của session
@@ -639,19 +639,19 @@ public class CustomerController extends BaseController {
 		String[] colHeaders;
 		List<Object[]> tblData;
 		if(type.equals("customPerson")) {
-			lstResponPerson = storageService.getResponPersonRepo().findAll();
+			lstResponPerson = storageService.getResponPersonRepo().findAllOrderBySeqno();
 			colHeaders = new String[]{"ID", "Tên người phụ trách", "Ghi chú", "Hành động"};
 			List<String> fields = List.of("id", "name", "note");
 			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstResponPerson, fields);
 		}
 		else if(type.equals("customProfession")) {
-			lstProfession = storageService.getProfessionRepo().findAll();
+			lstProfession = storageService.getProfessionRepo().findAllOrderBySeqno();
 			colHeaders = new String[]{"ID", "Tên ngành nghề", "Ghi chú", "Hành động"};
 			List<String> fields = List.of("id", "name", "note");
 			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstProfession, fields);
 		}
 		else {
-			lstStatus = storageService.getStatusRepo().findAll();
+			lstStatus = storageService.getStatusRepo().findAllOrderBySeqno();
 			colHeaders = new String[]{"ID", "Tên trạng thái" , "BackgroundColor","Hành động"};
 			List<String> fields = List.of("id", "name", "backgroundColor");
 			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstStatus, fields);
@@ -725,6 +725,24 @@ public class CustomerController extends BaseController {
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
 	}
+	
+	@PostMapping("/swap")
+    public ResponseEntity<?> swapRows(@RequestParam("rowIndex1") Long rowIndex1, 
+							            @RequestParam("rowIndex2") Long rowIndex2,
+							            @RequestParam("type") String type) {
+		try {
+			storageService.swapRowOnHandsontable(rowIndex1, rowIndex2, type);
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Đã hoán đổi thành công!"));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			log.debug("Error while swap. Error: {}", e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
+		}
+    }
+	
 	// Hàm edit-customer của Đạt
 	@PutMapping("/newedit-customer")
 	@ResponseBody

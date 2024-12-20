@@ -281,5 +281,18 @@ public class StorageServiceImpl implements StorageService {
 	public void deleteProfessionById(Long id) {
 		appRepo.deleteProfessionById(id);
 	}
+	@Override
+	public void swapRowOnHandsontable(Long rowId1, Long rowId2, String type) {
+		if(type.equals("customPerson")) {
+			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_responsible_person");
+		}
+		else if(type.equals("customProfession")) {
+			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_profession");
+		}
+		else {
+			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_status");
+		}
+		
+	}
 	
 }

@@ -218,6 +218,7 @@ public class AppRepository {
 		for (Profession e : entities) {
 			if (e.getId() == null) {
 				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+				updateSeqno(id, "crm_profession");
 			} else {
 				// Update
 				// update(e);
@@ -231,6 +232,10 @@ public class AppRepository {
 		return ids;
 	}
 
+	private void updateSeqno(Long id, String tableName) {
+		String sql = String.format("UPDATE %s SET seqno = ? WHERE id = ?", tableName);
+		jdbcTemplate0.update(sql, id, id); // Set seqno = id
+	}
 	private void updateProfession(Profession e) {
 		// TODO Auto-generated method stub
 		String updateSql = "UPDATE crm_profession SET name = ?, note = ? WHERE id = ?";
@@ -248,6 +253,7 @@ public class AppRepository {
 		for (Status e : entities) {
 			if (e.getId() == null) {
 				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+				updateSeqno(id, "crm_status");
 			} else {
 				// Update
 				// update(e);
@@ -278,6 +284,7 @@ public class AppRepository {
 		for (ResponsiblePerson e : entities) {
 			if (e.getId() == null) {
 				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+				updateSeqno(id, "crm_responsible_person");
 			} else {
 				// Update
 				// update(e);
@@ -656,5 +663,12 @@ public class AppRepository {
 		simpleJdbcInsert.execute(parameters);
 		log.debug("History record saved successfully.");
 	}
+
+	public void swapRowOnHandsontable(Long rowId1, Long rowId2, String table) {
+		String sql = String.format("UPDATE %s t1 JOIN %s t2 ON t1.id != t2.id SET t1.seqno = t2.seqno, t2.seqno = t1.seqno WHERE t1.id = ? AND t2.id = ?", table, table);
+
+		jdbcTemplate0.update(sql, rowId1, rowId2);
+	}
+
 
 }

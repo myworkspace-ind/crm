@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -35,6 +36,9 @@ public class Status implements Serializable {
 
 	@Column(name = "backgroundColor", length = 99)
 	private String backgroundColor;
+
+	@Column(name = "seqno")
+	private Long seqno;  // Trường seqno sẽ luôn bằng với id dùng để sắp xếp thứ tự
 
 //	// Many-to-Many relationship with Customer
 //	@ManyToMany(mappedBy = "statuses")
@@ -68,6 +72,12 @@ public class Status implements Serializable {
 		this.backgroundColor = backgroundColor;
 	}
 	
-	
-	
+	@PrePersist
+	public void setSeqno() {
+		if (this.id != null) {
+			this.seqno = this.id;  // Đảm bảo seqno luôn bằng với id
+		}
+	}
+
+
 }

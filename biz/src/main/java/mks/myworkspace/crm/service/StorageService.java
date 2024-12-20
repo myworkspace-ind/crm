@@ -58,5 +58,5 @@ public interface StorageService {
 	void deleteStatusById(Long id);
 	void deleteProfessionById(Long id);
 
-
+	void swapRowOnHandsontable(Long rowId1, Long rowId2, String type);
 }

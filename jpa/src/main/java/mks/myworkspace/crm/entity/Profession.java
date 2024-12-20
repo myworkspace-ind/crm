@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -32,6 +33,8 @@ public class Profession implements Serializable {
     @Column(name = "note", length = 255)
     private String note;  // Ghi chú về ngành nghề
 
+    @Column(name = "seqno")
+    private Long seqno;  // Trường seqno sẽ luôn bằng với id dùng để sắp xếp thứ tự
     public Profession(Long id, String name, String note) {
         super();
         this.id = id;
@@ -43,5 +46,11 @@ public class Profession implements Serializable {
 		this.id = Long.parseLong(id);
 	}
 
+	@PrePersist
+	public void setSeqno() {
+		if (this.id != null) {
+			this.seqno = this.id;  // Đảm bảo seqno luôn bằng với id
+		}
+	}
 
 }

@@ -25,6 +25,54 @@ function loadTableData(type) {
 		}
 	});
 }
+// Hàm hoán đổi 2 hàng
+function swapRows(hotInstance, rowIndex1, rowIndex2, row1, row2) {
+	const data = hotInstance.getData();
+
+	// Đổi dữ liệu hai hàng
+	const temp = data[row1];
+	data[row1] = data[row2];
+	data[row2] = temp;
+
+	// Cập nhật lại bảng
+	hotInstance.loadData(data);
+	var container = document.getElementById('responsibleTable');
+	let type;
+	if(container.classList.contains("customPerson")){
+		type = "customPerson";
+	}
+	else if(container.classList.contains("customProfession")){
+		type = "customProfession";
+	}
+	else {
+		type = "customStatus"
+	}
+	// Tạo một đối tượng URLSearchParams với các tham số
+	const params = new URLSearchParams();
+	params.append('rowIndex1', rowIndex1);
+	params.append('rowIndex2', rowIndex2);
+	params.append('type', type);
+
+	// Xây dựng URL với query parameters
+	const url = `${_ctx}customer/swap?${params.toString()}`;
+
+	fetch(url, {
+		method: 'POST',
+	    headers: {
+			'Content-Type': 'application/json',
+		},
+		// Không cần body khi sử dụng query parameters qua URL
+	})
+	.then(response => response.json())
+	.then(data => {
+		alert("Hoán đổi thành công");
+		location.reload();
+	})
+	.catch(error => {
+		alert("Đã xảy ra lỗi khi hoán đổi!!!!");
+		console.error('Lỗi khi swap:', error);
+	});
+}
 
 function initTable(colHeaders, colWidths, data, type) {
     console.log("HST:", document.getElementById('responsibleTable'));
@@ -53,7 +101,39 @@ function initTable(colHeaders, colWidths, data, type) {
             columnSorting: true,  // Bật tính năng sắp xếp cột
             autoColumnSize: true,  // Tự động điều chỉnh kích thước cột
             minSpareRows: 1,
-            contextMenu: true,
+            contextMenu: {
+				items: {
+					"row_above": {
+						name: 'Add Row Above',
+					},
+					"row_below": {
+						name: 'Add Row Below',
+					},
+					"swap_rows": {
+						name: 'Swap Rows', // Tên của menu item
+						callback: function () {
+						const selected = htResponsiblePerson.getSelected();
+
+						if (selected && selected.length === 2) {
+						const [row1, col1] = selected[0];
+						const [row2, col2] = selected[1];
+
+						const idRow1 = htResponsiblePerson.getDataAtCell(row1, 0);
+						const idRow2 = htResponsiblePerson.getDataAtCell(row2, 0);
+						// Kiểm tra nếu đây là 2 hàng khác nhau
+						if (row1 !== row2) {
+						 // Thực hiện hoán đổi hàng ở đây
+							swapRows(htResponsiblePerson,idRow1, idRow2, row1, row2);
+						} else {
+							alert('Please select two different rows!');
+						}
+						} else {
+							alert('Please select exactly two rows to swap.');
+						}
+					}
+				},
+			}
+		},
             licenseKey: 'non-commercial-and-evaluation'
         });
         
