@@ -100,11 +100,6 @@ function initTable(colHeaders, colWidths, data) {
                     type: 'text', 
                     allowEmpty: true, 
                     readOnly: true
-                },
-                { 
-                    type: 'text', 
-                    allowEmpty: true, 
-                    readOnly: true
                 }
             ],
             rowHeaders: true,
@@ -118,6 +113,10 @@ function initTable(colHeaders, colWidths, data) {
             contextMenu: true,
             licenseKey: 'non-commercial-and-evaluation',
             mergeCells: mergeCells,
+            hiddenColumns: {
+                columns: [3, 4], // Chỉ mục của các cột cần ẩn
+                indicators: false // Không hiển thị biểu tượng cột bị ẩn
+            },
 
             afterChange: function(changes, source) {
                 if (changes) {
