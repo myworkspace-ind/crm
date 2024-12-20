@@ -6,10 +6,16 @@ import java.util.Map;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
+import mks.myworkspace.crm.entity.Profession;
+import mks.myworkspace.crm.entity.ResponsiblePerson;
+import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.OrderCategoryRepository;
 import mks.myworkspace.crm.repository.OrderRepository;
+import mks.myworkspace.crm.repository.ProfessionRepository;
+import mks.myworkspace.crm.repository.ResponsiblePersonRepository;
+import mks.myworkspace.crm.repository.StatusRepository;
 
 public interface StorageService {
 	AppRepository getAppRepo();
@@ -43,6 +49,7 @@ public interface StorageService {
 	
 	List<Profession> saveOrUpdateProfession(List<Profession> lstProfession);
 
+
 	List<Status> saveOrUpdateStatus(List<Status> lstStatus);
 
 	ResponsiblePersonRepository getResponPersonRepo();
@@ -53,8 +60,6 @@ public interface StorageService {
 	void deleteStatusById(Long id);
 	void deleteProfessionById(Long id);
 
-
-	boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody);
 
 	boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody);
 

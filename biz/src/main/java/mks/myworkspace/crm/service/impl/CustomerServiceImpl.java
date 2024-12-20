@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +17,12 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Interaction;
+import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.StatusRepository;
 import mks.myworkspace.crm.service.CustomerService;
+import mks.myworkspace.crm.service.specification.CustomerSpecs;
 
 @Service
 @Transactional
@@ -171,5 +176,65 @@ public class CustomerServiceImpl implements CustomerService {
 
     public List<Customer> findByInteractDateRange(Date startDate, Date enDate) {
         return repo.findByInteractDateRange(startDate,enDate);
+    }
+    
+    public Page<Customer> findAllWithStatuses(Pageable pageable)
+    {
+    	return repo.findAllByAccountStatusTrue(pageable);
+    }
+    
+    public Page<Customer> findAllWithSpecs(Pageable pageable, CustomerCriteriaDTO customerCriteriaDTO)
+    {
+    	Specification<Customer> combinedSpec = Specification.where(null);
+    	if(customerCriteriaDTO.getStatusId() != null &&  customerCriteriaDTO.getStatusId().isPresent() && !customerCriteriaDTO.getStatusId().get().isBlank())
+    	{
+    		Long statusId = Long.parseLong(customerCriteriaDTO.getStatusId().get());
+    		combinedSpec = combinedSpec.and(CustomerSpecs.matchStatus(statusId));
+    	}
+    	if(customerCriteriaDTO.getCareers() != null &&  customerCriteriaDTO.getCareers().isPresent())
+    	{
+    		combinedSpec = combinedSpec.and(CustomerSpecs.matchListProfession(customerCriteriaDTO.getCareers().get()));
+    	}
+    	if(customerCriteriaDTO.getAddress() != null &&  customerCriteriaDTO.getAddress().isPresent())
+    	{
+    		combinedSpec = combinedSpec.and(CustomerSpecs.matchAddress(customerCriteriaDTO.getAddress().get()));
+    	}
+    	if(customerCriteriaDTO.getPhone() != null &&  customerCriteriaDTO.getPhone().isPresent())
+    	{
+    		combinedSpec = combinedSpec.and(CustomerSpecs.matchPhone(customerCriteriaDTO.getPhone().get()));
+    	}
+    	if(customerCriteriaDTO.getContactPerson() != null &&  customerCriteriaDTO.getContactPerson().isPresent())
+    	{
+    		combinedSpec = combinedSpec.and(CustomerSpecs.matchContactPerson(customerCriteriaDTO.getContactPerson().get()));
+    	}
+    	if(customerCriteriaDTO.getNameCompany() != null &&  customerCriteriaDTO.getNameCompany().isPresent())
+    	{
+    		combinedSpec = combinedSpec.and(CustomerSpecs.matchNameCompany(customerCriteriaDTO.getNameCompany().get()));
+    	}
+    	if(customerCriteriaDTO.getEmail() != null &&  customerCriteriaDTO.getEmail().isPresent())
+    	{
+    		combinedSpec = combinedSpec.and(CustomerSpecs.matchEmail(customerCriteriaDTO.getEmail().get()));
+    	}
+    	combinedSpec = combinedSpec.and(CustomerSpecs.matchaccountStatusTrue());
+    	return repo.findAll(combinedSpec, pageable);
+    }
+    public Page<Customer> findAllKeyword(Pageable pageable, String keyword)
+    {
+    	Specification<Customer> combinedSpec = CustomerSpecs.matchaccountStatusTrue();
+        
+        Specification<Customer> keywordSpec = Specification.where(
+                CustomerSpecs.matchReponsiblePersonName(keyword)
+            ).or(CustomerSpecs.matchNameCompany(keyword))
+             .or(CustomerSpecs.matchContactPerson(keyword))
+             .or(CustomerSpecs.matchEmail(keyword))
+             .or(CustomerSpecs.matchAddress(keyword))
+             .or(CustomerSpecs.matchPhone(keyword))
+             .or(CustomerSpecs.matchProfession(keyword))
+             .or(CustomerSpecs.matchMainStatusName(keyword))
+             .or(CustomerSpecs.matchSubStatusName(keyword))
+             .or(CustomerSpecs.matchNote(keyword));
+        combinedSpec = combinedSpec.and(keywordSpec);
+        
+        return repo.findAll(combinedSpec, pageable);
     }
 }

@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -205,6 +206,10 @@ public class OrderController extends BaseController {
 		allSenders = customerService.getAllCustomers();
 		
 		List<String> allCodes = orderService.findAllCodeOrders();
+		List<String> uniqueTransportMethods = listOrders.stream()
+			    .map(Order::getTransportationMethod)
+			    .distinct()
+			    .collect(Collectors.toList());
 
 		List<Object[]> dataSet = JpaTransformer_Order.convert2D(listOrders, allGoodsCategories, allSenders);
 		if (dataSet == null) {
@@ -219,8 +224,7 @@ public class OrderController extends BaseController {
 
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-
-		mav.addObject("dataSet", dataSet);
+		mav.addObject("listTransports",uniqueTransportMethods);		mav.addObject("dataSet", dataSet);
 		mav.addObject("listOrders", listOrders);
 		mav.addObject("listCustomers", listCustomers);
 		mav.addObject("listOrderStatuses", listOrderStatuses);

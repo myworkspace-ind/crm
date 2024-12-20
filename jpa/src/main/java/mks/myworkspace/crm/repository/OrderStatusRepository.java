@@ -19,6 +19,4 @@ public interface OrderStatusRepository  extends JpaRepository<OrderStatus, Long>
 	List<OrderStatus> findByOrderCategoryListId (@Param("orderCategoryIds") List<Long> orderCategoryIds);
 	
 	OrderStatus findByNameIgnoreCase(@Param("orderStatusName") String orderStatusName);
-	
-
 }

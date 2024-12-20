@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liên hệ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <th:block th:include="fragments/head"></th:block>
+</head>
+<style>
+    .form-container {
+        background-color: #f7f7f7;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: auto;
+    }
+    .btn-custom {
+        background-color: #1140ed;
+        color: white;
+    }
+	/* Ẩn tooltip mặc định */
+    .custom-tooltip {
+        position: absolute;
+        bottom: -30px; /* Đặt tooltip bên dưới ảnh */
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        padding: 5px 10px;
+        font-size: 12px;
+        z-index:99;
+        border-radius: 4px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* Khi hover vào ảnh, hiển thị tooltip */
+    a:hover .custom-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+</style>
+
+<body>
+
+	<!-- Header Section -->
+	<div id="headerToolbar" class="bg-light shadow-sm py-2">
+	    <div class="container d-flex align-items-center">
+	        <a th:href= "@{/}" class="text-decoration-none d-flex align-items-center position-relative">
+			    <img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;">
+			    <span class="custom-tooltip">Go Home</span>
+			</a>
+	    </div>
+	</div>
+	
+    <!-- Hero Section -->
+    <div class="text-center bg-primary text-white py-5 position-relative">
+        <div class="container">
+            <h1 class="fw-bold fs-1 mt-4">LIÊN HỆ</h1>
+            <h2 class=" fw-bold fs-3 mt-3">HÃY LIÊN HỆ VỚI CHÚNG TÔI ĐỂ NHẬN ĐƯỢC SỰ HỖ TRỢ TỐT NHẤT</h2>
+
+        </div>
+    </div>
+    <!--Contact -->
+    <div class="container px-3 mt-5 mb-5">
+        <div class="row">
+            <!-- Form Contact -->
+            <div class="col-md-6">
+                <div class="form-container">
+                    <h2 class="text-center fw-bold text-primary">LIÊN HỆ</h2>
+                    <p class="text-center text-muted">Vui lòng cung cấp thông tin để người phù hợp có thể liên hệ lại với bạn.</p>
+                    <form>
+                        <div class="mb-4">
+                            <label for="fullName" class="form-label fw-bold">Họ tên</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control" id="fullName" placeholder="Nhập họ tên">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="form-label fw-bold">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" class="form-control" id="email" placeholder="Nhập địa chỉ Email">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="subject" class="form-label fw-bold">Chức danh</label>
+                            <select class="form-select" id="subject">
+                                <option selected>Chọn một chức danh phù hợp</option>
+                                <option value="1">Sale Manager</option>
+                                <option value="2">Costomer Service Manager</option>
+                                <option value="3">IT Manager</option>
+                                <option value="4">Marketing/PR Manager</option>
+                                <option value="5">Others</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="company" class="form-label fw-bold">Công ty</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi-building"></i></span>
+                                <input type="company" class="form-control" id="company" placeholder="Nhập tên công ty">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="subject" class="form-label fw-bold">Cơ cấu nhân sự</label>
+                            <select class="form-select" id="subject">
+                                <option selected>Chọn mức phù hợp</option>
+                                <option value="1">1 - 5 nhân sự</option>
+                                <option value="2">6 - 30 nhân sự</option>
+                                <option value="3">31 - 200 nhân sự</option>
+                                <option value="4">201 - 500 nhân sự</option>
+                                <option value="5">501 - 2000 nhân sự</option>
+                                <option value="6">2000+ nhân sự</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="message" class="form-label fw-bold">Tin nhắn</label>
+                            <textarea class="form-control" id="message" rows="4" placeholder="Nhập câu hỏi hay những vấn đề tại đây"></textarea>
+                        </div>
+                        <div class="justify-content-between">
+                            <button type="submit" class="btn btn-custom w-100 fw-bold">Gửi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info Contact -->
+            <div class="col-md-6">
+                <div class="border rounded-4 p-4  p-md-5">
+                        <div class="text-center">
+                            <h2 class="fw-bold text-primary">THÔNG TIN LIÊN HỆ</h2>
+                        </div>
+                        <div class="d-flex flex-column gap-5 justify-content-center py-4">
+                            <!-- Bộ phận kinh doanh -->
+                            <div class="card shadow">
+                                <div class="card-header text-center text-uppercase text-primary fw-bold">
+                                    Bộ phận kinh doanh
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <p class="fw-bold">Điện thoại:</p>
+                                        <p>(012) 3456 7890 - Nhánh 1</p>
+                                        <p>(012) 3456 7890 - Nhánh 2</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p class="fw-bold">Hotline:</p>
+                                        <p>19001000</p>
+                                    </div>
+                                    <div>
+                                        <p class="fw-bold">Email:</p>
+                                        <p>contact@crm.hcmute.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Bộ phận chăm sóc khách hàng -->
+                            <div class="card shadow">
+                                <div class="card-header text-center text-uppercase text-primary fw-bold">
+                                    Bộ phận chăm sóc khách hàng
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <p class="fw-bold">Điện thoại:</p>
+                                        <p>(012) 3456 7890 - Nhánh 1</p>
+                                        <p>(012) 3456 7890 - Nhánh 2</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+    
