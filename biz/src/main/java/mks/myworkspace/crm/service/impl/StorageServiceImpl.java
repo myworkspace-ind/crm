@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.Profession;
@@ -21,6 +22,7 @@ import mks.myworkspace.crm.entity.OrderStatus;
 
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.repository.GoodsCategoryRepository;
 import mks.myworkspace.crm.repository.OrderCategoryRepository;
 import mks.myworkspace.crm.repository.OrderRepository;
 import mks.myworkspace.crm.repository.ProfessionRepository;
@@ -49,18 +51,22 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	@Getter
 	CustomerRepository customerRepo;
-	
+
 	@Autowired
 	@Getter
 	ResponsiblePersonRepository responPersonRepo;
-	
+
 	@Autowired
 	@Getter
 	ProfessionRepository professionRepo;
-	
+
 	@Autowired
 	@Getter
 	StatusRepository statusRepo;
+
+	@Autowired
+	@Getter
+	GoodsCategoryRepository goodsCategoryRepo;
 	
 	@Autowired
 	@Getter
@@ -295,7 +301,40 @@ public class StorageServiceImpl implements StorageService {
 	public void deleteProfessionById(Long id) {
 		appRepo.deleteProfessionById(id);
 	}
-	
+	@Override
+	public void swapRowOnHandsontable(Long rowId1, Long rowId2, String type) {
+		if(type.equals("customPerson")) {
+			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_responsible_person");
+		}
+		else if(type.equals("customProfession")) {
+			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_profession");
+		}
+		else if(type.equals("customStatus")){
+			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_status");
+		}
+		else {
+			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_goodscategory");
+		}
+
+	}
+	@Override
+	public List<GoodsCategory> saveOrUpdateGoodsCategory(List<GoodsCategory> lstGoodsCategory) {
+		List<Long> lstIds = appRepo.saveOrUpdateGoodsCategory(lstGoodsCategory);
+
+		// Update the Id of saved task
+		int len = (lstIds != null) ? lstIds.size() : 0;
+		for (int i = 0; i < len; i++) {
+			lstGoodsCategory.get(i).setId(lstIds.get(i));
+		}
+
+		return lstGoodsCategory;
+	}
+	@Override
+	public void deleteGoodsCategoryById(Long id) {
+		appRepo.deleteGoodsCategoryById(id);
+	}
+
+
 	
 	@Override
 	public boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody) {

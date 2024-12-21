@@ -27,4 +27,10 @@ public class ProfessionServiceImpl implements ProfessionService {
     public Profession saveProfession(Profession profession) {
         return professionRepository.save(profession);
     }
+
+	@Override
+	public ProfessionRepository getRepo() {
+		// TODO Auto-generated method stub
+		return professionRepository;
+	}
 }

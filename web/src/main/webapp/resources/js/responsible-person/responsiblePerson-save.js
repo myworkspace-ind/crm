@@ -9,8 +9,11 @@ $(document).ready(function () {
 		else if(container.classList.contains("customProfession")){
 			type = "customProfession";
 		}
-		else {
+		else if(container.classList.contains("customStatus")){
 			type = "customStatus"
+		}
+		else{
+			type = "customGoodsCategory";
 		}
         // Lấy thông tin từ Handsontable
         var colHeaders = htResponsiblePerson.getColHeader();
