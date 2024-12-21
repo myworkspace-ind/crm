@@ -657,4 +657,47 @@ public class AppRepository {
 		log.debug("History record saved successfully.");
 	}
 
+	public void createOrderStatus(String name) {
+		if(name == null || name == "") {
+			return;
+		}
+		else {
+			String sql = "Insert into crm_orderstatus (name) values (?)";
+			jdbcTemplate0.update(sql,name);
+			System.out.println("Them vao orderStatus thanh cong");
+		}
+	}
+	
+	public void deleteOrderCategoryStatus(Long idLoaiDonHang, Long idTrangThai) {
+		if(idLoaiDonHang == null || idTrangThai == null) {
+			return;
+		}
+		else {
+			String sql = "Delete from order_category_status where order_category_id=? and order_status_id=?";
+			jdbcTemplate0.update(sql,idLoaiDonHang,idTrangThai);
+			System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong");
+		}
+	}
+	
+	public void insertOrderCategoryStatus(Long idLoaiDonHang, Long idTrangThai) {
+		if(idLoaiDonHang == null || idTrangThai == null) {
+			return;
+		}
+		else {
+			String sql = "Insert into order_category_status (order_category_id,order_status_id) values (?,?)";
+			jdbcTemplate0.update(sql,idLoaiDonHang,idTrangThai);
+			System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong");
+		}
+	}
+	
+	public void updateOrderCategory(Long idLoaiDonHang, String name) {
+		if(idLoaiDonHang == null || name == null || name.isEmpty()) {
+			return;
+		}
+		else {
+			String sql = "update crm_ordercategory set name=? where id=?";
+			jdbcTemplate0.update(sql,name,idLoaiDonHang);
+			System.out.println("Cap Nhat loai don hang thanh cong");
+		}
+	}
 }

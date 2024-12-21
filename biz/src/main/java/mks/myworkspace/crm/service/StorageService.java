@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.service;
 
 import java.util.List;
+import java.util.Map;
 
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Order;
@@ -58,5 +59,7 @@ public interface StorageService {
 	void deleteStatusById(Long id);
 	void deleteProfessionById(Long id);
 
+
+	boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody);
 
 }

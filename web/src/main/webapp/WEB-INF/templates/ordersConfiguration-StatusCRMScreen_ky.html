@@ -10,6 +10,11 @@
 <link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
 <script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
 
+<!-- Thêm CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.min.css">
+<!-- Thêm JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.min.js"></script>
+
 <script>console.log("Handsontable:", typeof Handsontable); //Check Handsontable is available or not
 </script>
 
@@ -56,7 +61,7 @@
 	<!-- END COMMON JAVASCRIPT -->
 	
 	<!-- FILE JS BỔ SUNG -->
-	<script type="text/javascript" th:src="@{/resources/js/orders-configuration/status-init.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/js/orders-configuration/status-init-ky.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
 	<!-- Screen Javascripts -->
 
