@@ -129,9 +129,9 @@ public class AppRepository {
 
 		// Log kết quả
 		if (rowsDeleted > 0) {
-			log.debug("Interaction with ID {} deleted successfully.", Id);
+			log.debug("Responsible Person with ID {} deleted successfully.", Id);
 		} else {
-			log.warn("No interaction found with ID {} to delete.", Id);
+			log.warn("No Responsible Person found with ID {} to delete.", Id);
 		}
 	}
 	public void deleteStatusById(Long Id) {
@@ -143,9 +143,9 @@ public class AppRepository {
 
 		// Log kết quả
 		if (rowsDeleted > 0) {
-			log.debug("Interaction with ID {} deleted successfully.", Id);
+			log.debug("Status with ID {} deleted successfully.", Id);
 		} else {
-			log.warn("No interaction found with ID {} to delete.", Id);
+			log.warn("No Status found with ID {} to delete.", Id);
 		}
 	}
 	public void deleteProfessionById(Long Id) {
@@ -157,9 +157,24 @@ public class AppRepository {
 
 		// Log kết quả
 		if (rowsDeleted > 0) {
-			log.debug("Interaction with ID {} deleted successfully.", Id);
+			log.debug("Profession with ID {} deleted successfully.", Id);
 		} else {
-			log.warn("No interaction found with ID {} to delete.", Id);
+			log.warn("No profession found with ID {} to delete.", Id);
+		}
+	}
+
+	public void deleteGoodsCategoryById(Long Id) {
+		// Tạo câu lệnh DELETE với ID duy nhất
+		String sql = "DELETE FROM crm_goodscategory WHERE id = ?";
+
+		// Thực thi câu lệnh DELETE
+		int rowsDeleted = jdbcTemplate0.update(sql, Id);
+
+		// Log kết quả
+		if (rowsDeleted > 0) {
+			log.debug("GoodsCategory with ID {} deleted successfully.", Id);
+		} else {
+			log.warn("No GoodsCategory found with ID {} to delete.", Id);
 		}
 	}
 
@@ -238,9 +253,40 @@ public class AppRepository {
 	}
 	private void updateProfession(Profession e) {
 		// TODO Auto-generated method stub
-		String updateSql = "UPDATE crm_profession SET name = ?, note = ? WHERE id = ?";
+		String updateSql = "UPDATE crm_profession SET name = ?, note = ?, seqno = ? WHERE id = ?";
 
-		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getSeqno(), e.getId());
+	}
+
+	public List<Long> saveOrUpdateGoodsCategory(List<GoodsCategory> entities) {
+		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
+
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_goodscategory")
+				.usingGeneratedKeyColumns("id");
+
+		Long id;
+		for (GoodsCategory e : entities) {
+			if (e.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+				updateSeqno(id, "crm_goodscategory");
+			} else {
+				// Update
+				// update(e);
+				id = e.getId();
+				updateGoodsCategory(e);
+			}
+
+			ids.add(id);
+		}
+
+		return ids;
+	}
+	
+	private void updateGoodsCategory(GoodsCategory e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_goodscategory SET name = ?, note = ?, seqno = ? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getSeqno(), e.getId());
 	}
 
 	public List<Long> saveOrUpdateStatus(List<Status> entities) {
@@ -269,11 +315,11 @@ public class AppRepository {
 
 	private void updateStatus(Status e) {
 		// TODO Auto-generated method stub
-		String updateSql = "UPDATE crm_status SET name = ?, backgroundColor = ? WHERE id = ?";
+		String updateSql = "UPDATE crm_status SET name = ?, backgroundColor = ?, seqno = ?  WHERE id = ?";
 
-		jdbcTemplate0.update(updateSql, e.getName(), e.getBackgroundColor(), e.getId());
+		jdbcTemplate0.update(updateSql, e.getName(), e.getBackgroundColor(), e.getSeqno(), e.getId());
 	}
-	
+
 	public List<Long> saveOrUpdateResponsiblePerson(List<ResponsiblePerson> entities) {
 		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
 
@@ -300,9 +346,9 @@ public class AppRepository {
 
 	private void updateResponsiblePerson(ResponsiblePerson e) {
 		// TODO Auto-generated method stub
-		String updateSql = "UPDATE crm_responsible_person SET name = ?, note = ? WHERE id = ?";
+		String updateSql = "UPDATE crm_responsible_person SET name = ?, note = ?, seqno=? WHERE id = ?";
 
-		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getSeqno(), e.getId());
 	}
 	public Long saveOrUpdate(Customer customer) {
 		Long id;

@@ -79,5 +79,13 @@ public class Status implements Serializable {
 		}
 	}
 
+	public Status(Long id, String name, String backgroundColor, Long seqno) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.backgroundColor = backgroundColor;
+		this.seqno = seqno;
+	}
+
 
 }

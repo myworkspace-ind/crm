@@ -45,8 +45,11 @@ function swapRows(hotInstance, rowIndex1, rowIndex2, row1, row2) {
 	else if(container.classList.contains("customProfession")){
 		type = "customProfession";
 	}
-	else {
+	else if(container.classList.contains("customStatus")){
 		type = "customStatus"
+	}
+	else{
+		type = "customGoodsCategory";
 	}
 	// Tạo một đối tượng URLSearchParams với các tham số
 	const params = new URLSearchParams();
@@ -91,6 +94,7 @@ function initTable(colHeaders, colWidths, data, type) {
                 { type: 'text' }, // ID
                 { type: 'text' }, 
                 { type: 'text' },
+				{ type: 'text' },
                 { renderer: deleteButtonRenderer },
             ],
             rowHeaders: true,
@@ -181,8 +185,11 @@ function deleteRow(rowIndex, id) {
 	else if(container.classList.contains("customProfession")){
 		type = "customProfession";
 	}
-	else {
+	else if(container.classList.contains("customStatus")){
 		type = "customStatus"
+	}
+	else{
+		type = "customGoodsCategory";
 	}
     if (confirm(`Bạn có chắc muốn xóa hàng số ${rowIndex + 1}?`)) {
         $.ajax({

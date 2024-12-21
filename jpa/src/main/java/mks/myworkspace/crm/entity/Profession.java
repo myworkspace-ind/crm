@@ -53,4 +53,12 @@ public class Profession implements Serializable {
 		}
 	}
 
+	public Profession(Long id, String name, String note, Long seqno) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.note = note;
+		this.seqno = seqno;
+	}
+
 }

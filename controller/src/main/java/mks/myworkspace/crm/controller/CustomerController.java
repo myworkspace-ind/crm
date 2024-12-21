@@ -44,6 +44,7 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.Profession;
@@ -59,6 +60,7 @@ import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Interaction_Handsontable;
 import mks.myworkspace.crm.transformer.JpaTransformer_OrderCate_Handsontable;
 import mks.myworkspace.crm.transformer.JpaTransformer_ResponsiblePerson_Handsontable;
+import mks.myworkspace.crm.validate.GoodsCategoryValidator;
 import mks.myworkspace.crm.validate.InteractionValidator;
 import mks.myworkspace.crm.validate.OrderCategoryValidator;
 import mks.myworkspace.crm.validate.ProfessionValidator;
@@ -635,26 +637,33 @@ public class CustomerController extends BaseController {
 		List<ResponsiblePerson> lstResponPerson;
 		List<Profession> lstProfession;
 		List<Status> lstStatus;
-		int[] colWidths = {50, 300, 300, 100};
+		List<GoodsCategory> lstGoodsCategory;
+		int[] colWidths = {50, 300, 300, 100, 100};
 		String[] colHeaders;
 		List<Object[]> tblData;
 		if(type.equals("customPerson")) {
 			lstResponPerson = storageService.getResponPersonRepo().findAllOrderBySeqno();
-			colHeaders = new String[]{"ID", "Tên người phụ trách", "Ghi chú", "Hành động"};
-			List<String> fields = List.of("id", "name", "note");
+			colHeaders = new String[]{"ID", "Tên người phụ trách", "Ghi chú", "Thứ tự ưu tiên","Hành động"};
+			List<String> fields = List.of("id", "name", "note", "seqno");
 			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstResponPerson, fields);
 		}
 		else if(type.equals("customProfession")) {
 			lstProfession = storageService.getProfessionRepo().findAllOrderBySeqno();
-			colHeaders = new String[]{"ID", "Tên ngành nghề", "Ghi chú", "Hành động"};
-			List<String> fields = List.of("id", "name", "note");
+			colHeaders = new String[]{"ID", "Tên ngành nghề", "Ghi chú","Thứ tự ưu tiên", "Hành động"};
+			List<String> fields = List.of("id", "name", "note", "seqno");
 			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstProfession, fields);
 		}
-		else {
+		else if(type.equals("customStatus")){
 			lstStatus = storageService.getStatusRepo().findAllOrderBySeqno();
-			colHeaders = new String[]{"ID", "Tên trạng thái" , "BackgroundColor","Hành động"};
-			List<String> fields = List.of("id", "name", "backgroundColor");
+			colHeaders = new String[]{"ID", "Tên trạng thái" , "BackgroundColor","Thứ tự ưu tiên","Hành động"};
+			List<String> fields = List.of("id", "name", "backgroundColor", "seqno");
 			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstStatus, fields);
+		}
+		else {
+			lstGoodsCategory = storageService.getGoodsCategoryRepo().findAllOrderBySeqno();
+			colHeaders = new String[]{"ID", "Tên hàng hóa", "Ghi chú","Thứ tự ưu tiên", "Hành động"};
+			List<String> fields = List.of("id", "name", "note", "seqno");
+			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstGoodsCategory, fields);
 		}
 		TableStructure tblOrderCate = new TableStructure(colWidths, colHeaders, tblData);
 
@@ -672,24 +681,31 @@ public class CustomerController extends BaseController {
 			List<Profession> lstProfession;
 			List<Status> lstStatus;
 			List<Object[]> tblData;
+			List<GoodsCategory> lstGoodsCategory;
 
 			if(type.equals("customPerson")) {
 				lstResponsiblePerson = ResponsiblePersonValidator.validateAndCleasing(tableData.getData());	
 				lstResponsiblePerson = storageService.saveOrUpdateResponsiblePerson(lstResponsiblePerson);
-				List<String> fields = List.of("id", "name", "note");
+				List<String> fields = List.of("id", "name", "note", "seqno");
 				tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstResponsiblePerson, fields);
 			}
 			else if(type.equals("customProfession")) {
 				lstProfession = ProfessionValidator.validateAndCleasing(tableData.getData());				
 				lstProfession = storageService.saveOrUpdateProfession(lstProfession);
-				List<String> fields = List.of("id", "name", "note");
+				List<String> fields = List.of("id", "name", "note", "seqno");
 				tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstProfession, fields);
 			}
-			else {
+			else if(type.equals("customStatus")){
 				lstStatus = StatusValidator.validateAndCleasing(tableData.getData());
 				lstStatus = storageService.saveOrUpdateStatus(lstStatus);
-				List<String> fields = List.of("id", "name", "backgroundColor");
+				List<String> fields = List.of("id", "name", "backgroundColor", "seqno");
 				tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstStatus, fields);
+			}
+			else {
+				lstGoodsCategory = GoodsCategoryValidator.validateAndCleasing(tableData.getData());
+				lstGoodsCategory = storageService.saveOrUpdateGoodsCategory(lstGoodsCategory);
+				List<String> fields = List.of("id", "name", "note", "seqno");
+				tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstGoodsCategory, fields);
 			}
 
 			tableData.setData(tblData);
@@ -712,8 +728,11 @@ public class CustomerController extends BaseController {
 			else if(type.equals("customProfession")) {
 				storageService.deleteProfessionById(id);
 			}
-			else {
+			else if(type.equals("customStatus")){
 				storageService.deleteStatusById(id);
+			}
+			else {
+				storageService.deleteGoodsCategoryById(id);
 			}
 			return ResponseEntity.ok()
 					.body(Map.of("message", "Đã được xóa thành công!", "id", id));

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.Profession;
@@ -16,6 +17,7 @@ import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.repository.GoodsCategoryRepository;
 import mks.myworkspace.crm.repository.OrderCategoryRepository;
 import mks.myworkspace.crm.repository.OrderRepository;
 import mks.myworkspace.crm.repository.ProfessionRepository;
@@ -41,18 +43,22 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	@Getter
 	CustomerRepository customerRepo;
-	
+
 	@Autowired
 	@Getter
 	ResponsiblePersonRepository responPersonRepo;
-	
+
 	@Autowired
 	@Getter
 	ProfessionRepository professionRepo;
-	
+
 	@Autowired
 	@Getter
 	StatusRepository statusRepo;
+
+	@Autowired
+	@Getter
+	GoodsCategoryRepository goodsCategoryRepo;
 //	@Override
 //	public CustomerRepository getCustomerRepo() {
 //		// TODO Auto-generated method stub
@@ -289,10 +295,30 @@ public class StorageServiceImpl implements StorageService {
 		else if(type.equals("customProfession")) {
 			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_profession");
 		}
-		else {
+		else if(type.equals("customStatus")){
 			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_status");
 		}
-		
+		else {
+			appRepo.swapRowOnHandsontable(rowId1, rowId2, "crm_goodscategory");
+		}
+
 	}
-	
+	@Override
+	public List<GoodsCategory> saveOrUpdateGoodsCategory(List<GoodsCategory> lstGoodsCategory) {
+		List<Long> lstIds = appRepo.saveOrUpdateGoodsCategory(lstGoodsCategory);
+
+		// Update the Id of saved task
+		int len = (lstIds != null) ? lstIds.size() : 0;
+		for (int i = 0; i < len; i++) {
+			lstGoodsCategory.get(i).setId(lstIds.get(i));
+		}
+
+		return lstGoodsCategory;
+	}
+	@Override
+	public void deleteGoodsCategoryById(Long id) {
+		appRepo.deleteGoodsCategoryById(id);
+	}
+
+
 }

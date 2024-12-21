@@ -13,12 +13,12 @@ public class ResponsiblePersonValidator {
 		for (Object[] rowData : data) {
 			if (CommonUtil.isNNNE(rowData)) {
 				Long responsiblePersonId = parseResponsiblePersonId(rowData[0]);
-
+				Long seqno = parseResponsiblePersonId(rowData[3]);
 				ResponsiblePerson responsiblePerson = new ResponsiblePerson(responsiblePersonId, 
 						(String) rowData[1], // name
-						(String) rowData[2] // note
+						(String) rowData[2], // note
+						seqno
 				);
-
 				paramList.add(responsiblePerson);
 			}
 		}

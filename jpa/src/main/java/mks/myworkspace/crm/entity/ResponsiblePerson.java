@@ -53,4 +53,12 @@ public class ResponsiblePerson implements Serializable {
 			this.seqno = this.id;  // Đảm bảo seqno luôn bằng với id
 		}
 	}
+
+	public ResponsiblePerson(Long id, String name, String note, Long seqno) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.note = note;
+		this.seqno = seqno;
+	}
 }

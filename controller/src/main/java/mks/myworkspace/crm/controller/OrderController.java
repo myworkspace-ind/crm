@@ -193,7 +193,7 @@ public class OrderController extends BaseController {
 		listCustomers = customerService.getAllCustomers();
 
 		List<GoodsCategory> listGoodsCategories;
-		listGoodsCategories = goodsCategoryService.findAllGoodsCategory();
+		listGoodsCategories = goodsCategoryService.getRepo().findAllOrderBySeqno();
 
 		List<Order> listOrders;
 		listOrders = orderService.getAllOrders();
