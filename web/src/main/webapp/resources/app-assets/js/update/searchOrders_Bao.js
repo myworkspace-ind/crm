@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				console.log("Order object being sent:", order);
 
 				$.ajax({
-					url: _ctx + '/orders-datatable/saveOrderStatus/',
+					url: _ctx + 'orders-datatable/saveOrderStatus/',
 					method: 'POST',
 					contentType: 'application/json',
 					data: JSON.stringify(order),
@@ -534,7 +534,7 @@ $(document).on('click', '#saveOrderButton', function() {
 	console.log("Order object being sent:", order);
 
 	$.ajax({
-		url: _ctx + '/orders-datatable/saveOrderData/',
+		url: _ctx + 'orders-datatable/saveOrderData/',
 		method: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(order),
