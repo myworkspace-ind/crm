@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('change', saveFormData);
   form.addEventListener('submit', clearFormData);
 
-  // Xóa dữ liệu Local Storage khi vào chế độ edit
+  // Xóa dữ liệu Local Storage khi vào chế độ edit/ấn lưu sau khi tạo mới thành công khách hàng
   if (isEditMode) {
     clearFormData();
   }
