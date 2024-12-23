@@ -24,8 +24,20 @@ function attachEventHandlers() {
 function handleFormSubmit(e) {
     e.preventDefault();
 
+	const tableData = htInteraction.getData().filter(row => 
+	    row.some(cell => cell !== null && cell !== '') // Loại bỏ các dòng hoàn toàn trống
+	);
+
+	const isValid = tableData.every(row => 
+	    [0, 1, 2, 3].every(colIndex => row[colIndex] !== null && row[colIndex] !== '')
+	);
+
+	if (!isValid) {
+	    showErrorToast('Vui lòng nhập đầy đủ thông tin trước khi lưu.');
+	    return;
+	}
+	
     const colHeaders = htInteraction.getColHeader();
-    const tableData = htInteraction.getData();
     const colWidths = [];
 
     for (let i = 0; i < colHeaders.length; i++) {
@@ -87,8 +99,9 @@ function loadTableData(customerId) {
             return;
         }
 		
-        const url = `${_ctx}/customer/load-interaction?id=${customerId}`;
-
+//        const url = `${_ctx}/customer/load-interaction?id=${customerId}`;
+		//Không thêm / trước customer vì trong _ctx đã có /sẵn rồi
+		const url = `${_ctx}customer/load-interaction?id=${customerId}`;
         $.ajax({
             url: url,
             type: 'GET',
@@ -132,7 +145,13 @@ function initTable(colHeaders, colWidths, data) {
             colWidths: colWidths,
             columns: [
                 { type: 'text' },
-                { type: 'date', dateFormat: 'YYYY-MM-DD', correctFormat: true },
+				{
+                    type: 'date',
+                    dateFormat: 'YYYY-MM-DD',
+                    correctFormat: true,
+					defaultDate: new Date(),
+					datePickerConfig: { format: 'YYYY-MM-DD' }
+                },
                 { type: 'text' },
                 { type: 'text' },
                 { renderer: deleteButtonRenderer },
@@ -168,7 +187,7 @@ function deleteButtonRenderer(instance, td, row, col, prop, value, cellPropertie
 function deleteRow(rowIndex, interactionId) {
     if (confirm(`Bạn có chắc muốn xóa hàng số ${rowIndex + 1}?`)) {
         $.ajax({
-            url: `${_ctx}/customer/delete-interaction?id=${interactionId}`,
+            url: `${_ctx}customer/delete-interaction?id=${interactionId}`,
             type: 'DELETE',
             success: function (response) {
                 console.log('Xóa thành công:', response);
@@ -192,6 +211,12 @@ function filterTableData(startDate, endDate, contactPerson) {
         console.error("Ngày không hợp lệ.");
         return;
     }
+	
+	// Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
+    if (start && end && start > end) {
+        showErrorToast('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
+        return; // Dừng xử lý nếu điều kiện sai
+    }
 
     const filteredData = allData.filter(function (row) {
         const recordDate = new Date(row[1]);
@@ -212,8 +237,23 @@ function filterTableData(startDate, endDate, contactPerson) {
     htInteraction.loadData(filteredData);
 }
 
-function showSuccessToast(message) {
-    const toast = $('#success-alert');
+let isToastVisible = false; // Biến flag để kiểm tra trạng thái hiển thị toast
+
+function showToast(message, type) {
+    if (isToastVisible) return; // Nếu một toast đang hiển thị, không hiển thị toast mới
+    
+    isToastVisible = true; // Đánh dấu là toast đang hiển thị
+    let toast;
+    
+    // Chọn thông báo dựa trên loại (success hoặc warning)
+    if (type === 'success') {
+        toast = $('#success-alert');
+        toast.removeClass('alert-warning').addClass('alert-success');
+    } else if (type === 'warning') {
+        toast = $('#warning-alert');
+        toast.removeClass('alert-success').addClass('alert-warning');
+    }
+
     toast.text(message); // Đặt nội dung của toast
 
     // Hiển thị toast từ đầu
@@ -227,7 +267,16 @@ function showSuccessToast(message) {
 
     // Sau 3 giây (3000ms), ẩn toast (fade-out)
     setTimeout(function () {
-        toast.fadeOut(200);  // 500ms để mờ dần ra
-    }, 500);  // Toast sẽ hiển thị trong 3 giây
+        toast.fadeOut(100);  // 200ms để mờ dần ra
+        isToastVisible = false; // Đánh dấu là toast đã ẩn
+    }, 500);  // Toast sẽ hiển thị trong 0.5 giây
+}
+
+function showSuccessToast(message) {
+    showToast(message, 'success');
+}
+
+function showErrorToast(message) {
+    showToast(message, 'warning');
 }
 

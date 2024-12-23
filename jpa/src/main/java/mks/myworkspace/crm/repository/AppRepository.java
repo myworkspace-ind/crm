@@ -26,6 +26,9 @@ import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
+import mks.myworkspace.crm.entity.Profession;
+import mks.myworkspace.crm.entity.ResponsiblePerson;
+import mks.myworkspace.crm.entity.Status;
 
 @Repository
 @Slf4j
@@ -67,82 +70,130 @@ public class AppRepository {
 //		return id;
 //
 //	}
-	
+
 	public List<Long> saveOrUpdateInteraction(List<Interaction> entities) {
-	    // Danh sách để lưu trữ các ID của bản ghi sau khi lưu hoặc cập nhật
-	    List<Long> ids = new ArrayList<>();
+		// Danh sách để lưu trữ các ID của bản ghi sau khi lưu hoặc cập nhật
+		List<Long> ids = new ArrayList<>();
 
-	    // Sử dụng SimpleJdbcInsert để thực hiện lưu bản ghi mới
-	    SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
-	    	    .withTableName("crm_customer_interaction")
-	    	    .usingColumns("interaction_date", "content", "next_plan", "customer_id", "contact_person")
-	    	    .usingGeneratedKeyColumns("id");
+		// Sử dụng SimpleJdbcInsert để thực hiện lưu bản ghi mới
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
+				.withTableName("crm_customer_interaction")
+				.usingColumns("interaction_date", "content", "next_plan", "customer_id", "contact_person")
+				.usingGeneratedKeyColumns("id");
 
-	    for (Interaction entity : entities) {
-	        Long id;
+		for (Interaction entity : entities) {
+			Long id;
 
-	        MapSqlParameterSource params = new MapSqlParameterSource()
-	                .addValue("interaction_date", entity.getInteractionDate())
-	                .addValue("content", entity.getContent())
-	                .addValue("next_plan", entity.getNextPlan())
-	                .addValue("customer_id", entity.getCustomer() != null ? entity.getCustomer().getId() : null)
-	                .addValue("contact_person", entity.getContactPerson());
-	        
-	        if (entity.getId() == null) {
-	            // Nếu ID của thực thể là null, thực hiện lưu mới
-	            id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
-	        } else {
+			MapSqlParameterSource params = new MapSqlParameterSource()
+					.addValue("interaction_date", entity.getInteractionDate()).addValue("content", entity.getContent())
+					.addValue("next_plan", entity.getNextPlan())
+					.addValue("customer_id", entity.getCustomer() != null ? entity.getCustomer().getId() : null)
+					.addValue("contact_person", entity.getContactPerson());
 
-	        	updateEntity(entity);
-	            id = entity.getId(); // Lấy ID của bản ghi đã cập nhật
-	        }
+			if (entity.getId() == null) {
+				// Nếu ID của thực thể là null, thực hiện lưu mới
+				id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
+			} else {
 
-	        // Thêm ID vào danh sách kết quả
-	        ids.add(id);
-	    }
+				updateEntity(entity);
+				id = entity.getId(); // Lấy ID của bản ghi đã cập nhật
+			}
 
-	    return ids; // Trả về danh sách ID sau khi xử lý
+			// Thêm ID vào danh sách kết quả
+			ids.add(id);
+		}
+
+		return ids; // Trả về danh sách ID sau khi xử lý
 	}
-	
+
 	public void deleteInteractionById(Long interactionId) {
-	    // Tạo câu lệnh DELETE với ID duy nhất
-	    String sql = "DELETE FROM crm_customer_interaction WHERE id = ?";
+		// Tạo câu lệnh DELETE với ID duy nhất
+		String sql = "DELETE FROM crm_customer_interaction WHERE id = ?";
 
-	    // Thực thi câu lệnh DELETE
-	    int rowsDeleted = jdbcTemplate0.update(sql, interactionId);
+		// Thực thi câu lệnh DELETE
+		int rowsDeleted = jdbcTemplate0.update(sql, interactionId);
 
-	    // Log kết quả
-	    if (rowsDeleted > 0) {
-	        log.debug("Interaction with ID {} deleted successfully.", interactionId);
-	    } else {
-	        log.warn("No interaction found with ID {} to delete.", interactionId);
-	    }
+		// Log kết quả
+		if (rowsDeleted > 0) {
+			log.debug("Interaction with ID {} deleted successfully.", interactionId);
+		} else {
+			log.warn("No interaction found with ID {} to delete.", interactionId);
+		}
+	}
+	public void deletePersonById(Long Id) {
+		// Tạo câu lệnh DELETE với ID duy nhất
+		String sql = "DELETE FROM crm_responsible_person WHERE id = ?";
+
+		// Thực thi câu lệnh DELETE
+		int rowsDeleted = jdbcTemplate0.update(sql, Id);
+
+		// Log kết quả
+		if (rowsDeleted > 0) {
+			log.debug("Responsible Person with ID {} deleted successfully.", Id);
+		} else {
+			log.warn("No Responsible Person found with ID {} to delete.", Id);
+		}
+	}
+	public void deleteStatusById(Long Id) {
+		// Tạo câu lệnh DELETE với ID duy nhất
+		String sql = "DELETE FROM crm_status WHERE id = ?";
+
+		// Thực thi câu lệnh DELETE
+		int rowsDeleted = jdbcTemplate0.update(sql, Id);
+
+		// Log kết quả
+		if (rowsDeleted > 0) {
+			log.debug("Status with ID {} deleted successfully.", Id);
+		} else {
+			log.warn("No Status found with ID {} to delete.", Id);
+		}
+	}
+	public void deleteProfessionById(Long Id) {
+		// Tạo câu lệnh DELETE với ID duy nhất
+		String sql = "DELETE FROM crm_profession WHERE id = ?";
+
+		// Thực thi câu lệnh DELETE
+		int rowsDeleted = jdbcTemplate0.update(sql, Id);
+
+		// Log kết quả
+		if (rowsDeleted > 0) {
+			log.debug("Profession with ID {} deleted successfully.", Id);
+		} else {
+			log.warn("No profession found with ID {} to delete.", Id);
+		}
+	}
+
+	public void deleteGoodsCategoryById(Long Id) {
+		// Tạo câu lệnh DELETE với ID duy nhất
+		String sql = "DELETE FROM crm_goodscategory WHERE id = ?";
+
+		// Thực thi câu lệnh DELETE
+		int rowsDeleted = jdbcTemplate0.update(sql, Id);
+
+		// Log kết quả
+		if (rowsDeleted > 0) {
+			log.debug("GoodsCategory with ID {} deleted successfully.", Id);
+		} else {
+			log.warn("No GoodsCategory found with ID {} to delete.", Id);
+		}
 	}
 
 	private void updateEntity(Interaction entity) {
-	    String updateSql = "UPDATE crm_customer_interaction SET "
-	            + "interaction_date = ?, "
-	            + "content = ?, "
-	            + "next_plan = ?, "
-	            + "contact_person = ? "
-	            + "WHERE id = ?";
+		String updateSql = "UPDATE crm_customer_interaction SET " + "interaction_date = ?, " + "content = ?, "
+				+ "next_plan = ?, " + "contact_person = ? " + "WHERE id = ?";
 
-	    // Execute the update using the JdbcTemplate
-	    int rowsUpdated = jdbcTemplate0.update(updateSql,
-	            entity.getInteractionDate(),  
-	            entity.getContent(),        
-	            entity.getNextPlan(),    
-	            entity.getContactPerson(),
-	            entity.getId());            
+		// Execute the update using the JdbcTemplate
+		int rowsUpdated = jdbcTemplate0.update(updateSql, entity.getInteractionDate(), entity.getContent(),
+				entity.getNextPlan(), entity.getContactPerson(), entity.getId());
 
-	    // Log the result
-	    if (rowsUpdated > 0) {
-	        log.debug("Interaction updated successfully with ID: {}", entity.getId());
-	    } else {
-	        log.warn("No interaction found with ID: {}", entity.getId());
-	    }
+		// Log the result
+		if (rowsUpdated > 0) {
+			log.debug("Interaction updated successfully with ID: {}", entity.getId());
+		} else {
+			log.warn("No interaction found with ID: {}", entity.getId());
+		}
 	}
-	
+
 	public List<Long> saveOrUpdateOrderCategory(List<OrderCategory> entities) {
 		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
 
@@ -172,7 +223,133 @@ public class AppRepository {
 
 		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
 	}
+	public List<Long> saveOrUpdateProfession(List<Profession> entities) {
+		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
 
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_profession")
+				.usingGeneratedKeyColumns("id");
+
+		Long id;
+		for (Profession e : entities) {
+			if (e.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+				updateSeqno(id, "crm_profession");
+			} else {
+				// Update
+				// update(e);
+				id = e.getId();
+				updateProfession(e);
+			}
+
+			ids.add(id);
+		}
+
+		return ids;
+	}
+
+	private void updateSeqno(Long id, String tableName) {
+		String sql = String.format("UPDATE %s SET seqno = ? WHERE id = ?", tableName);
+		jdbcTemplate0.update(sql, id, id); // Set seqno = id
+	}
+	private void updateProfession(Profession e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_profession SET name = ?, note = ?, seqno = ? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getSeqno(), e.getId());
+	}
+
+	public List<Long> saveOrUpdateGoodsCategory(List<GoodsCategory> entities) {
+		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
+
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_goodscategory")
+				.usingGeneratedKeyColumns("id");
+
+		Long id;
+		for (GoodsCategory e : entities) {
+			if (e.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+				updateSeqno(id, "crm_goodscategory");
+			} else {
+				// Update
+				// update(e);
+				id = e.getId();
+				updateGoodsCategory(e);
+			}
+
+			ids.add(id);
+		}
+
+		return ids;
+	}
+	
+	private void updateGoodsCategory(GoodsCategory e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_goodscategory SET name = ?, note = ?, seqno = ? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getSeqno(), e.getId());
+	}
+
+	public List<Long> saveOrUpdateStatus(List<Status> entities) {
+		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
+
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_status")
+				.usingGeneratedKeyColumns("id");
+
+		Long id;
+		for (Status e : entities) {
+			if (e.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+				updateSeqno(id, "crm_status");
+			} else {
+				// Update
+				// update(e);
+				id = e.getId();
+				updateStatus(e);
+			}
+
+			ids.add(id);
+		}
+
+		return ids;
+	}
+
+	private void updateStatus(Status e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_status SET name = ?, backgroundColor = ?, seqno = ?  WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getBackgroundColor(), e.getSeqno(), e.getId());
+	}
+
+	public List<Long> saveOrUpdateResponsiblePerson(List<ResponsiblePerson> entities) {
+		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
+
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_responsible_person")
+				.usingGeneratedKeyColumns("id");
+
+		Long id;
+		for (ResponsiblePerson e : entities) {
+			if (e.getId() == null) {
+				id = simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(e)).longValue();
+				updateSeqno(id, "crm_responsible_person");
+			} else {
+				// Update
+				// update(e);
+				id = e.getId();
+				updateResponsiblePerson(e);
+			}
+
+			ids.add(id);
+		}
+
+		return ids;
+	}
+
+	private void updateResponsiblePerson(ResponsiblePerson e) {
+		// TODO Auto-generated method stub
+		String updateSql = "UPDATE crm_responsible_person SET name = ?, note = ?, seqno=? WHERE id = ?";
+
+		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getSeqno(), e.getId());
+	}
 	public Long saveOrUpdate(Customer customer) {
 		Long id;
 		if (customer.getAccountStatus() == null) {
@@ -193,48 +370,42 @@ public class AppRepository {
 	}
 
 	private int updateCustomer(Customer customer) {
-	    // Tạo bản đồ chứa các giá trị cần cập nhật
-	    Map<String, Object> parameters = new HashMap<>();
-	    
-	    // Thêm các trường cố định trong entity (không có liên kết bảng)
-	    parameters.put("address", customer.getAddress());
-	    parameters.put("company_name", customer.getCompanyName());
-	    parameters.put("contact_person", customer.getContactPerson());
-	    //parameters.put("updated_at", customer.getUpdatedAt()); // Giả sử bạn có trường `updated_at`
-	    parameters.put("email", customer.getEmail());
-	    parameters.put("note", customer.getNote());
-	    parameters.put("phone", customer.getPhone());
-	    
-	    // Thêm các khóa ngoại
-	    parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
-	    parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
-	    parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
-	    parameters.put("responsible_person_id", customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
+		// Tạo bản đồ chứa các giá trị cần cập nhật
+		Map<String, Object> parameters = new HashMap<>();
 
-	    // Chỉ định điều kiện cập nhật (thường là theo ID)
-	    String sql = "UPDATE crm_customer SET " +
-	                 "address = :address, " +
-	                 "company_name = :company_name, " +
-	                 "contact_person = :contact_person, " +
-	                 //"updated_at = :updated_at, " +
-	                 "email = :email, " +
-	                 "note = :note, " +
-	                 "phone = :phone, " +
-	                 "main_status_id = :main_status_id, " +
-	                 "sub_status_id = :sub_status_id, " +
-	                 "profession_id = :profession_id, " +
-	                 "responsible_person_id = :responsible_person_id " +
-	                 "WHERE id = :id";
+		// Thêm các trường cố định trong entity (không có liên kết bảng)
+		parameters.put("address", customer.getAddress());
+		parameters.put("company_name", customer.getCompanyName());
+		parameters.put("contact_person", customer.getContactPerson());
+		// parameters.put("updated_at", customer.getUpdatedAt()); // Giả sử bạn có
+		// trường `updated_at`
+		parameters.put("email", customer.getEmail());
+		parameters.put("note", customer.getNote());
+		parameters.put("phone", customer.getPhone());
 
-	    // Thêm ID vào parameters
-	    parameters.put("id", customer.getId());
+		// Thêm các khóa ngoại
+		parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
+		parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
+		parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
+		parameters.put("responsible_person_id",
+				customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
 
-	    // Thực thi câu lệnh SQL với NamedParameterJdbcTemplate
-	    int rowsAffected = new NamedParameterJdbcTemplate(jdbcTemplate0).update(sql, parameters);
-	    log.debug("Updated rows: {}", rowsAffected);
-	    return rowsAffected;
+		// Chỉ định điều kiện cập nhật (thường là theo ID)
+		String sql = "UPDATE crm_customer SET " + "address = :address, " + "company_name = :company_name, "
+				+ "contact_person = :contact_person, " +
+				// "updated_at = :updated_at, " +
+				"email = :email, " + "note = :note, " + "phone = :phone, " + "main_status_id = :main_status_id, "
+				+ "sub_status_id = :sub_status_id, " + "profession_id = :profession_id, "
+				+ "responsible_person_id = :responsible_person_id " + "WHERE id = :id";
+
+		// Thêm ID vào parameters
+		parameters.put("id", customer.getId());
+
+		// Thực thi câu lệnh SQL với NamedParameterJdbcTemplate
+		int rowsAffected = new NamedParameterJdbcTemplate(jdbcTemplate0).update(sql, parameters);
+		log.debug("Updated rows: {}", rowsAffected);
+		return rowsAffected;
 	}
-
 
 	private Long createCustomer(Customer customer) {
 		Long id;
@@ -301,14 +472,20 @@ public class AppRepository {
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
 
-	public void hideCustomersByIds(List<Long> customerIds) {
+	public void deleteCustomersByIds(List<Long> customerIds) {
 		// deleteCustomerStatusByCustomerIds(customerIds);
+		String sql = "DELETE FROM crm_customer WHERE id IN ("
+				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
+		jdbcTemplate0.update(sql, customerIds.toArray());
+	}
+
+	public void hideCustomersByIds(List<Long> customerIds) {
 		String sql = "UPDATE crm_customer SET account_status = 0 WHERE id IN ("
 				+ customerIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
 
 		jdbcTemplate0.update(sql, customerIds.toArray());
 	}
-	
+
 	public void showHidedCustomers() {
 		String sql = "UPDATE crm_customer SET account_status = 1 WHERE account_status = 0";
 		jdbcTemplate0.update(sql);
@@ -515,24 +692,72 @@ public class AppRepository {
 			log.warn("No customer found with ID: {}", customer.getId());
 		}
 	}
-	
+
 	public void saveHistory(HistoryOrder historyOrder) {
-	    SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
-	            .withTableName("crm_history_order")
-	            .usingGeneratedKeyColumns("id");
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_history_order")
+				.usingGeneratedKeyColumns("id");
 
-	    Map<String, Object> parameters = new HashMap<>();
-	    // Thêm khóa ngoại tới đơn hàng
-	    parameters.put("order_id", historyOrder.getOrder().getId());
-	    // Thêm khóa ngoại tới trạng thái đơn hàng
-	    parameters.put("order_status_id", historyOrder.getOrderStatus().getId());
-	    // Thêm thời gian cập nhật
-	    parameters.put("updated_at", historyOrder.getUpdatedAt());
+		Map<String, Object> parameters = new HashMap<>();
+		// Thêm khóa ngoại tới đơn hàng
+		parameters.put("order_id", historyOrder.getOrder().getId());
+		// Thêm khóa ngoại tới trạng thái đơn hàng
+		parameters.put("order_status_id", historyOrder.getOrderStatus().getId());
+		// Thêm thời gian cập nhật
+		parameters.put("updated_at", historyOrder.getUpdatedAt());
 
-	    // Thực hiện chèn mà không cần lấy id
-	    simpleJdbcInsert.execute(parameters);
-	    log.debug("History record saved successfully.");
+		// Thực hiện chèn mà không cần lấy id
+		simpleJdbcInsert.execute(parameters);
+		log.debug("History record saved successfully.");
+	}
+
+	public void swapRowOnHandsontable(Long rowId1, Long rowId2, String table) {
+		String sql = String.format("UPDATE %s t1 JOIN %s t2 ON t1.id != t2.id SET t1.seqno = t2.seqno, t2.seqno = t1.seqno WHERE t1.id = ? AND t2.id = ?", table, table);
+
+		jdbcTemplate0.update(sql, rowId1, rowId2);
 	}
 
 
+	public void createOrderStatus(String name) {
+		if(name == null || name == "") {
+			return;
+		}
+		else {
+			String sql = "Insert into crm_orderstatus (name) values (?)";
+			jdbcTemplate0.update(sql,name);
+			System.out.println("Them vao orderStatus thanh cong");
+		}
+	}
+	
+	public void deleteOrderCategoryStatus(Long idLoaiDonHang, Long idTrangThai) {
+		if(idLoaiDonHang == null || idTrangThai == null) {
+			return;
+		}
+		else {
+			String sql = "Delete from order_category_status where order_category_id=? and order_status_id=?";
+			jdbcTemplate0.update(sql,idLoaiDonHang,idTrangThai);
+			System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong");
+		}
+	}
+	
+	public void insertOrderCategoryStatus(Long idLoaiDonHang, Long idTrangThai) {
+		if(idLoaiDonHang == null || idTrangThai == null) {
+			return;
+		}
+		else {
+			String sql = "Insert into order_category_status (order_category_id,order_status_id) values (?,?)";
+			jdbcTemplate0.update(sql,idLoaiDonHang,idTrangThai);
+			System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong");
+		}
+	}
+	
+	public void updateOrderCategory(Long idLoaiDonHang, String name) {
+		if(idLoaiDonHang == null || name == null || name.isEmpty()) {
+			return;
+		}
+		else {
+			String sql = "update crm_ordercategory set name=? where id=?";
+			jdbcTemplate0.update(sql,name,idLoaiDonHang);
+			System.out.println("Cap Nhat loai don hang thanh cong");
+		}
+	}
 }

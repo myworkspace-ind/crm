@@ -27,7 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = {};
       Array.from(form.elements).forEach(input => {
         if (input.name) {
-          formData[input.name] = input.value;
+			if(input.value!=="custom"){
+				formData[input.name] = input.value;
+			}
         }
       });
       localStorage.setItem(storageKey, JSON.stringify(formData));
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('change', saveFormData);
   form.addEventListener('submit', clearFormData);
 
-  // Xóa dữ liệu Local Storage khi vào chế độ edit
+  // Xóa dữ liệu Local Storage khi vào chế độ edit/ấn lưu sau khi tạo mới thành công khách hàng
   if (isEditMode) {
     clearFormData();
   }

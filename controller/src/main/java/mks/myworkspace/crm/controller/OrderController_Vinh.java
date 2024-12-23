@@ -23,10 +23,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -67,6 +70,7 @@ import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Order;
 import mks.myworkspace.crm.transformer.JpaTransformer_OrderDetail;
+import mks.myworkspace.crm.transformer.JpaTransformer_OrderSearch;
 import mks.myworkspace.crm.transformer.JpaTransformer_Order_Handsontable;
 import mks.myworkspace.crm.transformer.OrderConverter;
 
@@ -75,12 +79,12 @@ import mks.myworkspace.crm.transformer.OrderConverter;
  */
 @Controller
 @Slf4j
-@RequestMapping("/orders-vinh")
+@RequestMapping("/orders-handsontable")
 public class OrderController_Vinh extends BaseController {
-	
+
 	@Autowired
 	GoodsCategoryService goodsCategoryService;
-	
+
 	@Autowired
 	OrderService orderService;
 
@@ -107,31 +111,90 @@ public class OrderController_Vinh extends BaseController {
 
 	@Autowired
 	StorageService storageService;
-	
+
 	@Autowired
 	OrderCategoryService orderCategoryService;
 
 	@Autowired
 	OrderStatusService orderStatusService;
-	
+
 	@Autowired
 	CustomerService customerService;
-	
+
 	@Value("classpath:orders/orders-demo.json")
 	private Resource resOrdersDemo;
+
+	@GetMapping("")
+	public ModelAndView displayOrder(@RequestParam(value = "categoryId", required = false) Long categoryId,
+			@RequestParam(value = "customerId", required = false) Long customerId, HttpServletRequest request,
+			HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("ordersCRMScreen_Hansontable");
+		initSession(request, httpSession);
+
+		Order newOrder = new Order();
+		newOrder.setDeliveryDate(new Date());
+
+		// Giả định trong hệ thống có 1 loại đơn hàng thôi
+		// Load tất cả các trạng thái của đơn hàng này lên combobox
+		List<OrderCategory> orderCategories;
+		orderCategories = orderCategoryService.getAllOrderCategoriesWithOrderStatuses();
+		log.debug("Fetching all order's categories.");
+
+		// Nếu có categoryId, lấy trạng thái của loại đơn hàng đó
+		if (categoryId != null) {
+			List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(categoryId);
+			mav.addObject("orderStatuses", orderStatuses);
+			mav.addObject("selectedCategoryId", categoryId);
+		} else {
+			// Nếu không có categoryId, mặc định hiển thị orderStatuses của loại đơn hàng có
+			// id là 1
+			Long defaultCategoryId = 1L;
+			List<OrderStatus> orderStatuses = orderStatusService.findByOrderCategories_Id(defaultCategoryId);
+			mav.addObject("orderStatuses", orderStatuses);
+			mav.addObject("selectedCategoryId", defaultCategoryId);
+		}
+
+		List<OrderStatus> listOrderStatuses;
+		listOrderStatuses = orderStatusService.findAllOrderStatuses();
+		log.debug("Fetching all order's statuses: {}", listOrderStatuses);
+
+		List<Customer> listCustomers;
+		listCustomers = customerService.getAllCustomers();
+
+		JSONArray jsonArray = new JSONArray();
+
+		for (Customer customer : listCustomers) {
+			JSONObject json = new JSONObject(customer);
+			jsonArray.put(json);
+		}
+		List<OrderCategory> listOrderCategoryTransJson = orderCategories.stream()
+				.map(category -> new OrderCategory(category.getId(), category.getName(), category.getNote()))
+				.collect(Collectors.toList());
+		JSONArray jsonArrayB = new JSONArray(listOrderCategoryTransJson);
+		
+		mav.addObject("customersJson", jsonArray.toString());
+		mav.addObject("orderCateJson", jsonArrayB.toString());
+		mav.addObject("listCustomers", listCustomers);
+		mav.addObject("listOrderStatuses", listOrderStatuses);
+		mav.addObject("orderCategories", orderCategories);
+		mav.addObject("order", newOrder);
+
+		return mav;
+	}
 
 	private String getDefaultOrderData() throws IOException {
 		return IOUtils.toString(resOrdersDemo.getInputStream(), StandardCharsets.UTF_8);
 	}
+
 	@GetMapping("/load")
 	@ResponseBody
 	public Object getOrderData() throws IOException {
 		log.debug("Get sample data from configuration file.");
-		
+
 		String jsonOrderCateTable = getDefaultOrderData();
-		
+
 		List<Order> lstOrders = orderService.getAllOrders();
-		
+
 		if (lstOrders == null || lstOrders.isEmpty()) {
 			return jsonOrderCateTable;
 		} else {
@@ -151,35 +214,34 @@ public class OrderController_Vinh extends BaseController {
 				colHeaders[i] = jsonObjColHeaders.getString(i);
 			}
 			List<Object[]> tblData = JpaTransformer_Order_Handsontable.convert2D(lstOrders);
-			
+
 			TableStructure tblOrder = new TableStructure(colWidths, colHeaders, tblData);
 
 			return tblOrder;
+		}
 	}
-}
-	
+
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseEntity<?> deleteOrderById(@RequestParam("id") Long orderId, 
-	                                               HttpServletRequest request,
-	                                               HttpSession httpSession) {
-	    try {
-	        if (orderId == null) {
-	            return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID không được để trống."));
-	        }
-	        
-	        storageService.deleteOrderById(orderId);
+	public ResponseEntity<?> deleteOrderById(@RequestParam("id") Long orderId, HttpServletRequest request,
+			HttpSession httpSession) {
+		try {
+			if (orderId == null) {
+				return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID không được để trống."));
+			}
 
-	        return ResponseEntity.ok()
-	                .body(Map.of("message", "Order đã được xóa thành công!", "id", orderId));
-	    } catch (IllegalArgumentException e) {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
-	    } catch (Exception e) {
-	        log.debug("Error while deleting order with ID: {}. Error: {}", orderId, e.getMessage());
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                .body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
-	    }
+			storageService.deleteOrderById(orderId);
+
+			return ResponseEntity.ok().body(Map.of("message", "Order đã được xóa thành công!", "id", orderId));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			log.debug("Error while deleting order with ID: {}. Error: {}", orderId, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
+		}
 	}
+
 	@GetMapping("/viewDetails/{id}")
 	@ResponseBody
 	public ResponseEntity<?> displayOrderDetails(@PathVariable("id") Long orderId) {
@@ -199,6 +261,7 @@ public class OrderController_Vinh extends BaseController {
 		}
 
 	}
+
 	@PostMapping(value = "/saveOrderStatus", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> saveOrderStatus(@RequestBody String json) {
@@ -218,7 +281,8 @@ public class OrderController_Vinh extends BaseController {
 			// Lưu hoặc cập nhật đơn hàng
 			Order savedOrderStatus = storageService.updateOrderStatus(order);
 			response.put("status", "success");
-			response.put("message", "OrderStatus " + (order.getId() != null ? "updated" : "created") + " successfully.");
+			response.put("message",
+					"OrderStatus " + (order.getId() != null ? "updated" : "created") + " successfully.");
 			log.debug("Order saved with ID: {}", savedOrderStatus.getId()); // Log kết quả ID
 
 		} catch (Exception e) {
@@ -229,4 +293,91 @@ public class OrderController_Vinh extends BaseController {
 
 		return ResponseEntity.ok(response);
 	}
-}	
+
+	@GetMapping(value = "/order-statuses", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Object> getOrderStatusesByCategory(@RequestParam("categoryId") Long categoryId) {
+		try {
+			List<OrderStatus> statuses = orderStatusService.findByOrderCategories_Id(categoryId);
+			Object[][] orderStatusData = JpaTransformer_OrderDetail.convert2D_OrderStatus(statuses);
+			// Chuyển đổi mảng 2 chiều thành danh sách danh sách để tương thích với JSON
+			List<List<Object>> jsonCompatibleData = new ArrayList<>();
+			for (Object[] row : orderStatusData) {
+				jsonCompatibleData.add(Arrays.asList(row));
+			}
+			log.debug("Fetched order statuses for category {}: {}", categoryId, jsonCompatibleData);
+
+			return ResponseEntity.ok(jsonCompatibleData);
+		} catch (Exception e) {
+			log.error("Error fetching order statuses for category {}: ", categoryId, e);
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+		}
+	}
+	
+	@GetMapping(value = "/order-statuses-list", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Object> getOrderStatusesByCategoryList(@RequestParam("categoryIds") List<Long> categoryIds) {
+		try {
+			List<OrderStatus> statuses = orderStatusService.findByOrderCategories_ListId(categoryIds);
+			Object[][] orderStatusData = JpaTransformer_OrderDetail.convert2D_OrderStatus(statuses);
+			// Chuyển đổi mảng 2 chiều thành danh sách danh sách để tương thích với JSON
+			List<List<Object>> jsonCompatibleData = new ArrayList<>();
+			for (Object[] row : orderStatusData) {
+				jsonCompatibleData.add(Arrays.asList(row));
+			}
+			log.debug("Fetched order statuses for category {}: {}", categoryIds, jsonCompatibleData);
+
+			return ResponseEntity.ok(jsonCompatibleData);
+		} catch (Exception e) {
+			log.error("Error fetching order statuses for category {}: ", categoryIds, e);
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+		}
+	}
+
+	@GetMapping("/search-orders-list")
+	@ResponseBody
+	public List<Object[]> searchOrdersByList(@RequestParam(required = false) List<Long> customerIds,
+			@RequestParam(required = false) List<Long> orderCategoryIds,
+			@RequestParam(required = false) List<Long> statuses,
+			@RequestParam(required = false) Optional<java.sql.Date> create_date,
+			@RequestParam(required = false) Optional<java.sql.Date> delivery_date) {
+
+		List<GoodsCategory> allGoodsCategories;
+		allGoodsCategories = goodsCategoryService.findAllGoodsCategory();
+
+		List<Customer> allSenders;
+		allSenders = customerService.getAllCustomers();
+
+		List<Order> orders;
+		orders = orderService.searchOrdersByList(customerIds, orderCategoryIds, statuses, create_date, delivery_date);
+
+		log.debug("customerId: {} " + customerIds);
+		log.debug("orderCategoryId: {} " + orderCategoryIds);
+		log.debug("statuses: {} " + statuses);
+
+		return JpaTransformer_OrderSearch.convert2D(orders, allGoodsCategories, allSenders);
+	}
+	
+	@GetMapping("/get-sender-receiver-details")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> getSenderDetails(@RequestParam("customerId") Long customerId) {
+		try {
+			Optional<Customer> customerDetail = customerService.findById(customerId);
+
+			if (customerDetail.isPresent()) {
+				Customer customer = customerDetail.get();
+				Map<String, String> senderDetail = new HashMap<>();
+				senderDetail.put("phone", customer.getPhone());
+				senderDetail.put("email", customer.getEmail());
+
+				return ResponseEntity.ok(senderDetail);
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+}

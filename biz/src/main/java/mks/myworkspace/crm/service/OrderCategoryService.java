@@ -11,4 +11,6 @@ public interface OrderCategoryService {
 	List<OrderCategory> getAllOrderCategoriesWithOrderStatuses();
 	
 	List<OrderCategory> findAllOrderCategory();
+	
+	OrderCategory findOrderCategoryById(Long id);
 }

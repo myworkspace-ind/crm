@@ -14,7 +14,7 @@ $(document).ready(function() {
 function loadTableData() {
 
 	$.ajax({
-		url: _ctx + 'orders-vinh/load',
+		url: _ctx + 'orders-handsontable/load',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -108,7 +108,7 @@ function viewDetail(row) {
     console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
 
     $.ajax({
-        url: _ctx + 'orders-vinh/viewDetails/' + orderId,
+        url: _ctx + 'orders-handsontable/viewDetails/' + orderId,
         method: 'GET',
         success: function(response) {
             console.log(response);
@@ -180,7 +180,7 @@ function edit(row) {
     console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
 
     $.ajax({
-        url: _ctx + 'orders-vinh/viewDetails/' + orderId,
+        url: _ctx + 'orders-handsontable/viewDetails/' + orderId,
         method: 'GET',
         success: function(response) {
             console.log(response);
@@ -254,7 +254,7 @@ function deleteRow(row) {
     if (confirm(`Bạn có chắc chắn muốn xóa đơn hàng ID: ${orderId}?`)) {
         // Gửi yêu cầu xóa đến server
         $.ajax({
-            url: `${_ctx}/orders-vinh/delete?id=${orderId}`, // URL API xóa (thay đổi theo API của bạn)
+            url: `${_ctx}orders-handsontable/delete?id=${orderId}`, // URL API xóa (thay đổi theo API của bạn)
             type: 'DELETE',
             success: function(response) {
                 console.log("Xóa thành công:", response);
@@ -293,7 +293,7 @@ function openStatusModal(row) {
 
     // Gửi yêu cầu AJAX để lấy thông tin chi tiết đơn hàng
     $.ajax({
-        url: _ctx + 'orders-vinh/viewDetails/' + orderId,
+        url: _ctx + 'orders-handsontable/viewDetails/' + orderId,
         method: 'GET',
         success: function(response) {
             console.log('Thông tin chi tiết đơn hàng:', response);
@@ -356,7 +356,7 @@ function openStatusModal(row) {
 
         // Gửi yêu cầu AJAX để lưu trạng thái đơn hàng
         $.ajax({
-            url: _ctx + '/orders-vinh/saveOrderStatus/',
+            url: _ctx + 'orders-handsontable/saveOrderStatus/',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(order),

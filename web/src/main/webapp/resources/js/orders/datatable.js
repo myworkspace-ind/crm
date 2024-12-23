@@ -13,7 +13,19 @@ $(document).ready(function() {
 	});
 
 	removeJSessionIdFromUrl();*/
-
+	function loadCustomerInfo(customerId, phone, name) {
+									fetch(`${_ctx}orders-datatable/get-sender-receiver-details?customerId=${customerId}`)
+										.then(response => response.json())
+										.then(data => {
+											if (data) {
+												phone.value = data.phone || "";
+												name.value = data.email || "";					
+											}
+										})
+										.catch(error => {
+											console.error("Error fetching sender details:", error);
+										});
+	}
 	if (!window.dataSetLogged) {
 		console.log(dataSet);
 		window.dataSetLogged = true;
@@ -150,7 +162,7 @@ $(document).ready(function() {
 			console.log("Order object being sent:", order);
 
 			$.ajax({
-				url: _ctx + '/orders-datatable/saveOrderStatus/',
+				url: _ctx + 'orders-datatable/saveOrderStatus/',
 				method: 'POST',
 				contentType: 'application/json',
 				data: JSON.stringify(order),
@@ -231,6 +243,7 @@ $(document).ready(function() {
 							var selected = sender[0] === currentOrderSenderId ? ' selected' : '';
 							return '<option value="' + sender[0] + '"' + selected + '>' + sender[1] + '</option>';
 						}).join('');
+						loadCustomerInfo(currentOrderSenderId, document.getElementById("orderSenderPhoneUpdate"), document.getElementById("orderSenderEmailUpdate"));
 						$('#orderSenderNameUpdate').html(options);
 					}
 
@@ -239,6 +252,7 @@ $(document).ready(function() {
 							var selected = receiver[0] === currentOrderReceiverId ? ' selected' : '';
 							return '<option value="' + receiver[0] + '"' + selected + '>' + receiver[1] + '</option>';
 						}).join('');
+						loadCustomerInfo(currentOrderReceiverId, document.getElementById("orderReceiverPhoneUpdate"), document.getElementById("orderReceiverEmailUpdate"));
 						$('#orderReceiverNameUpdate').html(options);
 					}
 
@@ -260,7 +274,7 @@ $(document).ready(function() {
 			var orderId = row[0];
 
 			console.log('Xem chi tiết cho ID đơn hàng: ', orderId);
-
+			
 			$.ajax({
 				url: _ctx + 'orders-datatable/viewDetails/' + orderId,
 				method: 'GET',
@@ -313,6 +327,7 @@ $(document).ready(function() {
 							var selected = sender[0] === currentOrderSenderId ? ' selected' : '';
 							return '<option value="' + sender[0] + '"' + selected + '>' + sender[1] + '</option>';
 						}).join('');
+						loadCustomerInfo(currentOrderSenderId, document.getElementById("orderSenderPhoneDetail"), document.getElementById("orderSenderEmailDetail"));
 						$('#orderSenderNameDetail').html(options);
 						$('#orderSenderNameDetail').css('pointer-events', 'none');
 					}
@@ -322,6 +337,7 @@ $(document).ready(function() {
 							var selected = receiver[0] === currentOrderReceiverId ? ' selected' : '';
 							return '<option value="' + receiver[0] + '"' + selected + '>' + receiver[1] + '</option>';
 						}).join('');
+						loadCustomerInfo(currentOrderReceiverId, document.getElementById("orderReceiverPhoneDetail"), document.getElementById("orderReceiverEmailDetail"));
 						$('#orderReceiverNameDetail').html(options);
 						$('#orderReceiverNameDetail').css('pointer-events', 'none');
 					}
@@ -426,7 +442,7 @@ $(document).on('click', '#saveOrderButton', function() {
 	console.log("Order object being sent:", order);
 
 	$.ajax({
-		url: _ctx + '/orders-datatable/saveOrderData/',
+		url: _ctx + 'orders-datatable/saveOrderData/',
 		method: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(order),

@@ -1,0 +1,30 @@
+{
+	"colWidths": [
+		50,
+		300,
+		300,
+		300
+	],
+	"colHeaders": [
+		"ID",
+		"Tên người phụ trách",
+		"Ghi chú"
+	],
+	"data": [
+		[
+			"1",
+			"Lê Ngọc Thạch",
+			"Người quản lý dự án CRM"
+		],
+		[
+			"2",
+			"Nguyễn Hoàng Phương Ngân",
+			"Tận tâm, tận tình, hướng dẫn mọi nơi, mọi lúc, mọi nhà, mọi người"
+		],
+		[
+			"4",
+			"Nguyễn Thế Thành",
+			""
+		]
+	]
+}
