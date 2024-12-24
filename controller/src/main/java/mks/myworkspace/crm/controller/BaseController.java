@@ -55,8 +55,8 @@ public class BaseController {
     String themeRoot;
     
     
-    @Value("${logintUrl}")
-    String logintUrl;
+    @Value("${loginUrl}")
+    String loginUrl;
 
     /** Default. */
     final String mimeType = "application/octet-stream";
@@ -103,7 +103,7 @@ public class BaseController {
             httpSession.setAttribute("userLastName", "Le Ngoc Thach");       
         }
         
-        httpSession.setAttribute("logintUrl", logintUrl);
+        httpSession.setAttribute("loginUrl", loginUrl);
     }
 
 

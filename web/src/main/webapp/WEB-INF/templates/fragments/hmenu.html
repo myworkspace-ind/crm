@@ -103,7 +103,7 @@
 			
 			        <!-- Kiểm tra nếu chưa đăng nhập -->
 			        <li th:unless="${#request.userPrincipal}" data-menu="">
-			            <a class="dropdown-item" th:href="${session.logintUrl}">
+			            <a class="dropdown-item" th:href="${session.loginUrl}">
 			                <i class="icon-login"></i>Log In
 			            </a>
 			        </li>
