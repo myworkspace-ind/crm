@@ -27,4 +27,11 @@ public class ResponsiblePersonServiceImpl implements ResponsiblePersonService {
     public ResponsiblePerson saveResponsiblePerson(ResponsiblePerson responsiblePerson) {
         return responsiblePersonRepository.save(responsiblePerson);
     }
+
+	@Override
+	public ResponsiblePersonRepository getRepo() {
+		// TODO Auto-generated method stub
+		return responsiblePersonRepository;
+	}
+
 }

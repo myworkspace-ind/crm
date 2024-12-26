@@ -34,7 +34,12 @@ public class GoodsCategory implements Serializable {
 
 	@Column(name = "name", length = 255)
 	private String name;
-
+	
+	@Column(name = "note", length = 255)
+    private String note;  // Ghi chú về loại hàng hóa
+	
+	@Column(name = "seqno")
+    private Long seqno;  // Trường seqno sẽ luôn bằng với id dùng để sắp xếp thứ tự
 	// Constructor nhận id
     public GoodsCategory(Long id) {
         this.id = id;
@@ -46,5 +51,15 @@ public class GoodsCategory implements Serializable {
 		this.siteId = siteId;
 		this.name = name;
 	}
+
+	public GoodsCategory(Long id, String name, String note, Long seqno) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.note = note;
+		this.seqno = seqno;
+	}
+
+
 
 }

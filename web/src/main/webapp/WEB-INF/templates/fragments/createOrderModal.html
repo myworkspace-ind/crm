@@ -5,6 +5,49 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
+<style>
+	/* Styles for the Icon Container */
+    .icon-plus {
+        width: 17px; /* Adjusted size for better alignment */
+        height: 17px;
+        background: linear-gradient(135deg, #1e90ff, #00c6ff); /* Softer gradient colors */
+        font-size: 14px; /* Slightly smaller icon size */
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for a cleaner look */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Hover Effect for Icon */
+    .icon-plus:hover {
+        transform: scale(1.15); /* Slightly larger hover effect */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* Enhanced shadow on hover */
+        background: linear-gradient(135deg, #0056b3, #009cd4); /* Slightly darker gradient */
+    }
+
+    /* Icon Style */
+    .icon-plus i {
+        animation: spin 3s linear infinite;
+        color: #fff;
+    }
+	.icon-plus:before{
+		content:'';
+	}
+    /* Optional: Adding Rotation Animation */
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+	#goodsCategoryModal {
+  		--bs-modal-width: 800px;
+	}
+</style>
 <body>
 	<div id="createOrderModal">
 		<!-- <h3>ID của đơn hàng <span id="orderIdUpdate"></span></h3> -->
@@ -49,7 +92,15 @@
 		    <br/><div class="row2">
 				    <div class="form-row">
 				        <div class="form-group col-md-6">
-						    <label for="goodsType">Loại hàng hóa</label>
+						    <label for="goodsType" style="display: flex; align-items: center;">
+							    Loại hàng hóa
+							    <span 
+							        id="addGoodsCategoryIcon" 
+							        class="d-flex align-items-center justify-content-center rounded-circle text-white mx-2 icon-plus"
+							        title="Tuỳ chỉnh loại hàng hóa">
+							        <i class="fas fa-plus"></i>
+							    </span>
+							</label>
 						    <input list="goodsCategories" id="orderGoodsCreate" class="form-control" placeholder="Nhập hoặc chọn loại hàng hóa" maxlength="255">
 						    <datalist id="goodsCategories">
 						        <th:block th:each="goodsCategory : ${listGoodsCategories}">
@@ -182,6 +233,29 @@
 			</div>
 	    </form>
 	</div>
+	<!-- Modal CRUD Người phụ trách -->
+		<div class="modal" tabindex="-1" role="dialog" id="goodsCategoryModal" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title text-light" id="goodsCategoryModalLabel" ></h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<span>ID sẽ tăng tự động khi được tạo mới. Vui lòng không nhập ID!</span>
+						<div id="responsibleTable"></div>
+					</div>
+					<div id="success-alert" class="alert alert-success" style="display: none">
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						<strong>Success! </strong> Saved.
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="cancelShowBtn" class="btn btn-secondary modal-btn" data-dismiss="modal">Đóng</button>
+						<button type="button" class="btn btn-primary" id="saveDataButton" style="margin: 3.5px;">Lưu</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	<script type="text/javascript" th:src="@{/resources/js/orders/datatable.js}" ></script>
 	<script>
 		document.getElementById("createOrderButton").addEventListener("click", function () {
@@ -198,6 +272,14 @@
 		  });
 	</script>
 	<script>
+		document.getElementById('addGoodsCategoryIcon').addEventListener('click', function () {
+			document.getElementById('goodsCategoryModalLabel').innerText = "Quản lý loại hàng hóa";
+			loadTableData("customGoodsCategory");
+			const modal = new bootstrap.Modal(document.getElementById('goodsCategoryModal'));
+			modal.show();
+		});
+
+
 		// Hàm lưu dữ liệu vào localStorage
 		const saveData = (key, value) => {
 		    localStorage.setItem(key, value);

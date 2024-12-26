@@ -22,4 +22,6 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
     @Query(value = "DELETE FROM customer_status WHERE customer_id IN :customerIds", nativeQuery = true)
     void deleteByCustomerIds(@Param("customerIds") List<Long> customerIds);
 	
+	@Query("SELECT s FROM Status s ORDER BY s.seqno ASC")
+	List<Status> findAllOrderBySeqno();
 }

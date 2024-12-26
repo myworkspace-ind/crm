@@ -3,22 +3,21 @@ package mks.myworkspace.crm.validate;
 import java.util.ArrayList;
 import java.util.List;
 
-import mks.myworkspace.crm.entity.ResponsiblePerson;
-import mks.myworkspace.crm.entity.Status;
+import mks.myworkspace.crm.entity.GoodsCategory;
 import mksgroup.java.common.CommonUtil;
 
-public class StatusValidator {
-	public static List<Status> validateAndCleasing(List<Object[]> data) {
-		List<Status> paramList = new ArrayList<>();
+public class GoodsCategoryValidator {
+	public static List<GoodsCategory> validateAndCleasing(List<Object[]> data) {
+		List<GoodsCategory> paramList = new ArrayList<>();
 
 		for (Object[] rowData : data) {
 			if (CommonUtil.isNNNE(rowData)) {
 				Long responsiblePersonId = parseResponsiblePersonId(rowData[0]);
 				Long seqno = parseResponsiblePersonId(rowData[3]);
 
-				Status responsiblePerson = new Status(responsiblePersonId, 
+				GoodsCategory responsiblePerson = new GoodsCategory(responsiblePersonId, 
 						(String) rowData[1], // name
-						(String) rowData[2], // background
+						(String) rowData[2], // note
 						seqno
 				);
 

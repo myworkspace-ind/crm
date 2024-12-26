@@ -20,7 +20,6 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -54,6 +53,10 @@ public class BaseController {
 
     @Value("${theme.root}")
     String themeRoot;
+    
+    
+    @Value("${loginUrl}")
+    String loginUrl;
 
     /** Default. */
     final String mimeType = "application/octet-stream";
@@ -97,8 +100,10 @@ public class BaseController {
             httpSession.setAttribute("userEid", "ThachLN");
             httpSession.setAttribute("userEmail", "LNThach@gmail.com");
             httpSession.setAttribute("userFirstName", "Thach");
-            httpSession.setAttribute("userLastName", "Le Ngoc Thach");            
+            httpSession.setAttribute("userLastName", "Le Ngoc Thach");       
         }
+        
+        httpSession.setAttribute("loginUrl", loginUrl);
     }
 
 
