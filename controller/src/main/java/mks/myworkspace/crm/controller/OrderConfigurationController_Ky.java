@@ -158,21 +158,26 @@ public class OrderConfigurationController_Ky extends BaseController {
 		    orderStatuses = category.getOrderStatuses();
 
 		    boolean isFirst = true; // Biến kiểm tra phần tử đầu tiên
-		    for (OrderStatus os : orderStatuses) {
-		        nameStatus = os.getName();
-		        idTrangThai=os.getId();
-		        Object[] data;
-		        
-		        if (isFirst) {
-		            data = new Object[] { id, nameCategory, nameStatus,idTrangThai,id };
-		            isFirst = false; // Sau phần tử đầu tiên, đặt biến này thành false
-		        } else {
-		            data = new Object[] { "", "", nameStatus,idTrangThai,id }; // Để trống id và nameCategory
-		        }
+		    if(orderStatuses.size()>0) {
+		    	for (OrderStatus os : orderStatuses) {
+			        nameStatus = os.getName();
+			        idTrangThai=os.getId();
+			        Object[] data;
+			        
+			        if (isFirst) {
+			            data = new Object[] { id, nameCategory, nameStatus,idTrangThai,id };
+			            isFirst = false; // Sau phần tử đầu tiên, đặt biến này thành false
+			        } else {
+			            data = new Object[] { "", "", nameStatus,idTrangThai,id }; // Để trống id và nameCategory
+			        }
 
-		        orderStatusData.add(data);
-		    } 
-		    orderStatusData.add(new Object[] {"","","Thêm trạng thái mới","",""});
+			        orderStatusData.add(data);
+			    } 
+			    orderStatusData.add(new Object[] {"","","Thêm trạng thái mới","",""});
+		    }
+		    else {
+				orderStatusData.add(new Object[] {id,nameCategory,"Thêm trạng thái mới","",id});
+			}
 		}
 		orderStatusData.add(new Object[] {".",".",".","",""});
 		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, orderStatusData);

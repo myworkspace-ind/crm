@@ -113,10 +113,10 @@ function initTable(colHeaders, colWidths, data) {
             contextMenu: true,
             licenseKey: 'non-commercial-and-evaluation',
             mergeCells: mergeCells,
-            hiddenColumns: {
+            /*hiddenColumns: {
                 columns: [3, 4], // Chỉ mục của các cột cần ẩn
                 indicators: false // Không hiển thị biểu tượng cột bị ẩn
-            },
+            },*/
 
             afterChange: function(changes, source) {
                 if (changes) {
@@ -133,17 +133,19 @@ function initTable(colHeaders, colWidths, data) {
                             console.info("Giá trị cần create nên null");
                         }
 
-                        if(idLoaiDonHang != null || idTrangThai != null) {
+                        if(idLoaiDonHang != null && idTrangThai != null) {
                             updateList.push([row, col, oldValue, newValue, idTrangThai, idLoaiDonHang]);
-                        } else if(col != 0 && oldValue != "" && newValue != null) {
+                        } else if(col != 0 && oldValue != "" && newValue != null && idLoaiDonHang != null && col != 4) {
                             if(col == 2) {
-                                for(let i = row-1; i >= 0; i--) {
+                                /*for(let i = row-1; i >= 0; i--) {
                                     if(data[i][1] != null && data[i][1] != "") {
-                                        idLoaiDonHang = data[i][4];
-                                        createList.push([row,col,oldValue,newValue,idTrangThai,idLoaiDonHang])
+                                        idLoaiDonHang = data[i][1];
+										createList.push([row, col, oldValue, newValue, idTrangThai, idLoaiDonHang]);
                                         break;
                                     }
-                                }
+                                }*/
+								idLoaiDonHang = htOrder.getDataAtCell(row,4);
+								createList.push([row, col, oldValue, newValue, idTrangThai, idLoaiDonHang]);
                             } else {
                                 createList.push([row, col, oldValue, newValue, idTrangThai, idLoaiDonHang]);
                             }
@@ -163,6 +165,11 @@ function initTable(colHeaders, colWidths, data) {
                         
                         const physicalRow = coords.row;
                         const physicalCol = coords.col;
+						let mergeDataCategory = null;
+						let mergeDataIdCategory = null;
+						let dataTest = null;
+						
+						
                         
                         // Log để kiểm tra
                         console.log(`Double-clicked cell coordinates - Row: ${physicalRow}, Col: ${physicalCol}`);
@@ -173,6 +180,21 @@ function initTable(colHeaders, colWidths, data) {
                             e.preventDefault();
                             // Thêm row mới phía trên
                             htOrder.alter('insert_row_above', physicalRow);
+							console.log(`Id loại đơn hàng cần thêm là: ${htOrder.getDataAtCell(physicalRow-1, 4)}`);
+							dataTest = htOrder.getDataAtCell(physicalRow+1,4);
+							if(htOrder.getDataAtCell(physicalRow+1,4) != null && htOrder.getDataAtCell(physicalRow+1,4) !=""){
+								mergeDataCategory = htOrder.getDataAtCell(physicalRow+1, 1);
+								mergeDataIdCategory = htOrder.getDataAtCell(physicalRow+1, 0);
+								htOrder.setDataAtCell(physicalRow, 1, mergeDataCategory);
+								htOrder.setDataAtCell(physicalRow, 0, mergeDataIdCategory);
+								htOrder.setDataAtCell(physicalRow, 4, mergeDataIdCategory);
+								htOrder.getPlugin('mergeCells').merge(physicalRow, 0, physicalRow+1, 0); 
+								htOrder.getPlugin('mergeCells').merge(physicalRow, 1, physicalRow+1, 1); 
+							}
+							else{
+								mergeDataIdCategory = htOrder.getDataAtCell(physicalRow-1, 4);
+								htOrder.setDataAtCell(physicalRow,4,mergeDataIdCategory);
+							}
                         }
                     });
 
