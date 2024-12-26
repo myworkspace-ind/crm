@@ -113,10 +113,10 @@ function initTable(colHeaders, colWidths, data) {
             contextMenu: true,
             licenseKey: 'non-commercial-and-evaluation',
             mergeCells: mergeCells,
-            /*hiddenColumns: {
+            hiddenColumns: {
                 columns: [3, 4], // Chỉ mục của các cột cần ẩn
                 indicators: false // Không hiển thị biểu tượng cột bị ẩn
-            },*/
+            },
 
             afterChange: function(changes, source) {
                 if (changes) {
@@ -137,13 +137,6 @@ function initTable(colHeaders, colWidths, data) {
                             updateList.push([row, col, oldValue, newValue, idTrangThai, idLoaiDonHang]);
                         } else if(col != 0 && oldValue != "" && newValue != null && idLoaiDonHang != null && col != 4) {
                             if(col == 2) {
-                                /*for(let i = row-1; i >= 0; i--) {
-                                    if(data[i][1] != null && data[i][1] != "") {
-                                        idLoaiDonHang = data[i][1];
-										createList.push([row, col, oldValue, newValue, idTrangThai, idLoaiDonHang]);
-                                        break;
-                                    }
-                                }*/
 								idLoaiDonHang = htOrder.getDataAtCell(row,4);
 								createList.push([row, col, oldValue, newValue, idTrangThai, idLoaiDonHang]);
                             } else {
