@@ -80,7 +80,7 @@ import mks.myworkspace.crm.transformer.OrderConverter;
 @Controller
 @Slf4j
 @RequestMapping("/orders-handsontable")
-public class OrderController_Vinh extends BaseController {
+public class OrderController_Handsontable extends BaseController {
 
 	@Autowired
 	GoodsCategoryService goodsCategoryService;

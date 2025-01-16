@@ -19,7 +19,7 @@ $(document).ready(function() {
  */
 function loadTableData() {
     $.ajax({
-        url: _ctx + 'orders-configuration-ky/load-statuses',
+        url: _ctx + 'orders-configuration/load-statuses',
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json',
@@ -206,7 +206,7 @@ function saveChanges() {
 
         // Gửi AJAX request
         $.ajax({
-            url: _ctx + 'orders-configuration-ky/save-category-status',
+            url: _ctx + 'orders-configuration/save-category-status',
             type: 'POST',
             data: formDataJson,
             dataType: "json",
