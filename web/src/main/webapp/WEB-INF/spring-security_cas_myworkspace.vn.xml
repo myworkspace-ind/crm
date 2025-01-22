@@ -71,35 +71,18 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
     <!-- Enable security, let the casAuthenticationEntryPoint handle all intercepted urls. The CAS_FILTER needs to be in 
         the right position within the filter chain. -->
 
-		<logout logout-url="/logout"
-			logout-success-url="https://myworkspace.vn/cas/logout?service=http://localhost:8080/crm-web" />
-			
-		<form-login default-target-url="/" />
-	</http> -->
-	
-	<http entry-point-ref="casAuthenticationEntryPoint" use-expressions="true">
-		<!-- Tắt CSRF -->
-	    <csrf disabled="true" />
-	    
-	    <!-- Các URL cụ thể hơn cần được định nghĩa trước -->
-	    <intercept-url pattern="/j_spring_cas_security_check" access="permitAll" />
-	    <intercept-url pattern="/resources/**" access="permitAll" />
-	    <intercept-url pattern="/logout" access="permitAll" />
-	    <intercept-url pattern="/" access="permitAll" />
-	    <intercept-url pattern="/orders/**" access="isAuthenticated()" />
-		<intercept-url pattern="/customer/**" access="isAuthenticated()" />
-		<intercept-url pattern="/orders-configuration-ky/**" access="isAuthenticated()" />
-		<intercept-url pattern="/orders-configuration/**" access="isAuthenticated()" />
-		
-	    <!-- Cuối cùng là URL phổ quát -->
-	    <intercept-url pattern="/**" access="permitAll" />
-	
-	    <custom-filter ref="singleLogoutFilter" before="LOGOUT_FILTER" />
-	    <custom-filter ref="casAuthenticationFilter" position="CAS_FILTER" />
-	    <logout logout-url="/logout" logout-success-url="https://myworkspace.vn/cas/logout?service=http://localhost:8080/crm-web" />
-	    <form-login default-target-url="/" />
-	</http>
-	
+    <!-- Uncomment this entry-point-refer to use CAS for authentication -->
+    <!-- <http entry-point-ref="casAuthenticationEntryPoint" auto-config="true"> -->
+    <!-- <intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY"></intercept-url> -->
+    <!-- <custom-filter position="CAS_FILTER" ref="casAuthenticationFilter"></custom-filter> -->
+    <!-- </http> -->
+    <!-- <http entry-point-ref="casAuthenticationEntryPoint" use-expressions="true"> <intercept-url pattern="/j_spring_cas_security_check" 
+        access="permitAll" /> <intercept-url pattern="/" access="permitAll" /> <intercept-url pattern="/resources/**" access="permitAll" 
+        /> <intercept-url pattern="/**" access="permitAll" /> <intercept-url pattern="/orders/list/**" access="isAuthenticated()" 
+        /> <intercept-url pattern="/logout" access="permitAll" /> <intercept-url pattern="/logout-handler" access="permitAll" /> 
+        <custom-filter ref="singleLogoutFilter" before="LOGOUT_FILTER" /> <custom-filter ref="casAuthenticationFilter" position="CAS_FILTER" 
+        /> <logout logout-url="/logout" logout-success-url="https://myworkspace.vn/cas/logout?service=http://localhost:8080/crm-web" 
+        /> <form-login default-target-url="/" /> </http> -->
 
     <http entry-point-ref="casAuthenticationEntryPoint" use-expressions="true">
         <!-- Tắt CSRF -->
@@ -110,6 +93,11 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
         <intercept-url pattern="/resources/**" access="permitAll" />
         <intercept-url pattern="/logout" access="permitAll" />
         <intercept-url pattern="/" access="permitAll" />
+        
+        <intercept-url pattern="/orders/**" access="isAuthenticated()" />
+		<intercept-url pattern="/customer/**" access="isAuthenticated()" />
+		<intercept-url pattern="/orders-configuration-ky/**" access="isAuthenticated()" />
+		<intercept-url pattern="/orders-configuration/**" access="isAuthenticated()" />
 
         <!-- Cuối cùng là URL phổ quát -->
         <intercept-url pattern="/**" access="permitAll" />

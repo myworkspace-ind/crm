@@ -27,7 +27,10 @@
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer/newEditCustomer}" data-toggle="dropdown">New</a></li>
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer/list}" data-toggle="dropdown">List</a></li>
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer/interact}" data-toggle="dropdown">Interaction</a></li>  
-                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer/list}" data-toggle="dropdown">Search (Son)</a></li>
+                  
+                  <!-- Chức năng không khác gì Customer>List. Cần thay đổi lại -->
+                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer/list}" data-toggle="dropdown">Search</a></li>  
+                  
                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Care</a></li>
                 </ul>
             </li>
@@ -36,9 +39,12 @@
                 <ul class="dropdown-menu">
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/new}" data-toggle="dropdown">New</a></li>
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/list}" data-toggle="dropdown">List</a></li>
-                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders-datatable-thien}" data-toggle="dropdown">Search</a>
-                  </li>
-                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Update status</a>
+                  
+                  <!-- Chức năng không khác gì Order>List. Cần thay đổi lại -->
+				  <!-- <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders-datatable-thien}" data-toggle="dropdown">Search</a></li> -->
+				 
+				  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/list}" data-toggle="dropdown">Search</a></li>
+                  <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Update Status</a>
                   </li>
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/history}" data-toggle="dropdown">History</a>
                   </li>
@@ -47,9 +53,9 @@
             <li class="dropdown nav-item" data-menu="dropdown">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-settings"></i><span data-i18n="nav.dash.main">Settings</span></a>
                    <ul class="dropdown-menu">
-                      <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration-ky/status}" data-toggle="dropdown">Order configuration</a></li>
-                      <li data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration/orders}" data-toggle="dropdown">Order Type (Bao)</a></li>
-                      <li data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration-ky/status}" data-toggle="dropdown">Order Status</a></li>
+                      <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration/status}" data-toggle="dropdown">Order Configuration</a></li>
+                      <li data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration/orders}" data-toggle="dropdown">Order Type</a></li>
+                      <li data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration/status}" data-toggle="dropdown">Order Status</a></li>
                       <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">General</a></li>
                   </ul>
             </li>

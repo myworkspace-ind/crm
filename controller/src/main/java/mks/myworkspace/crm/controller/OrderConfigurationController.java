@@ -22,7 +22,10 @@ package mks.myworkspace.crm.controller;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -46,6 +49,10 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.OrderCategory;
+import mks.myworkspace.crm.entity.OrderStatus;
+import mks.myworkspace.crm.service.OrderCategoryService;
+import mks.myworkspace.crm.service.OrderService;
+import mks.myworkspace.crm.service.OrderStatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_OrderCate_Handsontable;
 import mks.myworkspace.crm.validate.OrderCategoryValidator;
@@ -63,11 +70,22 @@ public class OrderConfigurationController extends BaseController {
 	 * 
 	 * @param binder
 	 */
-	@Autowired
-	StorageService storageService;
 	
 	@Value("classpath:order-category/order-category-demo.json")
 	private Resource resOrderCategoryDemo;
+	
+	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
+	private OrderCategoryService categoryService;
+	
+	@Autowired
+	private OrderStatusService statusService;
+	
+	@Autowired
+	private StorageService storageService;
+	
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
@@ -85,13 +103,23 @@ public class OrderConfigurationController extends BaseController {
 		initSession(request, httpSession);
 		return mav;
 	}
+	
 	@GetMapping("/status")
 	public ModelAndView displayOrderConfigurationStatus(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("ordersConfiguration-StatusCRMScreen");
+		ModelAndView mav = new ModelAndView("ordersConfiguration-StatusCRMScreen_ky");
 
 		initSession(request, httpSession);
 		return mav;
 	}
+	
+	@PostMapping(value = "/save-category-status")
+	@ResponseBody
+	public Object saveCategoryStatus(@RequestBody Map<String, Object> requestBody) throws IOException{
+	    // Lấy danh sách các thay đổi (update)
+		boolean saveOrUpdate = storageService.saveOrUpdateOrderCategoryStatus(requestBody);
+	    return getOrderConfigurationStatusData();
+	}
+	
 	private String getDefaultOrderCateData() throws IOException {
 		return IOUtils.toString(resOrderCategoryDemo.getInputStream(), StandardCharsets.UTF_8);
 	}
@@ -177,42 +205,41 @@ public class OrderConfigurationController extends BaseController {
 	@ResponseBody
 	public Object getOrderConfigurationStatusData() throws IOException {
 		log.debug("Get sample data from configuration file.");
-		int[] colWidths = { 50, 300, 300, };
-		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", };
-		List<Object[]> tblData = new ArrayList<>();
-		Object[] data1 = new Object[] { "1", "Mặc định", "Nhận đơn" };
-		Object[] data2 = new Object[] { "", "", "Đóng gói" };
-		Object[] data3 = new Object[] { "", "", "Vận chuyển" };
-		Object[] data4 = new Object[] { "", "", "Giao hàng" };
+		int[] colWidths = { 50, 300, 300, 200, 200};
+		String[] colHeaders = { "No", "Loại đơn hàng", "Trạng thái", "Id Trạng Thái", "Id Loại Đơn Hàng"};
 		
-		Object[] data5 = new Object[] { "2", "Máy móc", "Nhận đơn" };
-		Object[] data6 = new Object[] { "", "", "Đóng gói" };
-		Object[] data7 = new Object[] { "", "", "Vận chuyển" };
-		Object[] data8 = new Object[] { "", "", "Lưu kho" };
-		Object[] data9 = new Object[] { "", "", "Giao hàng" };
-		
-		Object[] data10 = new Object[] { "3", "Thực phẩm", "Nhận đơn" };
-		Object[] data11 = new Object[] { "", "", "Đóng gói" };
-		Object[] data12 = new Object[] { "", "", "Vận chuyển" };
-		Object[] data13 = new Object[] { "", "", "Lưu kho lạnh" };
-		Object[] data14 = new Object[] { "", "", "Giao hàng" };
-		
-		tblData.add(data1);
-		tblData.add(data2);
-		tblData.add(data3);
-		tblData.add(data4);
-		tblData.add(data5);
-		tblData.add(data6);
-		tblData.add(data7);
-		tblData.add(data8);
-		tblData.add(data9);
-		tblData.add(data10);
-		tblData.add(data11);
-		tblData.add(data12);
-		tblData.add(data13);
-		tblData.add(data14);
+		List<OrderCategory> orderCategoryStatus=categoryService.getAllOrderCategoriesWithOrderStatuses();
+		List<Object[]> orderStatusData=new ArrayList<>();
+		OrderCategory category=new OrderCategory();
+		Long id,idTrangThai;
+		String nameCategory,nameStatus;
+		Set<OrderStatus> orderStatuses=new HashSet<OrderStatus>();
 
-		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, tblData);
+		for (int i = 0; i < orderCategoryStatus.size(); i++) {
+		    category = orderCategoryStatus.get(i);
+		    id = category.getId();
+		    nameCategory = category.getName();
+		    orderStatuses = category.getOrderStatuses();
+
+		    boolean isFirst = true; // Biến kiểm tra phần tử đầu tiên
+		    for (OrderStatus os : orderStatuses) {
+		        nameStatus = os.getName();
+		        idTrangThai=os.getId();
+		        Object[] data;
+		        
+		        if (isFirst) {
+		            data = new Object[] { id, nameCategory, nameStatus,idTrangThai,id };
+		            isFirst = false; // Sau phần tử đầu tiên, đặt biến này thành false
+		        } else {
+		            data = new Object[] { "", "", nameStatus,idTrangThai,id }; // Để trống id và nameCategory
+		        }
+
+		        orderStatusData.add(data);
+		    } 
+		    orderStatusData.add(new Object[] {"","","Thêm trạng thái mới","",""});
+		}
+		orderStatusData.add(new Object[] {".",".",".","",""});
+		TableStructure tblOrderConfigurationStatus = new TableStructure(colWidths, colHeaders, orderStatusData);
 
 		return tblOrderConfigurationStatus;
 	}
@@ -234,42 +261,4 @@ public class OrderConfigurationController extends BaseController {
 
 		return tableData;
 	}
-//	private String getDefaultOrderData() throws IOException {
-//		return IOUtils.toString(resOrderDemo.getInputStream(), StandardCharsets.UTF_8);
-//	}
-
-//	@GetMapping("/load")
-//	@ResponseBody
-//	public Object getTaskData() throws IOException {
-//		log.debug("Get sample data from configuration file.");
-//		String jsonOrdersTable = getDefaultOrdersData();
-//
-//		List<Task> lstTasks = storageService.getTaskRepo().findAll();
-//
-//		if (lstTasks == null || lstTasks.isEmpty()) {
-//			return jsonTaskTable;
-//		} else {
-//			JSONObject jsonObjTableTask = new JSONObject(jsonTaskTable);
-//
-//			JSONArray jsonObjColWidths = jsonObjTableTask.getJSONArray("colWidths");
-//			int len = (jsonObjColWidths != null) ? jsonObjColWidths.length() : 0;
-//			int[] colWidths = new int[len];
-//			for (int i = 0; i < jsonObjColWidths.length(); i++) {
-//				colWidths[i] = jsonObjColWidths.getInt(i);
-//			}
-//
-//			JSONArray jsonObjColHeaders = jsonObjTableTask.getJSONArray("colHeaders");
-//			len = (jsonObjColHeaders != null) ? jsonObjColHeaders.length() : 0;
-//			String[] colHeaders = new String[len];
-//			for (int i = 0; i < jsonObjColHeaders.length(); i++) {
-//				colHeaders[i] = jsonObjColHeaders.getString(i);
-//			}
-//
-//			List<Object[]> tblData = JpaTransformer.convert2D(lstTasks);
-//
-//			TableStructure tblTask = new TableStructure(colWidths, colHeaders, tblData);
-//
-//			return tblTask;
-//		}
-//	}
 }
