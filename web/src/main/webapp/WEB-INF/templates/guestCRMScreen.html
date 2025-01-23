@@ -1,0 +1,142 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Intro</title>
+    <link rel="stylesheet" href="resources/css/buttonBackToTop.css">
+    
+    <th:block th:include="fragments/common_meta_title"></th:block>
+    <th:block th:include="fragments/head"></th:block>
+    <th:block th:include="fragments/common_css"></th:block>
+    <style>
+    .carousel-control-prev, .carousel-control-next {
+        width: 30px; /* Chiều rộng khung mũi tên */
+        height: 30px; /* Chiều cao khung mũi tên */
+    }
+    
+    .carousel-control-prev-icon, .carousel-control-next-icon {
+        width: 15px; /* Chiều rộng biểu tượng mũi tên */
+        height: 15px; /* Chiều cao biểu tượng mũi tên */
+    }
+    </style>
+    
+    <th:block th:include="fragments/head"></th:block>
+</head>
+<body>
+    <th:block th:include="fragments/hmenuGuest"></th:block>
+	<!-- Header Section -->
+ 	<th:block th:include="fragments/home/sidebarGuest"></th:block>
+ 	<th:block th:include="fragments/home/NavbarForIntro"></th:block>		
+	<!-- Thumbnail Carousel Section -->
+	<th:block th:include="fragments/home/content"></th:block>
+	
+	<!-- New Section After Thumbnail Carousel -->
+	<section class="container my-5">
+		<div class="row text-center">
+			<div class="col-md-4 ">
+				<img src="resources/Image/1.png" alt="Feature 1" class="img-fluid"><br>
+				<p></p>
+				<div class="border border-primary">
+				<h5 class="bg-primary text-white">
+				New Feature 1
+				</h5>
+				<p>Highlighting new features to enhance user experience.</p>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<img src="resources/Image/2.jpg" alt="Feature 2" class="img-fluid"> <br>
+				<p></p>
+				<div class="border border-success">
+				<h5 class ="bg-success text-white ">
+				New Feature 2
+				</h5>
+				<p>Innovative tools for better business management.</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<img src="resources/Image/3.jpg" alt="Feature 3" class="img-fluid"><br>
+				<p></p>
+				<div class="border border-danger">
+				<h5 class ="bg-danger text-white ">New Feature 3</h5>
+				<p>Advanced analytics and reporting capabilities.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Features Section -->
+	<section class="text-center py-5">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<i class="bi bi-phone"></i>
+					<p>Free Mobile App</p>
+				</div>
+				<div class="col-md-3">
+					<i class="bi bi-people"></i>
+					<p>Quản lý khách hàng</p>
+				</div>
+				<div class="col-md-3">
+					<i class="bi bi-graph-up"></i>
+					<p>Marketing Automation</p>
+				</div>
+				<div class="col-md-3">
+					<i class="bi bi-bar-chart"></i>
+					<p>Đo lường KPI</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Partner Section -->
+	<section class="bg-light py-5">
+		<div class="container text-center">
+			<h2>Các đối tác của chúng tôi</h2>
+			<div id="partnerCarousel" class="carousel slide mt-4"
+				data-bs-ride="carousel">
+				<div class="carousel-inner">
+					<!-- Nhóm 1 -->
+					<div class="carousel-item active">
+						<div class="d-flex justify-content-center">
+							<img src="resources/Image/hs.jpg" class="mx-5 my-3" width="200">
+							<img src="resources/Image/tsb.jpg " class="mx-5 my-3" width="200">
+							<img src="resources/Image/vt.jpg" class="mx-5 my-3" width="200">
+						</div>
+					</div>
+					<!-- Nhóm 2 -->
+					<div class="carousel-item">
+						<div class="d-flex justify-content-center">
+							<img src="resources/Image/ss.png" class="mx-5 my-3" width="200">
+							<img src="resources/Image/lg.png" class="mx-5 my-3" width="200">
+							<img src="resources/Image/fbt.png" class="mx-5 my-3" width="200">
+						</div>
+					</div>
+				</div>
+				<button class="carousel-control-prev  bg-success" type="button"
+					data-bs-target="#partnerCarousel" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon text-white"
+						aria-hidden="true"></span> <span
+						class="visually-hidden text-white">Previous</span>
+				</button>
+				<button class="carousel-control-next  bg-success" type="button"
+					data-bs-target="#partnerCarousel" data-bs-slide="next">
+					<span class="carousel-control-next-icon text-white"
+						aria-hidden="true"></span> <span
+						class="visually-hidden text-white">Next</span>
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- Button backToTop -->
+	<button id="backToTop" class="btn btn-primary rounded-circle">
+  		<i class="fas fa-arrow-up"></i>
+	</button>
+	
+	<!-- Footer Section -->
+    <th:block th:include="fragments/home/footerForIntro"></th:block>
+</body>
+<th:block th:include="fragments/common_javascript"></th:block>
+
+<script src="resources/js/task/BackToTop.js"></script>
+
+</html>

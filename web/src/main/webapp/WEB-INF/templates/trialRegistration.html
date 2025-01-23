@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Đăng ký dùng thử</title>
+    <link rel="stylesheet" href="resources/css/buttonBackToTop.css">
+    <link rel="stylesheet" type="text/css" th:href="@{resources/css/trialRegistrtrationForm.css}">
+    
+    <th:block th:include="fragments/common_meta_title"></th:block>
+    <th:block th:include="fragments/head"></th:block>
+    <th:block th:include="fragments/common_css"></th:block>
+    <th:block th:include="fragments/head"></th:block>
+</head>
+<body>
+    <th:block th:include="fragments/hmenuGuest"></th:block>
+	<!-- Header Section -->
+ 	<!-- <th:block th:include="fragments/home/sidebarGuest"></th:block> -->
+ 	<th:block th:include="fragments/home/trialRegistrtrationForm"></th:block>
+	
+	
+	<!-- Footer Section -->
+    <th:block th:include="fragments/home/footerForIntro"></th:block>
+</body>
+<th:block th:include="fragments/common_javascript"></th:block>
+
+<script src="resources/js/task/BackToTop.js"></script>
+
+</html>

@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+body {
+	font-family: Arial, sans-serif;
+}
+
+.form-section {
+	padding: 20px;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+}
+
+.btn-submit {
+	background-color: #dc3545;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.btn-submit:hover {
+	background-color: #e65c00;
+}
+
+.feature-list li {
+    margin-bottom: 15px;
+}

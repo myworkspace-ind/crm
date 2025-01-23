@@ -1,0 +1,88 @@
+<div class="container mt-5">
+    <div class="row">
+        <!-- Form Section -->
+        <div class="col-md-6">
+            <div class="form-section">
+                <h5>Vui lòng chọn ĐỊA ĐIỂM phù hợp để được hỗ trợ nhanh nhất</h5>
+                <div class="mb-4">
+                    <label class="form-check-label">
+                        <input type="radio" name="location" value="Bac" checked> Miền Bắc
+                    </label>
+                    <label class="form-check-label ms-3">
+                        <input type="radio" name="location" value="Trung"> Miền Trung
+                    </label>
+                    <label class="form-check-label ms-3">
+                        <input type="radio" name="location" value="Nam"> Miền Nam
+                    </label>
+                </div>
+
+               <!--  <form th:action="@{/register}" method="post"> -->
+               <form>
+                    <div class="mb-3">
+                        <label for="contactName">Người liên hệ chính/Contact name</label>
+                        <input type="text" id="contactName" name="contactName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactNumber">Điện thoại/Contact number</label>
+                        <input type="text" id="contactNumber" name="contactNumber" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="companyName">Tên công ty/Company name</label>
+                        <input type="text" id="companyName" name="companyName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message">Nhu cầu/Your message</label>
+                        <textarea id="message" name="message" class="form-control"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address">Địa chỉ văn phòng/Address</label>
+                        <input type="text" id="address" name="address" class="form-control">
+                    </div>
+                    <button type="submit" class="btn-submit">Đăng ký dùng 30 ngày</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Information Section -->
+        <div class="col-md-6">
+            <h5>PHẦN MỀM QUẢN LÝ VÀ CHĂM SÓC KHÁCH HÀNG TOÀN DIỆN</h5>
+            <hr>
+            <ul class="feature-list">
+			    <li>
+			        <i class="fas fa-gift text-danger"></i>
+			        <strong>Trải nghiệm ngay 30 ngày miễn phí</strong> với giải pháp CRM tối ưu của MekongSolution, giúp doanh nghiệp bạn vươn xa hơn.
+			    </li>
+			    <li>
+			        <i class="fas fa-chart-line text-primary"></i>
+			        Chúng tôi <strong>hiểu rõ từng đặc thù kinh doanh</strong> và đồng hành cùng bạn để tạo ra giải pháp phù hợp nhất.
+			    </li>
+			    <li>
+			        <i class="fas fa-headset text-success"></i>
+			        <strong>Hỗ trợ toàn diện 24/7</strong>, từ hướng dẫn sử dụng đến tư vấn triển khai thực tiễn.
+			    </li>
+			    <li>
+			        <i class="fas fa-rocket text-warning"></i>
+			        Luôn <strong>nâng cấp công nghệ và dịch vụ</strong> để đáp ứng nhu cầu ngày càng cao của doanh nghiệp bạn.
+			    </li>
+			    <li>
+			        <i class="fas fa-handshake text-info"></i>
+			        Hãy để <strong>chúng tôi trở thành đối tác tin cậy</strong>, giúp bạn chinh phục mọi thử thách!
+			    </li>
+			</ul>
+        </div>
+    </div>
+</div>
+
+<script>
+     // Thêm dấu '*' cho các trường yêu cầu
+     document.querySelectorAll("input[required], select[required], textarea[required]").forEach((element) => {
+         const label = element.previousElementSibling;
+         if (label) {
+             label.innerHTML += ' <span style="color: red;">*</span>';
+         }
+     });
+</script>

@@ -38,7 +38,15 @@
 
 <body>
 
-	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- <th:block th:include="fragments/hmenu"></th:block> -->
+	<!-- Header Section -->
+	<div id="headerToolbar" class="bg-light shadow-sm py-2">
+	    <div class="container d-flex align-items-center">
+	        <a th:href= "@{/}" class="text-decoration-none d-flex align-items-center position-relative">
+			    <img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;">
+			</a>
+	    </div>
+	</div>
 
 	<div class="hero_area">
 

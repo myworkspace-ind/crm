@@ -38,7 +38,7 @@ public class HomeController extends BaseController {
 	 * Simply selects the home view to render by returning its name.
      * @return Intro view 
 	 */
-	@GetMapping("/")
+	@GetMapping("/members")
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("intro");
 

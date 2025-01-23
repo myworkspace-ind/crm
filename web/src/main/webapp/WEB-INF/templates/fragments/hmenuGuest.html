@@ -1,0 +1,32 @@
+<!-- Fragment: Horizontal menu -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-light navbar-without-dd-arrow navbar-shadow navbar-brand-center" role="navigation" data-menu="menu-wrapper" data-nav="brand-center" style="z-index: 1000;">
+      <div class="main-menu-content center-layout" data-menu="menu-container">
+        
+        <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+        	<!-- <li class="nav-item active" data-page="crm-web/home">
+			    <a class="nav-link" th:href="@{/}" id="homeLink">
+			        <i class="icon-home"></i>
+			        <span class="menu-title" data-i18n="nav.dash.main">Trang chủ</span>
+			    </a>
+			</li> -->
+			 <li class="dropdown nav-item active" data-menu="dropdown">
+                <a class="dropdown-toggle nav-link" th:href="@{/}"><i class="icon-home"></i><span data-i18n="nav.dash.main">Home</span></a>
+            </li>
+            <li class="dropdown nav-item active" data-menu="dropdown">
+                <a class="dropdown-toggle nav-link" th:href="@{/ecosystem}"><i class="icon-globe"></i><span data-i18n="nav.dash.main">Ecosystem</span></a>
+            </li>
+            <li class="dropdown nav-item" data-menu="dropdown">
+                <a class="dropdown-toggle nav-link" th:href="@{/contact}"><i class="icon-envelope"></i><span data-i18n="nav.dash.main">Contact</span></a>
+            </li>
+            <li class="dropdown nav-item" data-menu="dropdown">
+                <a class="dropdown-toggle nav-link" th:href="@{/feature-introduction}"><i class="icon-settings"></i><span data-i18n="nav.dash.main">Features</span></a>
+            </li>
+            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" th:href="@{/feedback}"><i class="icon-note"></i><span data-i18n="nav.templates.main">Feedback</span></a>
+             </li>
+             <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" href="#"><i class="icon-notebook"></i><span data-i18n="nav.templates.main">About</span></a>
+        </ul>
+    </div>
+</div>        
+</html>

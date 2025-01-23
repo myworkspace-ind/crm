@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,7 +12,15 @@
 </head>
 
 <body>
-    <!-- Hero Section -->
+    <!-- Header Section -->
+	<div id="headerToolbar" class="bg-light shadow-sm py-2">
+	    <div class="container d-flex align-items-center">
+	        <a th:href= "@{/}" class="text-decoration-none d-flex align-items-center position-relative">
+			    <img src="resources/Image/intro.png" alt="Logo" class="img-fluid me-3" style="height: 50px;">
+			</a>
+	    </div>
+	</div>
+	<!-- Hero Section -->
     <div class="text-center bg-primary text-white py-5 position-relative">
         <div class="container">
             <h1 class="fw-bold fs-1">Giải Pháp Quản Lý Và Chăm Sóc Khách Hàng Toàn Diện</h1>
