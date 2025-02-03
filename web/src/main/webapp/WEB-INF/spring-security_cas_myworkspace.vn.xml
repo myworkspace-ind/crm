@@ -93,6 +93,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
         <intercept-url pattern="/resources/**" access="permitAll" />
         <intercept-url pattern="/logout" access="permitAll" />
         <intercept-url pattern="/" access="permitAll" />
+        <intercept-url pattern="/send-email" access="permitAll" />
         
         <intercept-url pattern="/orders/**" access="isAuthenticated()" />
 		<intercept-url pattern="/customer/**" access="isAuthenticated()" />

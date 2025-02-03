@@ -4,20 +4,20 @@
         <div class="col-md-6">
             <div class="form-section">
                 <h5>Vui lòng chọn ĐỊA ĐIỂM phù hợp để được hỗ trợ nhanh nhất</h5>
-                <div class="mb-4">
-                    <label class="form-check-label">
-                        <input type="radio" name="location" value="Bac" checked> Miền Bắc
-                    </label>
-                    <label class="form-check-label ms-3">
-                        <input type="radio" name="location" value="Trung"> Miền Trung
-                    </label>
-                    <label class="form-check-label ms-3">
-                        <input type="radio" name="location" value="Nam"> Miền Nam
-                    </label>
-                </div>
+<!--                 <div class="mb-4"> -->
+<!--                     <label class="form-check-label"> -->
+<!--                         <input type="radio" name="location" value="Bac" checked> Miền Bắc -->
+<!--                     </label> -->
+<!--                     <label class="form-check-label ms-3"> -->
+<!--                         <input type="radio" name="location" value="Trung"> Miền Trung -->
+<!--                     </label> -->
+<!--                     <label class="form-check-label ms-3"> -->
+<!--                         <input type="radio" name="location" value="Nam"> Miền Nam -->
+<!--                     </label> -->
+<!--                 </div> -->
 
                <!--  <form th:action="@{/register}" method="post"> -->
-               <form action="/send-email" method="post">
+               <form th:action="@{/send-email}" method="post">
                     <div class="mb-3">
                         <label for="contactName">Người liên hệ chính/Contact name</label>
                         <input type="text" id="contactName" name="contactName" class="form-control" required>
