@@ -46,11 +46,10 @@
 					</div>
 				</div>
 				<div class="content-header-right col-md-6 col-12">
+					<!-- Outline buttons with Icons -->
+					
 					<fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-						<input class="form-control" id="iconLeft" type="text" placeholder="Tìm kiếm khách hàng..." />
-						<div class="form-control-position">
-							<i class="fa fa-search"></i>
-						</div>
+						<button type="button" class="mr-1 mb-1 btn btn-outline-primary btn-min-width"><i class="fa fa-envelope-o"></i> Gửi Email</button>
 					</fieldset>
 				</div>
 			</div>
@@ -93,28 +92,27 @@
 					</div> -->
 
 					<div class="person-in-charge">
-						<label class="label-bold" for="person-in-charge">Người phụ
-							trách:</label> <select id="person-in-charge">
+						<p>
+					        <span class="label-bold">Người phụ trách:</span>
+					        <span th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : 'Chưa có'}"></span>
+					    </p>
+						<!-- <select id="person-in-charge">
 							<option value="">Chọn Người Phụ Trách</option>
 							<th:block th:each="person : ${responsiblePersons}">
 								<option th:value="${person.id}" th:text="${person.name}"
 									th:selected="${person.id == customer.responsiblePerson.id}">
 								</option>
 							</th:block>
-						</select>
+						</select> -->
 					</div>
 
 					<div class="creation-info">
 						<p>
-							<span class="label-bold">Ngày tạo:</span> 9/8/2024 9:00
-						</p>
-						<p>
-							<span class="label-bold">Người tạo:</span> Nguyễn Hoàng Phương
-							Ngân
-						</p>
-						<p>
-							<span class="label-bold">Đã mua:</span> 0 lần
-						</p>
+					        <span class="label-bold">Ngày tạo:</span>
+					        <span th:text="${customer.createdAt}"></span>
+					    </p>
+						<!-- <p><span class="label-bold">Người tạo:</span> Nguyễn Hoàng Phương Ngân</p>
+						<p><span class="label-bold">Đã mua:</span> 0 lần</p> -->
 					</div>
 				</div>
 
