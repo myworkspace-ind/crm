@@ -106,8 +106,9 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
         <custom-filter ref="singleLogoutFilter" before="LOGOUT_FILTER" />
         <custom-filter ref="casAuthenticationFilter" position="CAS_FILTER" />
         <logout logout-url="/logout"
-            logout-success-url="https://myworkspace.vn/cas/logout?service=http://localhost:8080/crm-web" />
-        <form-login default-target-url="/" />
+            logout-success-url="https://myworkspace.vn/cas/logout?service=http://localhost:8080/crm-web/members" />
+        <!-- <form-login default-target-url="/" /> -->
+        <form-login default-target-url="/members" always-use-default-target="true" />
     </http>
 
 
