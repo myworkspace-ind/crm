@@ -64,8 +64,22 @@
 						</div>
 						<div class="user-details">
 							<h2 th:text="${customer.companyName}"></h2>
-							<p th:text="${customer.address}"></p>
-							<p th:text="${customer.phone}"></p>
+							
+							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;">
+							  <i class="fa fa-map-marker"></i>
+							  <p th:text="${customer.address}" style="display: inline; margin: 0;"></p>
+							</div>
+							
+							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;	">
+							  <i class="fa fa-volume-control-phone"></i>
+							  <p th:text="${customer.phone}" style="display: inline; margin: 0;"></p>
+							</div>
+							
+							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;	">
+							  <i class="fa fa-envelope-open"></i>
+							  <p th:text="${customer.email}" style="display: inline; margin: 0;"></p>
+							</div>
+							
 						</div>
 					</div>
 
@@ -93,7 +107,7 @@
 
 					<div class="person-in-charge">
 						<p>
-					        <span class="label-bold">Người phụ trách:</span>
+					        <span class="label-bold">Nhân viên phụ trách:</span>
 					        <span th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : 'Chưa có'}"></span>
 					    </p>
 						<!-- <select id="person-in-charge">
@@ -114,10 +128,33 @@
 						<!-- <p><span class="label-bold">Người tạo:</span> Nguyễn Hoàng Phương Ngân</p>
 						<p><span class="label-bold">Đã mua:</span> 0 lần</p> -->
 					</div>
+					
+					<div class="relative-list-btn">
+				    <div class="btn-group mr-1 mb-1 drop-down">
+				        <button type="button" class="btn btn-outline-dark btn-min-width dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+				            Danh sách liên quan
+				        </button>
+				        <div class="dropdown-menu">
+				            <span class="dropdown-item">Thông tin chung</span>
+				            <span class="dropdown-item">Email với khách hàng</span>
+				            <span class="dropdown-item">Trao đổi nội bộ</span>
+				            <div class="dropdown-divider"></div>
+				            <a class="dropdown-item">Separated link</a>
+				        </div>
+				    </div>
+				</div>
+
 				</div>
 
 				<!-- Right panel -->
-				<div class="right-panel">
+				<div class="right-container">
+					<div class="common-info">
+					</div>
+					
+					<div class="email-to-customer">
+					</div>
+				
+					<div class="right-panel">
 					<div class="comments-section">
 						<h3>Trao đổi</h3>
 
@@ -156,7 +193,9 @@
 						<textarea placeholder="Nhập phản hồi..."></textarea>
 						<button>Gửi</button>
 					</div>
+					</div>
 				</div>
+				
 			</div>
 		</div>
 	</div>
