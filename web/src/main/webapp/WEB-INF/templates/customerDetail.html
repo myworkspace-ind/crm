@@ -132,12 +132,12 @@
 					<div class="relative-list-btn">
 				    <div class="btn-group mr-1 mb-1 drop-down">
 				        <button type="button" class="btn btn-outline-dark btn-min-width dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-				            Danh sách liên quan
+				           	Related Lists
 				        </button>
 				        <div class="dropdown-menu">
-				            <span class="dropdown-item">Thông tin chung</span>
-				            <span class="dropdown-item">Email với khách hàng</span>
-				            <span class="dropdown-item">Trao đổi nội bộ</span>
+				            <span class="dropdown-item" data-target="common-info">Overview</span>
+				            <span class="dropdown-item" data-target="email-to-customer">Email</span>
+				            <span class="dropdown-item" data-target="comments-section">Internal exchange</span>
 				            <div class="dropdown-divider"></div>
 				            <a class="dropdown-item">Separated link</a>
 				        </div>
@@ -148,15 +148,30 @@
 
 				<!-- Right panel -->
 				<div class="right-container">
-					<div class="common-info">
+					<div class="common-info" id="common-info">
+						<h2>Overview</h2>
 					</div>
 					
-					<div class="email-to-customer">
+					<div class="email-to-customer" id="email-to-customer">
+						<div class="card-header">
+							<h3 class="card-title" style="padding-left: 20px;">Email</h3>
+						</div>
+						
+						<div class="card-body">
+							<ul class="nav nav-tabs nav-iconfall nav-justified" id="tab-icon-fall-drag">
+								<li class="nav-item">
+									<a class="nav-link active" id="activeIcon32-tab1" data-toggle="tab" aria-controls="activeIcon32" aria-expanded="true"><i class="fa fa-envelope-o"></i> Letter</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="linkIcon32-tab1" data-toggle="tab" aria-controls="linkIcon32" aria-expanded="false"><i class="fa fa-file-o"></i> Draft</a>
+								</li>
+							</ul>
+						</div>
 					</div>
 				
 					<div class="right-panel">
-					<div class="comments-section">
-						<h3>Trao đổi</h3>
+					<div class="comments-section" id="comments-section">
+						<h3>Exchange</h3>
 
 						<!--  Comment 1 -->
 						<div class="comment">
@@ -219,9 +234,9 @@
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
-	<script type="text/javascript" src="resources/app-assets/js/update/navigate.js"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/deleteCustomer.js}" defer></script>
-	
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/customerDetail.js}" defer></script>
 	
 </body>
 

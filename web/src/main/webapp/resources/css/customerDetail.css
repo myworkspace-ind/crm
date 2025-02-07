@@ -40,8 +40,8 @@ body {
     border-color: #c7c7c7 !important;
     border-radius: 10px;
     border: solid;
-    height: 54%;
-    margin-bottom: 20px;
+    height: max-content;
+    margin-bottom: 20px !important;
 }
 
 .user-info {
@@ -87,6 +87,7 @@ body {
 	margin: 2px 0;
 	font-size: 14px;
 	color: #5d5d5d;
+	text-align: justify;
 }
 
 .actions {
@@ -212,4 +213,12 @@ body {
 .drop-down .dropdown-toggle {
     position: relative;
     z-index: 1;
+}
+
+.dropdown-menu{
+	cursor: pointer;
+}
+
+.nav.nav-tabs.nav-iconfall .nav-item a.nav-link{
+	line-height: 1 !important;
 }

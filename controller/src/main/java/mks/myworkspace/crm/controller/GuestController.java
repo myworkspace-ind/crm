@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 public class GuestController extends BaseController {
-	@GetMapping("/")
+	@GetMapping("/guest")
 	public ModelAndView displayGuestScreen(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("guestCRMScreen");
 		

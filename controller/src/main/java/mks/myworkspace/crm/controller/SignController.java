@@ -30,7 +30,7 @@ public class SignController extends BaseController {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 			redirectAttributes.addFlashAttribute("message", "Bạn đã đăng xuất thành công!");
 		}
-		return "redirect:/members";
+		return "redirect:/";
 	}
 
 	@GetMapping("/logout-handler")
