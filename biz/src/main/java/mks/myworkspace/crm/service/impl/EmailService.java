@@ -3,6 +3,7 @@ package mks.myworkspace.crm.service.impl;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 
@@ -49,5 +50,16 @@ public class EmailService {
 
         // Gửi email
         mailSender.send(mimeMessage);
+    }
+    
+    public void sendEmailToCustomer(String from, String to, String subject, String text) throws MessagingException{
+    	MimeMessage message = mailSender.createMimeMessage();
+    	MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(from);
+    	helper.setTo(to);
+    	helper.setSubject(subject);
+        helper.setText(text, true);
+         
+        mailSender.send(message);
     }
 }

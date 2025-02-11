@@ -49,9 +49,39 @@
 					<!-- Outline buttons with Icons -->
 					
 					<fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-						<button type="button" class="mr-1 mb-1 btn btn-outline-primary btn-min-width"><i class="fa fa-envelope-o"></i> Gửi Email</button>
+						<button id="openEmailModal" type="button" class="mr-1 mb-1 btn btn-outline-primary btn-min-width"><i class="fa fa-envelope-o"></i> Gửi Email</button>
 					</fieldset>
 				</div>
+				
+				<div class="email-overlay" id="emailOverlay"></div>
+				
+			       <!-- Modal Gửi Email -->
+			    <form th:action="@{/send-email-to-customer}" method="post">
+				    <div class="email-modal" id="emailModal">
+				    	<div class="email-header d-flex justify-content-between align-items-center">
+						    <h5 class="mb-3">Send Email</h5>
+						    <div class="btnGroup" style="margin-right: 50px">
+						        <button class="btn btn-warning" id="minimizeEmailModal"><i class="fa fa-minus"></i></button>
+						        <button class="btn btn-danger" id="closeEmailModal"><i class="fa fa-times"></i></button>
+						    </div>
+						</div>
+						
+						<div class="email-header d-flex justify-content-between align-items-center">
+						    <span class="user-name-email">Phuong Ngan < <span>example@gmail.com</span> > </span>					    
+						</div>
+				    	
+				        <input type="text" name="to" class="form-control mb-2" placeholder="Đến">
+				        <input type="text" name="subject" class="form-control mb-2" placeholder="Chủ đề">
+				        <textarea class="form-control mb-2" name="message" rows="5" placeholder="Nội dung"></textarea>
+				        <button class="btn btn-primary w-100"  type="submit" >Send</button>
+				        
+				        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+				        <div th:if="${error}" class="alert alert-danger" th:text="${error{}"></div>
+				        
+				    </div>
+				 </form>
+			    
+			    
 			</div>
 
 

@@ -222,3 +222,104 @@ body {
 .nav.nav-tabs.nav-iconfall .nav-item a.nav-link{
 	line-height: 1 !important;
 }
+
+.card-header .card-title {
+    margin-top: 49px;
+}
+.card-title {
+    padding-top: 15px; /* Tạo khoảng cách giữa đường gạch và chữ Email */
+}
+
+.card-header {
+    position: relative;
+    padding-top: 20px;
+}
+
+.card-header::before {
+    content: "";
+    display: block;
+    width: 95%; /* Điều chỉnh độ dài */
+    height: 1px;
+    background-color: #ccc; /* Màu xám nhạt giống hình */
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+  /* Modal mặc định ẩn */
+.email-modal {
+    position: fixed;
+    top: 50%;
+    right: -400px;
+    width: 810px !important;
+    height: auto;
+    background: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-50%);
+    transition: right 0.4s ease-in-out;
+    padding: 20px;
+    border-radius: 10px 0 0 10px;
+    display: none; /* Ẩn modal lúc đầu */
+    z-index: 10;
+}
+
+/* Khi modal được kích hoạt */
+.email-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+	margin-bottom: 10px;
+    border-bottom: solid 1px #88a3d2;    
+}
+
+.email-header h5 {
+    margin: 0;
+    font-weight: bold;
+}
+
+.email-header button {
+    margin-left: 5px;
+}
+
+.email-header button {
+    width: 40px; /* Giảm kích thước nút */
+    height: 35px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.email-header button i {
+    font-size: 14px; /* Giảm kích thước biểu tượng */
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.email-modal.show {
+    display: block; /* Hiển thị modal */
+    right: 0; /* Trượt vào từ bên phải */
+    z-index: 10;
+    width: 810px;
+}
+
+.email-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 5;
+}
+
+.email-overlay.show {
+    display: block;
+}
+
+.user-name-email{
+	margin-bottom: 10px;
+}

@@ -99,6 +99,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 		<intercept-url pattern="/customer/**" access="isAuthenticated()" />
 		<intercept-url pattern="/orders-configuration-ky/**" access="isAuthenticated()" />
 		<intercept-url pattern="/orders-configuration/**" access="isAuthenticated()" />
+		<intercept-url pattern="/send-email-to-customer/**" access="isAuthenticated()" />
 
         <!-- Cuối cùng là URL phổ quát -->
         <intercept-url pattern="/**" access="permitAll" />
