@@ -52,5 +52,28 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 })
 
+document.addEventListener("DOMContentLoaded", function() {
+	const letterTab = document.getElementById("activeIcon32-tab1");
+	const draftTab = document.getElementById("linkIcon32-tab1");
+	const tableLetter = document.getElementById("table-letter");
+	const tableDraft = document.getElementById("table-draft");
+	
+	function showTable(tableToShow, tableToHide){
+		tableToShow.style.display = "block";
+		tableToHide.style.display = "none";
+	}
+	
+	letterTab.addEventListener("click", function() {
+		showTable(tableLetter, tableDraft);
+	})
+	
+	draftTab.addEventListener("click", function() {
+		showTable(tableDraft, tableLetter);
+	})
+	
+	tableDraft.style.display = "none";
+	
+})
+
 
 

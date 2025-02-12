@@ -56,7 +56,7 @@
 				<div class="email-overlay" id="emailOverlay"></div>
 				
 			       <!-- Modal Gửi Email -->
-			    <form th:action="@{/send-email-to-customer}" method="post">
+			    
 				    <div class="email-modal" id="emailModal">
 				    	<div class="email-header d-flex justify-content-between align-items-center">
 						    <h5 class="mb-3">Send Email</h5>
@@ -65,21 +65,22 @@
 						        <button class="btn btn-danger" id="closeEmailModal"><i class="fa fa-times"></i></button>
 						    </div>
 						</div>
-						
-						<div class="email-header d-flex justify-content-between align-items-center">
-						    <span class="user-name-email">Phuong Ngan < <span>example@gmail.com</span> > </span>					    
-						</div>
-				    	
-				        <input type="text" name="to" class="form-control mb-2" placeholder="Đến">
-				        <input type="text" name="subject" class="form-control mb-2" placeholder="Chủ đề">
-				        <textarea class="form-control mb-2" name="message" rows="5" placeholder="Nội dung"></textarea>
-				        <button class="btn btn-primary w-100"  type="submit" >Send</button>
-				        
-				        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-				        <div th:if="${error}" class="alert alert-danger" th:text="${error{}"></div>
-				        
+						<form th:action="@{/send-email-to-customer}" method="post">
+							<div class="email-header d-flex justify-content-between align-items-center">
+							    <span class="user-name-email">Phuong Ngan < <span>example@gmail.com</span> > </span>					    
+							</div>
+					    	
+					        <input type="text" name="to" class="form-control mb-2" placeholder="Đến">
+					        <input type="text" name="subject" class="form-control mb-2" placeholder="Chủ đề">
+					        <textarea class="form-control mb-2" name="message" rows="5" placeholder="Nội dung"></textarea>
+					        
+					        <button class="btn btn-primary w-30" type="submit" >Send</button>
+					        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+					        <div th:if="${error}" class="alert alert-danger" th:text="${error{}"></div>
+					    </form>
+					    	<button class="btn btn-light w-30" type="submit" style="border: solid 1px; margin-top: 10px; margin-left: 700px;">Save draft</button>					        
 				    </div>
-				 </form>
+				 
 			    
 			    
 			</div>
@@ -192,11 +193,144 @@
 								<li class="nav-item">
 									<a class="nav-link active" id="activeIcon32-tab1" data-toggle="tab" aria-controls="activeIcon32" aria-expanded="true"><i class="fa fa-envelope-o"></i> Letter</a>
 								</li>
+								
 								<li class="nav-item">
 									<a class="nav-link" id="linkIcon32-tab1" data-toggle="tab" aria-controls="linkIcon32" aria-expanded="false"><i class="fa fa-file-o"></i> Draft</a>
 								</li>
 							</ul>
 						</div>
+						
+						<div class="table-responsive" id="table-letter" style="padding: 10px">
+		                    <table class="table">
+		                        <thead>
+		                            <tr>
+		                                <th data-field="select" class="th1">
+											<input type="checkbox" id="select-all" class="d-flex align-items-center justify-content-center" />
+										</th>
+		                                <th>Chủ đề</th>
+		                                <th>Ngày gửi</th>
+		                                <th>Được gửi bởi</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		                            <tr class="bg-blue bg-lighten-5">
+		                                <td class="th1">
+		                                	<input type="checkbox" class="email-to-customer-checkbox" />
+		                               	</td>
+																
+		                                <!-- <td class="th1">
+		                                	<input type="checkbox" name="customer" th:value="${customer.id}" class="customer-checkbox" />
+		                                </td> -->
+		                                <td>Báo giá sản phẩm</td>
+		                                <td>05/02/2025 2:20 CH</td>
+		                                <td>example@gmail.com</td>
+		                            </tr>
+		                            <tr>
+		                                <td class="th1">
+		                                	<input type="checkbox" class="email-to-customer-checkbox" />
+		                               	</td>
+		                                <td>Báo giá sản phẩm</td>
+		                                <td>05/02/2025 2:20 CH</td>
+		                                <td>example@gmail.com</td>
+		                            </tr>
+		                            <tr class="bg-teal bg-lighten-5">
+		                                <td class="th1">
+		                                	<input type="checkbox" class="email-to-customer-checkbox" />
+		                               	</td>
+		                                <td>Báo giá sản phẩm</td>
+		                                <td>05/02/2025 2:20 CH</td>
+		                                <td>example@gmail.com</td>
+		                            </tr>
+		                            <tr>
+		                                <td class="th1">
+		                                	<input type="checkbox" class="email-to-customer-checkbox" />
+		                               	</td>
+		                                <td>Báo giá sản phẩm</td>
+		                                <td>05/02/2025 2:20 CH</td>
+		                                <td>example@gmail.com</td>
+		                            </tr>
+		                            <tr class="bg-pink bg-lighten-5">
+		                                <td class="th1">
+		                                	<input type="checkbox" class="email-to-customer-checkbox" />
+		                               	</td>
+		                                <td>Báo giá sản phẩm</td>
+		                                <td>05/02/2025 2:20 CH</td>
+		                                <td>example@gmail.com</td>
+		                            </tr>
+		                            <tr>
+		                                <td class="th1">
+		                                	<input type="checkbox" class="email-to-customer-checkbox" />
+		                               	</td>
+		                                <td>Báo giá sản phẩm</td>
+		                                <td>05/02/2025 2:20 CH</td>
+		                                <td>example@gmail.com</td>
+		                            </tr>
+		                            <tr class="bg-purple bg-lighten-5">
+		                                <td class="th1">
+		                                	<input type="checkbox" class="email-to-customer-checkbox" />
+		                               	</td>
+		                                <td>Báo giá sản phẩm</td>
+		                                <td>05/02/2025 2:20 CH</td>
+		                                <td>example@gmail.com</td>
+		                            </tr>
+		                            <tr>
+		                                <td class="th1">
+		                                	<input type="checkbox" class="email-to-customer-checkbox" />
+		                               	</td>
+		                                <td>Báo giá sản phẩm</td>
+		                                <td>05/02/2025 2:20 CH</td>
+		                                <td>example@gmail.com</td>
+		                            </tr>
+		                            <tr class="bg-yellow bg-lighten-5">
+		                               <td class="th1">
+		                                	<input type="checkbox" class="email-to-customer-checkbox" />
+		                               	</td>
+		                                <td>Báo giá sản phẩm</td>
+		                                <td>05/02/2025 2:20 CH</td>
+		                                <td>example@gmail.com</td>
+		                            </tr>
+		                        </tbody>
+		                    </table>
+		                </div>
+				        
+				        <div class="table-responsive" id="table-draft" style="padding: 10px">
+		                    <table class="table mb-0">
+		                        <thead>
+		                            <tr>
+		                                <th>Firstname</th>
+		                                <th>Lastname</th>
+		                                <th>Email</th>
+		                                <th>Password</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		                            <tr>
+		                                <td>John</td>
+		                                <td>Doe</td>
+		                                <td>john@example.com</td>
+		                                <td>********</td>
+		                            </tr>
+		                            <tr>
+		                                <td>Mary</td>
+		                                <td>Moe</td>
+		                                <td>mary@example.com</td>
+		                                <td>*****</td>
+		                            </tr>
+		                            <tr>
+		                                <td>July</td>
+		                                <td>Dooley</td>
+		                                <td>july@example.com</td>
+		                                <td>**********</td>
+		                            </tr>
+		                            <tr>
+		                                <td>Piter</td>
+		                                <td>pan</td>
+		                                <td>july@example.com</td>
+		                                <td>********</td>
+		                            </tr>
+		                        </tbody>
+		                    </table>
+		                </div> 
 					</div>
 				
 					<div class="right-panel">
