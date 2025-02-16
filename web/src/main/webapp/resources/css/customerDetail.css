@@ -338,3 +338,19 @@ body {
 .user-name-email{
 	margin-bottom: 10px;
 }
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    flex-shrink: 0; 
+    margin-right: 10px;
+}
+
+.form-group input,
+.form-group textarea {
+    flex: 1;
+}

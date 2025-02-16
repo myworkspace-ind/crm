@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.EmailToCustomer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.HistoryOrder;
 import mks.myworkspace.crm.entity.Interaction;
@@ -368,6 +370,12 @@ public class AppRepository {
 		return id;
 
 	}
+	
+	public Long saveEmailToCustomer(EmailToCustomer emailToCustomer) {
+		Long id;
+		id = createEmail(emailToCustomer);
+		return id;
+	}
 
 	private int updateCustomer(Customer customer) {
 		// Tạo bản đồ chứa các giá trị cần cập nhật
@@ -434,6 +442,24 @@ public class AppRepository {
 		log.debug("New ID: {}", id);
 		return id;
 
+	}
+	
+	private Long createEmail(EmailToCustomer emailToCustomer) {
+		Long id;
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_emailtocustomer")
+				.usingGeneratedKeyColumns("id");
+		Map<String, Object> parameters = new HashMap<>();
+		// Thêm các trường cố định trong entity (không có liên kết bảng)
+		parameters.put("subject", emailToCustomer.getSubject());
+		parameters.put("content", emailToCustomer.getContent());
+		parameters.put("sender", emailToCustomer.getSender());
+		
+		// Thêm các khóa ngoại
+		//parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
+		parameters.put("receiver_id", emailToCustomer.getCustomer() != null ? emailToCustomer.getCustomer().getId() : null);
+		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		
+		return id;
 	}
 
 	public List<Long> saveOrUpdate(List<Customer> entities) {

@@ -6,31 +6,27 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.EmailToCustomer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
+import mks.myworkspace.crm.entity.OrderStatus;
 import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
-import mks.myworkspace.crm.entity.OrderStatus;
-
-
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.GoodsCategoryRepository;
 import mks.myworkspace.crm.repository.OrderCategoryRepository;
 import mks.myworkspace.crm.repository.OrderRepository;
+import mks.myworkspace.crm.repository.OrderStatusRepository;
 import mks.myworkspace.crm.repository.ProfessionRepository;
 import mks.myworkspace.crm.repository.ResponsiblePersonRepository;
 import mks.myworkspace.crm.repository.StatusRepository;
-import mks.myworkspace.crm.repository.OrderStatusRepository;
-
-
 import mks.myworkspace.crm.service.StorageService;
 
 @Service
@@ -427,5 +423,10 @@ public class StorageServiceImpl implements StorageService {
 				return true;
 			}
 		}
+	}
+	@Override
+	public EmailToCustomer saveEmailToCustomer(EmailToCustomer emailToCustomer) {
+		appRepo.saveEmailToCustomer(emailToCustomer);
+		return emailToCustomer;
 	}
 }

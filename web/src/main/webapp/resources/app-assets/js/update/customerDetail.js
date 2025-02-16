@@ -75,5 +75,56 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 })
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".openEmailModalBtn").forEach((button) => {
+        button.addEventListener("click", function () {
+            let customerId = this.getAttribute("data-customer-id");
+            let customerEmail = this.getAttribute("data-customer-email");
+            let senderEmail = document.getElementById("loggedInUserEmail").value; // Lấy email người gửi
+
+            document.getElementById("emailTo").value = customerEmail;
+            document.getElementById("emailModal").setAttribute("data-customer-id", customerId);
+            document.getElementById("emailModal").setAttribute("data-sender-email", senderEmail);
+        });
+    });
+
+    document.getElementById("sendEmailBtn").addEventListener("click", function (event) {
+        event.preventDefault();
+        
+        let customerId = document.getElementById("emailModal").getAttribute("data-customer-id");
+        let senderEmail = document.getElementById("emailModal").getAttribute("data-sender-email"); // Lấy email người gửi
+        let emailSubject = document.getElementById("emailSubject").value;
+        let emailContent = document.getElementById("emailContent").value;
+        
+        let emailData = {
+            subject: emailSubject,
+            content: emailContent,
+            sender: senderEmail, // email người gửi
+            customer: { id: customerId }
+        };
+		console.log(_ctx);
+
+        fetch(`${_ctx}email-to-customer/send`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(emailData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+            } else if (data.errorMessage) {
+                alert(data.errorMessage);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+});
+
+
+
+
 
 

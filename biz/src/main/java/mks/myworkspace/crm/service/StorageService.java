@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.EmailToCustomer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
@@ -67,7 +68,8 @@ public interface StorageService {
 	List<GoodsCategory> saveOrUpdateGoodsCategory(List<GoodsCategory> lstGoodsCategory);
 	void deleteGoodsCategoryById(Long id);
 
-
 	boolean saveOrUpdateOrderCategoryStatus(Map<String, Object> requestBody);
+	
+	public EmailToCustomer saveEmailToCustomer(EmailToCustomer emailToCustomer);
 
 }
