@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
@@ -43,18 +44,21 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.EmailToCustomer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
+import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.CustomerService_Son;
 import mks.myworkspace.crm.service.ProfessionService;
 import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
+import mks.myworkspace.crm.service.impl.EmailService;
 import mks.myworkspace.crm.transformer.JpaTransformer_Interaction_Handsontable;
 import mks.myworkspace.crm.transformer.JpaTransformer_ResponsiblePerson_Handsontable;
 import mks.myworkspace.crm.validate.GoodsCategoryValidator;
@@ -108,6 +112,50 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	CustomerService_Son customerServiceSon;
+	
+	@Autowired
+	EmailService emailService;
+	
+	@Autowired
+	private CustomerRepository customerRepository;
+	
+	@PostMapping("/send-email-to-customer")
+	public ResponseEntity<?> sendEmail(@RequestParam("to") String to,
+	                                   @RequestParam("subject") String subject,
+	                                   @RequestParam("message") String content,
+	                                   @RequestParam("customerId") Long customerId,
+	                                   Authentication authentication) {
+	    try {
+	        String loggedInUserEmail = authentication.getName();
+	        log.info("Sender email: {}", loggedInUserEmail);
+	        
+	        
+	        Customer customer = customerRepository.findById(customerId).orElse(null);
+	        if (customer == null) {
+	            return ResponseEntity.badRequest().body("Không tìm thấy khách hàng!");
+	        }
+	        
+	        EmailToCustomer email = new EmailToCustomer();
+	        email.setSender(loggedInUserEmail);
+	        email.setCustomer(customer);
+//	        email.setSubject(new String(subject.getBytes(), "UTF-8"));
+//	        email.setContent(new String(content.getBytes(), "UTF-8"));
+	        
+//	        email.setSubject(new String(subject.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
+//	        email.setContent(new String(content.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
+	        
+	        email.setSubject(subject);
+	        email.setContent(content);
+	        
+	        email.setStatus(EmailToCustomer.EmailStatus.SENT);
+	        
+	        emailService.sendEmailToCustomer(email);
+	        
+	        return ResponseEntity.ok("Gửi email thành công!");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(500).body("Gửi email thất bại!");
+	    }
+}
 	
 	@Value("classpath:responsible-person/responsible-person-demo.json")
 	private Resource resResponsiblePersonDemo;

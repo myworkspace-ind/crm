@@ -1,15 +1,3 @@
-/*document.addEventListener("DOMContentLoaded", function(){
-	document.querySelectorAll(".dropdown-item").forEach(item => {
-		item.addEventListener("click", function () {
-			const targetId = this.getAttribute("data-target");
-			const targetElement = document.getElementById(targetId);
-			if(targetElement){
-				targetElement.scrollIntoView({behavior: "smooth", block: "start"});
-			}
-		});
-	});
-});*/
-
 document.addEventListener("DOMContentLoaded", function() {
 	document.querySelectorAll(".dropdown-item").forEach(item => {
 		item.addEventListener("click", function() {
@@ -75,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 })
 
-document.addEventListener("DOMContentLoaded", function () {
+/*document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".openEmailModalBtn").forEach((button) => {
         button.addEventListener("click", function () {
             let customerId = this.getAttribute("data-customer-id");
@@ -121,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error:", error));
     });
-});
+});*/
 
 
 

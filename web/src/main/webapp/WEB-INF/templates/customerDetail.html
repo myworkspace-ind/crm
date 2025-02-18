@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<meta charset="UTF-8">
+
 	<!-- START COMMON META AND TITLE -->
 	<th:block th:include="fragments/common_meta_title"></th:block>
 	<!-- END COMMON META AND TITLE -->
@@ -66,6 +68,11 @@
 						    </div>
 						</div>
 						<!-- <form th:action="@{/send-email-to-customer}" method="post"> -->
+						<form th:action="@{/customer/send-email-to-customer}" method="post" id="emailForm">
+							
+							<!-- Thêm một input hidden để truyền customerId -->
+    						<input type="hidden" name="customerId" th:value="${customer.id}" />
+							
 							<div th:if="${#request.userPrincipal}" class="email-header d-flex justify-content-between align-items-center">
 							    <!-- <span class="user-name-email">Phuong Ngan < <span>example@gmail.com</span> > </span> -->
 							    <span style="color: gray;" class="user-name-email" >
@@ -94,7 +101,8 @@
 					        <button class="btn btn-primary w-30" id="sendEmailBtn" type="submit" >Send</button>
 					        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 					        <div th:if="${error}" class="alert alert-danger" th:text="${error{}"></div>
-					    	<button class="btn btn-light w-30" type="submit" style="border: solid 1px; margin-top: 10px; margin-left: 700px;">Save draft</button>					        
+					    	<button class="btn btn-light w-30" type="submit" style="border: solid 1px; margin-top: 10px; margin-left: 700px;">Save draft</button>				
+						</form>	        
 				    </div>
 				 
 			    

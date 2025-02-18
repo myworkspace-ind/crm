@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.repository;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -450,9 +451,14 @@ public class AppRepository {
 				.usingGeneratedKeyColumns("id");
 		Map<String, Object> parameters = new HashMap<>();
 		// Thêm các trường cố định trong entity (không có liên kết bảng)
-		parameters.put("subject", emailToCustomer.getSubject());
-		parameters.put("content", emailToCustomer.getContent());
+		 String subjectUtf8 = new String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+		 String contentUtf8 = new String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+
+		 parameters.put("subject", subjectUtf8);
+		 parameters.put("content", contentUtf8);
+		    
 		parameters.put("sender", emailToCustomer.getSender());
+
 		
 		// Thêm các khóa ngoại
 		//parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");

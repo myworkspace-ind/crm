@@ -1,6 +1,5 @@
 package mks.myworkspace.crm.controller;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.ui.Model;
-
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.service.impl.EmailService;
@@ -53,20 +50,20 @@ public class EmailController extends BaseController {
 	    }
 	}
 	
-	@PostMapping("/send-email-to-customer")
-	 public String sendEmail(
-							 @RequestParam("to") String to,
-				             @RequestParam("subject") String subject,
-				             @RequestParam("message") String message,
-				             Model model) {
-		try {
-				emailService.sendEmailToCustomer("crm.mekongsolution@gmail.com",to, subject, message);
-				model.addAttribute("success", "Email đã được gửi thành công!");
-			} catch (MessagingException e) {
-				model.addAttribute("error", "Gửi email thất bại: " + e.getMessage());
-			}
-		return "customerDetail";//Adjust redirection to page email sent successfully/error
-	}
+//	@PostMapping("/send-email-to-customer")
+//	 public String sendEmail(
+//							 @RequestParam("to") String to,
+//				             @RequestParam("subject") String subject,
+//				             @RequestParam("message") String message,
+//				             Model model) {
+//		try {
+//				emailService.sendEmailToCustomer("crm.mekongsolution@gmail.com",to, subject, message);
+//				model.addAttribute("success", "Email đã được gửi thành công!");
+//			} catch (MessagingException e) {
+//				model.addAttribute("error", "Gửi email thất bại: " + e.getMessage());
+//			}
+//		return "customerDetail";//Adjust redirection to page email sent successfully/error
+//	}
 	
 	@GetMapping("/error")
 	public ModelAndView displayEmailError(HttpServletRequest request, HttpSession httpSession) {
