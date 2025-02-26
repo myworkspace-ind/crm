@@ -354,3 +354,12 @@ body {
 .form-group textarea {
     flex: 1;
 }
+
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clickable-row:hover {
+    background-color: #f0f0f0;
+}

@@ -63,6 +63,51 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 })
 
+document.addEventListener("DOMContentLoaded", function(){
+    const customerId = new URLSearchParams(window.location.search).get("id");
+    if(!customerId){
+        console.error("Không tìm thấy customerId");
+        return;
+    } else{
+        console.log("CustomerID: ", customerId);
+    }
+
+    fetch(`${_ctx}customer/get-email-to-customer?customerId=${customerId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log("đã tới được đây!");
+            const emailList = document.getElementById("email-list");
+            emailList.innerHTML = ""; // Xóa nội dung cũ
+
+            data.forEach(email => {
+                const row = document.createElement("tr");
+                row.classList.add("clickable-row"); 
+                row.dataset.emailId = email.id; 
+
+                row.innerHTML = `
+                    <td class="th1"><input type="checkbox" class="email-to-customer-checkbox" /></td>
+                    <td>${email.subject}</td>
+                    <td>${new Date(email.sendDate).toLocaleString()}</td>
+                    <td>${email.sender}</td>
+                `;
+                emailList.appendChild(row);
+            });
+
+            // Thêm sự kiện click vào từng hàng email
+            document.querySelectorAll(".clickable-row").forEach(row => {
+                row.addEventListener("click", function() {
+                    const emailId = this.dataset.emailId;
+                    if (emailId) {
+                        //window.location.href = `${_ctx}customer/email-detail?id=${emailId}`;
+						alert("Bạn đã chọn một email!"); 
+                    }
+                });
+            });
+        })
+        .catch(error => console.error("Lỗi khi lấy danh sách email:", error));
+});
+
+
 /*document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".openEmailModalBtn").forEach((button) => {
         button.addEventListener("click", function () {

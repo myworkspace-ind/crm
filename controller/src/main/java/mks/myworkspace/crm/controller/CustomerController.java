@@ -54,6 +54,7 @@ import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.CustomerService_Son;
+import mks.myworkspace.crm.service.EmailToCustomerService;
 import mks.myworkspace.crm.service.ProfessionService;
 import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
@@ -117,6 +118,9 @@ public class CustomerController extends BaseController {
 	EmailService emailService;
 	
 	@Autowired
+	EmailToCustomerService emailToCustomerService;
+	
+	@Autowired
 	private CustomerRepository customerRepository;
 	
 	@PostMapping("/send-email-to-customer")
@@ -155,7 +159,13 @@ public class CustomerController extends BaseController {
 	    } catch (Exception e) {
 	        return ResponseEntity.status(500).body("Gửi email thất bại!");
 	    }
-}
+	}
+	
+	@GetMapping("/get-email-to-customer")
+	public ResponseEntity<List<EmailToCustomer>> getEmailsByCustomerId(@RequestParam("customerId") Long customerId){
+		List<EmailToCustomer> emails = emailToCustomerService.getAllEmailToCustomer(customerId);
+		return new ResponseEntity<>(emails, HttpStatus.OK);
+	}
 	
 	@Value("classpath:responsible-person/responsible-person-demo.json")
 	private Resource resResponsiblePersonDemo;

@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -451,15 +452,17 @@ public class AppRepository {
 				.usingGeneratedKeyColumns("id");
 		Map<String, Object> parameters = new HashMap<>();
 		// Thêm các trường cố định trong entity (không có liên kết bảng)
-		 String subjectUtf8 = new String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-		 String contentUtf8 = new String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+		String subjectUtf8 = new String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+		String contentUtf8 = new String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
-		 parameters.put("subject", subjectUtf8);
-		 parameters.put("content", contentUtf8);
-		    
+		parameters.put("subject", subjectUtf8);
+		parameters.put("content", contentUtf8);
 		parameters.put("sender", emailToCustomer.getSender());
-
 		
+		// Thêm send_date và status
+	    parameters.put("send_date", emailToCustomer.getSendDate() != null ? emailToCustomer.getSendDate() : new Date());
+	    parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
+
 		// Thêm các khóa ngoại
 		//parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
 		parameters.put("receiver_id", emailToCustomer.getCustomer() != null ? emailToCustomer.getCustomer().getId() : null);

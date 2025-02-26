@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,6 +20,7 @@ import javax.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mks.myworkspace.crm.transformer.EmailStatusConverter;
 @Entity
 @Table(name = "crm_emailtocustomer", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 @Getter
@@ -41,7 +44,12 @@ public class EmailToCustomer implements Serializable{
     private String subject;
 	
 	@Column(name = "content")
-    private String content; 
+    private String content;  
+//	ALTER TABLE crm_emailtocustomer MODIFY content LONGTEXT;
+//	ALTER DATABASE crm CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+//	ALTER TABLE crm_emailtocustomer CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+//	ALTER TABLE crm_emailtocustomer MODIFY content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+//	--> Chạy 4 dòng lệnh này trong mysql
 	
 	@ManyToOne
     @JoinColumn(name = "receiver_id", referencedColumnName = "id")
@@ -50,7 +58,7 @@ public class EmailToCustomer implements Serializable{
     @Column(name = "sender", length = 99) 
 	private String sender; //Column sender will be displayed by username's employee when employee login successfully to the system
     
-    @Enumerated (EnumType.STRING)
+    @Convert(converter = EmailStatusConverter.class)
     @Column(name = "status")
     private EmailStatus status; //Save status of "Send" and "Save draft"
     
