@@ -104,6 +104,26 @@
 					    	<button class="btn btn-light w-30" type="submit" style="border: solid 1px; margin-top: 10px; margin-left: 700px;">Save draft</button>				
 						</form>	        
 				    </div>
+				    
+				    <div id="detailEmailModal" class="detail-email-modal">
+				        	<div class="detail-email-modal-content">
+				        		<!-- <span class="close">&times;</span> -->
+        						<h2>Chi tiết Email</h2>
+        						<p hidden><strong>ID:</strong> <span id="detailEmailID"></span></p>
+        						
+        						<p><strong>Từ:</strong> <span id="detailEmailFrom"></span></p>
+        						<p><strong>Đến:</strong> <span id="detailEmailTo"></span></p>
+        						
+        						<p><strong>Chủ đề:</strong> <span id="detailEmailSubject"></span></p>
+        						
+						        <p><strong>Thời gian:</strong> <span id="detailEmailTime"></span></p>
+						        <p><strong>Trạng thái:</strong> <span id="detailEmailStatus"></span></p>
+						        <hr>
+						        <p><strong>Nội dung:</strong></p>
+						        <div id="detailEmailContent"></div>
+						        <button id="closeDetailEmailModal">Đóng</button>
+				        	</div>
+				     </div>
 				 
 			    
 			    
@@ -357,7 +377,7 @@
 		                    </table>
 		                </div> 
 					</div>
-				
+					
 					<div class="right-panel">
 					<div class="comments-section" id="comments-section">
 						<h3>Exchange</h3>

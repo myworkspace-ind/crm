@@ -167,6 +167,29 @@ public class CustomerController extends BaseController {
 		return new ResponseEntity<>(emails, HttpStatus.OK);
 	}
 	
+	@GetMapping("/get-detail-email-to-customer")
+	@ResponseBody
+	public ResponseEntity<?> getEmailToCustomerById(@RequestParam("emailToCustomerId") Long emailToCustomerId) {
+		try {
+			if(emailToCustomerId == null) {
+				return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID không được để trống."));
+			}
+			
+			Optional<EmailToCustomer> etcOpt = emailToCustomerService.GetEmailToCustomerByID(emailToCustomerId);
+			
+			if(etcOpt.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(Map.of("errorMessage", "Email với ID " + emailToCustomerId + " không tồn tại."));
+			}
+			
+			return ResponseEntity.ok()
+					.body(Map.of("message", "Email gửi tới khách hàng đã được tìm thấy!", "email", etcOpt.get()));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
+					"Có lỗi xảy ra khi lấy thông tin email. Vui lòng thử lại sau!", "details", e.getMessage()));
+		}
+	}
+	
 	@Value("classpath:responsible-person/responsible-person-demo.json")
 	private Resource resResponsiblePersonDemo;
 	@GetMapping("list")
