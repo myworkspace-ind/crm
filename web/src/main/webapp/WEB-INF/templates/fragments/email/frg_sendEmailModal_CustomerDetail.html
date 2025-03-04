@@ -1,0 +1,60 @@
+<!-- Modal Gửi Email -->
+<div class="email-modal" id="emailModal">
+	<div
+		class="email-header d-flex justify-content-between align-items-center">
+		<h5 class="mb-3">Gửi Email</h5>
+		<div class="btnGroup" style="margin-right: 50px">
+			<button class="btn btn-warning" id="minimizeEmailModal">
+				<i class="fa fa-minus"></i>
+			</button>
+			<button class="btn btn-danger" id="closeEmailModal">
+				<i class="fa fa-times"></i>
+			</button>
+		</div>
+	</div>
+	<!-- <form th:action="@{/send-email-to-customer}" method="post"> -->
+	<form th:action="@{/customer/send-email-to-customer}" method="post"
+		id="emailForm">
+
+		<!-- Thêm một input hidden để truyền customerId -->
+		<input type="hidden" name="customerId" th:value="${customer.id}" />
+
+		<div th:if="${#request.userPrincipal}"
+			class="email-header d-flex justify-content-between align-items-center">
+			<!-- <span class="user-name-email">Phuong Ngan < <span>example@gmail.com</span> > </span> -->
+			<span style="color: gray;" class="user-name-email"> Từ: <span
+				style="color: black;" th:text="${#request.userPrincipal.name}"></span>
+			</span> <input type="hidden" id="loggedInUserEmail"
+				th:value="${#request.userPrincipal.name}">
+		</div>
+
+
+		<div class="form-group">
+			<label style="color: gray; width: 80px;">Đến:</label> <input
+				style="color: black;" id="emailTo" th:value="${customer.email}"
+				type="text" name="to" class="form-control mb-2" placeholder="Đến"
+				readonly>
+		</div>
+
+		<div class="form-group">
+			<label style="color: gray; width: 80px;">Chủ đề:</label> <input
+				style="color: black;" id="emailSubject" type="text" name="subject"
+				class="form-control mb-2" placeholder="Chủ đề">
+		</div>
+
+		<div class="form-group">
+			<label style="color: gray; width: 80px;">Nội dung:</label>
+			<textarea style="color: black;" id="emailContent"
+				class="form-control mb-2" name="message" rows="5"
+				placeholder="Nội dung"></textarea>
+		</div>
+
+		<button class="btn btn-primary w-30" id="sendEmailBtn" type="submit">Gửi</button>
+		<div th:if="${success}" class="alert alert-success"
+			th:text="${success}"></div>
+		<div th:if="${error}" class="alert alert-danger" th:text="${error{}"></div>
+		<button class="btn btn-light w-30" type="submit"
+			style="border: solid 1px; margin-top: 10px; margin-left: 700px;">Lưu nháp
+		</button>
+	</form>
+</div>

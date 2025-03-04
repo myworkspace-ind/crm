@@ -16,8 +16,10 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/customerDetail.css}" />
 	<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
 	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
-	<script>console.log("Handsontable:", typeof Handsontable); //Check Handsontable is available or not
-</script>
+	<script>
+		console.log("Handsontable:", typeof Handsontable);
+	</script>
+	
 	<th:block th:include="fragments/head"></th:block>
 </head>
 
@@ -57,78 +59,26 @@
 				
 				<div class="email-overlay" id="emailOverlay"></div>
 				
-			       <!-- Modal Gửi Email -->
-			    
-				    <div class="email-modal" id="emailModal">
-				    	<div class="email-header d-flex justify-content-between align-items-center">
-						    <h5 class="mb-3">Send Email</h5>
-						    <div class="btnGroup" style="margin-right: 50px">
-						        <button class="btn btn-warning" id="minimizeEmailModal"><i class="fa fa-minus"></i></button>
-						        <button class="btn btn-danger" id="closeEmailModal"><i class="fa fa-times"></i></button>
-						    </div>
-						</div>
-						<!-- <form th:action="@{/send-email-to-customer}" method="post"> -->
-						<form th:action="@{/customer/send-email-to-customer}" method="post" id="emailForm">
-							
-							<!-- Thêm một input hidden để truyền customerId -->
-    						<input type="hidden" name="customerId" th:value="${customer.id}" />
-							
-							<div th:if="${#request.userPrincipal}" class="email-header d-flex justify-content-between align-items-center">
-							    <!-- <span class="user-name-email">Phuong Ngan < <span>example@gmail.com</span> > </span> -->
-							    <span style="color: gray;" class="user-name-email" >
-							    	from:
-							    	<span style="color: black;" th:text="${#request.userPrincipal.name}"></span>
-							    </span>					    
-							    <input type="hidden" id="loggedInUserEmail" th:value="${#request.userPrincipal.name}">
-							</div>
-							
-							
-					    	<div class="form-group">
-							    <label style="color: gray; width: 80px;">to:</label>
-							    <input style="color: black;" id="emailTo" th:value="${customer.email}" type="text" name="to" class="form-control mb-2" placeholder="Đến" readonly>
-							</div>
-							
-							<div class="form-group">
-							    <label style="color: gray; width: 80px;">subject:</label>
-							    <input style="color: black;" id="emailSubject" type="text" name="subject" class="form-control mb-2" placeholder="Chủ đề">
-							</div>
-							
-							<div class="form-group">
-							    <label style="color: gray; width: 80px;">content:</label>
-							    <textarea style="color: black;" id="emailContent" class="form-control mb-2" name="message" rows="5" placeholder="Nội dung"></textarea>
-							</div>
-					        
-					        <button class="btn btn-primary w-30" id="sendEmailBtn" type="submit" >Send</button>
-					        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-					        <div th:if="${error}" class="alert alert-danger" th:text="${error{}"></div>
-					    	<button class="btn btn-light w-30" type="submit" style="border: solid 1px; margin-top: 10px; margin-left: 700px;">Save draft</button>				
-						</form>	        
-				    </div>
-				    
-				    <div id="detailEmailModal" class="detail-email-modal">
-				        	<div class="detail-email-modal-content">
-				        		<!-- <span class="close">&times;</span> -->
-        						<h2>Chi tiết Email</h2>
-        						<p hidden><strong>ID:</strong> <span id="detailEmailID"></span></p>
-        						
-        						<p><strong>Từ:</strong> <span id="detailEmailFrom"></span></p>
-        						<p><strong>Đến:</strong> <span id="detailEmailTo"></span></p>
-        						
-        						<p><strong>Chủ đề:</strong> <span id="detailEmailSubject"></span></p>
-        						
-						        <p><strong>Thời gian:</strong> <span id="detailEmailTime"></span></p>
-						        <p><strong>Trạng thái:</strong> <span id="detailEmailStatus"></span></p>
-						        <hr>
-						        <p><strong>Nội dung:</strong></p>
-						        <div id="detailEmailContent"></div>
-						        <button id="closeDetailEmailModal">Đóng</button>
-				        	</div>
-				     </div>
-				 
-			    
-			    
+				<!-- Modal Gửi Email -->
+				<th:block th:include="fragments/chat/frg_sendEmailModal_CustomerDetail"></th:block>
+									    
+			    <div id="detailEmailModal" class="detail-email-modal">
+		        	<div class="detail-email-modal-content">
+		        		<!-- <span class="close">&times;</span> -->
+	     						<h2>Chi tiết Email</h2>
+	     						<p hidden><strong>ID:</strong> <span id="detailEmailID"></span></p>
+	     						<p><strong>Từ:</strong> <span id="detailEmailFrom"></span></p>
+	     						<p><strong>Đến:</strong> <span id="detailEmailTo"></span></p>
+	     						<p><strong>Chủ đề:</strong> <span id="detailEmailSubject"></span></p>
+				        <p><strong>Thời gian:</strong> <span id="detailEmailTime"></span></p>
+				        <p><strong>Trạng thái:</strong> <span id="detailEmailStatus"></span></p>
+				        <hr>
+				        <p><strong>Nội dung:</strong></p>
+				        <div id="detailEmailContent"></div>
+				        <button id="closeDetailEmailModal">Đóng</button>
+		        	</div>
+			     </div>
 			</div>
-
 
 			<div class="container">
 				<!-- Left panel -->
@@ -168,8 +118,6 @@
 						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer(' + ${customer.id} + ')'">Hide</button>
 						<button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Edit Interaction</button>
 					</div>
-					
-
 					<!-- <div class="relationship-section">
 						<label for="relationship">Trạng thái:</label>
 						<ul>
@@ -177,9 +125,7 @@
 							<li th:each="status : ${customer.statuses}"
 								th:text="${status.name}"></li>
 						</ul>
-
 					</div> -->
-
 					<div class="person-in-charge">
 						<p>
 					        <span class="label-bold">Nhân viên phụ trách:</span>
@@ -258,82 +204,6 @@
 		                        </thead>
 		                        <tbody id="email-list">
 		                        
-		                            <!-- <tr class="bg-blue bg-lighten-5">
-		                                <td class="th1">
-		                                	<input type="checkbox" class="email-to-customer-checkbox" />
-		                               	</td>
-																
-		                                <td class="th1">
-		                                	<input type="checkbox" name="customer" th:value="${customer.id}" class="customer-checkbox" />
-		                                </td>
-		                                <td>Báo giá sản phẩm</td>
-		                                <td>05/02/2025 2:20 CH</td>
-		                                <td>example@gmail.com</td>
-		                            </tr>
-		                            <tr>
-		                                <td class="th1">
-		                                	<input type="checkbox" class="email-to-customer-checkbox" />
-		                               	</td>
-		                                <td>Báo giá sản phẩm</td>
-		                                <td>05/02/2025 2:20 CH</td>
-		                                <td>example@gmail.com</td>
-		                            </tr>
-		                            <tr class="bg-teal bg-lighten-5">
-		                                <td class="th1">
-		                                	<input type="checkbox" class="email-to-customer-checkbox" />
-		                               	</td>
-		                                <td>Báo giá sản phẩm</td>
-		                                <td>05/02/2025 2:20 CH</td>
-		                                <td>example@gmail.com</td>
-		                            </tr>
-		                            <tr>
-		                                <td class="th1">
-		                                	<input type="checkbox" class="email-to-customer-checkbox" />
-		                               	</td>
-		                                <td>Báo giá sản phẩm</td>
-		                                <td>05/02/2025 2:20 CH</td>
-		                                <td>example@gmail.com</td>
-		                            </tr>
-		                            <tr class="bg-pink bg-lighten-5">
-		                                <td class="th1">
-		                                	<input type="checkbox" class="email-to-customer-checkbox" />
-		                               	</td>
-		                                <td>Báo giá sản phẩm</td>
-		                                <td>05/02/2025 2:20 CH</td>
-		                                <td>example@gmail.com</td>
-		                            </tr>
-		                            <tr>
-		                                <td class="th1">
-		                                	<input type="checkbox" class="email-to-customer-checkbox" />
-		                               	</td>
-		                                <td>Báo giá sản phẩm</td>
-		                                <td>05/02/2025 2:20 CH</td>
-		                                <td>example@gmail.com</td>
-		                            </tr>
-		                            <tr class="bg-purple bg-lighten-5">
-		                                <td class="th1">
-		                                	<input type="checkbox" class="email-to-customer-checkbox" />
-		                               	</td>
-		                                <td>Báo giá sản phẩm</td>
-		                                <td>05/02/2025 2:20 CH</td>
-		                                <td>example@gmail.com</td>
-		                            </tr>
-		                            <tr>
-		                                <td class="th1">
-		                                	<input type="checkbox" class="email-to-customer-checkbox" />
-		                               	</td>
-		                                <td>Báo giá sản phẩm</td>
-		                                <td>05/02/2025 2:20 CH</td>
-		                                <td>example@gmail.com</td>
-		                            </tr>
-		                            <tr class="bg-yellow bg-lighten-5">
-		                               <td class="th1">
-		                                	<input type="checkbox" class="email-to-customer-checkbox" />
-		                               	</td>
-		                                <td>Báo giá sản phẩm</td>
-		                                <td>05/02/2025 2:20 CH</td>
-		                                <td>example@gmail.com</td>
-		                            </tr> -->
 		                        </tbody>
 		                    </table>
 		                </div>

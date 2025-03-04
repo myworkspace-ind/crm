@@ -451,6 +451,7 @@ public class AppRepository {
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_emailtocustomer")
 				.usingGeneratedKeyColumns("id");
 		Map<String, Object> parameters = new HashMap<>();
+		
 		// Thêm các trường cố định trong entity (không có liên kết bảng)
 		String subjectUtf8 = new String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 		String contentUtf8 = new String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);

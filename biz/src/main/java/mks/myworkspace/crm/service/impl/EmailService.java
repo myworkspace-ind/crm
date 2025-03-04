@@ -79,6 +79,7 @@ public class EmailService {
         	
         	helper.setFrom(email.getSender());
         	helper.setTo(email.getCustomer().getEmail());
+        	
         	helper.setSubject(new String(email.getSubject().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         	helper.setText(new String(email.getContent().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8), true);
         	
@@ -87,6 +88,7 @@ public class EmailService {
             // Cập nhật trạng thái và thời gian gửi
             email.setStatus(EmailToCustomer.EmailStatus.SENT);
             email.setSendDate(new Date());
+            
             appRepository.saveEmailToCustomer(email);
         } catch (Exception e) {
             e.printStackTrace();
