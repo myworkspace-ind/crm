@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM Intro</title>
+    <title>MKS CRM</title>
     <link rel="stylesheet" href="resources/css/buttonBackToTop.css">
     
     <th:block th:include="fragments/common_meta_title"></th:block>
@@ -133,8 +133,9 @@
 	</button>
 
 	<!-- CHAT ASSISTANT -->
-	<th:block th:include="fragments/chat/frg_chatAssistant"></th:block>
-
+	<th:block th:if=${#request.userPrincipal}>
+		<th:block th:include="fragments/chat/frg_chatAssistant"></th:block>
+	</th:block>
 
 	<!-- Footer Section -->
     <th:block th:include="fragments/home/footerForIntro"></th:block>
