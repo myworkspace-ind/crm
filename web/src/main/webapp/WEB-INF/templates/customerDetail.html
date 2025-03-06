@@ -60,11 +60,11 @@
 				<div class="email-overlay" id="emailOverlay"></div>
 				
 				<!-- Modal Gửi Email -->
-				<th:block th:include="fragments/chat/frg_sendEmailModal_CustomerDetail"></th:block>
+				<th:block th:include="fragments/email/frg_sendEmailModal_CustomerDetail"></th:block>
 									    
-			    <div id="detailEmailModal" class="detail-email-modal">
+			  <div id="detailEmailModal" class="detail-email-modal">
 		        	<div class="detail-email-modal-content">
-		        		<!-- <span class="close">&times;</span> -->
+		        		<span class="close">&times;</span>
 	     						<h2>Chi tiết Email</h2>
 	     						<p hidden><strong>ID:</strong> <span id="detailEmailID"></span></p>
 	     						<p><strong>Từ:</strong> <span id="detailEmailFrom"></span></p>
@@ -100,9 +100,9 @@
 							  <p th:text="${customer.phone}" style="display: inline; margin: 0;"></p>
 							</div>
 							
-							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;	">
+							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px; display: inline-flex; white-space: nowrap;">
 							  <i class="fa fa-envelope-open"></i>
-							  <p th:text="${customer.email}" style="display: inline; margin: 0;"></p>
+							  <p th:text="${customer.email}" style="display: inline-flex; margin-top: -6px; margin-left: 5px"></p>
 							</div>
 							
 						</div>
@@ -118,39 +118,38 @@
 						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer(' + ${customer.id} + ')'">Hide</button>
 						<button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Edit Interaction</button>
 					</div>
-					<!-- <div class="relationship-section">
-						<label for="relationship">Trạng thái:</label>
-						<ul>
-							Lặp qua danh sách trạng thái
-							<li th:each="status : ${customer.statuses}"
-								th:text="${status.name}"></li>
-						</ul>
-					</div> -->
+<!-- 					<div class="relationship-section"> -->
+<!-- 						<label for="relationship">Trạng thái:</label> -->
+<!-- 						<ul> -->
+<!-- 							<li th:each="status : ${customer.mainStatus}" -->
+<!-- 								th:text="${status.name}"></li> -->
+<!-- 						</ul> -->
+<!-- 					</div> -->
 					<div class="person-in-charge">
 						<p>
 					        <span class="label-bold">Nhân viên phụ trách:</span>
 					        <span th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : 'Chưa có'}"></span>
 					    </p>
-						<!-- <select id="person-in-charge">
-							<option value="">Chọn Người Phụ Trách</option>
-							<th:block th:each="person : ${responsiblePersons}">
-								<option th:value="${person.id}" th:text="${person.name}"
-									th:selected="${person.id == customer.responsiblePerson.id}">
-								</option>
-							</th:block>
-						</select> -->
+<!-- 						<select id="person-in-charge"> -->
+<!-- 							<option value="">Chọn Người Phụ Trách</option> -->
+<!-- 							<th:block th:each="person : ${responsiblePersons}"> -->
+<!-- 								<option th:value="${person.id}" th:text="${person.name}" -->
+<!-- 									th:selected="${person.id == customer.responsiblePerson.id}"> -->
+<!-- 								</option> -->
+<!-- 							</th:block> -->
+<!-- 						</select> -->
 					</div>
 
-					<div class="creation-info">
-						<p>
-					        <span class="label-bold">Ngày tạo:</span>
-					        <span th:text="${customer.createdAt}"></span>
-					    </p>
-						<!-- <p><span class="label-bold">Người tạo:</span> Nguyễn Hoàng Phương Ngân</p>
-						<p><span class="label-bold">Đã mua:</span> 0 lần</p> -->
-					</div>
+<!-- 					<div class="creation-info"> -->
+<!-- 						<p> -->
+<!-- 					        <span class="label-bold">Ngày tạo:</span> -->
+<!-- 					        <span th:text="${customer.createdAt}"></span> -->
+<!-- 					    </p> -->
+<!-- 						<p><span class="label-bold">Người tạo:</span> Nguyễn Hoàng Phương Ngân</p> -->
+<!-- 						<p><span class="label-bold">Đã mua:</span> 0 lần</p> -->
+<!-- 					</div> -->
 					
-					<div class="relative-list-btn">
+				<div class="relative-list-btn">
 				    <div class="btn-group mr-1 mb-1 drop-down">
 				        <button type="button" class="btn btn-outline-dark btn-min-width dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
 				           	Related Lists
@@ -252,7 +251,7 @@
 					<div class="comments-section" id="comments-section">
 						<h3>Exchange</h3>
 
-						<!--  Comment 1 -->
+						 Comment 1
 						<div class="comment">
 							<div class="comment-avatar">
 								<img
@@ -266,7 +265,7 @@
 							</div>
 						</div>
 
-						<!-- Comment 2 -->
+						Comment 2
 						<div class="comment">
 							<div class="comment-avatar">
 								<img
