@@ -75,5 +75,29 @@ document.addEventListener('DOMContentLoaded', () => {
 		isMinimized = !isMinimized
 	})*/
 	
+	document.querySelectorAll('.radio-badge-group input[type="radio"]').forEach(radio => {
+	    radio.addEventListener('change', function () {
+	        const parent = this.closest('.radio-badge-group');
+	        parent.querySelectorAll('label').forEach(label => {
+	            label.className = 'badge badge-default'; // Reset màu mặc định
+	        });
+
+	        const selectedLabel = parent.querySelector(`label[for="${this.id}"]`);
+	        switch (this.value) {
+	            case '1':
+	                selectedLabel.classList.add('badge-danger');
+	                break;
+	            case '2':
+	                selectedLabel.classList.add('badge-warning');
+	                break;
+	            case '3':
+	                selectedLabel.classList.add('badge-primary');
+	                break;
+	        }
+	    });
+	});
 });
+
+
+
 
