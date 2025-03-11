@@ -41,7 +41,7 @@ public class HomeController extends BaseController {
 	@GetMapping("/")
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("intro");
-
+		
 		initSession(request, httpSession);
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());

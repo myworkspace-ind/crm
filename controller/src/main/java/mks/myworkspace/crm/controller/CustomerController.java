@@ -123,6 +123,23 @@ public class CustomerController extends BaseController {
 	@Autowired
 	private CustomerRepository customerRepository;
 	
+	@GetMapping("/get-potential-customer")
+	public ResponseEntity<?> getPotentialCustomers() {
+		try {
+			List<Customer> customers = customerService.findPotentialCustomers();
+	        
+	        if (customers.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+	                                 .body("Không có khách hàng tiềm năng nào.");
+	        }
+
+	        return ResponseEntity.ok(customers);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
+		}
+	}
+	
 	@PostMapping("/send-email-to-customer")
 	public ResponseEntity<?> sendEmail(@RequestParam("to") String to,
 	                                   @RequestParam("subject") String subject,

@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	const modalContainer = document.getElementById('modal-container');
 	const modalOverlay = document.getElementById('modal-overlay');
 	const closeButton = document.getElementById('close-btn-modal');
-	const minimizeButton = document.getElementById('minimize-btn-modal');
-	let isMinimized = false;
 	
 	chatBtn.addEventListener('click', () => {
 		if (chatAssistant.style.display === 'none' || chatAssistant.style.display === '') {
@@ -63,18 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		modalOverlay.style.display = 'none';
 	});
 	
-	//Minimize customer care table
-	/*minimizeButton.addEventListener('click', () => {
-		if (!isMinimized) {
-			modalContainer.classList.add('minimzed');
-			minimizeButton.textContent = 'Restore';
-		} else {
-			modalContainer.classList.remove('minimized');
-			minimizeButton.textContent = 'Minimize';
-		}
-		isMinimized = !isMinimized
-	})*/
-	
 	document.querySelectorAll('.radio-badge-group input[type="radio"]').forEach(radio => {
 	    radio.addEventListener('change', function () {
 	        const parent = this.closest('.radio-badge-group');
@@ -96,6 +82,30 @@ document.addEventListener('DOMContentLoaded', () => {
 	        }
 	    });
 	});
+	
+	function loadCustomerCareData() {
+		fetch(`${_ctx}customer-care/load-customer-care`)  
+			.then(response => response.json())
+			.then(data => {
+				let tableBody = document.getElementById("customerTableBody");
+				tableBody.innerHTML = ""; // Xóa dữ liệu cũ
+				data.forEach(customer => {
+					let row = `<tr>
+	                        <td>
+	                            <button class="btn btn-update">Cập nhật</button>
+	                            <button class="btn btn-hide">Ẩn</button>
+	                        </td>
+	                        <td>${customer.customer.companyName}</td>
+	                        <td>${customer.customer.contactPerson}</td>
+	                    </tr>`;
+					tableBody.innerHTML += row;
+				});
+			})
+			.catch(error => console.error("Lỗi khi tải dữ liệu: ", error));
+	}
+
+	// Gọi hàm load dữ liệu khi trang load xong
+	document.addEventListener("DOMContentLoaded", loadCustomerCareData);
 });
 
 

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.CustomerCare;
 import mks.myworkspace.crm.entity.EmailToCustomer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.HistoryOrder;
@@ -794,6 +795,13 @@ public class AppRepository {
 			String sql = "update crm_ordercategory set name=? where id=?";
 			jdbcTemplate0.update(sql,name,idLoaiDonHang);
 			System.out.println("Cap Nhat loai don hang thanh cong");
+		}
+	}
+	
+	public void insertCustomerCare(List<CustomerCare> customerCares) {
+		String sql = "INSERT INTO crm_customer_care (customer_id) VALUES (?)";
+		for (CustomerCare care : customerCares) {
+			jdbcTemplate0.update(sql, care.getCustomer().getId());
 		}
 	}
 }
