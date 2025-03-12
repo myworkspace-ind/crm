@@ -54,58 +54,67 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 	
-	//Đóng customer care table
 	closeButton.addEventListener('click', () => {
 		console.log("Close button clicked!");
 		modalContainer.style.display = 'none';
 		modalOverlay.style.display = 'none';
 	});
 	
-	document.querySelectorAll('.radio-badge-group input[type="radio"]').forEach(radio => {
-	    radio.addEventListener('change', function () {
-	        const parent = this.closest('.radio-badge-group');
-	        parent.querySelectorAll('label').forEach(label => {
-	            label.className = 'badge badge-default'; // Reset màu mặc định
-	        });
-
-	        const selectedLabel = parent.querySelector(`label[for="${this.id}"]`);
-	        switch (this.value) {
-	            case '1':
-	                selectedLabel.classList.add('badge-danger');
-	                break;
-	            case '2':
-	                selectedLabel.classList.add('badge-warning');
-	                break;
-	            case '3':
-	                selectedLabel.classList.add('badge-primary');
-	                break;
-	        }
-	    });
-	});
+//	document.querySelectorAll('.radio-badge-group input[type="radio"]').forEach(radio => {
+//	    radio.addEventListener('change', function () {
+//	        const parent = this.closest('.radio-badge-group');
+//	        parent.querySelectorAll('label').forEach(label => {
+//	            label.className = 'badge badge-default'; // Reset màu mặc định
+//	        });
+//
+//	        const selectedLabel = parent.querySelector(`label[for="${this.id}"]`);
+//	        switch (this.value) {
+//	            case '1':
+//	                selectedLabel.classList.add('badge-danger');
+//	                break;
+//	            case '2':
+//	                selectedLabel.classList.add('badge-warning');
+//	                break;
+//	            case '3':
+//	                selectedLabel.classList.add('badge-primary');
+//	                break;
+//	        }
+//	    });
+//	});
 	
-	function loadCustomerCareData() {
-		fetch(`${_ctx}customer-care/load-customer-care`)  
-			.then(response => response.json())
-			.then(data => {
-				let tableBody = document.getElementById("customerTableBody");
-				tableBody.innerHTML = ""; // Xóa dữ liệu cũ
-				data.forEach(customer => {
-					let row = `<tr>
-	                        <td>
-	                            <button class="btn btn-update">Cập nhật</button>
-	                            <button class="btn btn-hide">Ẩn</button>
-	                        </td>
-	                        <td>${customer.customer.companyName}</td>
-	                        <td>${customer.customer.contactPerson}</td>
-	                    </tr>`;
-					tableBody.innerHTML += row;
-				});
-			})
-			.catch(error => console.error("Lỗi khi tải dữ liệu: ", error));
-	}
-
-	// Gọi hàm load dữ liệu khi trang load xong
-	document.addEventListener("DOMContentLoaded", loadCustomerCareData);
+//	function loadCustomerCareData() {
+//	        fetch(`${_ctx}customer-care/load-customer-care`)
+//	            .then(response => {
+//	                if (!response.ok) {
+//	                    throw new Error(`HTTP error! Status: ${response.status}`);
+//	                }
+//	                return response.json();
+//	            })
+//	            .then(data => {
+//	                let tableBody = document.getElementById("customerTableBody");
+//	                if (tableBody) {
+//	                    tableBody.innerHTML = "";
+//	                    data.forEach(customer => {
+//	                        let row = `<tr>
+//	                            <td>
+//	                                <button class="btn btn-update">Cập nhật</button>
+//	                                <button class="btn btn-hide">Ẩn</button>
+//	                            </td>
+//	                            <td class="company-name-customer-care" style="cursor: pointer;">${customer.customer.companyName || 'N/A'}</td>
+//	                            <td class="contact-person-customer-care">${customer.customer.contactPerson || 'N/A'}</td>
+//								<td class="main-status-customer-care" style="color: #FF6961; font-weight: 600">${customer.customer.mainStatus.name || 'N/A'}</td>
+//								<td class="interaction-btn-customer-care" style="cursor: pointer;">
+//									<button">Xem tương tác</button> 
+//								</td>
+//	                        </tr>`;
+//	                        tableBody.innerHTML += row;
+//	                    });
+//	                }
+//	            })
+//	            .catch(error => console.error("Lỗi khi tải dữ liệu: ", error));
+//	    }
+//
+//	    loadCustomerCareData();
 });
 
 

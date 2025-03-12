@@ -3,13 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 
-	<!-- START COMMON META AND TITLE -->
-	<th:block th:include="fragments/common_meta_title"></th:block>
-	<!-- END COMMON META AND TITLE -->
-
-	<!-- START COMMON CSS -->
-	<th:block th:include="fragments/common_css"></th:block>
-	<!-- END COMMON CSS -->
+	<!-- Chat Assistant CSS -->
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/chatAssistant.css}">	
 
 	<th:block th:include="fragments/head"></th:block>
 </head>
@@ -83,25 +78,28 @@
 						<!-- <div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;"> -->
 						<div class="card-content collapse show">
 							<!-- <div class="dataTables_scrollHeadInner" style="box-sizing: content-box; width: 1062.41px; padding-right: 17px;" -->
-							<div class="card-body card-dashboard">
-								
-									<table class="table-striped table-bordered dataex-key-scrolling dataex-res-modal">
-										<thead>
-											<tr>
-												<th>Hành động</th>
-												<th>Tên công ty</th>
-												<th>Người liên hệ</th>
-												<th>Trạng thái chính</th>
-												<th>Chi tiết tương tác</th>
-												<th>Độ ưu tiên</th>
-												<th>Tình trạng chăm sóc</th>
-												<th>Thực hiện chăm sóc</th>
-												<th>Ngày nhắc nhở</th>
-											</tr>
-										</thead>
-											<tbody id="customerTableBody">
+							<div id="customerTable" class="card-body card-dashboard">
+							
+								<div class="table-responsive" style = "width: 100%">
+									<th:block th:include="fragments/chat/frg_datatable"></th:block>
+								</div>
+<!-- 									<table class="table-striped table-bordered dataex-key-scrolling dataex-res-modal"> -->
+<!-- 										<thead> -->
+<!-- 											<tr> -->
+<!-- 												<th>Hành động</th> -->
+<!-- 												<th>Tên công ty</th> -->
+<!-- 												<th>Người liên hệ</th> -->
+<!-- 												<th>Trạng thái chính</th> -->
+<!-- 												<th>Chi tiết tương tác</th> -->
+<!-- 												<th>Độ ưu tiên</th> -->
+<!-- 												<th>Tình trạng chăm sóc</th> -->
+<!-- 												<th>Thực hiện chăm sóc</th> -->
+<!-- 												<th>Ngày nhắc nhở</th> -->
+<!-- 											</tr> -->
+<!-- 										</thead> -->
+<!-- 											<tbody id="customerTableBody"> -->
 												
-											</tbody>
+<!-- 											</tbody> -->
 <!-- 										<tbody> -->
 <!-- 											<tr> -->
 <!-- 												<td> -->
@@ -397,8 +395,7 @@
 <!-- 												<td style="vertical-align: middle;">20/09/2024</td> -->
 <!-- 											</tr> -->
 <!-- 										</tbody> -->
-									</table>	
-								
+<!-- 									</table>	 -->
 							</div>
 						</div>
 					</div>
@@ -407,281 +404,13 @@
 	    </div>
 	</div>
 		
-	
-	
-	
 	<!-- Chat Button -->
 	<button id="chat-button" class="btn btn-primary rounded-circle shadow">
 	    💬
 	</button>
-	
-	<!-- Chat Assistant CSS -->
-	<style>
-	#chat-assistant {
-	    position: fixed;
-	    bottom: 80px;
-	    right: 30px;
-	    width: 310px;
-	    background-color: #f0f8f0;
-	    border-radius: 10px;
-	    overflow: hidden;
-	    z-index: 10;
-	}
-	#chat-button {
-	    position: fixed;
-	    bottom: 20px;
-	    right: 30px;
-	    width: 55px;
-	    height: 55px;
-	    font-size: 18px;
-	    z-index: 10;
-	}
-	/* Tab Styles */
-	.chat-tabs {
-	    display: flex;
-	    border-bottom: 1px solid #ccc;
-	}
-	.tab-btn {
-	    flex: 1;
-	    padding: 5px 0;
-	    background-color: #e9ecef;
-	    border: none;
-	    cursor: pointer;
-	    transition: all 0.3s ease;
-	    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-	    border-radius: 5px;
-	    margin: 0 5px;
-	}
-	.tab-btn.active {
-		box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
-		transform: translateY(2px);
-		background-color: #4fcf95;
-	}
-	.tab-btn:hover {
-		background-color: #d4d9dd;
-		transform: translateY(-3px);
-		box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
-	}
-	.tab-content {
-	    display: none;
-	}
-	.tab-content.active {
-	    display: block;
-	}
-	.click-here{
-		text-decoration: underline;
-		color: blue;
-		cursor: pointer;
-	}
-	.modal-overlay {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.5);
-		z-index: 999;
-	}
-	.modal-container {
-	    position: fixed;
-	    top: 50%;
-	    left: 50%;
-	    transform: translate(-50%, -50%);
-	    background-color: #fff;
-	    border-radius: 8px;
-	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-	    z-index: 1000;
-	    width: 95%;
-	    max-height: 80%;
-	    overflow-y: auto;
-	}
-	
-	.modal-header {
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
-	    background-color: #f0f0f0;
-	    padding: 10px;
-	    border-bottom: 1px solid #ddd;
-	}
-	
-	.modal-title {
-	    font-weight: bold;
-	}
-	
-	.modal-buttons .modal-btn {
-	    margin-left: 5px;
-	    padding: 5px 10px;
-	    border: none;
-	    background-color: #007bff;
-	    color: #fff;
-	    border-radius: 4px;
-	    cursor: pointer;
-	}
-	
-	.modal-btn:hover {
-	    background-color: #0056b3;
-	}
-	
-	.modal-content {
-	    padding: 15px;
-	}
-	
-	.minimized {
-	    position: fixed;
-	    bottom: 10px;
-	    right: 10px;
-	    width: 200px;
-	    height: 40px;
-	    overflow: hidden;
-	    cursor: pointer;
-	}
-	.care-button {
-	    position: relative;
-	    display: flex;
-	    align-items: center;
-	    padding: 10px 20px;
-	    background-color: #52B788;
-	    border: none;
-	    border-radius: 50px;
-	    color: #fff;
-	    font-size: 16px;
-	    cursor: pointer;
-	    transition: background-color 0.5s ease, transform 0.2s ease, box-shadow 0.2s ease;
-	    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
-	}
-
-.care-button .icon {
-    position: absolute;
-    left: 0px;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background-image: url('https://media.istockphoto.com/id/1330766185/vi/vec-to/bi%E1%BB%83u-t%C6%B0%E1%BB%A3ng-gi%E1%BB%AF-ch%C3%A2n-kh%C3%A1ch-h%C3%A0ng-d%E1%BB%8Bch-v%E1%BB%A5-ch%C4%83m-s%C3%B3c-kh%C3%A1ch-h%C3%A0ng-ng%C6%B0%E1%BB%9Di-c%C3%B3-bi%E1%BB%83u-t%C6%B0%E1%BB%A3ng-b%C3%A0n-tay.jpg?s=612x612&w=0&k=20&c=EEqUglMlEMECZ_S8ZT-KwR6e2fxXOWbSBlouATc6ra0=');
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: transform 0.5s ease, background-color 0.5s ease;
-    border: solid 3px #3db85e;
-}
-
-.care-button .text{
-    margin-left: 50px;
-    transition: transform 0.5s ease, color 0.5s ease;
-}
-
-.care-button:hover {
-    background-color: #40916c;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Tăng bóng đổ khi hover */
-    transform: translateY(-3px); /* Nhẹ nhàng nhô lên khi hover */
-}
-
-.care-button:hover .icon {
-    transform: translateX(120px); /* Trượt icon từ trái sang phải khi hover */
-}
-
-.care-button:hover .text {
-    color: 'white';
-    transform: translateX(-60px);
-    font-weight: 600;
-}
-
-.meet-button {
-	margin-top: 10px;
-	position: relative;
-    display: inline-flex;
-    white-space: nowrap;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #4F81BD;
-    border: none;
-    border-radius: 50px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.5s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
-}
-.meet-button .icon {
-    position: absolute;
-    left: 0px;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background-image: url('https://media.istockphoto.com/id/940783490/vector/calendar-and-clock-icon.jpg?s=612x612&w=0&k=20&c=6Qkj9UwZRyj8cD5eYxUMzdAJnz1VuxSF3aC_JAa8-qk=');
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: transform 0.5s ease, background-color 0.5s ease;
-    border: solid 3px #3d56b8;
-    background-color: 'white';
-}
-
-.meet-button .text {
-    margin-left: 50px;
-    transition: transform 0.5s ease, color 0.5s ease;
-}
-
-.meet-button:hover {
-    background-color: #3A6BA3;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Tăng bóng đổ khi hover */
-    transform: translateY(-3px); /* Nhẹ nhàng nhô lên khi hover */
-}
-
-.meet-button:hover .icon {
-    transform: translateX(150px); /* Trượt icon từ trái sang phải khi hover */
-}
-
-.meet-button:hover .text {
-    color: 'white';
-    transform: translateX(-60px);
-    font-weight: 600;
-}
-td.company-name:hover {
-	color: #1261A6 !important;
-	transition: color 0.3s ease !important;
-}
-.table-striped th, .table-striped td{
-	vertical-align: middle; 
-}
-.badge {
-    background-color: #d3d3d3; /* Màu xám mặc định */
-    color: #333;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-input[type="radio"]:checked + label {
-    background-color: #d3d3d3; /* Giữ màu xám khi không chọn */
-    color: #333;
-}
-
-.radio-badge-group input[type="radio"] {
-    display: none; /* Ẩn các nút radio mặc định */
-}
-
-/* Màu khi được chọn */
-input[type="radio"]:checked + label.badge-danger {
-    background-color: #dc3545;
-    color: #fff;
-}
-
-input[type="radio"]:checked + label.badge-warning {
-    background-color: #ffc107;
-    color: #fff;
-}
-
-input[type="radio"]:checked + label.badge-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-	
-	
-	</style>
+</body>
 	
 	<!-- Chat Assistant JavaScript -->
+	<script type="text/javascript" th:src="@{/resources/js/chat/datatable.js}" ></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/chatAssistant.js}"></script>
-</body>
 </html>

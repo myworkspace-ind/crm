@@ -1,6 +1,8 @@
 /*var dataSet */
 
 $(document).ready(function() {
+	console.log("jQuery version:", $.fn.jquery);
+	console.log("DataTables version:", $.fn.DataTable);
 /*	function removeJSessionIdFromUrl() {
 		if (window.location.href.indexOf('jsessionid') !== -1) {
 			var newUrl = window.location.href.split(';')[0];
