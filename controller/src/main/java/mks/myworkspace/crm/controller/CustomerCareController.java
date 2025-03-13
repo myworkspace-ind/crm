@@ -27,7 +27,7 @@ public class CustomerCareController extends BaseController{
 	@Autowired
 	CustomerService customerService;
 	
-	@GetMapping("/load-potential")
+	@GetMapping(value = "/load-potential", produces = "application/json; charset=UTF-8")
     public ResponseEntity<?> loadPotentialCustomers() {
         try {
             customerCareService.loadPotentialCustomersIntoCustomerCare();
