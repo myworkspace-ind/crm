@@ -59,6 +59,18 @@ $(document).ready(function() {
 			}
 		});
 	})
+	
+	$('#tblDatatableCustomerCare tbody').on('click', '.care-button', function() {
+		alert("Đã click vào nút Chăm sóc");
+//		let rowData = $('#tblDatatableCustomerCare').DataTable().row($(this).parents('tr')).data();
+//		console.log("Dữ liệu hàng:", rowData);
+//
+//		// Gắn dữ liệu vào modal (nếu cần)
+//		$('#careModal .modal-body').html(`<p>Đang chăm sóc khách hàng: <strong>${rowData[2]}</strong></p>`);
+//
+//		// Hiển thị modal
+//		$('#careModal').modal('show');
+	});
 
 
 	if (!$.fn.DataTable.isDataTable('#tblDatatableCustomerCare')) {

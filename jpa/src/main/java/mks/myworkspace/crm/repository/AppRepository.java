@@ -799,9 +799,16 @@ public class AppRepository {
 	}
 	
 	public void insertCustomerCare(List<CustomerCare> customerCares) {
-		String sql = "INSERT INTO crm_customer_care (customer_id) VALUES (?)";
-		for (CustomerCare care : customerCares) {
-			jdbcTemplate0.update(sql, care.getCustomer().getId());
-		}
+	    String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
+	    String insertSql = "INSERT INTO crm_customer_care (customer_id) VALUES (?)";
+
+	    for (CustomerCare care : customerCares) {
+	        Boolean exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, care.getCustomer().getId());
+
+	        if (Boolean.FALSE.equals(exists)) { // Nếu chưa tồn tại, thì insert
+	            jdbcTemplate0.update(insertSql, care.getCustomer().getId());
+	        }
+	    }
 	}
+
 }
