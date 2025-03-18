@@ -5,37 +5,6 @@ $(document).ready(function() {
 	//	console.log("DataTables version:", $.fn.DataTable);
 	console.log("jQuery version:", $.fn.jquery);
 	console.log("DataTables version:", $.fn.dataTable);
-
-	//	let table = $('#tblDatatableCustomerCare');
-	//
-	//	if (table.length === 0) {
-	//		console.error("❌ Không tìm thấy bảng #tblDatatableCustomerCare trong DOM!");
-	//		return;
-	//	} else {
-	//		console.log("✅ Tìm thấy bảng #tblDatatableCustomerCare.");
-	//	}
-	//
-	//	console.log("🔍 Kiểm tra DataTable đã khởi tạo chưa...");
-	//
-	//	if ($.fn.DataTable.isDataTable('#tblDatatableCustomerCare')) {
-	//		console.warn("⚠️ Bảng đã được khởi tạo trước đó, không khởi tạo lại.");
-	//	} else {
-	//		console.log("✅ Chưa có DataTable, tiến hành khởi tạo...");
-	//		table.DataTable();
-	//		console.log("🎉 DataTable đã được khởi tạo thành công.");
-	//	}
-	//
-	//
-	//
-	//	$(document).ready(function () {
-	//	    if ($.fn.DataTable) {
-	//	        if (!$.fn.DataTable.isDataTable('#tblDatatableCustomerCare')) {
-	//	            $('#tblDatatableCustomerCare').DataTable();
-	//	        }
-	//	    } else {
-	//	        console.error("DataTables chưa được tải!");
-	//	    }
-	//	});
 	
 	$('#reloadCustomerCare').on('click', function(){
 		$(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Đang tải...');
@@ -59,6 +28,41 @@ $(document).ready(function() {
 			}
 		});
 	})
+	
+	$('#tblDatatableCustomerCare tbody').on('click', '.btn-save', function() {
+		let updateList = [];
+		
+	    let $row = $(this).closest('tr'); // Lấy hàng chứa nút được nhấn
+	    let customerId = $row.find('td:first').text().trim(); 
+	    let priority = $row.find('.radio-badge-group input:checked').val(); 
+
+	    if (!priority) {
+	        alert("Vui lòng chọn mức độ ưu tiên trước khi lưu.");
+	        return;
+	    }
+		
+		if (priority) {
+			updateList.push({ id: parseInt(customerId), priority });
+		}
+		
+		console.log("🔄 Dữ liệu gửi đi:", updateList);
+
+	    $.ajax({
+	        url: _ctx + 'customer-care/update-priority',
+	        method: "PUT",
+	        headers: { "Content-Type": "application/json" },
+	        data: JSON.stringify(updateList),
+	        success: function(response) {
+	            alert("Cập nhật thành công!");
+	            console.log("✅ API Response:", response);
+	        },
+	        error: function(xhr, error) {
+	            console.error("❌ Lỗi khi cập nhật priority:", error);
+	            alert("Lỗi khi cập nhật dữ liệu: " + xhr.responseText);
+	        }
+	    });
+	});
+
 	
 	$('#tblDatatableCustomerCare tbody').on('click', '.care-button', function() {
 		alert("Đã click vào nút Chăm sóc");
@@ -118,14 +122,14 @@ $(document).ready(function() {
 					columnDefs: [
 						{
 							targets: 0,
-							visible: false
+							visible: true
 						},
 						{
 							targets: 1,
 							data: null,
 							defaultContent: `
 									        <div class="btn-group-customer-care" role="group">
-									            <button class="btn btn-primary btn-sm"><i class="bi bi-save"></i></button>
+									            <button class="btn btn-primary btn-save"><i class="bi bi-save"></i></button>
 									            <button class="btn btn-danger btn-sm"><i class="bi bi-eye-slash"></i></button>
 									        </div>`
 						},
@@ -145,20 +149,35 @@ $(document).ready(function() {
 							targets: 6,
 							data: null,
 							render: function(data, type, row, meta) {
+								let priority = row[6];
+								
+								if (priority) {
+									switch (priority) {
+										case "Rất quan trọng":
+											return `<span class="badge badge-danger">${priority}</span>`;
+										case "Quan trọng":
+											return `<span class="badge badge-warning">${priority}</span>`;
+										case "Trung bình":
+											return `<span class="badge badge-primary">${priority}</span>`;
+										default:
+											return `<span class="badge badge-default">${priority || "Chưa có dữ liệu"}</span>`;
+									}
+								}
+								
 								setTimeout(() => {
 									updateBadgeStyle($(`.radio-badge-group[data-row="${meta.row}"]`), data, meta.row)
 								}, 0);
 
 								return `
 										        <div class="radio-badge-group"> 
-										            <input type="radio" id="option1-row${meta.row}" name="priority-row${meta.row}" value="1" hidden>
-										            <label for="option1-row${meta.row}" class="badge badge-default">1. Rất quan trọng</label>
+										            <input type="radio" id="option1-row${meta.row}" name="priority-row${meta.row}" value="Rất quan trọng" hidden>
+										            <label for="option1-row${meta.row}" class="badge badge-default">Rất quan trọng</label>
 										                                        
-										            <input type="radio" id="option2-row${meta.row}" name="priority-row${meta.row}" value="2" hidden>
-										            <label for="option2-row${meta.row}" class="badge badge-default">2. Quan trọng</label>
+										            <input type="radio" id="option2-row${meta.row}" name="priority-row${meta.row}" value="Quan trọng" hidden>
+										            <label for="option2-row${meta.row}" class="badge badge-default">Quan trọng</label>
 										                                        
-										            <input type="radio" id="option3-row${meta.row}" name="priority-row${meta.row}" value="3" hidden>
-										            <label for="option3-row${meta.row}" class="badge badge-default">3. Bình thường</label>
+										            <input type="radio" id="option3-row${meta.row}" name="priority-row${meta.row}" value="Trung bình" hidden>
+										            <label for="option3-row${meta.row}" class="badge badge-default">Trung bình</label>
 										        </div>`;
 							}
 						},
@@ -218,7 +237,7 @@ $(document).ready(function() {
 
 				// Hàm cập nhật màu cho badge dựa trên giá trị
 				function updateBadgeStyle($radioGroup, priority, rowIndex) {
-					console.log(`🔄 Cập nhật màu cho hàng ${rowIndex}, mức độ: ${priority}`);
+//					console.log(`🔄 Cập nhật màu cho hàng ${rowIndex}, mức độ: ${priority}`);
 
 					$radioGroup.find('label').removeClass('badge-danger badge-warning badge-primary').addClass('badge-default');
 
@@ -229,13 +248,13 @@ $(document).ready(function() {
 						let $label = $radioGroup.find(`label[for="${labelFor}"]`);
 
 						switch (priority) {
-							case "1":
+							case "Rất quan trọng":
 								$label.addClass('badge-danger');
 								break;
-							case "2":
+							case "Quan trọng":
 								$label.addClass('badge-warning');
 								break;
-							case "3":
+							case "Trung bình":
 								$label.addClass('badge-primary');
 								break;
 						}

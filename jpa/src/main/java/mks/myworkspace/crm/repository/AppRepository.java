@@ -1,18 +1,20 @@
 package mks.myworkspace.crm.repository;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.hibernate.annotations.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -761,7 +763,7 @@ public class AppRepository {
 		else {
 			String sql = "Insert into crm_orderstatus (name) values (?)";
 			jdbcTemplate0.update(sql,name);
-			System.out.println("Them vao orderStatus thanh cong");
+			/* System.out.println("Them vao orderStatus thanh cong"); */
 		}
 	}
 	
@@ -772,7 +774,7 @@ public class AppRepository {
 		else {
 			String sql = "Delete from order_category_status where order_category_id=? and order_status_id=?";
 			jdbcTemplate0.update(sql,idLoaiDonHang,idTrangThai);
-			System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong");
+			/* System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong"); */
 		}
 	}
 	
@@ -783,7 +785,7 @@ public class AppRepository {
 		else {
 			String sql = "Insert into order_category_status (order_category_id,order_status_id) values (?,?)";
 			jdbcTemplate0.update(sql,idLoaiDonHang,idTrangThai);
-			System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong");
+			/* System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong"); */
 		}
 	}
 	
@@ -794,21 +796,49 @@ public class AppRepository {
 		else {
 			String sql = "update crm_ordercategory set name=? where id=?";
 			jdbcTemplate0.update(sql,name,idLoaiDonHang);
-			System.out.println("Cap Nhat loai don hang thanh cong");
+			/* System.out.println("Cap Nhat loai don hang thanh cong"); */
 		}
 	}
+	
+	//Khong khai bao bien trong vong lap
 	
 	public void insertCustomerCare(List<CustomerCare> customerCares) {
 	    String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
 	    String insertSql = "INSERT INTO crm_customer_care (customer_id) VALUES (?)";
+	    
+	    Boolean exists;
 
 	    for (CustomerCare care : customerCares) {
-	        Boolean exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, care.getCustomer().getId());
+	        exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, care.getCustomer().getId());
 
 	        if (Boolean.FALSE.equals(exists)) { // Nếu chưa tồn tại, thì insert
 	            jdbcTemplate0.update(insertSql, care.getCustomer().getId());
 	        }
 	    }
 	}
+	
+	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
+	    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
+	    
+	    int[] rowsUpdated = jdbcTemplate0.batchUpdate(updateSql, new BatchPreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				CustomerCare customerCare = customerCareList.get(i);
+				ps.setString(1, customerCare.getPriority());
+				ps.setLong(2, customerCare.getId());
+			}
+			
+			@Override
+			public int getBatchSize() {
+				return customerCareList.size();
+			}
+		});
+	    
+	    int totalUpdated = Arrays.stream(rowsUpdated).sum();
+	    
+	    log.debug("Total {} records updated successfully.", totalUpdated);
+	}
+
 
 }

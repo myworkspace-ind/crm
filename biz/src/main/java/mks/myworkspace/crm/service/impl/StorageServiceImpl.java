@@ -3,6 +3,7 @@ package mks.myworkspace.crm.service.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.CustomerCare;
 import mks.myworkspace.crm.entity.EmailToCustomer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Order;
@@ -366,9 +368,9 @@ public class StorageServiceImpl implements StorageService {
 	        Long idLoaiDonHang = extractId(change.get(5));  // Extract ID of LoaiDonHang
 
 	        // Ghi log thông tin
-	        System.out.println("Row: " + row + ", Col: " + col);
-	        System.out.println("Old Value: " + oldValue + ", New Value: " + newValue);
-	        System.out.println("Id Trạng Thái: " + idTrangThai + ", Id Loại Đơn Hàng: " + idLoaiDonHang);
+//	        System.out.println("Row: " + row + ", Col: " + col);
+//	        System.out.println("Old Value: " + oldValue + ", New Value: " + newValue);
+//	        System.out.println("Id Trạng Thái: " + idTrangThai + ", Id Loại Đơn Hàng: " + idLoaiDonHang);
 
 	        // Xử lý dữ liệu tùy theo cột
 	        if (col == 2) {
@@ -428,5 +430,16 @@ public class StorageServiceImpl implements StorageService {
 	public EmailToCustomer saveEmailToCustomer(EmailToCustomer emailToCustomer) {
 		appRepo.saveEmailToCustomer(emailToCustomer);
 		return emailToCustomer;
+	}
+	@Override
+	public void updatePriority(List<CustomerCare> customerCareRequests) {
+		List<CustomerCare> customerCareLists = customerCareRequests.stream().map(request -> {
+			CustomerCare customerCare = new CustomerCare();
+			customerCare.setId(request.getId());
+			customerCare.setPriority(request.getPriority());
+			return customerCare;
+		}).collect(Collectors.toList());
+		
+		appRepo.updatePriorityCustomerCare(customerCareLists);
 	}
 }

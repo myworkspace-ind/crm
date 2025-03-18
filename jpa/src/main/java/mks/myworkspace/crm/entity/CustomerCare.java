@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -42,9 +43,9 @@ public class CustomerCare implements Serializable{
 
 	@Column(name = "remind_date")
     //@Temporal(TemporalType.DATE)
-    private Date remindDate;
+    private LocalDateTime remindDate;
 
-	public CustomerCare(Long id, Customer customer, String priority, String careStatus, Date remindDate) {
+	public CustomerCare(Long id, Customer customer, String priority, String careStatus, LocalDateTime remindDate) {
 		super();
 		this.id = id;
 		this.customer = customer;

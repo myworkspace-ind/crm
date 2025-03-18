@@ -6,9 +6,12 @@
 
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+	</listener> 
+	
+<!-- 	Nó sẽ tìm file cấu hình applicationContext.xml (hoặc Java Config nếu dùng @Configuration). -->
 
 	<!-- Spring Security Configuration -->
+	
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 

@@ -113,11 +113,11 @@ public class CustomerServiceImpl implements CustomerService {
     public Map<Long, Long> getCustomerCountsByStatus() {
         List<Object[]> mainStatusCounts = repo.countCustomersByMainStatus();
         for (Object[] count : mainStatusCounts) {
-            System.out.println("Main Status ID: " + count[0] + ", Count: " + count[1]);
+//            System.out.println("Main Status ID: " + count[0] + ", Count: " + count[1]);
         }
         List<Object[]> subStatusCounts = repo.countCustomersBySubStatus();
         for (Object[] count :subStatusCounts) {
-            System.out.println("Sub Status ID: " + count[0] + ", Count: " + count[1]);
+//            System.out.println("Sub Status ID: " + count[0] + ", Count: " + count[1]);
         }
         
         Map<Long, Long> statusCountMap = new HashMap<>();
@@ -137,7 +137,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
         
         // In ra map kết quả để kiểm tra
-        System.out.println("Final Status Count Map: " + statusCountMap);
+//        System.out.println("Final Status Count Map: " + statusCountMap);
 
         return statusCountMap.isEmpty() ? new HashMap<>() : statusCountMap;
     }

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.CustomerCare;
 import mks.myworkspace.crm.service.CustomerCareService;
 import mks.myworkspace.crm.service.CustomerService;
+import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_CustomerCare;
 
 @Controller
@@ -26,6 +29,9 @@ public class CustomerCareController extends BaseController{
 	
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired
+	StorageService storageService;
 	
 	@GetMapping(value = "/load-potential", produces = "application/json; charset=UTF-8")
     public ResponseEntity<?> loadPotentialCustomers() {
@@ -58,6 +64,19 @@ public class CustomerCareController extends BaseController{
 		}
 	}
 	
-    
-
+	@PutMapping(value = "/update-priority", produces = "application/json; charset=UTF-8")
+	public ResponseEntity<?> updatePriority(@RequestBody List<CustomerCare> customerCareLists){
+		try {
+			if (customerCareLists == null || customerCareLists.isEmpty()) {
+				return ResponseEntity.badRequest().body("Danh sách khách hàng cần chăm sóc trống.");
+			}
+			
+			storageService.updatePriority(customerCareLists);
+			return ResponseEntity.ok("Cập nhật priority thành công cho " + customerCareLists.size() + " khách hàng.");
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Lỗi khi cập nhật priority: " + e.getMessage());
+		}
+	}
 }

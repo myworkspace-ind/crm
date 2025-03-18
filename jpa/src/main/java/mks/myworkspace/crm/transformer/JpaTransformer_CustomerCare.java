@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.transformer;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,7 +59,7 @@ public class JpaTransformer_CustomerCare {
 	        } else {
 	            rowData[4] = "Không xác định";
 	        }
-	        
+	        rowData[6] = customerCare.getPriority();
 	        rowData[7] = customerCare.getCareStatus(); 
 	        rowData[9] = formatDate(customerCare.getRemindDate()); 
 
@@ -70,10 +71,10 @@ public class JpaTransformer_CustomerCare {
 	    return lstObject;
 	}
 	
-	private static String formatDate(Date date) {
-		if (date == null) {
+	private static String formatDate(LocalDateTime localDateTime) {
+		if (localDateTime == null) {
 			return null;
 		}
-		return new SimpleDateFormat("dd/MM/yyyy").format(date);
+		return new SimpleDateFormat("dd/MM/yyyy").format(localDateTime);
 	}
 }
