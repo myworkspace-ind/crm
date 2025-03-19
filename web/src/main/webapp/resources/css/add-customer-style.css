@@ -80,10 +80,26 @@ option {
     background-color: #f9f9f9;
 }
 
+/* .card-header { */
+/*     text-align: center; */
+/*     padding-bottom: 15px; */
+/*     border-bottom: 1px solid #ddd; */
+/* } */
+
 .card-header {
-    text-align: center;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #ddd;
+	background: linear-gradient(to right, #014468, #8e9297) !important;
+    padding: 15px !important;
+    border-radius: 8px 8px 0 0 !important;
+    text-align: center !important;
+}
+
+.card-title {
+    font-size: 22px !important; 
+    font-weight: bold !important;
+    color: white !important;
+    text-transform: uppercase !important;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2) !important;
+    letter-spacing: 1px !important;
 }
 
 /* Chỉnh khoảng cách các nút trong form */
