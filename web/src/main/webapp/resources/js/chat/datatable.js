@@ -1,12 +1,45 @@
 /*var dataSetCustomerCare */
 
+function checkUncaredCustomers() {
+    let hasUncared = false;
+    
+    // Kiểm tra xem có dòng nào trong tbody không
+    let rows = $('#tblDatatableCustomerCare tbody tr');
+    console.log(`🔍 Tổng số hàng trong bảng: ${rows.length}`);
+    
+    if (rows.length === 0) {
+        console.log("⚠ Bảng chưa có dữ liệu!");
+    }
+
+    rows.each(function (index) {
+        let status = $(this).find('td:nth-child(8)').text().trim();
+        console.log(`📌 Hàng ${index + 1}: Tình trạng - '${status}'`);
+        
+        if (status === "Chưa chăm sóc") {
+            hasUncared = true;
+            console.log("❗ Phát hiện khách hàng chưa chăm sóc, dừng kiểm tra.");
+            return false;
+        }
+    });
+
+    if (hasUncared) {
+        console.log("✅ Có khách hàng chưa chăm sóc => Bật cảnh báo chat.");
+        $("#chat-button").addClass("chat-alert");
+    } else {
+        console.log("✅ Tất cả khách hàng đã được chăm sóc => Tắt cảnh báo chat.");
+        $("#chat-button").removeClass("chat-alert");
+    }
+}
+
+
 $(document).ready(function() {
-	//	console.log("jQuery version:", $.fn.jquery);
-	//	console.log("DataTables version:", $.fn.DataTable);
+	
 	console.log("jQuery version:", $.fn.jquery);
 	console.log("DataTables version:", $.fn.dataTable);
 	
 	$('#reloadCustomerCare').on('click', function(){
+		//setTimeout(checkUncaredCustomers, 1000);
+		
 		$(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Đang tải...');
 		
 		$.ajax({
@@ -119,6 +152,10 @@ $(document).ready(function() {
 							className: 'btn-pdf'
 						}
 					],
+					initComplete: function() {
+						console.log("✅ DataTable đã khởi tạo xong, kiểm tra dữ liệu...");
+						checkUncaredCustomers();
+					},
 					columnDefs: [
 						{
 							targets: 0,
@@ -267,6 +304,7 @@ $(document).ready(function() {
 			}
 		});
 	}
+	
 })
 
 

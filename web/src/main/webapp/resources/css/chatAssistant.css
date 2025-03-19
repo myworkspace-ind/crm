@@ -165,13 +165,12 @@
 
 .care-button:hover {
 	background-color: #40916c;
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Tăng bóng đổ khi hover */
-	transform: translateY(-3px); /* Nhẹ nhàng nhô lên khi hover */
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+	transform: translateY(-3px);
 }
 
 .care-button:hover .icon {
 	transform: translateX(120px);
-	/* Trượt icon từ trái sang phải khi hover */
 }
 
 .care-button:hover .text {
@@ -221,13 +220,12 @@
 
 .meet-button:hover {
 	background-color: #3A6BA3;
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Tăng bóng đổ khi hover */
-	transform: translateY(-3px); /* Nhẹ nhàng nhô lên khi hover */
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+	transform: translateY(-3px);
 }
 
 .meet-button:hover .icon {
 	transform: translateX(150px);
-	/* Trượt icon từ trái sang phải khi hover */
 }
 
 .meet-button:hover .text {
@@ -252,7 +250,7 @@
 }
 
 .badge {
-	background-color: #d3d3d3; /* Màu xám mặc định */
+	background-color: #d3d3d3;
 	color: #333;
 	padding: 5px 10px;
 	border-radius: 5px;
@@ -261,7 +259,7 @@
 }
 
 input[type="radio"]:checked+label {
-	background-color: #d3d3d3; /* Giữ màu xám khi không chọn */
+	background-color: #d3d3d3;
 	color: #333;
 }
 
@@ -269,7 +267,6 @@ input[type="radio"]:checked+label {
 /* 	display: none;  */
 /* } */
 
-/* Màu khi được chọn */
 input[type="radio"]:checked+label.badge-danger {
 	background-color: #dc3545;
 	color: #fff;
@@ -338,4 +335,26 @@ input[type="radio"]:checked+label.badge-primary {
 
 .btn-group-customer-care button:nth-child(2):hover {
     background-color: #b02a37;
+}
+
+.chat-alert {
+    position: relative;
+    animation: shake 0.5s infinite alternate;
+}
+
+.chat-alert::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    box-shadow: 0 0 5px red;
+}
+
+@keyframes shake {
+    0% { transform: translateX(-3px); }
+    100% { transform: translateX(3px); }
 }
