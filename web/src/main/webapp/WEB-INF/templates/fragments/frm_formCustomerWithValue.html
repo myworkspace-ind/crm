@@ -44,9 +44,13 @@
 
 									<div class="form-group">
 										<label for="address">Địa Chỉ:</label>
-										<input type="text" class="form-control" id="address" name="address" maxlength="255"
-										   th:value="${customer?.address}" required>
+										<div class="d-flex align-items-center">
+											<input type="text" class="form-control me-2" id="address" name="address" maxlength="255"
+												   th:value="${customer?.address}" required>
+											<button type="button" id="address-btn" class="btn btn-outline-secondary">📍</button>
+										</div>
 									</div>
+
 
 									<div class="form-group">
 										<label for="profession">Ngành Nghề:</label>
