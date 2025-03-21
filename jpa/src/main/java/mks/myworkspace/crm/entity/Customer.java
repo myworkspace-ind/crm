@@ -1,8 +1,7 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
-import java.util.Date;
-
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,13 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -69,9 +64,8 @@ public class Customer implements Serializable {
     @JoinColumn(name = "responsible_person_id")
     private ResponsiblePerson responsiblePerson;
 
-    @Column(name = "created_at")
-    @Temporal(TemporalType.DATE)
-    private Date createdAt;
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime createdAt;
 
     @Column(name = "note", length = 255)
     private String note;
@@ -81,7 +75,7 @@ public class Customer implements Serializable {
     
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, Date createdAt,
+			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, LocalDateTime createdAt,
 			String note, Boolean accountStatus) {
 		super();
 		this.id = id;
@@ -101,7 +95,7 @@ public class Customer implements Serializable {
 	}
     
     public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			Date createdAt, String note, Boolean accountStatus) {
+			LocalDateTime createdAt, String note, Boolean accountStatus) {
 		super();
 		this.id = id;
 		this.siteId = siteId;

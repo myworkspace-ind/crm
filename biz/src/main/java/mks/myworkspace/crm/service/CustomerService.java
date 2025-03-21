@@ -51,5 +51,5 @@ public interface CustomerService {
 	
 	Page<Customer> findAllKeyword(Pageable pageable, String keyword);
 	
-	List<Customer> findPotentialCustomers();
+//	List<Customer> findPotentialCustomers();
 }

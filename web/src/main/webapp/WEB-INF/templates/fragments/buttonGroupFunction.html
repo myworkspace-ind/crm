@@ -188,12 +188,14 @@
 	function submitUpdate() {
 	    // Lấy giá trị từ các trường input
 	    const updatedCustomer = {
-	        id: document.getElementById('customerId').value,
+	        id: Number(document.getElementById('customerId').value),  
 	        phone: document.getElementById('customerPhone').value,
 	        name: document.getElementById('customerName').value,
-	        mainStatus: document.getElementById('mainStatus').value,
-	        subStatus: document.getElementById('subStatus').value
-	    };
+	        mainStatus: document.getElementById('mainStatus').value ? { id: Number(document.getElementById('mainStatus').value) } : null,
+	        subStatus: document.getElementById('subStatus').value ? { id: Number(document.getElementById('subStatus').value) } : null
+    	};
+	    
+	    console.log("Dữ liệu gửi lên:", updatedCustomer);  // Debug
 
 	    // Gửi yêu cầu POST đến API cập nhật trạng thái khách hàng
 	    fetch(`${_ctx}customer/update-customer-status`, {
@@ -207,7 +209,7 @@
 	        if (response.ok) {
 	            return response.json();  // Phân tích dữ liệu JSON nếu trả về thành công
 	        }
-	        throw new Error('Cập nhật thất bại');
+	        return response.text().then(text => { throw new Error(text) });
 	    })
 	    .then(data => {
 	        alert('Cập nhật thành công!');

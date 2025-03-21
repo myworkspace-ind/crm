@@ -311,8 +311,8 @@
 																	</td>
 																	<td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : ''}"></td>
 
-																	<td
-																		th:text="${customer.createdAt != null ? #dates.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td>
+																	<!-- <td th:text="${customer.createdAt != null ? #temporals.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td> -->
+																	<td th:text="${customer.createdAt != null ? customer.createdAt : ''}"></td>
 																	<td th:text="${customer.note != null ? customer.note : ''}"></td>
 																	<td> 
 																		<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><span data-i18n="nav.dash.main">Hành động</span></a>

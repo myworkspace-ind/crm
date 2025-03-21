@@ -1,5 +1,7 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,8 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Override
 	public void loadPotentialCustomersIntoCustomerCare() {
 		try {
-            List<Customer> potentialCustomers = customerRepository.findPotentialCustomers();
+			LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(2);
+            List<Customer> potentialCustomers = repo.findPotentialCustomers(twoDaysAgo);
 
             if (potentialCustomers.isEmpty()) {
                 throw new RuntimeException("Không có khách hàng tiềm năng nào để nạp vào CustomerCare.");
@@ -57,6 +60,17 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Override
 	public List<CustomerCare> findAll() {
 		return repo.findAllCustomerCares();
+	}
+
+	@Override
+	public List<Customer> findAllCustomerCare() {
+		LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(2);
+		return repo.findPotentialCustomers(twoDaysAgo);
+	}
+
+	@Override
+	public boolean existsInCustomerCares(Long customerId) {
+		return repo.existsInCustomerCares(customerId);
 	}
 
 }

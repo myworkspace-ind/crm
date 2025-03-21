@@ -1,6 +1,12 @@
 package mks.myworkspace.crm.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,25 +50,71 @@ public class CustomerCareController extends BaseController{
         }
     }
 	
-	@GetMapping("/load-customer-care")
+	@GetMapping(value = "/load-customer-care", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> getPotentialCustomers() {
-		try {
-			List<CustomerCare> customerCares = customerCareService.findAll();
-			List<Customer> listCustomers = customerService.getAllCustomers();
-	        
-	        if (customerCares.isEmpty()) {
+	    try {
+	        List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();
+	        List<CustomerCare> customersWithCareData = customerCareService.findAll();
+
+	        if (customersNeedCares.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-	                                 .body("Không có khách hàng tiềm năng nào.");
+	                                 .body("Không có khách hàng nào cần chăm sóc.");
 	        }
 	        
-	        List<Object[]> dataSetCustomerCare = JpaTransformer_CustomerCare.convert2D(customerCares, listCustomers);
+	        Set<Long> customersWithCareIds = customersWithCareData.stream()
+	        														.map(c ->c.getCustomer().getId())
+	        														.collect(Collectors.toSet());
 
-	        return ResponseEntity.ok(dataSetCustomerCare);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
-		}
+	        // Danh sách chứa dữ liệu từ crm_customer_care
+	        List<CustomerCare> customersWithData = new ArrayList<>();
+	        // Danh sách chưa có dữ liệu
+	        List<Customer> customersWithoutData = new ArrayList<>();
+
+	        for (Customer customer : customersNeedCares) {
+	        	if(customersWithCareIds.contains(customer.getId())) {
+	        		// Lấy CustomerCare tương ứng
+	        		customersWithCareData.stream()
+	        			.filter(cc -> cc.getCustomer().getId().equals(customer.getId()))
+	        			.findFirst()
+	        			.ifPresent(customersWithData::add);
+	        	} else {
+	                customersWithoutData.add(customer);
+	            }
+	        }
+
+	        // Chuyển đổi từng danh sách riêng
+	        List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData, customersNeedCares);
+	        List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData);
+
+	        // Gom tất cả lại và trả về response
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("customersWithData", convertedWithData);
+	        response.put("customersWithoutData", convertedWithoutData);
+
+	        return ResponseEntity.ok(response);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
+	    }
 	}
+	
+	
+//	@GetMapping(value = "/notify-potential", produces = "application/json; charset=UTF-8")
+//	public ResponseEntity<?> getPotentialCustomersForNotification() {
+//	    try {
+//	        List<Customer> customers = customerCareService.findAllCustomerCare();
+//
+//	        if (customers.isEmpty()) {
+//	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+//	                                 .body("Không có khách hàng tiềm năng nào.");
+//	        }
+//
+//	        return ResponseEntity.ok(customers);
+//	    } catch (Exception e) {
+//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//	                .body("Lỗi khi lấy thông báo khách hàng cần chăm sóc: " + e.getMessage());
+//	    }
+//	}
 	
 	@PutMapping(value = "/update-priority", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> updatePriority(@RequestBody List<CustomerCare> customerCareLists){

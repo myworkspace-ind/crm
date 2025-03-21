@@ -3,10 +3,10 @@ package mks.myworkspace.crm.controller;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,22 +123,22 @@ public class CustomerController extends BaseController {
 	@Autowired
 	private CustomerRepository customerRepository;
 	
-	@GetMapping("/get-potential-customer")
-	public ResponseEntity<?> getPotentialCustomers() {
-		try {
-			List<Customer> customers = customerService.findPotentialCustomers();
-	        
-	        if (customers.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-	                                 .body("Không có khách hàng tiềm năng nào.");
-	        }
-
-	        return ResponseEntity.ok(customers);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
-		}
-	}
+//	@GetMapping("/get-potential-customer")
+//	public ResponseEntity<?> getPotentialCustomers() {
+//		try {
+//			List<Customer> customers = customerService.findPotentialCustomers();
+//	        
+//	        if (customers.isEmpty()) {
+//	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+//	                                 .body("Không có khách hàng tiềm năng nào.");
+//	        }
+//
+//	        return ResponseEntity.ok(customers);
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
+//		}
+//	}
 	
 	@PostMapping("/send-email-to-customer")
 	public ResponseEntity<?> sendEmail(@RequestParam("to") String to,
@@ -305,7 +305,7 @@ public class CustomerController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request) {
 		try {
-			customer.setCreatedAt(new Date());
+			customer.setCreatedAt(LocalDateTime.now());
 			customer.setSiteId(getCurrentSiteId());
 			customer.setAccountStatus(true);
 
@@ -412,6 +412,46 @@ public class CustomerController extends BaseController {
 					"Có lỗi xảy ra khi lấy thông tin khách hàng. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
 	}
+	
+//	@GetMapping("/get-customer/{id}")
+//	@ResponseBody
+//	public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
+//	    try {
+//	        if (id == null) {
+//	            return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID khách hàng không được để trống."));
+//	        }
+//
+//	        Optional<Customer> customerOpt = customerService.findById(id);
+//	        if (customerOpt.isEmpty()) {
+//	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//	                    .body(Map.of("errorMessage", "Khách hàng với ID " + id + " không tồn tại."));
+//	        }
+//
+//	        Customer customer = customerOpt.get();
+//
+//	        // Format LocalDateTime -> String
+//	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//	        String createdAtStr = customer.getCreatedAt() != null ? customer.getCreatedAt().format(formatter) : null;
+//
+//	        // Tạo object trả về với trường `createdAt` đã được format
+//	        Map<String, Object> customerData = new HashMap<>();
+//	        customerData.put("id", customer.getId());
+//	        customerData.put("companyName", customer.getCompanyName());
+//	        customerData.put("contactPerson", customer.getContactPerson());
+//	        customerData.put("email", customer.getEmail());
+//	        customerData.put("phone", customer.getPhone());
+//	        customerData.put("createdAt", createdAtStr);  // Dùng String thay vì LocalDateTime
+//	        customerData.put("mainStatus", customer.getMainStatus().getId());
+//	        customerData.put("subStatus", customer.getSubStatus().getId());
+//	        return ResponseEntity.ok(Map.of("message", "Thông tin khách hàng đã được tìm thấy!", "customer", customerData));
+//
+//	    } catch (Exception e) {
+//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+//	            "errorMessage", "Có lỗi xảy ra khi lấy thông tin khách hàng. Vui lòng thử lại sau!",
+//	            "details", e.getMessage()
+//	        ));
+//	    }
+//	}
 
 	@PostMapping("/update-customer-status")
 	@ResponseBody
@@ -890,7 +930,7 @@ public class CustomerController extends BaseController {
 			}
 
 			else {
-				customer.setCreatedAt(new Date());
+				customer.setCreatedAt(LocalDateTime.now());
 				customer.setSiteId(getCurrentSiteId());
 				updatedCustomer = storageService.saveOrUpdate(customer);
 			}
