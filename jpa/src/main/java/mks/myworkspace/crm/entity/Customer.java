@@ -2,6 +2,7 @@ package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -117,6 +118,13 @@ public class Customer implements Serializable {
 	public Customer(Long id) {
 		super();
 		this.id = id;
+	}
+	
+	public String getFormattedCreatedAt() {
+	    if (createdAt != null) {
+	        return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	    }
+	    return "";
 	}
 	
 	/*

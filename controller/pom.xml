@@ -151,19 +151,27 @@
             <artifactId>spring-security-taglibs</artifactId>
             <version>5.5.7</version>
         </dependency>
+        
+        <!--
+		https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.15.2</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
 
 		<!--https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
-<!--		<dependency>-->
-<!--		    <groupId>org.springframework.boot</groupId>-->
-<!--		    <artifactId>spring-boot-starter-mail</artifactId>-->
-<!--		    <version>2.5.4</version>-->
-<!--		    <exclusions>-->
-<!--		        <exclusion>-->
-<!--		            <groupId>org.apache.logging.log4j</groupId>-->
-<!--		            <artifactId>log4j-to-slf4j</artifactId>-->
-<!--		        </exclusion>-->
-<!--		    </exclusions>-->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--		    <groupId>org.springframework.boot</groupId>-->
+		<!--		    <artifactId>spring-boot-starter-mail</artifactId>-->
+		<!--		    <version>2.5.4</version>-->
+		<!--		    <exclusions>-->
+		<!--		        <exclusion>-->
+		<!--		            <groupId>org.apache.logging.log4j</groupId>-->
+		<!--		            <artifactId>log4j-to-slf4j</artifactId>-->
+		<!--		        </exclusion>-->
+		<!--		    </exclusions>-->
+		<!--		</dependency>-->
 
 
 	</dependencies>
