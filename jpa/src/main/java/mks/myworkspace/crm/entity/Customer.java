@@ -136,3 +136,4 @@ public class Customer implements Serializable {
 	 * ", createdAt=" + createdAt + ", note=" + note + "]"; }
 	 */
 }
+
