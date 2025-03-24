@@ -12,7 +12,29 @@ import mks.myworkspace.crm.entity.CustomerCare;
 
 @Slf4j
 public class JpaTransformer_CustomerCare {
-	public static List<Object[]> convert2D(List<CustomerCare> lstCustomerCares, List<Customer> allCustomers) {
+	public static List<Object[]> convert2D_Customers(List<Customer> lstCustomers) {
+		if (lstCustomers == null || lstCustomers.isEmpty()) {
+			return null;
+		}
+
+		List<Object[]> lstObject = new ArrayList<>();
+
+		for (Customer customerCare : lstCustomers) {
+	        Object[] rowData = new Object[10];//SL cột 
+	        
+	        rowData[0] = customerCare.getId(); // ID
+	        rowData[2] = customerCare.getCompanyName();
+	        rowData[3] = customerCare.getContactPerson();
+	        rowData[4] = customerCare.getMainStatus().getName();
+	        
+	        lstObject.add(rowData);
+	    }
+	    
+	    log.debug("Converted dataset: {}", lstObject);
+	    return lstObject;
+	}
+	
+	public static List<Object[]> convert2D_CustomerCares(List<CustomerCare> lstCustomerCares, List<Customer> allCustomers) {
 		if (lstCustomerCares == null || lstCustomerCares.isEmpty()) {
 			return null;
 		}
@@ -23,7 +45,7 @@ public class JpaTransformer_CustomerCare {
 	        Object[] rowData = new Object[10];//SL cột 
 	        
 	        rowData[0] = customerCare.getId(); // ID
-	        
+
 	        if (customerCare.getCustomer() != null) {
 	            Long customerId = customerCare.getCustomer().getId();
 	            Customer matchingCustomer = allCustomers.stream()
@@ -78,3 +100,5 @@ public class JpaTransformer_CustomerCare {
 		return new SimpleDateFormat("dd/MM/yyyy").format(localDateTime);
 	}
 }
+
+

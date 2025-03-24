@@ -238,8 +238,8 @@ public class CustomerServiceImpl implements CustomerService {
         return repo.findAll(combinedSpec, pageable);
     }
 
-	@Override
-	public List<Customer> findPotentialCustomers() {
-		return repo.findPotentialCustomers();
-	}
+//	@Override
+//	public List<Customer> findPotentialCustomers() {
+//		return repo.findPotentialCustomers();
+//	}
 }

@@ -1,12 +1,188 @@
 /*var dataSetCustomerCare */
 
+function notifyPotentialCustomers() {
+    fetch(`${_ctx}customer-care/load-customer-care/`)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Danh sách khách hàng cần nhắc nhở:", data);
+
+            // Kiểm tra nếu dữ liệu trả về có đúng định dạng object hay không
+            if (!data || typeof data !== "object") {
+                console.error("Dữ liệu trả về không hợp lệ:", data);
+                return;
+            }
+
+            // Lấy danh sách khách hàng có hoặc không có dữ liệu
+            const customersWithData = Array.isArray(data.customersWithData) ? data.customersWithData : [];
+            const customersWithoutData = Array.isArray(data.customersWithoutData) ? data.customersWithoutData : [];
+
+            // Gộp hai danh sách lại để xử lý chung
+            const allCustomers = [...customersWithData, ...customersWithoutData];
+
+            if (allCustomers.length === 0) {
+                console.warn("Không có khách hàng nào cần nhắc nhở.");
+                return;
+            }
+
+            allCustomers.forEach(customerData => {
+                if (!Array.isArray(customerData) || customerData.length < 5) {
+                    console.warn("Dữ liệu khách hàng không hợp lệ:", customerData);
+                    return;
+                }
+
+                const customer = {
+                    id: customerData[0] || "unknown",
+                    companyName: customerData[2] || "Không rõ",
+                    contactName: customerData[3] || "Không có",
+                    status: customerData[4] || "Không xác định"
+                };
+
+                showMessageNotification(customer);
+            });
+        })
+        .catch(error => console.error('Lỗi khi lấy danh sách khách hàng', error));
+}
+
+function showMessageNotification(customer) {
+    const reminderList = document.getElementById("customer-reminder");
+    if (!reminderList) return;
+
+    if (document.querySelector(`#customer-reminder li[data-id='${customer.id}']`)) {
+        return; 
+    }
+
+    let reminderItem = document.createElement("li");
+    reminderItem.classList.add("mb-3");
+    reminderItem.setAttribute("data-id", customer.id);
+
+    let now = new Date();
+    let currentDate = now.toISOString().split("T")[0]; // Lấy ngày hiện tại (YYYY-MM-DD)
+
+    let createdAt = customer.createdAt ? new Date(customer.createdAt) : now;
+    let createdDate = createdAt.toISOString().split("T")[0]; // Lấy ngày tạo (YYYY-MM-DD)
+
+    let displayDate;
+    if (currentDate === createdDate) {
+        displayDate = "Hôm nay";
+    } else {
+        displayDate = createdAt.toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+    }
+
+    let currentTime = now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+
+    reminderItem.innerHTML = `
+        <div class="bg-light p-2 rounded">
+            <p class="mb-1 text-dark">
+                Nhắc nhở: Khách hàng 
+                <a href="#" onclick="highlightCustomer('${customer.id}')" class="fw-bold">${customer.companyName}</a> 
+                cần chăm sóc ngay!
+            </p>
+            <small class="text-muted">${displayDate}, ${currentTime}</small>
+        </div>`;
+
+    reminderList.appendChild(reminderItem);
+}
+
+
+function highlightCustomer(customerId) {
+    const modalContainer = document.getElementById('modal-container');
+    const modalOverlay = document.getElementById('modal-overlay');
+    
+    if (!modalContainer || !modalOverlay) return;
+
+    // Mở modal nếu nó đang bị ẩn
+    if (modalContainer.style.display === "none" || modalContainer.style.display === "") {
+        modalContainer.style.display = "block";
+        modalOverlay.style.display = "block";
+    }
+
+    const table = document.getElementById("tblDatatableCustomerCare");
+    if (!table) return;
+
+    // Tìm tất cả các hàng trong tbody
+    const rows = table.querySelectorAll("tbody tr");
+
+    let targetRow = null;
+
+    // Duyệt từng dòng để tìm ID trong cột đầu tiên
+    rows.forEach(row => {
+        const firstCell = row.querySelector("td"); // Cột đầu tiên chứa ID
+        if (firstCell && firstCell.textContent.trim() === customerId.toString()) {
+            targetRow = row;
+        }
+    });
+
+    if (targetRow) {
+        // Đợi bảng hiển thị xong rồi mới cuộn và viền
+        setTimeout(() => {
+            targetRow.scrollIntoView({ behavior: "smooth", block: "center" });
+            targetRow.style.transition = "border 0.5s ease-in-out";
+            targetRow.style.border = "2px solid red";
+
+            setTimeout(() => { targetRow.style.border = "none"; }, 5000);
+        }, 300); // Đợi 300ms để modal mở hoàn toàn
+    } else {
+        console.log(`Không tìm thấy dòng khách hàng với ID: ${customerId}`);
+    }
+}
+
+
+
+function checkUncaredCustomers() {
+    let hasUncared = false;
+    
+    // Kiểm tra xem có dòng nào trong tbody không
+    let rows = $('#tblDatatableCustomerCare tbody tr');
+    console.log(`🔍 Tổng số hàng trong bảng: ${rows.length}`);
+    
+    if (rows.length === 0) {
+        console.log("⚠ Bảng chưa có dữ liệu!");
+    }
+
+    rows.each(function (index) {
+        let status = $(this).find('td:nth-child(8)').text().trim();
+        console.log(`📌 Hàng ${index + 1}: Tình trạng - '${status}'`);
+        
+        if (status === "Chưa chăm sóc") {
+            hasUncared = true;
+            console.log("❗ Phát hiện khách hàng chưa chăm sóc, dừng kiểm tra.");
+            return false;
+        }
+    });
+	
+	let chatButton = $("#chat-button");
+	let chatMessages = $("#chat-messages");
+
+    if (hasUncared) {
+        console.log("✅ Có khách hàng chưa chăm sóc => Bật cảnh báo chat.");
+        chatButton.addClass("chat-alert");
+		
+		//Thêm tin nhắn thông báo báo nếu chưa có
+		if ($("#chat-messages .alert-message").length === 0){
+			chatMessages.append('<div class="alert-message">⚠ Hãy chăm sóc khách hàng của bạn!</div>');
+		}
+    } else {
+        console.log("✅ Tất cả khách hàng đã được chăm sóc => Tắt cảnh báo chat.");
+        chatButton.removeClass("chat-alert");
+		
+		//Xóa tin nhắn thông báo
+		$("#chat-messages .alert-message").remove();
+    }
+}
+
+
 $(document).ready(function() {
-	//	console.log("jQuery version:", $.fn.jquery);
-	//	console.log("DataTables version:", $.fn.DataTable);
+	
 	console.log("jQuery version:", $.fn.jquery);
 	console.log("DataTables version:", $.fn.dataTable);
 	
 	$('#reloadCustomerCare').on('click', function(){
+		//setTimeout(checkUncaredCustomers, 1000);
+		
 		$(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Đang tải...');
 		
 		$.ajax({
@@ -87,11 +263,27 @@ $(document).ready(function() {
 			url: _ctx + 'customer-care/load-customer-care/',
 			method: "GET",
 			dataType: "json",
-			success: function(dataSetCustomerCare) {
-				console.log("Dữ liệu nhận được:", dataSetCustomerCare);
+			success: function(data) {
+				console.log("Dữ liệu nhận được:", data);
 				
+				if(!data || typeof data !== "object"){
+					console.error("Dữ liệu trả về không đúng định dạng:", data);
+					return;
+				}
+				
+				//Lấy danh sách KH cần chăm sóc (có hoặc ko có dữ liệu)
+				const customersWithData = Array.isArray(data.customersWithData) ? data.customersWithData : [];
+				const customersWithoutData = Array.isArray(data.customersWithoutData) ? data.customersWithoutData : [];	
+				
+				// Gộp tất cả khách hàng lại
+				const allCustomers = [...customersWithData, ...customersWithoutData];
+
+				if (allCustomers.length === 0) {
+					console.warn("Không có khách hàng nào để hiển thị.");
+					return;
+				}	
 				let table = $('#tblDatatableCustomerCare').DataTable({
-					data: dataSetCustomerCare,
+					data: allCustomers,
 					dom: 'Bfrtip',
 					paging: true, // Phân trang
 					searching: true, // Tìm kiếm
@@ -119,6 +311,11 @@ $(document).ready(function() {
 							className: 'btn-pdf'
 						}
 					],
+					initComplete: function() {
+						console.log("✅ DataTable đã khởi tạo xong, kiểm tra dữ liệu...");
+						checkUncaredCustomers();
+						notifyPotentialCustomers();
+					},
 					columnDefs: [
 						{
 							targets: 0,
@@ -184,6 +381,10 @@ $(document).ready(function() {
 						{
 							targets: 7,
 							render: function(data, type, row, meta) {
+								if(!data || data.trim() === "") {
+									data = "Chưa chăm sóc";
+								}
+								
 								if (data === "Đã chăm sóc !") {
 									return `
 									                <div class="alert alert-success" role="alert">
@@ -267,6 +468,7 @@ $(document).ready(function() {
 			}
 		});
 	}
+	
 })
 
 

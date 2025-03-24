@@ -9,13 +9,14 @@
     <th:block th:include="fragments/common_css"></th:block>
     <!-- END COMMON CSS -->
 
-    <link rel="stylesheet" type="text/css" href="resources/css/add-customer-style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/add-customer-style.css}">
     <th:block th:include="fragments/head"></th:block>
     <link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
 	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
 </head>
-<body class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"
-    data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
+<body>
+<!--  class="vertical-layout vertical-compact-menu 2-columns menu-expanded fixed-navbar"  -->
+<!--  data-open="click" data-menu="vertical-compact-menu" data-col="2-columns" -->
     <!-- BEGIN HEADER -->
     <th:block th:include="fragments/hmenu"></th:block>
     <!-- END HEADER -->

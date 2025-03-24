@@ -88,8 +88,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSp
 	
 	Page<Customer> findAll(Specification<Customer> spec, Pageable pageable);
 	
-	@Query("SELECT c FROM Customer c LEFT JOIN Interaction i ON c.id = i.customer.id " + 
-			"WHERE c.mainStatus.name = 'Mới' AND i.id IS NULL")
-	List<Customer> findPotentialCustomers();
+//	@Query("SELECT c FROM Customer c LEFT JOIN Interaction i ON c.id = i.customer.id " + 
+//			"WHERE c.mainStatus.name = 'Mới' AND i.id IS NULL")
+//	List<Customer> findPotentialCustomers();
 
 }

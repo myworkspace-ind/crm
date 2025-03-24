@@ -138,4 +138,22 @@
 		class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource0" />
 	</bean>
+	
+	
+	
+	<!--  -->
+<!-- 	<bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" factory-method="createDefault"> -->
+<!-- 		<property name="dateFormat"> -->
+<!-- 			<bean class="com.fasterxml.jackson.databind.util.StdDateFormat" /> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"> -->
+<!-- 		<property name="objectMapper" ref="jacksonObjectMapper" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<JavaTimeModule Registration --> 
+<!-- 	<bean id="jacksonCustomizer" class="mks.myworkspace.crm.config.JacksonCustomizer" /> -->
+	
+	
 </beans>
