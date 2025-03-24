@@ -65,7 +65,7 @@ public class Customer implements Serializable {
     @JoinColumn(name = "responsible_person_id")
     private ResponsiblePerson responsiblePerson;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "note", length = 255)
@@ -75,44 +75,44 @@ public class Customer implements Serializable {
     private Boolean accountStatus;
     
     
-    public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, LocalDateTime createdAt,
-			String note, Boolean accountStatus) {
-		super();
-		this.id = id;
-		this.siteId = siteId;
-		this.companyName = companyName;
-		this.contactPerson = contactPerson;
-		this.email = email;
-		this.phone = phone;
-		this.address = address;
-		this.profession = profession;
-		this.mainStatus = mainStatus;
-		this.subStatus = subStatus;
-		this.responsiblePerson = responsiblePerson;
-		this.createdAt = createdAt;
-		this.note = note;
-		this.accountStatus = accountStatus;
-	}
-    
-    public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-			LocalDateTime createdAt, String note, Boolean accountStatus) {
-		super();
-		this.id = id;
-		this.siteId = siteId;
-		this.companyName = companyName;
-		this.contactPerson = contactPerson;
-		this.email = email;
-		this.phone = phone;
-		this.address = address;
-		this.createdAt = createdAt;
-		this.note = note;
-		this.accountStatus = accountStatus;
-	}
+//    public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
+//			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, LocalDateTime createdAt,
+//			String note, Boolean accountStatus) {
+//		super();
+//		this.id = id;
+//		this.siteId = siteId;
+//		this.companyName = companyName;
+//		this.contactPerson = contactPerson;
+//		this.email = email;
+//		this.phone = phone;
+//		this.address = address;
+//		this.profession = profession;
+//		this.mainStatus = mainStatus;
+//		this.subStatus = subStatus;
+//		this.responsiblePerson = responsiblePerson;
+//		this.createdAt = createdAt;
+//		this.note = note;
+//		this.accountStatus = accountStatus;
+//	}
+//    
+//    public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
+//			LocalDateTime createdAt, String note, Boolean accountStatus) {
+//		super();
+//		this.id = id;
+//		this.siteId = siteId;
+//		this.companyName = companyName;
+//		this.contactPerson = contactPerson;
+//		this.email = email;
+//		this.phone = phone;
+//		this.address = address;
+//		this.createdAt = createdAt;
+//		this.note = note;
+//		this.accountStatus = accountStatus;
+//	}
 
-	public Customer(String contactPerson2) {
-		// TODO Auto-generated constructor stub
-	}
+//	public Customer(String contactPerson2) {
+//		// TODO Auto-generated constructor stub
+//	}
 	
 
 	public Customer(Long id) {
@@ -126,14 +126,4 @@ public class Customer implements Serializable {
 	    }
 	    return "";
 	}
-	
-	/*
-	 * @Override public String toString() { return "Customer [id=" + id +
-	 * ", siteId=" + siteId + ", companyName=" + companyName + ", contactPerson=" +
-	 * contactPerson + " email=" + email + ", phone=" + phone + ", address=" +
-	 * address + ", mainStatus=" + mainStatus + ", subStatus=" + subStatus +
-	 * ", orders=" + orders + ", responsiblePerson=" + responsiblePerson +
-	 * ", createdAt=" + createdAt + ", note=" + note + "]"; }
-	 */
 }
-
