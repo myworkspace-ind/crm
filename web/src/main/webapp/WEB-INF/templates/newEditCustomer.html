@@ -10,6 +10,7 @@
     <!-- END COMMON CSS -->
 
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/add-customer-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/editCustomerAddress.css}">
     <th:block th:include="fragments/head"></th:block>
     <link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
 	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
@@ -27,6 +28,9 @@
 
     <th:block th:include="fragments/frm_formCustomerWithValue"></th:block>
 
+    <!-- INCLUDE EDIT ADDRESS MODAL -->
+    <div th:include="fragments/frg_EditCustomerAddress :: addressModal"></div>
+
     <!-- START CUSTOMIZE BUTTON -->
     <th:block th:include="fragments/customizeButton"></th:block>
     <!-- END CUSTOMIZE BUTTON -->
@@ -36,11 +40,13 @@
     <!-- END COMMON JAVASCRIPT -->
 
     <!-- FILE JS BỔ SUNG -->
+<!-- Google Maps script -->
     <script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
     <script type="text/javascript" th:src="@{/resources/app-assets/js/update/editCustomer_Dat.js}" defer></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/localStorageNewCustomer.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/responsible-person/init.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/responsible-person/responsiblePerson-save.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/app-assets/js/update/map.js}"></script>
 	
 	<script type="text/javascript">
 	 document.getElementById('updateCustomerForm').addEventListener('submit', function(event) {
@@ -51,5 +57,8 @@
 	        saveCustomerChanges();
 	    });
 	</script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB4DZ0dXTJttvbexvOQn2aVXMC5RkK_L0&libraries=places&callback=initMap" defer></script>
+
+
 </body>
 </html>
