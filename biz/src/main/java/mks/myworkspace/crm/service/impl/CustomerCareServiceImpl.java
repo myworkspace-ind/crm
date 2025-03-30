@@ -73,4 +73,9 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 		return repo.existsInCustomerCares(customerId);
 	}
 
+	@Override
+	public boolean checkCustomerCareIDExists(Long customerCareId) {
+		return repo.existsByCustomeCareId(customerCareId);
+	}
+
 }

@@ -1,0 +1,35 @@
+<!-- CÁI NÀY NÊN LÀ 1 MODAL NHỎ --> TIỆN DỤNG CHO NHÂN VIÊN BẤM VÀO ĐỂ THEO DÕI SINH NHẬT KH -->
+
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.15/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.15/index.global.min.js'></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            timeZone: 'UTC',
+            events: [
+              {
+                id: 'a',
+                title: 'my event',
+                start: '2025-03-29'
+              }
+            ]
+        });
+        calendar.render();
+        var event = calendar.getEventById('a') // an event object!
+        var start = event.start // a property (a Date object)
+        console.log(start.toISOString()) // "2018-09-01T00:00:00.000Z"
+      });
+
+    </script>
+  </head>
+  <body>
+    <div id='calendar'></div>	
+  </body>
+</html>

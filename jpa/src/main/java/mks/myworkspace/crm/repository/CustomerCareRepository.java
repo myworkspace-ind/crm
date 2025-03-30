@@ -31,4 +31,7 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 		       "WHERE c.customer.id = :customerId " +
 		       "AND NOT EXISTS (SELECT 1 FROM CustomerCare cc WHERE cc.customer.id = c.customer.id)")
 	boolean existsInCustomerCares(@Param("customerId") Long customerId);
+	
+	@Query("SELECT COUNT(c) > 0 FROM CustomerCare c WHERE c.id = :customerCareId")
+	boolean existsByCustomeCareId(@Param("customerCareId") Long customerCareId);
 }

@@ -8,14 +8,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
@@ -39,6 +44,35 @@ public class CustomerCareController extends BaseController{
 	@Autowired
 	StorageService storageService;
 	
+	@GetMapping("/calendar")
+	public ModelAndView displayCalendar(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("calendar");
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
+	
+	@GetMapping("/general")
+	public ModelAndView displayCustomerCarePage(HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav = new ModelAndView("customerCare");
+		initSession(request, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+
+		return mav;
+	}
+	
+	@GetMapping(value = "/check-exist/{customerCareId}")
+	public ResponseEntity<Map<String, Boolean>> checkCustomerCare(@PathVariable Long customerCareId){
+		boolean exists = customerCareService.checkCustomerCareIDExists(customerCareId);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("exists", exists);
+		
+		return ResponseEntity.ok(response);
+	}
+	
 	@GetMapping(value = "/load-potential", produces = "application/json; charset=UTF-8")
     public ResponseEntity<?> loadPotentialCustomers() {
         try {
@@ -49,6 +83,54 @@ public class CustomerCareController extends BaseController{
                 .body("Lỗi khi nạp khách hàng: " + e.getMessage());
         }
     }
+	
+	@GetMapping(value = "/check-unsaved-customercare", produces = "application/json; charset=UTF-8")
+	public ResponseEntity<?> checkUnsavedCustomerCare() {
+	    try {
+	        List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();
+	        List<CustomerCare> customersWithCareData = customerCareService.findAll();
+
+	        if (customersNeedCares.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+	                                 .body("Không có khách hàng nào cần chăm sóc.");
+	        }
+	        
+	        Set<Long> customersWithCareIds = customersWithCareData.stream()
+	        														.map(c ->c.getCustomer().getId())
+	        														.collect(Collectors.toSet());
+
+	        // Danh sách chứa dữ liệu từ crm_customer_care
+	        List<CustomerCare> customersWithData = new ArrayList<>();
+	        // Danh sách chưa có dữ liệu
+	        List<Customer> customersWithoutData = new ArrayList<>();
+
+	        for (Customer customer : customersNeedCares) {
+	        	if(customersWithCareIds.contains(customer.getId())) {
+	        		// Lấy CustomerCare tương ứng
+	        		customersWithCareData.stream()
+	        			.filter(cc -> cc.getCustomer().getId().equals(customer.getId()))
+	        			.findFirst()
+	        			.ifPresent(customersWithData::add);
+	        	} else {
+	                customersWithoutData.add(customer);
+	            }
+	        }
+
+	        // Chuyển đổi từng danh sách riêng
+	        List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData, customersNeedCares);
+	        List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData);
+
+	        // Gom tất cả lại và trả về response
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("customersWithData", convertedWithData);
+	        response.put("customersWithoutData", convertedWithoutData);
+
+	        return ResponseEntity.ok(response);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
+	    }
+	}
 	
 	@GetMapping(value = "/load-customer-care", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> getPotentialCustomers() {

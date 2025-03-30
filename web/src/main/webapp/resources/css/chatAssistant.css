@@ -470,6 +470,20 @@ input[type="radio"]:checked+label.badge-primary {
     100% { box-shadow: 0 0 10px rgba(255, 65, 108, 0.6); }
 }
 
+.highlight-box {
+    display: inline-block !important;
+    background-color: yellow !important;
+    color: black !important;
+    font-weight: bold !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+}
+
+#swal2-title, .swal2-title.custom-title {
+    line-height: 40px !important;
+}
+
+
 /* #chat-button.chat-alert {
     animation: pulse 1.5s infinite;
 } */

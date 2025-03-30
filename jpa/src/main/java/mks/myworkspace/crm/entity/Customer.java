@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -17,6 +18,7 @@ import javax.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mks.myworkspace.crm.entity.EmailToCustomer.EmailStatus;
 
 @Entity
 @Table(name = "crm_customer", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
@@ -64,7 +66,17 @@ public class Customer implements Serializable {
     @ManyToOne
     @JoinColumn(name = "responsible_person_id")
     private ResponsiblePerson responsiblePerson;
+    
+    @Column(name = "birthay")
+    private LocalDate birthday; //Lưu ngày sinh nhật cá nhân hoặc ngày kỷ niệm thành lập doanh nghiệp
+    
+    @Column(name = "classification")
+	private Classification classification; // Save status of "Send" and "Save draft"
 
+	public enum Classification {
+		BUSINESS, INDIVIDUAL;
+	}
+    
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
