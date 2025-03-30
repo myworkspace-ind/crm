@@ -230,8 +230,55 @@ function initMap() {
     document.getElementById("address-modal").addEventListener("click", function () {
         setTimeout(setupModalAutocomplete, 500); // Delay to ensure modal is fully loaded
     });
+
+    // Process event click on the map
+    map.addListener('click', function(e) {
+        let label = 'A';
+        var marker = new google.maps.Marker({
+                position: e.latLng,
+                label: label,
+                map: map
+        });
+
+        // Debug
+        console.log("Location at " + e.latLng + " with label " + label);
+        
+        // https://developers.google.com/maps/documentation/javascript/geocoding
+        // Convert location (lat, lng) into address
+        var geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode({ 'location': e.latLng }, function(results, status) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    console.log(results[0].formatted_address);
+
+                    // Add new address into the handsontable in the left side
+                    selectAddress(label, results[0].formatted_address, e.latLng.lat(), e.latLng.lng());
+                } else {
+                    console.log('No results found');
+                }
+            } else {
+                console.log('Geocoder failed due to: ' + status);
+            }
+        });
+    });
 }
 
+/**
+ * Add new address into the form.
+ * @param label Character of the label at the selected address. Ex: "A"
+ * @param address full address. Ex: Australian Rockery Lawn, 2A Macquarie St, Sydney NSW 2000, Australia
+ * @param lat Latitude of the selected address. Ex: -33.859063280483426
+ * @param lng Longiture of the selected address. Ex: 151.2158149841309
+ * 
+ * @returns None
+ * The inputs of address in the left form are filled.
+ * The full address in the parent form is filled.
+ * The latitude and longitude of the address are kept also.
+ */
+function selectAddress(label, address, lat, lng) {
+    console.log("label, address, lat, lng = " + label + ": " + address + ": " + lat + ": " + lng);
+}
 
 // Function to setup Autocomplete in modal
 function setupModalAutocomplete() {
