@@ -154,7 +154,15 @@ function initTable(colHeaders, colWidths, data) {
                 },
                 { type: 'text' },
                 { type: 'text' },
-                { renderer: deleteButtonRenderer },
+				{
+					type: 'date',
+					dateFormat: 'YYYY-MM-DD',
+					correctFormat: true,
+					defaultDate: new Date(),
+					datePickerConfig: { format: 'YYYY-MM-DD' },
+					readOnly: true
+				}, //Ngày tạo
+				{ renderer: deleteButtonRenderer },
             ],
             height: 400,
             currentRowClassName: 'currentRow',

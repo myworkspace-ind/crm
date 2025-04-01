@@ -666,8 +666,8 @@ public class CustomerController extends BaseController {
 		List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
 
 		// Cấu trúc bảng
-		int[] colWidths = { 200, 200, 380, 300, 30 };
-		String[] colHeaders = { "Người trao đổi", "Ngày", "Nội dung trao đổi", "Kế hoạch tiếp theo", "" };
+		int[] colWidths = { 200, 200, 300, 300, 200, 30 };
+		String[] colHeaders = { "Người trao đổi", "Ngày tương tác (dự kiến)", "Nội dung trao đổi", "Kế hoạch tiếp theo", "Ngày tạo", "" };
 
 		// Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
 		Map<String, Object> response = new HashMap<>();
