@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,9 @@ public class CustomerCareController extends BaseController{
 	
 	@Autowired
 	StorageService storageService;
+	
+	@Value("${customer.care.days-ago-case1}")
+	private int reminderDays;
 	
 	@GetMapping("/calendar")
 	public ModelAndView displayCalendar(HttpServletRequest request, HttpSession httpSession) {
@@ -118,7 +122,7 @@ public class CustomerCareController extends BaseController{
 
 	        // Chuyển đổi từng danh sách riêng
 	        List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData, customersNeedCares);
-	        List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData);
+	        List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData, reminderDays);
 
 	        // Gom tất cả lại và trả về response
 	        Map<String, Object> response = new HashMap<>();
@@ -166,7 +170,7 @@ public class CustomerCareController extends BaseController{
 
 	        // Chuyển đổi từng danh sách riêng
 	        List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData, customersNeedCares);
-	        List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData);
+	        List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData, reminderDays);
 
 	        // Gom tất cả lại và trả về response
 	        Map<String, Object> response = new HashMap<>();

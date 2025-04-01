@@ -1,11 +1,11 @@
 package mks.myworkspace.crm.service.impl;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +30,9 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Autowired
 	CustomerRepository customerRepository;
 	
+	@Value("${customer.care.days-ago-case1}")
+	private int daysAgo;
+	
 
 	@Override
 	public CustomerCareRepository getRepo() {
@@ -39,7 +42,7 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Override
 	public void loadPotentialCustomersIntoCustomerCare() {
 		try {
-			LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(2);
+			LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
             List<Customer> potentialCustomers = repo.findPotentialCustomers(twoDaysAgo);
 
             if (potentialCustomers.isEmpty()) {
@@ -50,7 +53,7 @@ public class CustomerCareServiceImpl implements CustomerCareService{
                 .map(customer -> new CustomerCare(null, customer, null, null, null)) // ID tự động tăng, các trường còn lại null
                 .collect(Collectors.toList());
 
-            appRepository.insertCustomerCare(customerCares);
+            appRepository.insertCustomerCare(customerCares, daysAgo);
         } catch (Exception e) {
             throw new RuntimeException("Lỗi khi nạp khách hàng tiềm năng vào CustomerCare: " + e.getMessage());
         }

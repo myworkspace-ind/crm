@@ -1,9 +1,8 @@
 package mks.myworkspace.crm.transformer;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +11,14 @@ import mks.myworkspace.crm.entity.CustomerCare;
 
 @Slf4j
 public class JpaTransformer_CustomerCare {
-	public static List<Object[]> convert2D_Customers(List<Customer> lstCustomers) {
+	
+	public static List<Object[]> convert2D_Customers(List<Customer> lstCustomers, int reminderDays) {
 		if (lstCustomers == null || lstCustomers.isEmpty()) {
 			return null;
 		}
 
 		List<Object[]> lstObject = new ArrayList<>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
 		for (Customer customerCare : lstCustomers) {
 	        Object[] rowData = new Object[10];//SL cột 
@@ -26,6 +27,14 @@ public class JpaTransformer_CustomerCare {
 	        rowData[2] = customerCare.getCompanyName();
 	        rowData[3] = customerCare.getContactPerson();
 	        rowData[4] = customerCare.getMainStatus().getName();
+	        
+	        //Tính toán ngày nhắc nhở (Ngày nhắc nhở = Ngày tạo mới KH + reminderDays)
+	        if (customerCare.getCreatedAt() != null) {
+                LocalDateTime reminderDate = customerCare.getCreatedAt().plusDays(reminderDays);
+                rowData[9] = reminderDate.format(formatter);
+            } else {
+                rowData[9] = "Không xác định"; // Nếu không có ngày tạo
+            }
 	        
 	        lstObject.add(rowData);
 	    }
@@ -40,6 +49,7 @@ public class JpaTransformer_CustomerCare {
 		}
 
 		List<Object[]> lstObject = new ArrayList<>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
 		for (CustomerCare customerCare : lstCustomerCares) {
 	        Object[] rowData = new Object[10];//SL cột 
@@ -83,7 +93,13 @@ public class JpaTransformer_CustomerCare {
 	        }
 	        rowData[6] = customerCare.getPriority();
 	        rowData[7] = customerCare.getCareStatus(); 
-	        rowData[9] = formatDate(customerCare.getRemindDate()); 
+	        
+	        if (customerCare.getRemindDate() != null) {
+                LocalDateTime reminderDate = customerCare.getRemindDate();
+                rowData[9] = reminderDate.format(formatter);
+            } else {
+                rowData[9] = "Không xác định"; // Nếu không có ngày tạo
+            }
 
 	        
 	        lstObject.add(rowData);
@@ -93,12 +109,6 @@ public class JpaTransformer_CustomerCare {
 	    return lstObject;
 	}
 	
-	private static String formatDate(LocalDateTime localDateTime) {
-		if (localDateTime == null) {
-			return null;
-		}
-		return new SimpleDateFormat("dd/MM/yyyy").format(localDateTime);
-	}
 }
 
 

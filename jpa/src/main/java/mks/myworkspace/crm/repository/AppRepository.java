@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -801,20 +802,26 @@ public class AppRepository {
 	}
 	
 	//Khong khai bao bien trong vong lap
-	
-	public void insertCustomerCare(List<CustomerCare> customerCares) {
-	    String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
-	    String insertSql = "INSERT INTO crm_customer_care (customer_id) VALUES (?)";
-	    
-	    Boolean exists;
+	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDays) {
+		String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
+		String insertSql = "INSERT INTO crm_customer_care (customer_id, remind_date) VALUES (?, ?)";
 
-	    for (CustomerCare care : customerCares) {
-	        exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, care.getCustomer().getId());
+		Boolean exists;
+		LocalDateTime reminderTime;
 
-	        if (Boolean.FALSE.equals(exists)) { // Nếu chưa tồn tại, thì insert
-	            jdbcTemplate0.update(insertSql, care.getCustomer().getId());
-	        }
-	    }
+		for (CustomerCare care : customerCares) {
+			exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, care.getCustomer().getId());
+
+			if (Boolean.FALSE.equals(exists)) { // Nếu chưa tồn tại, thì insert
+				if (care.getCustomer().getCreatedAt() != null) {
+					reminderTime = care.getCustomer().getCreatedAt().plusDays(reminderDays);
+				} else {
+					reminderTime = null; 
+				}
+
+				jdbcTemplate0.update(insertSql, care.getCustomer().getId(), reminderTime);
+			}
+		}
 	}
 	
 	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {

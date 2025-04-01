@@ -331,162 +331,163 @@ $(document).ready(function() {
 					console.warn("Không có khách hàng nào để hiển thị.");
 					return;
 				}
-				
+
+				console.log("Dữ liệu allCustomers:", allCustomers);
+
 				// Kiểm tra nếu DataTable đã tồn tại thì xóa nó trước
 				if ($.fn.DataTable.isDataTable('#tblDatatableCustomerCare')) {
-					$('#tblDatatableCustomerCare').DataTable().destroy();
-					$('#tblDatatableCustomerCare tbody').empty(); // Xóa dữ liệu cũ trong tbody
-				}
-				
-				// Khởi tạo lại DataTable
-				let table = $('#tblDatatableCustomerCare').DataTable({
-					data: allCustomers,
-					dom: 'Bfrtip',
-					paging: true, // Phân trang
-					searching: true, // Tìm kiếm
-					ordering: true, // Sắp xếp
-					lengthMenu: [5, 10, 25],
-					buttons: [
-						{
-							extend: 'copyHtml5',
-							text: '<i class="fa fa-copy"></i> Sao chép',
-							className: 'btn-copy'
+					var table = $('#tblDatatableCustomerCare').DataTable();
+					table.clear(); // Xóa dữ liệu hiện tại
+					table.rows.add(allCustomers); // Thêm dữ liệu mới
+					table.draw(); // Vẽ lại bảng	
+				} else {
+					// Khởi tạo lại DataTable
+					let table = $('#tblDatatableCustomerCare').DataTable({
+						data: allCustomers,
+						dom: 'Bfrtip',
+						paging: true, // Phân trang
+						searching: true, // Tìm kiếm
+						ordering: true, // Sắp xếp
+						lengthMenu: [5, 10, 25],
+						buttons: [
+							{
+								extend: 'copyHtml5',
+								text: '<i class="fa fa-copy"></i> Sao chép',
+								className: 'btn-copy'
+							},
+							{
+								extend: 'excelHtml5',
+								text: '<i class="fa fa-file-excel"></i> Xuất Excel',
+								className: 'btn-excel'
+							},
+							{
+								extend: 'csvHtml5',
+								text: '<i class="fa fa-file-csv"></i> Xuất CSV',
+								className: 'btn-csv'
+							},
+							{
+								extend: 'pdfHtml5',
+								text: '<i class="fa fa-file-pdf"></i> Xuất PDF',
+								className: 'btn-pdf'
+							}
+						],
+						initComplete: function() {
+							console.log("✅ DataTable đã khởi tạo xong, kiểm tra dữ liệu...");
+							checkUncaredCustomers();
+							notifyPotentialCustomers();
 						},
-						{
-							extend: 'excelHtml5',
-							text: '<i class="fa fa-file-excel"></i> Xuất Excel',
-							className: 'btn-excel'
-						},
-						{
-							extend: 'csvHtml5',
-							text: '<i class="fa fa-file-csv"></i> Xuất CSV',
-							className: 'btn-csv'
-						},
-						{
-							extend: 'pdfHtml5',
-							text: '<i class="fa fa-file-pdf"></i> Xuất PDF',
-							className: 'btn-pdf'
-						}
-					],
-					initComplete: function() {
-						console.log("✅ DataTable đã khởi tạo xong, kiểm tra dữ liệu...");
-						checkUncaredCustomers();
-						notifyPotentialCustomers();
-					},
-					columnDefs: [
-						{
-							targets: 0,
-							visible: true
-						},
-						{
-							targets: 1,
-							data: null,
-							defaultContent: `
-									        <div class="btn-group-customer-care" role="group">
-									            <button class="btn btn-primary btn-save"><i class="bi bi-save"></i></button>
-									            <button class="btn btn-danger btn-sm"><i class="bi bi-eye-slash"></i></button>
-									        </div>`
-						},
-						{
-							targets: 2,
-							className: 'company-name-column'
-						},
-						{
-							targets: 5,
-							data: null,
-							defaultContent: `
-											<div class="interaction-btn-customer-care" style="cursor: pointer;">
-												<button>Xem tương tác</button>
-											</div>`
-						},
-						{
-							targets: 6,
-							data: null,
-							render: function(data, type, row, meta) {
-								let priority = row[6];
+						columnDefs: [
+							{
+								targets: 0,
+								visible: true
+							},
+							{
+								targets: 1,
+								data: null,
+								defaultContent: `
+														        <div class="btn-group-customer-care" role="group">
+														            <button class="btn btn-primary btn-save"><i class="bi bi-save"></i></button>
+														            <button class="btn btn-danger btn-sm"><i class="bi bi-eye-slash"></i></button>
+														        </div>`
+							},
+							{
+								targets: 2,
+								className: 'company-name-column'
+							},
+							{
+								targets: 5,
+								data: null,
+								defaultContent: `
+																<div class="interaction-btn-customer-care" style="cursor: pointer;">
+																	<button>Xem tương tác</button>
+																</div>`
+							},
+							{
+								targets: 6,
+								data: null,
+								render: function(data, type, row, meta) {
+									let priority = row[6];
 
-								if (priority) {
-									switch (priority) {
-										case "Rất quan trọng":
-											return `<span class="badge badge-danger">${priority}</span>`;
-										case "Quan trọng":
-											return `<span class="badge badge-warning">${priority}</span>`;
-										case "Trung bình":
-											return `<span class="badge badge-primary">${priority}</span>`;
-										default:
-											return `<span class="badge badge-default">${priority || "Chưa có dữ liệu"}</span>`;
+									if (priority) {
+										switch (priority) {
+											case "Rất quan trọng":
+												return `<span class="badge badge-danger">${priority}</span>`;
+											case "Quan trọng":
+												return `<span class="badge badge-warning">${priority}</span>`;
+											case "Trung bình":
+												return `<span class="badge badge-primary">${priority}</span>`;
+											default:
+												return `<span class="badge badge-default">${priority || "Chưa có dữ liệu"}</span>`;
+										}
 									}
-								}
 
-								setTimeout(() => {
-									updateBadgeStyle($(`.radio-badge-group[data-row="${meta.row}"]`), data, meta.row)
-								}, 0);
+									setTimeout(() => {
+										updateBadgeStyle($(`.radio-badge-group[data-row="${meta.row}"]`), data, meta.row)
+									}, 0);
 
-								return `
-										        <div class="radio-badge-group"> 
-										            <input type="radio" id="option1-row${meta.row}" name="priority-row${meta.row}" value="Rất quan trọng" hidden>
-										            <label for="option1-row${meta.row}" class="badge badge-default">Rất quan trọng</label>
-										                                        
-										            <input type="radio" id="option2-row${meta.row}" name="priority-row${meta.row}" value="Quan trọng" hidden>
-										            <label for="option2-row${meta.row}" class="badge badge-default">Quan trọng</label>
-										                                        
-										            <input type="radio" id="option3-row${meta.row}" name="priority-row${meta.row}" value="Trung bình" hidden>
-										            <label for="option3-row${meta.row}" class="badge badge-default">Trung bình</label>
-										        </div>`;
-							}
-						},
-						{
-							targets: 7,
-							render: function(data, type, row, meta) {
-								if (!data || data.trim() === "") {
-									data = "Chưa chăm sóc";
-								}
-
-								if (data === "Đã chăm sóc !") {
 									return `
-									                <div class="alert alert-success" role="alert">
-									                    <strong>Đã chăm sóc!</strong>
-									                </div>
-									            `;
-								} else if (data === "Chưa chăm sóc") {
-									return `
-									                <div class="alert alert-primary" role="alert">
-									                    <strong>Chưa chăm sóc</strong>
-									                </div>
-									            `;
+															        <div class="radio-badge-group"> 
+															            <input type="radio" id="option1-row${meta.row}" name="priority-row${meta.row}" value="Rất quan trọng" hidden>
+															            <label for="option1-row${meta.row}" class="badge badge-default">Rất quan trọng</label>
+															                                        
+															            <input type="radio" id="option2-row${meta.row}" name="priority-row${meta.row}" value="Quan trọng" hidden>
+															            <label for="option2-row${meta.row}" class="badge badge-default">Quan trọng</label>
+															                                        
+															            <input type="radio" id="option3-row${meta.row}" name="priority-row${meta.row}" value="Trung bình" hidden>
+															            <label for="option3-row${meta.row}" class="badge badge-default">Trung bình</label>
+															        </div>`;
 								}
-								return data;
-							}
-						},
-						{
-							targets: 8,
-							data: null,
-							defaultContent: `
-										<div class="action-care">
-											<button class="care-button">
-												<span class="icon"></span>
-												<span class="text">Chăm sóc</span>
-											</button>
-											
-											<button class="meet-button">
-												<span class="icon"></span>
-												<span class="text">Hẹn gặp mặt</span>
-											</button>
-										</div>`
-						},
-					],
-					createdRow: function(row, data, dataIndex) {
-						let priority = data[6];
-						let $radioGroup = $(row).find('.radio-badge-group');
-						let $selectedRadio = $radioGroup.find(`input[value="${priority}"]`);
-						$selectedRadio.prop('checked', true);
-						// Gọi hàm cập nhật màu khi tải dữ liệu
-						updateBadgeStyle($radioGroup, priority);
-					}
-				});
+							},
+							{
+								targets: 7,
+								render: function(data, type, row, meta) {
+									if (!data || data.trim() === "") {
+										data = "Chưa chăm sóc";
+									}
 
-				table.clear();
-				table.rows.add(dataSetCustomerCare).draw(false);
+									if (data === "Đã chăm sóc !") {
+										return `
+														                <div class="alert alert-success" role="alert">
+														                    <strong>Đã chăm sóc!</strong>
+														                </div>
+														            `;
+									} else if (data === "Chưa chăm sóc") {
+										return `
+														                <div class="alert alert-primary" role="alert">
+														                    <strong>Chưa chăm sóc</strong>
+														                </div>
+														            `;
+									}
+									return data;
+								}
+							},
+							{
+								targets: 8,
+								data: null,
+								defaultContent: `
+															<div class="action-care">
+																<button class="care-button">
+																	<span class="icon"></span>
+																	<span class="text">Chăm sóc</span>
+																</button>
+																
+																<button class="meet-button">
+																	<span class="icon"></span>
+																	<span class="text">Hẹn gặp mặt</span>
+																</button>
+															</div>`
+							},
+						],
+						createdRow: function(row, data, dataIndex) {
+							let priority = data[6];
+							let $radioGroup = $(row).find('.radio-badge-group');
+							let $selectedRadio = $radioGroup.find(`input[value="${priority}"]`);
+							$selectedRadio.prop('checked', true);
+							// Gọi hàm cập nhật màu khi tải dữ liệu
+							updateBadgeStyle($radioGroup, priority);
+						}
+					});
+				}
 
 				$('#tblDatatableCustomerCare tbody').on('change', 'input[type="radio"]', function() {
 					let $radioGroup = $(this).closest('.radio-badge-group');
