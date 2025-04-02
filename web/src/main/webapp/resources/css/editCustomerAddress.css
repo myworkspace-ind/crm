@@ -1,0 +1,157 @@
+/* Modal container - centers the modal */
+
+.modal {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+/* Modal content area */
+.modal-content {
+    display: flex;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 1400px;
+    width: 95%;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+
+    /* Centering */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.flex-container {
+    display: flex;
+    width: 100%;
+}
+
+/* Left side form - exactly 50% */
+.modal-content .form-container {
+    width: 50%;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+/* Right side map - exactly 50% */
+.modal-content .map-container {
+    width: 50%;
+    padding-left: 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: #ff4d4d;
+}
+
+/* Form inputs */
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group input::placeholder,
+.form-group select::placeholder {
+    color: #888; /* light grey */
+    opacity: 1; /* ensures the color shows fully in some browsers */
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Error message */
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+}
+
+.error-border {
+    border: 1px solid red;
+}
+
+/* Submit button (blue) */
+.submit-btn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: #0069d9;
+    transform: translateY(-1px);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+    background-color: #0056b3;
+}
+
+/* Map container styling */
+#map {
+    width: 100%;
+    height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-content {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .modal-content .form-container,
+    .modal-content .map-container {
+        width: 100%;
+        padding: 0;
+        margin-top: 20px;
+    }
+
+
+    #map {
+        height: 300px;
+    }
+
+}
+

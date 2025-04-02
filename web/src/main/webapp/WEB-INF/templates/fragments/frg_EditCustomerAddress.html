@@ -1,0 +1,73 @@
+<div th:fragment="addressModal">
+    <div id="address-modal" class="modal">
+        <div class="modal-content">
+            <!-- Flex Container for Form & Map -->
+            <div class="flex-container">
+                <!-- Form Section -->
+                <div class="form-container">
+                    <span id="close-modal" class="close-btn">&times;</span>
+                    <h4>New | Edit Address</h4>
+                    <hr>
+                    <form id="address-form">
+                        <div class="form-group">
+                            <label for="unit-number">Unit Number (Optional):</label>
+                            <input type="text" id="unit-number" placeholder="e.g. Unit 10">
+                        </div>
+                        <div class="form-group">
+                            <label for="street-number">Street Number:</label>
+                            <input type="text" id="street-number" placeholder="e.g. 35">
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="street-name">Street Name:</label>
+                            <input type="text" id="street-name" placeholder="e.g. Collins" >
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="street-type">Street Type:</label>
+                            <input type="text" id="street-type" placeholder="e.g. Rd" >
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="suburb">Suburb:</label>
+                            <input type="text" id="suburb" placeholder="e.g. Sydney" >
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State:</label>
+                            <select id="state" required>
+                                <option value="">Select state</option>
+                                <option value="NSW">New South Wales (NSW)</option>
+                                <option value="VIC">Victoria (VIC)</option>
+                                <option value="QLD">Queensland (QLD)</option>
+                                <option value="WA">Western Australia (WA)</option>
+                                <option value="SA">South Australia (SA)</option>
+                                <option value="TAS">Tasmania (TAS)</option>
+                                <option value="ACT">Australian Capital Territory (ACT)</option>
+                                <option value="NT">Northern Territory (NT)</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="postcode">Postcode:</label>
+                            <input type="text" id="postcode" placeholder="e.g. 2000" >
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country:</label>
+                            <input type="text" id="country" value="Australia" readonly>
+                        </div>
+                        <button type="submit" id="submit" class="submit-btn">Submit Address</button>
+                    </form>
+                </div>
+
+                <!-- Map Section -->
+                <div class="map-container">
+                    <div id="map"> Map Placeholder</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
