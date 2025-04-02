@@ -86,17 +86,19 @@ public class AppRepository {
 		// Sử dụng SimpleJdbcInsert để thực hiện lưu bản ghi mới
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
 				.withTableName("crm_customer_interaction")
-				.usingColumns("interaction_date", "content", "next_plan", "customer_id", "contact_person")
+				.usingColumns("interaction_date", "content", "next_plan", "customer_id", "contact_person", "created_at")
 				.usingGeneratedKeyColumns("id");
 
 		for (Interaction entity : entities) {
 			Long id;
 
 			MapSqlParameterSource params = new MapSqlParameterSource()
-					.addValue("interaction_date", entity.getInteractionDate()).addValue("content", entity.getContent())
+					.addValue("interaction_date", entity.getInteractionDate())
+					.addValue("content", entity.getContent())
 					.addValue("next_plan", entity.getNextPlan())
 					.addValue("customer_id", entity.getCustomer() != null ? entity.getCustomer().getId() : null)
-					.addValue("contact_person", entity.getContactPerson());
+					.addValue("contact_person", entity.getContactPerson())
+					.addValue("created_at", entity.getCreatedAt());
 
 			if (entity.getId() == null) {
 				// Nếu ID của thực thể là null, thực hiện lưu mới
@@ -196,7 +198,8 @@ public class AppRepository {
 
 		// Log the result
 		if (rowsUpdated > 0) {
-			log.debug("Interaction updated successfully with ID: {}", entity.getId());
+			log.info("✅ Interaction cập nhật thành công: ID={} | Date={} | Content={} | NextPlan={} | ContactPerson={}",
+	                 entity.getId(), entity.getInteractionDate(), entity.getContent(), entity.getNextPlan(), entity.getContactPerson());
 		} else {
 			log.warn("No interaction found with ID: {}", entity.getId());
 		}

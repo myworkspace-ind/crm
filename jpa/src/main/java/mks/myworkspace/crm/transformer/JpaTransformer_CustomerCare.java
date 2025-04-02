@@ -18,7 +18,7 @@ public class JpaTransformer_CustomerCare {
 		}
 
 		List<Object[]> lstObject = new ArrayList<>();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss");
 
 		for (Customer customerCare : lstCustomers) {
 	        Object[] rowData = new Object[10];//SL cột 

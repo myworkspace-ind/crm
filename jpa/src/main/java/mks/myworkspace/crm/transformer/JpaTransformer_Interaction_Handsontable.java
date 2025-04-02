@@ -17,8 +17,8 @@ public class JpaTransformer_Interaction_Handsontable {
         List<Object[]> lstObject = new ArrayList<>();
         
         // Định dạng ngày
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         for (Interaction interaction : interactions) {
             // Tạo một mảng Object để chứa dữ liệu của mỗi Interaction
@@ -29,8 +29,8 @@ public class JpaTransformer_Interaction_Handsontable {
             rowData[2] = interaction.getContent();  // Nội dung trao đổi
             rowData[0] = interaction.getContactPerson(); // Người trao đổi
             rowData[3] = interaction.getNextPlan(); // Kế hoạch tiếp theo
-            rowData[4] = interaction.getId(); // ID (để thực hiện các hành động như xóa)
-            rowData[5] = interaction.getCreatedAt() != null ? formatter.format(interaction.getCreatedAt()) : "";
+            rowData[4] = interaction.getCreatedAt() != null ? formatter.format(interaction.getCreatedAt()) : "";
+            rowData[5] = interaction.getId(); // ID (để thực hiện các hành động như xóa)
 
             lstObject.add(rowData);
         }

@@ -439,28 +439,56 @@ $(document).ready(function() {
 								}
 							},
 							{
-								targets: 7,
-								render: function(data, type, row, meta) {
-									if (!data || data.trim() === "") {
-										data = "Chưa chăm sóc";
-									}
+							    targets: 7,
+							    render: function(data, type, row, meta) {
+							        if (!data || data.trim() === "") {
+							            data = "Chưa chăm sóc";
+							        }
 
-									if (data === "Đã chăm sóc !") {
-										return `
-														                <div class="alert alert-success" role="alert">
-														                    <strong>Đã chăm sóc!</strong>
-														                </div>
-														            `;
-									} else if (data === "Chưa chăm sóc") {
-										return `
-														                <div class="alert alert-primary" role="alert">
-														                    <strong>Chưa chăm sóc</strong>
-														                </div>
-														            `;
-									}
-									return data;
-								}
+							        let alerts = [];
+
+							        // Chia data thành các trạng thái nếu có nhiều trạng thái (giả sử các trạng thái phân tách nhau bằng dấu phẩy)
+							        let statuses = data.split(",").map(status => status.trim());
+
+							        // Kiểm tra từng trạng thái và thêm alert vào mảng
+							        statuses.forEach(status => {
+							            if (status === "Đã chăm sóc") {
+							                alerts.push(
+							                    `<div class="alert alert-success" role="alert">
+							                        <strong>Đã chăm sóc</strong>
+							                    </div>`
+							                );
+							            } else if (status === "Chưa chăm sóc") {
+							                alerts.push(
+							                    `<div class="alert alert-primary" role="alert">
+							                        <strong>Chưa chăm sóc</strong>
+							                    </div>`
+							                );
+							            } else if (status === "Chăm sóc đúng hạn") {
+							                alerts.push(
+							                    `<div class="alert alert-info" role="alert">
+							                        <strong>Chăm sóc đúng hạn</strong>
+							                    </div>`
+							                );
+							            } else if (status === "Quá hạn chăm sóc") {
+							                alerts.push(
+							                    `<div class="alert alert-danger" role="alert">
+							                        <strong>Quá hạn chăm sóc</strong>
+							                    </div>`
+							                );
+							            }
+							        });
+
+							        // Nếu có ít nhất một alert, trả về tất cả các alert kết hợp
+							        if (alerts.length > 0) {
+							            return alerts.join(''); // Ghép các alert lại thành chuỗi
+							        }
+
+							        // Nếu không có alert nào, trả về giá trị data
+							        return data;
+							    }
 							},
+
 							{
 								targets: 8,
 								data: null,
