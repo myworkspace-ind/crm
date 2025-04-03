@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import lombok.Getter;
@@ -69,6 +70,9 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	@Getter
 	OrderStatusRepository orderStatusRepository;
+	
+	@Value("${customer.care.max-care-days}")
+	private int reminderDays;
 
 
 //	@Override
@@ -441,5 +445,17 @@ public class StorageServiceImpl implements StorageService {
 		}).collect(Collectors.toList());
 		
 		appRepo.updatePriorityCustomerCare(customerCareLists);
+	}
+	
+	@Override
+	public int updateCustomerCareStatus(int reminderDays) {
+		try {
+			int rowsUpdated = appRepo.updateCustomerCareStatus(reminderDays);
+			log.info("Updated care_status for {} records.", rowsUpdated);
+			
+			return rowsUpdated;
+		} catch (Exception e) {
+			throw new RuntimeException("Lỗi khi cập nhật trạng thái chăm sóc khách hàng: " + e.getMessage());
+		}
 	}
 }

@@ -180,6 +180,42 @@ $(document).ready(function() {
 	console.log("jQuery version:", $.fn.jquery);
 	console.log("DataTables version:", $.fn.dataTable);
 
+	$('#checkCareStatus').on('click', function() {
+		$(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Đang tải...');
+
+		$.ajax({
+			url: _ctx + 'customer-care/update-care-status', // API cập nhật tình trạng chăm sóc
+			method: "PUT",
+			success: function(response) {
+				console.log("✅ API Response:", response);
+
+				Swal.fire({
+					title: "✅ Thành công!",
+					text: response.message || "Cập nhật tình trạng chăm sóc thành công!",
+					icon: "success",
+					confirmButtonText: "OK"
+				}).then(() => {
+					// Tải lại dữ liệu danh sách
+					loadCustomerCareData();
+					location.reload();
+				});
+			},
+			error: function(xhr, error) {
+				console.error("❌ Lỗi khi cập nhật tình trạng chăm sóc:", error);
+				Swal.fire({
+					title: "❌ Lỗi!",
+					text: "Có lỗi xảy ra khi cập nhật tình trạng chăm sóc!",
+					icon: "error",
+					confirmButtonText: "Thử lại"
+				});
+			},
+			complete: function() {
+				$('#checkCareStatus').prop('disabled', false).html('<i class="fa fa-check"></i> CẬP NHẬT TÌNH TRẠNG CHĂM SÓC');
+			}
+		});
+
+	})
+
 	$('#reloadCustomerCare').on('click', function() {
 		//setTimeout(checkUncaredCustomers, 1000);
 
@@ -439,54 +475,54 @@ $(document).ready(function() {
 								}
 							},
 							{
-							    targets: 7,
-							    render: function(data, type, row, meta) {
-							        if (!data || data.trim() === "") {
-							            data = "Chưa chăm sóc";
-							        }
+								targets: 7,
+								render: function(data, type, row, meta) {
+									if (!data || data.trim() === "") {
+										data = "Chưa chăm sóc";
+									}
 
-							        let alerts = [];
+									let alerts = [];
 
-							        // Chia data thành các trạng thái nếu có nhiều trạng thái (giả sử các trạng thái phân tách nhau bằng dấu phẩy)
-							        let statuses = data.split(",").map(status => status.trim());
+									// Chia data thành các trạng thái nếu có nhiều trạng thái (giả sử các trạng thái phân tách nhau bằng dấu phẩy)
+									let statuses = data.split(",").map(status => status.trim());
 
-							        // Kiểm tra từng trạng thái và thêm alert vào mảng
-							        statuses.forEach(status => {
-							            if (status === "Đã chăm sóc") {
-							                alerts.push(
-							                    `<div class="alert alert-success" role="alert">
+									// Kiểm tra từng trạng thái và thêm alert vào mảng
+									statuses.forEach(status => {
+										if (status === "Đã chăm sóc") {
+											alerts.push(
+												`<div class="alert alert-success" role="alert">
 							                        <strong>Đã chăm sóc</strong>
 							                    </div>`
-							                );
-							            } else if (status === "Chưa chăm sóc") {
-							                alerts.push(
-							                    `<div class="alert alert-primary" role="alert">
+											);
+										} else if (status === "Chưa chăm sóc") {
+											alerts.push(
+												`<div class="alert alert-primary" role="alert">
 							                        <strong>Chưa chăm sóc</strong>
 							                    </div>`
-							                );
-							            } else if (status === "Chăm sóc đúng hạn") {
-							                alerts.push(
-							                    `<div class="alert alert-info" role="alert">
+											);
+										} else if (status === "Chăm sóc đúng hạn") {
+											alerts.push(
+												`<div class="alert alert-info" role="alert">
 							                        <strong>Chăm sóc đúng hạn</strong>
 							                    </div>`
-							                );
-							            } else if (status === "Quá hạn chăm sóc") {
-							                alerts.push(
-							                    `<div class="alert alert-danger" role="alert">
-							                        <strong>Quá hạn chăm sóc</strong>
+											);
+										} else if (status === "Chăm sóc trễ hạn") {
+											alerts.push(
+												`<div class="alert alert-danger" role="alert">
+							                        <strong>Chăm sóc trễ hạn</strong>
 							                    </div>`
-							                );
-							            }
-							        });
+											);
+										}
+									});
 
-							        // Nếu có ít nhất một alert, trả về tất cả các alert kết hợp
-							        if (alerts.length > 0) {
-							            return alerts.join(''); // Ghép các alert lại thành chuỗi
-							        }
+									// Nếu có ít nhất một alert, trả về tất cả các alert kết hợp
+									if (alerts.length > 0) {
+										return alerts.join(''); // Ghép các alert lại thành chuỗi
+									}
 
-							        // Nếu không có alert nào, trả về giá trị data
-							        return data;
-							    }
+									// Nếu không có alert nào, trả về giá trị data
+									return data;
+								}
 							},
 
 							{

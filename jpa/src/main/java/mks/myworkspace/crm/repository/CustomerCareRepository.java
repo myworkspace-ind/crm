@@ -12,12 +12,14 @@ import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.CustomerCare;
 
 public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long>, JpaSpecificationExecutor<CustomerCare> {
-	//Chỉ mới xét trường hợp khách hàng Mới và chưa có Interaction
-	@Query("SELECT c FROM Customer c LEFT JOIN Interaction i ON c.id = i.customer.id " +
-			"WHERE c.mainStatus.name = 'Mới' " + 
-			"AND i.id IS NULL " + 
-			"AND c.createdAt <= :twoDaysAgo")
-	List<Customer> findPotentialCustomers(@Param("twoDaysAgo") LocalDateTime twoDaysAgo);
+	//Chỉ mới xét trường hợp khách hàng Mới và chưa có Interaction hoặc có thời gian tạo mới interaction > thời gian nhắc nhở trong customer care
+	@Query("SELECT c FROM Customer c " +
+		       "LEFT JOIN Interaction i ON c.id = i.customer.id " +
+		       "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
+		       "WHERE c.mainStatus.name = 'Mới' " + 
+		       "AND (i.id IS NULL OR i.createdAt > cc.remindDate ) " + 
+		       "AND c.createdAt <= :twoDaysAgo")
+		List<Customer> findPotentialCustomers(@Param("twoDaysAgo") LocalDateTime twoDaysAgo);
 	
 	@Query("SELECT cc FROM CustomerCare cc JOIN FETCH cc.customer")
     List<CustomerCare> findAllCustomerCares();

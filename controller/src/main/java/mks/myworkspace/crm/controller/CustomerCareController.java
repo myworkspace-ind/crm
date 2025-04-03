@@ -48,6 +48,9 @@ public class CustomerCareController extends BaseController{
 	@Value("${customer.care.days-ago-case1}")
 	private int reminderDays;
 	
+	@Value("${customer.care.max-care-days}")
+	private int checkCareStatusDays;
+	
 	@GetMapping("/calendar")
 	public ModelAndView displayCalendar(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("calendar");
@@ -217,4 +220,23 @@ public class CustomerCareController extends BaseController{
 	                .body("Lỗi khi cập nhật priority: " + e.getMessage());
 		}
 	}
+	
+	@PutMapping(value = "/update-care-status", produces = "application/json; charset=UTF-8")
+	public ResponseEntity<?> updateCustomerCareStatus() {
+	    try {
+	        int rowsUpdated = storageService.updateCustomerCareStatus(checkCareStatusDays);
+	        log.info("Updated care_status for {} records.", rowsUpdated);
+
+	        if (rowsUpdated > 0) {
+	            return ResponseEntity.ok(Map.of("message", "Cập nhật thành công", "rowsUpdated", rowsUpdated));
+	        } else {
+	            return ResponseEntity.ok(Map.of("message", "Không có bản ghi nào được cập nhật"));
+	        }
+	    } catch (Exception e) {
+	        log.error("Lỗi khi cập nhật care_status: {}", e.getMessage());
+	        return ResponseEntity.status(500).body(Map.of("error", "Lỗi hệ thống", "message", e.getMessage()));
+	    }
+	}
+	
+	
 }

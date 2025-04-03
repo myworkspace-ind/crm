@@ -74,5 +74,7 @@ public interface StorageService {
 	public EmailToCustomer saveEmailToCustomer(EmailToCustomer emailToCustomer);
 	
 	void updatePriority(List<CustomerCare> lstCustomerCares);
+	
+	public int updateCustomerCareStatus(int reminderDays);
 
 }

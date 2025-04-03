@@ -849,6 +849,32 @@ public class AppRepository {
 	    
 	    log.debug("Total {} records updated successfully.", totalUpdated);
 	}
+	
+	public int updateCustomerCareStatus(int reminderDays) {
+		String updateSql = 
+		        "UPDATE crm_customer_care c " +
+		        "SET care_status = " +
+		        "    CASE " +
+		        "        WHEN EXISTS ( " +
+		        "            SELECT 1 FROM crm_customer_interaction i " +
+		        "            WHERE i.customer_id = c.customer_id " +
+		        "            AND i.created_at BETWEEN c.remind_date AND c.remind_date + INTERVAL ? DAY " +
+		        "        ) THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
 
+		        "        WHEN EXISTS ( " +
+		        "            SELECT 1 FROM crm_customer_interaction i " +
+		        "            WHERE i.customer_id = c.customer_id " +
+		        "            AND i.created_at > c.remind_date + INTERVAL ? DAY " +
+		        "        ) THEN 'Đã chăm sóc, Chăm sóc trễ hạn' " +
 
+		        "        WHEN c.remind_date + INTERVAL ? DAY >= NOW() " +
+		        "        THEN 'Chưa chăm sóc' " +
+
+		        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
+		        "    END " +
+		        "WHERE c.remind_date IS NOT NULL;";
+
+		    return jdbcTemplate0.update(updateSql, reminderDays, reminderDays, reminderDays);
+	}
+	
 }
