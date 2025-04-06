@@ -15,13 +15,8 @@ closeModalButton.addEventListener("click", () => {
     addressModal.style.display = "none";
 });
 
-
 // Wait for the DOM to load before adding event listeners
 document.addEventListener("DOMContentLoaded", function () {
-    const addressForm = document.getElementById("address-form");
-    const customerAddressInput = document.getElementById("address");
-    const addressModal = document.getElementById("address-modal");
-
     if (!addressForm) {
         console.error("Address form not found!");
         return;
@@ -37,14 +32,13 @@ document.addEventListener("DOMContentLoaded", function () {
             return; // Stop execution if validation fails
         }
 
-        const streetNumber = document.getElementById("street-number").value.trim();
-        const streetName = document.getElementById("street-name").value.trim();
+        const streetAddress = document.getElementById("street-address").value.trim();
         const suburb = document.getElementById("suburb").value.trim();
         const state = document.getElementById("state").value.trim();
         const postcode = document.getElementById("postcode").value.trim();
 
         // Combine the address into a formatted string
-        const fullAddress = `${streetNumber} ${streetName}, ${suburb}, ${state}, ${postcode}, Australia`;
+        const fullAddress = `${streetAddress}, ${suburb}, ${state}, ${postcode}, Australia`;
 
         // Set the customer address input field
         customerAddressInput.value = fullAddress;
@@ -69,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Close the modal
         addressModal.style.display = "none";
     });
-
 });
 
 // Close modal when clicking outside the modal content
@@ -79,7 +72,6 @@ window.addEventListener("click", (event) => {
     }
 });
 
-
 // Validate the address modal
 function validateForm() {
     console.log("validateAddress function is running!");
@@ -88,34 +80,14 @@ function validateForm() {
     clearErrors(); // Reset previous errors
 
     // Get input fields
-    const unitNumber = document.getElementById("unit-number");
-    const streetNumber = document.getElementById("street-number");
-    const streetName = document.getElementById("street-name");
-    const streetType = document.getElementById("street-type");
+    const streetAddress = document.getElementById("street-address");
     const suburb = document.getElementById("suburb");
     const state = document.getElementById("state");
     const postcode = document.getElementById("postcode");
 
-    // Validate optional unit number (allow alphanumeric, dashes, and slashes)
-    if (unitNumber.value && !/^[a-zA-Z0-9\s/-]+$/.test(unitNumber.value)) {
-        showError(unitNumber, "Unit number can only contain letters, numbers, dashes, or slashes.");
-        isValid = false;
-    }
-
-    // Validate street number (must be a number)
-    if (!streetNumber.value.trim() || !Number.isInteger(Number(streetNumber.value))) {
-        showError(streetNumber, "Street number must be a valid number.");
-        isValid = false;
-    }
-
-    // Validate required fields
-    if (!streetName.value.trim()) {
-        showError(streetName, "Street name is required.");
-        isValid = false;
-    }
-
-    if (!streetType.value.trim()) {
-        showError(streetType, "Street type is required.");
+    // Validate street address
+    if (!streetAddress.value.trim()) {
+        showError(streetAddress, "Street address is required.");
         isValid = false;
     }
 
@@ -169,8 +141,7 @@ function clearErrors() {
     document.querySelectorAll("input, select").forEach(input => input.style.borderColor = "");
 }
 
-
-//integration google map
+// Integration with Google Map
 let map;
 let marker;
 let geocoder;
@@ -178,6 +149,16 @@ let autocomplete;
 let modalAutocomplete;
 let apiCallCount = 0;
 
+/**
+ * Initialize Google Map and its event listeners.
+ * INPUT: None (uses default configuration for the map and autocomplete API)
+ * PROCESSING:
+ *  - Creates the Google Map centered at a default location.
+ *  - Sets up a draggable marker.
+ *  - Adds "click" event to map for marker placement.
+ *  - Adds autocomplete functionality for the input field.
+ * OUTPUT: Configured map with event listeners for marker updates and address lookups.
+ */
 function initMap() {
     // Default location (Sydney, Australia)
     const defaultLocation = { lat: -33.8568, lng: 151.2153 };
@@ -193,6 +174,7 @@ function initMap() {
         position: defaultLocation,
         map,
         draggable: true,
+        clickable: true
     });
 
     geocoder = new google.maps.Geocoder();
@@ -200,7 +182,6 @@ function initMap() {
     // Main Autocomplete for address input
     autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("address"),
-        { types: ["geocode"], componentRestrictions: { country: "AU" } }
     );
 
     autocomplete.addListener("place_changed", function () {
@@ -226,22 +207,32 @@ function initMap() {
         geocodePosition(marker.getPosition());
     });
 
+    // Add a click event to the map to update the marker and geocode the new position
+    google.maps.event.addListener(map, "click", function (event) {
+        // Get the clicked location
+        const clickedLocation = event.latLng;
+
+        // Move the marker to the clicked location
+        marker.setPosition(clickedLocation);
+
+        // Geocode the new position to update the address
+        geocodePosition(clickedLocation);
+    });
+
     // Attach event to the modal opening
     document.getElementById("address-modal").addEventListener("click", function () {
         setTimeout(setupModalAutocomplete, 500); // Delay to ensure modal is fully loaded
     });
 }
 
-
 // Function to setup Autocomplete in modal
 function setupModalAutocomplete() {
-    let streetName = document.getElementById("street-name");
+    let streetAddress = document.getElementById("street-address");
 
-    if (streetName) {
+    if (streetAddress) {
         // Always create a new instance when the modal opens
-        modalAutocomplete = new google.maps.places.Autocomplete(streetName, {
+        modalAutocomplete = new google.maps.places.Autocomplete(streetAddress, {
             types: ["geocode"],
-            componentRestrictions: { country: "AU" }
         });
 
         modalAutocomplete.addListener("place_changed", function () {
@@ -250,6 +241,16 @@ function setupModalAutocomplete() {
                 alert("No details available for this address.");
                 return;
             }
+
+            // Update the marker position
+            marker.setPosition(place.geometry.location);
+            marker.setMap(map);
+
+            // Update the map center and zoom
+            map.setCenter(place.geometry.location);
+            map.setZoom(17);
+
+            // Fill the modal form
             fillFormFields(place);
         });
     }
@@ -259,7 +260,6 @@ function setupModalAutocomplete() {
 document.getElementById("address-btn").addEventListener("click", function () {
     setTimeout(setupModalAutocomplete, 500); // Ensure modal is loaded
 });
-
 
 // Reverse geocode to update form when marker moves
 function geocodePosition(pos) {
@@ -276,47 +276,85 @@ function geocodePosition(pos) {
     });
 }
 
-// Extract and fill form fields
+/**
+ * Populate modal form fields based on the Google Place or Geocoder result.
+ * INPUT:
+ *  - place {Object} from Google Places/Geocoder API containing address components.
+ * PROCESSING:
+ *  - Extracts parts of an address (street address, suburb, state, etc.).
+ *  - Updates corresponding modal fields with extracted values.
+ * OUTPUT:
+ *  - None (updates HTML input fields directly).
+ */
 function fillFormFields(place) {
-    let streetNumber = "";
-    let streetName = "";
-    let streetType = "";
+    let streetAddress = "";
     let suburb = "";
     let state = "";
     let postcode = "";
-    let country = "Australia";
+    let country = "";
+    let ward = "";
 
-    console.log("Address Components:", place.address_components); // Debugging
+    console.log("Address Components:", place.adr_address);
+
+    // Check if the country is Vietnam
+    const isVietnam = place.address_components.some(component =>
+        component.types.includes("country") && component.long_name === "Vietnam"
+    );
 
     place.address_components.forEach((component) => {
         const types = component.types;
 
-        if (types.includes("street_number")) streetNumber = component.long_name;
-        if (types.includes("route")) {
-            streetName = component.long_name;
-            let streetParts = streetName.split(" ");
-            if (streetParts.length > 1) {
-                streetType = streetParts.pop(); // Extract last word as street type
-                streetName = streetParts.join(" ");
-            }
-        }
-        if (types.includes("locality") || types.includes("sublocality")) suburb = component.long_name;
-        if (types.includes("administrative_area_level_1")) state = component.short_name;
-        if (types.includes("postal_code")) postcode = component.long_name;
+        // Extract street number and route
+        if (types.includes("street_number")) streetAddress += component.long_name + " ";
+        if (types.includes("route")) streetAddress += component.long_name;
+
         if (types.includes("country")) country = component.long_name;
+
+        if (isVietnam) {
+            if (types.includes("administrative_area_level_2") || types.includes("sublocality")) {
+                suburb = component.long_name;
+            }
+            if (types.includes("administrative_area_level_1")) {
+                state = component.long_name;
+            }
+            if (types.includes("postal_code")) {
+                postcode = component.long_name;
+            }
+        } else {
+            if (types.includes("locality") || types.includes("sublocality")) suburb = component.long_name;
+            if (types.includes("administrative_area_level_1")) state = component.long_name;
+            if (types.includes("postal_code")) postcode = component.long_name;
+        }
     });
 
-    console.log("Extracted Street Name:", streetName);
-    console.log("Extracted Street Type:", streetType);
+    //Extract ward from adr_address for Vietnam
+    if (isVietnam && place.adr_address) {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = place.adr_address;
+        const wardSpan = tempDiv.querySelector(".extended-address");
+        if (wardSpan) {
+            ward = wardSpan.textContent.trim();
+            postcode = ward; // ✅ Replace postcode with ward
+        }
+    }
 
-    if (document.getElementById("street-name")) document.getElementById("street-name").value = streetName;
-    if (document.getElementById("street-type")) document.getElementById("street-type").value = streetType;
-    if (document.getElementById("street-number")) document.getElementById("street-number").value = streetNumber;
+    console.log("Extracted Street Address:", streetAddress);
+    console.log("Extracted Suburb (District):", suburb);
+    console.log("Extracted State:", state);
+    console.log("Extracted Postcode (Ward if Vietnam):", postcode);
+    console.log("Extracted Country:", country);
+
+    // Updating the form fields
+    if (document.getElementById("street-address")) document.getElementById("street-address").value = streetAddress;
     if (document.getElementById("suburb")) document.getElementById("suburb").value = suburb;
     if (document.getElementById("state")) document.getElementById("state").value = state;
     if (document.getElementById("postcode")) document.getElementById("postcode").value = postcode;
     if (document.getElementById("country")) document.getElementById("country").value = country;
 }
+
+
+
+
 
 // Assign initMap function to the global window object
 window.initMap = initMap;

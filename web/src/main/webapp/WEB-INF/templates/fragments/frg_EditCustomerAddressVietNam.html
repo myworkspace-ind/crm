@@ -1,4 +1,4 @@
-<div th:fragment="addressModal">
+<div th:fragment="addressModalVietnam">
     <div id="address-modal" class="modal">
         <div class="modal-content">
             <div class="flex-container">
@@ -13,16 +13,25 @@
                             <input type="text" id="street-address" placeholder="e.g. Collins Rd">
                             <span class="error-message"></span>
                         </div>
+
+                        <!-- Ward (Specific to Vietnam) -->
                         <div class="form-group">
-                            <label for="suburb">Suburb/District:</label>
-                            <input type="text" id="suburb" placeholder="e.g. Sydney / Hoàn Kiếm">
+                            <label for="ward">Ward:</label>
+                            <input type="text" id="ward" placeholder="e.g. Phường 1">
                             <span class="error-message"></span>
                         </div>
 
-                        <!-- State/Province -->
+                        <!-- District/Suburb -->
                         <div class="form-group">
-                            <label for="state">State/Province:</label>
-                            <input type="text" id="state" placeholder="e.g. New South Wales / Hà Nội">
+                            <label for="district">District/Suburb:</label>
+                            <input type="text" id="district" placeholder="e.g. Hoàn Kiếm">
+                            <span class="error-message"></span>
+                        </div>
+
+                        <!-- City/State -->
+                        <div class="form-group">
+                            <label for="city">City/State:</label>
+                            <input type="text" id="city" placeholder="e.g. Hanoi">
                             <span class="error-message"></span>
                         </div>
 
@@ -36,7 +45,7 @@
                         <!-- Country Selection -->
                         <div class="form-group">
                             <label for="country">Country:</label>
-                            <input type="text" id="country" placeholder="e.g. AUS">
+                            <input type="text" id="country" placeholder="e.g. Vietnam">
                         </div>
 
                         <button type="submit" id="submit" class="submit-btn">Submit Address</button>
