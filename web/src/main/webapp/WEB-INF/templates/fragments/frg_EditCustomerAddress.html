@@ -13,30 +13,50 @@
                             <input type="text" id="street-address" placeholder="e.g. Collins Rd">
                             <span class="error-message"></span>
                         </div>
-                        <div class="form-group">
-                            <label for="suburb">Suburb/District:</label>
-                            <input type="text" id="suburb" placeholder="e.g. Sydney / Hoàn Kiếm">
-                            <span class="error-message"></span>
+                        <!-- Default Form (Non-Vietnam) -->
+                        <div id="default-address-form">
+                            <div class="form-group">
+                                <label for="suburb">Suburb/District:</label>
+                                <input type="text" id="suburb" placeholder="e.g. Sydney / Hoàn Kiếm">
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State/Province:</label>
+                                <input type="text" id="state" placeholder="e.g. New South Wales / Hà Nội">
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="postcode">Postcode/Zip Code:</label>
+                                <input type="text" id="postcode" placeholder="e.g. 2000">
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country:</label>
+                                <input type="text" id="country" placeholder="e.g. AUS">
+                            </div>
                         </div>
 
-                        <!-- State/Province -->
-                        <div class="form-group">
-                            <label for="state">State/Province:</label>
-                            <input type="text" id="state" placeholder="e.g. New South Wales / Hà Nội">
-                            <span class="error-message"></span>
-                        </div>
-
-                        <!-- Postcode/Zip Code -->
-                        <div class="form-group">
-                            <label for="postcode">Postcode/Zip Code:</label>
-                            <input type="text" id="postcode" placeholder="e.g. 2000">
-                            <span class="error-message"></span>
-                        </div>
-
-                        <!-- Country Selection -->
-                        <div class="form-group">
-                            <label for="country">Country:</label>
-                            <input type="text" id="country" placeholder="e.g. AUS">
+                        <!-- Vietnam Address Form -->
+                        <div id="vietnam-address-form" style="display: none;">
+                            <div class="form-group">
+                                <label for="vn-ward">Ward:</label>
+                                <input type="text" id="vn-ward" placeholder="e.g. Phường 5">
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="vn-district">District:</label>
+                                <input type="text" id="vn-district" placeholder="e.g. Quận 1">
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="vn-city">City:</label>
+                                <input type="text" id="vn-city" placeholder="e.g. Hồ Chí Minh">
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="vn-country">Country:</label>
+                                <input type="text" id="vn-country" value="Vietnam" readonly>
+                            </div>
                         </div>
 
                         <button type="submit" id="submit" class="submit-btn">Submit Address</button>

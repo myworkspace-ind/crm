@@ -102,8 +102,8 @@ function validateForm() {
     }
 
     // Validate postcode (must be exactly 4 digits)
-    if (!/^\d{4}$/.test(postcode.value.trim())) {
-        showError(postcode, "Postcode must be exactly 4 digits.");
+    if (!/^\d$/.test(postcode.value.trim())) {
+        showError(postcode, "Postcode must be number");
         isValid = false;
     }
 
@@ -276,6 +276,23 @@ function geocodePosition(pos) {
     });
 }
 
+
+// Toggle the form visibility based on the country
+function toggleFormFields(isVietnam) {
+    const vietnamForm = document.getElementById("vietnam-address-form");
+    const nonVietnamForm = document.getElementById("default-address-form");
+
+    if (isVietnam) {
+        // Show Vietnam-specific form, hide others
+        vietnamForm.style.display = "block";
+        nonVietnamForm.style.display = "none";
+    } else {
+        // Show non-Vietnam form, hide others
+        vietnamForm.style.display = "none";
+        nonVietnamForm.style.display = "block";
+    }
+}
+
 /**
  * Populate modal form fields based on the Google Place or Geocoder result.
  * INPUT:
@@ -293,22 +310,23 @@ function fillFormFields(place) {
     let postcode = "";
     let country = "";
     let ward = "";
+    let isVietnam = false;
 
     console.log("Address Components:", place.adr_address);
 
     // Check if the country is Vietnam
-    const isVietnam = place.address_components.some(component =>
+    isVietnam = place.address_components.some(component =>
         component.types.includes("country") && component.long_name === "Vietnam"
     );
 
     place.address_components.forEach((component) => {
         const types = component.types;
 
-        // Extract street number and route
         if (types.includes("street_number")) streetAddress += component.long_name + " ";
         if (types.includes("route")) streetAddress += component.long_name;
 
         if (types.includes("country")) country = component.long_name;
+        if (types.includes("postal_code")) postcode = component.long_name;
 
         if (isVietnam) {
             if (types.includes("administrative_area_level_2") || types.includes("sublocality")) {
@@ -317,44 +335,49 @@ function fillFormFields(place) {
             if (types.includes("administrative_area_level_1")) {
                 state = component.long_name;
             }
-            if (types.includes("postal_code")) {
-                postcode = component.long_name;
-            }
         } else {
             if (types.includes("locality") || types.includes("sublocality")) suburb = component.long_name;
             if (types.includes("administrative_area_level_1")) state = component.long_name;
-            if (types.includes("postal_code")) postcode = component.long_name;
         }
     });
 
-    //Extract ward from adr_address for Vietnam
+    // Extract ward for Vietnam if available
     if (isVietnam && place.adr_address) {
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = place.adr_address;
         const wardSpan = tempDiv.querySelector(".extended-address");
         if (wardSpan) {
             ward = wardSpan.textContent.trim();
-            postcode = ward; // ✅ Replace postcode with ward
         }
     }
 
     console.log("Extracted Street Address:", streetAddress);
     console.log("Extracted Suburb (District):", suburb);
     console.log("Extracted State:", state);
-    console.log("Extracted Postcode (Ward if Vietnam):", postcode);
+    console.log("Extracted Postcode:", postcode);
+    console.log("Extracted Ward:", ward);
     console.log("Extracted Country:", country);
 
-    // Updating the form fields
-    if (document.getElementById("street-address")) document.getElementById("street-address").value = streetAddress;
-    if (document.getElementById("suburb")) document.getElementById("suburb").value = suburb;
-    if (document.getElementById("state")) document.getElementById("state").value = state;
-    if (document.getElementById("postcode")) document.getElementById("postcode").value = postcode;
-    if (document.getElementById("country")) document.getElementById("country").value = country;
+    // Updating the form fields based on the country
+    if (isVietnam) {
+        // Vietnam-specific fields
+        if (document.getElementById("street-address")) document.getElementById("street-address").value = streetAddress;
+        if (document.getElementById("vn-ward")) document.getElementById("vn-ward").value = ward;
+        if (document.getElementById("vn-district")) document.getElementById("vn-district").value = suburb;
+        if (document.getElementById("vn-city")) document.getElementById("vn-city").value = state;
+        if (document.getElementById("vn-country")) document.getElementById("vn-country").value = "Vietnam";
+    } else {
+        // Non-Vietnam fields
+        if (document.getElementById("street-address")) document.getElementById("street-address").value = streetAddress;
+        if (document.getElementById("suburb")) document.getElementById("suburb").value = suburb;
+        if (document.getElementById("state")) document.getElementById("state").value = state;
+        if (document.getElementById("postcode")) document.getElementById("postcode").value = postcode;
+        if (document.getElementById("country")) document.getElementById("country").value = country;
+    }
+
+    // Toggle form visibility based on country (Vietnam or not)
+    toggleFormFields(isVietnam);
 }
-
-
-
-
 
 // Assign initMap function to the global window object
 window.initMap = initMap;
