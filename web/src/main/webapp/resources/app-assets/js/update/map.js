@@ -101,9 +101,9 @@ function validateForm() {
         isValid = false;
     }
 
-    // Validate postcode (must be exactly 4 digits)
-    if (!/^\d$/.test(postcode.value.trim())) {
-        showError(postcode, "Postcode must be number");
+    // Validate postcode (must be a number)
+    if (!/^\d+$/.test(postcode.value.trim())) {
+        showError(postcode, "Postcode must be a number");
         isValid = false;
     }
 
