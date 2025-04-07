@@ -33,6 +33,9 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Value("${customer.care.days-ago-case1}")
 	private int daysAgo;
 	
+	@Value("${customer.care.days-ago-case2}")
+	private int daysAgo_case2;
+	
 
 	@Override
 	public CustomerCareRepository getRepo() {
@@ -43,7 +46,8 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	public void loadPotentialCustomersIntoCustomerCare() {
 		try {
 			LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
-            List<Customer> potentialCustomers = repo.findPotentialCustomers(twoDaysAgo);
+			LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
+            List<Customer> potentialCustomers = repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo);
 
             if (potentialCustomers.isEmpty()) {
                 throw new RuntimeException("Không có khách hàng tiềm năng nào để nạp vào CustomerCare.");
@@ -57,7 +61,6 @@ public class CustomerCareServiceImpl implements CustomerCareService{
         } catch (Exception e) {
             throw new RuntimeException("Lỗi khi nạp khách hàng tiềm năng vào CustomerCare: " + e.getMessage());
         }
-		
 	}
 
 	@Override
@@ -68,7 +71,8 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Override
 	public List<Customer> findAllCustomerCare() {
 		LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(2);
-		return repo.findPotentialCustomers(twoDaysAgo);
+		LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
+		return repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo);
 	}
 
 	@Override

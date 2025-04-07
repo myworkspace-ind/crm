@@ -48,6 +48,9 @@ public class CustomerCareController extends BaseController{
 	@Value("${customer.care.days-ago-case1}")
 	private int reminderDays;
 	
+	@Value("${customer.care.days-ago-case2}")
+	private int reminderDays_case2;
+	
 	@Value("${customer.care.max-care-days}")
 	private int checkCareStatusDays;
 	
