@@ -435,16 +435,21 @@ public class StorageServiceImpl implements StorageService {
 		appRepo.saveEmailToCustomer(emailToCustomer);
 		return emailToCustomer;
 	}
+//	@Override
+//	public void updatePriority(List<CustomerCare> customerCareRequests) {
+//		List<CustomerCare> customerCareLists = customerCareRequests.stream().map(request -> {
+//			CustomerCare customerCare = new CustomerCare();
+//			customerCare.setId(request.getId());
+//			customerCare.setPriority(request.getPriority());
+//			return customerCare;
+//		}).collect(Collectors.toList());
+//		
+//		appRepo.updatePriorityCustomerCare(customerCareLists);
+//	}
+	
 	@Override
-	public void updatePriority(List<CustomerCare> customerCareRequests) {
-		List<CustomerCare> customerCareLists = customerCareRequests.stream().map(request -> {
-			CustomerCare customerCare = new CustomerCare();
-			customerCare.setId(request.getId());
-			customerCare.setPriority(request.getPriority());
-			return customerCare;
-		}).collect(Collectors.toList());
-		
-		appRepo.updatePriorityCustomerCare(customerCareLists);
+	public void updatePriority(CustomerCare customerCare) {
+		appRepo.updatePriorityCustomerCare(customerCare);
 	}
 	
 	@Override

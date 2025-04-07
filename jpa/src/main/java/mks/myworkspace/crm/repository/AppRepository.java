@@ -827,27 +827,34 @@ public class AppRepository {
 		}
 	}
 	
-	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
+//	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
+//	    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
+//	    
+//	    int[] rowsUpdated = jdbcTemplate0.batchUpdate(updateSql, new BatchPreparedStatementSetter() {
+//			
+//			@Override
+//			public void setValues(PreparedStatement ps, int i) throws SQLException {
+//				CustomerCare customerCare = customerCareList.get(i);
+//				ps.setString(1, customerCare.getPriority());
+//				ps.setLong(2, customerCare.getId());
+//			}
+//			
+//			@Override
+//			public int getBatchSize() {
+//				return customerCareList.size();
+//			}
+//		});
+//	    
+//	    int totalUpdated = Arrays.stream(rowsUpdated).sum();
+//	    
+//	    log.debug("Total {} records updated successfully.", totalUpdated);
+//	}
+	
+	public void updatePriorityCustomerCare(CustomerCare customerCare) {
 	    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
-	    
-	    int[] rowsUpdated = jdbcTemplate0.batchUpdate(updateSql, new BatchPreparedStatementSetter() {
-			
-			@Override
-			public void setValues(PreparedStatement ps, int i) throws SQLException {
-				CustomerCare customerCare = customerCareList.get(i);
-				ps.setString(1, customerCare.getPriority());
-				ps.setLong(2, customerCare.getId());
-			}
-			
-			@Override
-			public int getBatchSize() {
-				return customerCareList.size();
-			}
-		});
-	    
-	    int totalUpdated = Arrays.stream(rowsUpdated).sum();
-	    
-	    log.debug("Total {} records updated successfully.", totalUpdated);
+	    int rowsUpdated = jdbcTemplate0.update(updateSql, customerCare.getPriority(), customerCare.getId());
+	    	    
+	    log.debug("✅ Cập nhật priority thành công cho ID: {}, rowsUpdated={}", customerCare.getId(), rowsUpdated);
 	}
 	
 	public int updateCustomerCareStatus(int reminderDays) {

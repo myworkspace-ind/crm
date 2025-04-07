@@ -34,26 +34,26 @@ import mks.myworkspace.crm.transformer.JpaTransformer_CustomerCare;
 @Controller
 @Slf4j
 @RequestMapping("/customer-care")
-public class CustomerCareController extends BaseController{
-	
+public class CustomerCareController extends BaseController {
+
 	@Autowired
 	CustomerCareService customerCareService;
-	
+
 	@Autowired
 	CustomerService customerService;
-	
+
 	@Autowired
 	StorageService storageService;
-	
+
 	@Value("${customer.care.days-ago-case1}")
 	private int reminderDays;
-	
+
 	@Value("${customer.care.days-ago-case2}")
 	private int reminderDays_case2;
-	
+
 	@Value("${customer.care.max-care-days}")
 	private int checkCareStatusDays;
-	
+
 	@GetMapping("/calendar")
 	public ModelAndView displayCalendar(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("calendar");
@@ -63,7 +63,7 @@ public class CustomerCareController extends BaseController{
 
 		return mav;
 	}
-	
+
 	@GetMapping("/general")
 	public ModelAndView displayCustomerCarePage(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("customerCare");
@@ -73,124 +73,119 @@ public class CustomerCareController extends BaseController{
 
 		return mav;
 	}
-	
+
 	@GetMapping(value = "/check-exist/{customerCareId}")
-	public ResponseEntity<Map<String, Boolean>> checkCustomerCare(@PathVariable Long customerCareId){
+	public ResponseEntity<Map<String, Boolean>> checkCustomerCare(@PathVariable Long customerCareId) {
 		boolean exists = customerCareService.checkCustomerCareIDExists(customerCareId);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("exists", exists);
-		
+
 		return ResponseEntity.ok(response);
 	}
-	
+
 	@GetMapping(value = "/load-potential", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<?> loadPotentialCustomers() {
-        try {
-            customerCareService.loadPotentialCustomersIntoCustomerCare();
-            return ResponseEntity.ok("Nạp khách hàng tiềm năng vào CustomerCare thành công!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Lỗi khi nạp khách hàng: " + e.getMessage());
-        }
-    }
-	
+	public ResponseEntity<?> loadPotentialCustomers() {
+		try {
+			customerCareService.loadPotentialCustomersIntoCustomerCare();
+			return ResponseEntity.ok("Nạp khách hàng tiềm năng vào CustomerCare thành công!");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Lỗi khi nạp khách hàng: " + e.getMessage());
+		}
+	}
+
 	@GetMapping(value = "/check-unsaved-customercare", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> checkUnsavedCustomerCare() {
-	    try {
-	        List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();
-	        List<CustomerCare> customersWithCareData = customerCareService.findAll();
+		try {
+			List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();
+			List<CustomerCare> customersWithCareData = customerCareService.findAll();
 
-	        if (customersNeedCares.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-	                                 .body("Không có khách hàng nào cần chăm sóc.");
-	        }
-	        
-	        Set<Long> customersWithCareIds = customersWithCareData.stream()
-	        														.map(c ->c.getCustomer().getId())
-	        														.collect(Collectors.toSet());
+			if (customersNeedCares.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Không có khách hàng nào cần chăm sóc.");
+			}
 
-	        // Danh sách chứa dữ liệu từ crm_customer_care
-	        List<CustomerCare> customersWithData = new ArrayList<>();
-	        // Danh sách chưa có dữ liệu
-	        List<Customer> customersWithoutData = new ArrayList<>();
+			Set<Long> customersWithCareIds = customersWithCareData.stream().map(c -> c.getCustomer().getId())
+					.collect(Collectors.toSet());
 
-	        for (Customer customer : customersNeedCares) {
-	        	if(customersWithCareIds.contains(customer.getId())) {
-	        		// Lấy CustomerCare tương ứng
-	        		customersWithCareData.stream()
-	        			.filter(cc -> cc.getCustomer().getId().equals(customer.getId()))
-	        			.findFirst()
-	        			.ifPresent(customersWithData::add);
-	        	} else {
-	                customersWithoutData.add(customer);
-	            }
-	        }
+			// Danh sách chứa dữ liệu từ crm_customer_care
+			List<CustomerCare> customersWithData = new ArrayList<>();
+			// Danh sách chưa có dữ liệu
+			List<Customer> customersWithoutData = new ArrayList<>();
 
-	        // Chuyển đổi từng danh sách riêng
-	        List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData, customersNeedCares);
-	        List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData, reminderDays);
+			for (Customer customer : customersNeedCares) {
+				if (customersWithCareIds.contains(customer.getId())) {
+					// Lấy CustomerCare tương ứng
+					customersWithCareData.stream().filter(cc -> cc.getCustomer().getId().equals(customer.getId()))
+							.findFirst().ifPresent(customersWithData::add);
+				} else {
+					customersWithoutData.add(customer);
+				}
+			}
 
-	        // Gom tất cả lại và trả về response
-	        Map<String, Object> response = new HashMap<>();
-	        response.put("customersWithData", convertedWithData);
-	        response.put("customersWithoutData", convertedWithoutData);
+			// Chuyển đổi từng danh sách riêng
+			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
+					customersNeedCares);
+			List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData,
+					reminderDays);
 
-	        return ResponseEntity.ok(response);
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
-	    }
+			// Gom tất cả lại và trả về response
+			Map<String, Object> response = new HashMap<>();
+			response.put("customersWithData", convertedWithData);
+			response.put("customersWithoutData", convertedWithoutData);
+
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
+		}
 	}
-	
+
 	@GetMapping(value = "/load-customer-care", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> getPotentialCustomers() {
-	    try {
-	        List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();
-	        List<CustomerCare> customersWithCareData = customerCareService.findAll();
+		try {
+			List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();
+			List<CustomerCare> customersWithCareData = customerCareService.findAll();
 
-	        if (customersNeedCares.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-	                                 .body("Không có khách hàng nào cần chăm sóc.");
-	        }
-	        
-	        Set<Long> customersWithCareIds = customersWithCareData.stream()
-	        														.map(c ->c.getCustomer().getId())
-	        														.collect(Collectors.toSet());
+			if (customersNeedCares.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Không có khách hàng nào cần chăm sóc.");
+			}
 
-	        // Danh sách chứa dữ liệu từ crm_customer_care
-	        List<CustomerCare> customersWithData = new ArrayList<>();
-	        // Danh sách chưa có dữ liệu
-	        List<Customer> customersWithoutData = new ArrayList<>();
+			Set<Long> customersWithCareIds = customersWithCareData.stream().map(c -> c.getCustomer().getId())
+					.collect(Collectors.toSet());
 
-	        for (Customer customer : customersNeedCares) {
-	        	if(customersWithCareIds.contains(customer.getId())) {
-	        		// Lấy CustomerCare tương ứng
-	        		customersWithCareData.stream()
-	        			.filter(cc -> cc.getCustomer().getId().equals(customer.getId()))
-	        			.findFirst()
-	        			.ifPresent(customersWithData::add);
-	        	} else {
-	                customersWithoutData.add(customer);
-	            }
-	        }
+			// Danh sách chứa dữ liệu từ crm_customer_care
+			List<CustomerCare> customersWithData = new ArrayList<>();
+			// Danh sách chưa có dữ liệu
+			List<Customer> customersWithoutData = new ArrayList<>();
 
-	        // Chuyển đổi từng danh sách riêng
-	        List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData, customersNeedCares);
-	        List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData, reminderDays);
+			for (Customer customer : customersNeedCares) {
+				if (customersWithCareIds.contains(customer.getId())) {
+					// Lấy CustomerCare tương ứng
+					customersWithCareData.stream().filter(cc -> cc.getCustomer().getId().equals(customer.getId()))
+							.findFirst().ifPresent(customersWithData::add);
+				} else {
+					customersWithoutData.add(customer);
+				}
+			}
 
-	        // Gom tất cả lại và trả về response
-	        Map<String, Object> response = new HashMap<>();
-	        response.put("customersWithData", convertedWithData);
-	        response.put("customersWithoutData", convertedWithoutData);
+			// Chuyển đổi từng danh sách riêng
+			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
+					customersNeedCares);
+			List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData,
+					reminderDays);
 
-	        return ResponseEntity.ok(response);
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
-	    }
+			// Gom tất cả lại và trả về response
+			Map<String, Object> response = new HashMap<>();
+			response.put("customersWithData", convertedWithData);
+			response.put("customersWithoutData", convertedWithoutData);
+
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
+		}
 	}
-	
-	
+
 //	@GetMapping(value = "/notify-potential", produces = "application/json; charset=UTF-8")
 //	public ResponseEntity<?> getPotentialCustomersForNotification() {
 //	    try {
@@ -207,39 +202,55 @@ public class CustomerCareController extends BaseController{
 //	                .body("Lỗi khi lấy thông báo khách hàng cần chăm sóc: " + e.getMessage());
 //	    }
 //	}
-	
+
+//	@PutMapping(value = "/update-priority", produces = "application/json; charset=UTF-8")
+//	public ResponseEntity<?> updatePriority(@RequestBody List<CustomerCare> customerCareLists){
+//		try {
+//			if (customerCareLists == null || customerCareLists.isEmpty()) {
+//				return ResponseEntity.badRequest().body("Danh sách khách hàng cần chăm sóc trống.");
+//			}
+//			
+//			storageService.updatePriority(customerCareLists);
+//			return ResponseEntity.ok("Cập nhật priority thành công cho " + customerCareLists.size() + " khách hàng.");
+//			
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//	                .body("Lỗi khi cập nhật priority: " + e.getMessage());
+//		}
+//	}
+
 	@PutMapping(value = "/update-priority", produces = "application/json; charset=UTF-8")
-	public ResponseEntity<?> updatePriority(@RequestBody List<CustomerCare> customerCareLists){
+	public ResponseEntity<?> updatePriority(@RequestBody CustomerCare customerCare) {
 		try {
-			if (customerCareLists == null || customerCareLists.isEmpty()) {
-				return ResponseEntity.badRequest().body("Danh sách khách hàng cần chăm sóc trống.");
+			if (customerCare == null || customerCare.getId() == null) {
+				return ResponseEntity.badRequest().body(Map.of("error", "Dữ liệu khách hàng không hợp lệ."));
 			}
-			
-			storageService.updatePriority(customerCareLists);
-			return ResponseEntity.ok("Cập nhật priority thành công cho " + customerCareLists.size() + " khách hàng.");
-			
+
+			storageService.updatePriority(customerCare);
+			return ResponseEntity.ok(
+					Map.of("message", "Cập nhật priority thành công cho khách hàng có ID: " + customerCare.getId()));
+
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                .body("Lỗi khi cập nhật priority: " + e.getMessage());
+					.body(Map.of("error", "Lỗi khi cập nhật priority: " + e.getMessage()));
 		}
 	}
-	
+
 	@PutMapping(value = "/update-care-status", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> updateCustomerCareStatus() {
-	    try {
-	        int rowsUpdated = storageService.updateCustomerCareStatus(checkCareStatusDays);
-	        log.info("Updated care_status for {} records.", rowsUpdated);
+		try {
+			int rowsUpdated = storageService.updateCustomerCareStatus(checkCareStatusDays);
+			log.info("Updated care_status for {} records.", rowsUpdated);
 
-	        if (rowsUpdated > 0) {
-	            return ResponseEntity.ok(Map.of("message", "Cập nhật thành công", "rowsUpdated", rowsUpdated));
-	        } else {
-	            return ResponseEntity.ok(Map.of("message", "Không có bản ghi nào được cập nhật"));
-	        }
-	    } catch (Exception e) {
-	        log.error("Lỗi khi cập nhật care_status: {}", e.getMessage());
-	        return ResponseEntity.status(500).body(Map.of("error", "Lỗi hệ thống", "message", e.getMessage()));
-	    }
+			if (rowsUpdated > 0) {
+				return ResponseEntity.ok(Map.of("message", "Cập nhật thành công", "rowsUpdated", rowsUpdated));
+			} else {
+				return ResponseEntity.ok(Map.of("message", "Không có bản ghi nào được cập nhật"));
+			}
+		} catch (Exception e) {
+			log.error("Lỗi khi cập nhật care_status: {}", e.getMessage());
+			return ResponseEntity.status(500).body(Map.of("error", "Lỗi hệ thống", "message", e.getMessage()));
+		}
 	}
-	
-	
+
 }

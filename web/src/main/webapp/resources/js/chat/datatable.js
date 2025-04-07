@@ -263,7 +263,7 @@ $(document).ready(function() {
 	})
 
 	$('#tblDatatableCustomerCare tbody').on('click', '.btn-save', function() {
-		let updateList = [];
+		//let updateList = [];
 
 		let $row = $(this).closest('tr'); // Lấy hàng chứa nút được nhấn
 		let customerCareId = $row.find('td:first').text().trim();
@@ -298,14 +298,20 @@ $(document).ready(function() {
 					return;
 				}
 
-				updateList.push({ id: parseInt(customerCareId), priority });
-				console.log("🔄 Dữ liệu gửi đi:", updateList);
+				//updateList.push({ id: parseInt(customerCareId), priority });
+				//console.log("🔄 Dữ liệu gửi đi:", updateList);
+
+				const updateData = {
+					id: parseInt(customerCareId),
+					priority: priority
+				};
+				console.log("🔄 Gửi dữ liệu:", updateData);
 
 				$.ajax({
 					url: _ctx + 'customer-care/update-priority',
 					method: "PUT",
 					headers: { "Content-Type": "application/json" },
-					data: JSON.stringify(updateList),
+					data: JSON.stringify(updateData),
 					success: function(response) {
 						alert("Cập nhật thành công!");
 						console.log("✅ API Response:", response);
