@@ -3,16 +3,19 @@ package mks.myworkspace.crm.transformer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.CustomerCare;
+import mks.myworkspace.crm.entity.Interaction;
 
 @Slf4j
 public class JpaTransformer_CustomerCare {
 	
-	public static List<Object[]> convert2D_Customers(List<Customer> lstCustomers, int reminderDays) {
+	public static List<Object[]> convert2D_Customers(List<Customer> lstCustomers, int reminderDays, int reminderDaysCase2) {
 		if (lstCustomers == null || lstCustomers.isEmpty()) {
 			return null;
 		}
@@ -24,50 +27,51 @@ public class JpaTransformer_CustomerCare {
 	        Object[] rowData = new Object[10];//SL cột 
 	        
 	        rowData[0] = customerCare.getId(); // ID
+	        rowData[1] = customerCare.getId(); // ID
 	        rowData[2] = customerCare.getCompanyName();
 	        rowData[3] = customerCare.getContactPerson();
 	        rowData[4] = customerCare.getMainStatus().getName();
 	        
 	        //Tính toán ngày nhắc nhở (Ngày nhắc nhở = Ngày tạo mới KH + reminderDays)
-	        if (customerCare.getCreatedAt() != null) {
-                LocalDateTime reminderDate = customerCare.getCreatedAt().plusDays(reminderDays);
-                rowData[9] = reminderDate.format(formatter);
-            } else {
-                rowData[9] = "Không xác định"; // Nếu không có ngày tạo
-            }
+//	        if (customerCare.getCreatedAt() != null) {
+//                LocalDateTime reminderDate = customerCare.getCreatedAt().plusDays(reminderDays);
+//                rowData[9] = reminderDate.format(formatter);
+//            } else {
+//                rowData[9] = "Không xác định"; // Nếu không có ngày tạo
+//            }
 	        
-//	        String mainStatus = rowData[4].toString();
-//
-//			if ("Mới".equals(mainStatus)) {
-//				// Nếu là khách hàng mới và chưa có interaction nào
-//				if (customerCare.getInteractions() == null || customerCare.getInteractions().isEmpty()) {
-//					if (customerCare.getCreatedAt() != null) {
-//						LocalDateTime reminderDate = customerCare.getCreatedAt().plusDays(reminderDays);
-//						rowData[9] = reminderDate.format(formatter);
-//					} else {
-//						rowData[9] = "Không xác định";
-//					}
-//				} else {
-//					rowData[9] = "Đã có interaction";
-//				}
-//			} else if ("Tiềm năng".equals(mainStatus)) {
-//				// Nếu là Tiềm năng và có interaction, lấy interaction mới nhất
-//				if (customerCare.getInteractions() != null && !customerCare.getInteractions().isEmpty()) {
-//					Optional<Interaction> latestInteraction = customerCare.getInteractions().stream()
-//							.filter(i -> i.getCreatedAt() != null).max(Comparator.comparing(Interaction::getCreatedAt));
-//
-//					if (latestInteraction.isPresent()) {
-//						LocalDateTime reminderDate = latestInteraction.get().getCreatedAt().plusDays(reminderDays);
-//						rowData[9] = reminderDate.format(formatter);
-//					} else {
-//						rowData[9] = "Không xác định";
-//					}
-//				} else {
-//					rowData[9] = "Không có interaction";
-//				}
-//			} else {
-//				rowData[9] = "Không xác định";
-//			}
+	        String mainStatus = rowData[4].toString();
+
+			if ("Mới".equals(mainStatus)) {
+				// Nếu là khách hàng mới và chưa có interaction nào
+				if (customerCare.getInteractions() == null || customerCare.getInteractions().isEmpty()) {
+					if (customerCare.getCreatedAt() != null) {
+						LocalDateTime reminderDate = customerCare.getCreatedAt().plusDays(reminderDays);
+						rowData[9] = reminderDate.format(formatter);
+					} else {
+						rowData[9] = "Không xác định";
+					}
+				} else {
+					rowData[9] = "Đã có interaction";
+				}
+			} else if ("Tiềm năng".equals(mainStatus)) {
+				// Nếu là Tiềm năng và có interaction, lấy interaction mới nhất
+				if (customerCare.getInteractions() != null && !customerCare.getInteractions().isEmpty()) {
+					Optional<Interaction> latestInteraction = customerCare.getInteractions().stream()
+							.filter(i -> i.getCreatedAt() != null).max(Comparator.comparing(Interaction::getCreatedAt));
+
+					if (latestInteraction.isPresent()) {
+						LocalDateTime reminderDate = latestInteraction.get().getCreatedAt().plusDays(reminderDaysCase2);
+						rowData[9] = reminderDate.format(formatter);
+					} else {
+						rowData[9] = "Không xác định";
+					}
+				} else {
+					rowData[9] = "Không có interaction";
+				}
+			} else {
+				rowData[9] = "Không xác định";
+			}
 	        
 	        lstObject.add(rowData);
 	    }
@@ -91,6 +95,8 @@ public class JpaTransformer_CustomerCare {
 
 	        if (customerCare.getCustomer() != null) {
 	            Long customerId = customerCare.getCustomer().getId();
+	            rowData[1] = customerId;
+	            
 	            Customer matchingCustomer = allCustomers.stream()
 	                .filter(gc -> gc.getId().equals(customerId))
 	                .findFirst()

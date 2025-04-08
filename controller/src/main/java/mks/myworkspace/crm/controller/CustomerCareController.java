@@ -126,7 +126,7 @@ public class CustomerCareController extends BaseController {
 			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
 					customersNeedCares);
 			List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData,
-					reminderDays);
+					reminderDays, reminderDays_case2);
 
 			// Gom tất cả lại và trả về response
 			Map<String, Object> response = new HashMap<>();
@@ -172,7 +172,7 @@ public class CustomerCareController extends BaseController {
 			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
 					customersNeedCares);
 			List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData,
-					reminderDays);
+					reminderDays, reminderDays_case2);
 
 			// Gom tất cả lại và trả về response
 			Map<String, Object> response = new HashMap<>();

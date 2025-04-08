@@ -7,6 +7,9 @@
 	<link rel="stylesheet" type="text/css" th:href="@{resources/css/chatAssistant.css}">	
 
 	<th:block th:include="fragments/head"></th:block>
+	
+	<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
 </head>
 
 <body>
@@ -419,9 +422,32 @@
 	<div id="chat-assistant" class="chat-box">
 		<div id="chat-messages"></div>
 	</div>
-</body>
 	
+	<!-- Modal -->
+	<div class="modal fade" id="customerDetailModal_CustomerCare" tabindex="-1" aria-labelledby="customerDetailModalLabel_CustomerCare" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="customerDetailModalLabel_CustomerCare" style="color: white !important">Thông tin khách hàng</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+	      </div>
+	      <div class="modal-body" id="modalCustomerDetailBody_CustomerCare">
+	        <!-- Nội dung sẽ được load động tại đây -->
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<th:block th:replace="~{fragments/frg_Modal_Interaction :: modalFragment('myInteractionCustomerCaresModal')}"></th:block>
+	
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
 	<!-- Chat Assistant JavaScript -->
+	<script type="text/javascript" th:src="@{/resources/js/interaction/interaction.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/js/chat/datatable.js}" ></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/chatAssistant.js}"></script>
+	
+</body>
+	
 </html>

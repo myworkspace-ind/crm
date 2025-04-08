@@ -13,8 +13,8 @@ import mks.myworkspace.crm.entity.CustomerCare;
 
 public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long>, JpaSpecificationExecutor<CustomerCare> {
 	//Chỉ mới xét trường hợp khách hàng Mới và chưa có Interaction hoặc có thời gian tạo mới interaction > thời gian nhắc nhở trong customer care
-	@Query("SELECT c FROM Customer c " +
-		       "LEFT JOIN Interaction i ON c.id = i.customer.id " +
+	@Query("SELECT DISTINCT c FROM Customer c " +
+		       "LEFT JOIN FETCH c.interactions i " + //fetch luôn interactions
 		       "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
 		       "WHERE ( " +
 		       "   c.mainStatus.name = 'Mới' AND " +

@@ -69,6 +69,7 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	}
 
 	@Override
+	@Transactional
 	public List<Customer> findAllCustomerCare() {
 		LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(2);
 		LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);

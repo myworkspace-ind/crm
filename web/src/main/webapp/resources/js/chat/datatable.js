@@ -180,6 +180,51 @@ $(document).ready(function() {
 	console.log("jQuery version:", $.fn.jquery);
 	console.log("DataTables version:", $.fn.dataTable);
 
+	$('#myInteractionCustomerCaresModal').on('show.bs.modal', function(event) {
+		const button = $(event.relatedTarget);
+		const customerId = button.data('customer-id');
+
+		// Gán vào global để dùng chỗ khác
+		window.customerId = customerId;
+
+		if (customerId) {
+			if (typeof loadTableData === 'function') {
+				loadTableData(customerId);
+			} else {
+				console.error('Hàm loadTableData chưa được định nghĩa');
+			}
+		} else {
+			console.error('Không có customerId');
+		}
+	})
+
+	$(document).on('click', '.company-name-link', function() {
+		const id = $(this).data('customer-id');
+
+		$.ajax({
+			url: _ctx + `customer/customerDetailJson?id=${id}`, // ← thay đổi tùy route backend
+			type: 'GET',
+			success: function(data) {
+				// Ví dụ data là object chứa info khách hàng
+				const html = `
+								<p><strong>Tên CTY:</strong> ${data.companyName}</p>
+								<p><strong>Email:</strong> ${data.email}</p>
+								<p><strong>SĐT:</strong> ${data.phone}</p>
+								<p><strong>Trạng thái chính:</strong> ${data.mainStatus}</p>
+								<p><strong>Trạng thái phụ:</strong> ${data.subStatus}</p>
+								<p><strong>Người phụ trách:</strong> ${data.responsiblePerson}</p>
+								<p><strong>Ghi chú:</strong> ${data.note}</p>
+							`;
+
+				$('#modalCustomerDetailBody_CustomerCare').html(html);
+				$('#customerDetailModal_CustomerCare').modal('show');
+			},
+			error: function(err) {
+				alert("Không thể tải thông tin chi tiết khách hàng.");
+			}
+		});
+	});
+
 	$('#checkCareStatus').on('click', function() {
 		$(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Đang tải...');
 
@@ -434,15 +479,53 @@ $(document).ready(function() {
 							},
 							{
 								targets: 2,
-								className: 'company-name-column'
+								data: null,
+								render: function(data, type, row, meta) {
+									const customerId = row[0];
+									const companyName = row[2];
+
+									return `<span class="company-name-link" style="cursor:pointer;" data-customer-id="${customerId}">${companyName}</span>`;
+								}
+							},
+							//							{
+							//								targets: 2,
+							//								className: 'company-name-column'
+							//							},
+							{
+								targets: 4,
+								data: null,
+								render: function(data, type, row, meta) {
+									let mainStatus = row[4];
+
+									if (mainStatus) {
+										switch (mainStatus) {
+											case "Mới":
+												return `<span class="badge badge-new">${mainStatus}</span>`;
+											case "Tiềm năng":
+												return `<span class="badge badge-potential">${mainStatus}</span>`;
+											case "Chốt":
+												return `<span class="badge badge-stay">${mainStatus}</span>`;
+											default:
+												return `<span class="badge badge-default">${mainStatus || "Chưa có dữ liệu"}</span>`;
+										}
+									}
+								}
 							},
 							{
 								targets: 5,
 								data: null,
-								defaultContent: `
-																<div class="interaction-btn-customer-care" style="cursor: pointer;">
-																	<button>Xem tương tác</button>
-																</div>`
+								render: function(data, type, row, meta) {
+									return `
+							      <div class="interaction-btn-customer-care" style="cursor: pointer;">
+							        <button 
+							          class="btn-view-interaction" 
+							          data-customer-id="${row[1]}" 
+							          data-bs-toggle="modal" 
+							          data-bs-target="#myInteractionCustomerCaresModal">
+							          Xem tương tác
+							        </button>
+							      </div>`;
+								}
 							},
 							{
 								targets: 6,

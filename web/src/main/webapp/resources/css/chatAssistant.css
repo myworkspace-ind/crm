@@ -271,7 +271,7 @@
 /* 	transition: color 0.3s ease !important; */
 /* } */
 
-.company-name-column:hover{
+.company-name-link:hover{
 	color: #1261A6 !important;
 	transition: color 0.3s ease !important;
 	cursor: pointer;
@@ -339,6 +339,24 @@ input[type="radio"]:checked+label.badge-primary {
 .badge-primary {
     background-color: #007bff;
     color: white;
+}
+
+.badge-new {
+    background-color: #ffb3ba;
+    color: #df1204 !important;
+    font-size: 15px !important;
+}
+
+.badge-potential {
+	background-color: #bae1ff;
+    color: #035eda !important;
+    font-size: 15px !important;
+}
+
+.badge-stay {
+	background-color: #baffc9;
+    color: #04a436 !important;
+    font-size: 15px !important;
 }
 
 .btn-group-customer-care {

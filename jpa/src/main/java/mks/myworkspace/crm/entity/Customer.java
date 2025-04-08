@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -88,8 +89,8 @@ public class Customer implements Serializable {
     @Column(name = "account_status")
     private Boolean accountStatus;
     
-//    @OneToMany(mappedBy = "customer")
-//    private List<Interaction> interactions;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Interaction> interactions;
 
     
     

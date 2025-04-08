@@ -51,6 +51,7 @@ import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
+import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.CustomerService_Son;
@@ -139,6 +140,33 @@ public class CustomerController extends BaseController {
 //                    .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
 //		}
 //	}
+	
+	@GetMapping("/customerDetailJson")
+	@ResponseBody
+	public ResponseEntity<?> getCustomerDetailJson(@RequestParam("id") Long customerId) {
+		Optional<Customer> customerOpt = customerService.findById_ForCustomerCare(customerId);
+
+		if (customerOpt.isPresent()) {
+			Customer c = customerOpt.get();
+			
+			CustomerDetailDTO dto = new CustomerDetailDTO(
+					c.getId(),
+					c.getCompanyName(),
+					c.getEmail(),
+					c.getPhone(),
+					c.getAddress(),
+					c.getContactPerson(),
+					c.getMainStatus() != null ? c.getMainStatus().getName() : null,
+					c.getSubStatus() != null ? c.getSubStatus().getName(): null,
+					c.getResponsiblePerson() != null ? c.getResponsiblePerson().getName() : null,
+					c.getBirthday() != null ? c.getBirthday().toString() : null,
+					c.getNote()
+			);
+			return ResponseEntity.ok(dto);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+		}
+	}
 	
 	@PostMapping("/send-email-to-customer")
 	public ResponseEntity<?> sendEmail(@RequestParam("to") String to,
