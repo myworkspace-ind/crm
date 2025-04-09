@@ -1,12 +1,10 @@
 package mks.myworkspace.crm.repository;
 
 import java.nio.charset.StandardCharsets;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +13,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -883,4 +880,50 @@ public class AppRepository {
 
 		    return jdbcTemplate0.update(updateSql, reminderDays, reminderDays, reminderDays);
 	}
+
+//	public int updateCustomerCareStatus(int reminderDaysForNew, int reminderDaysForPotential) {
+//	    String updateSql =
+//	        "UPDATE crm_customer_care c " +
+//	        "LEFT JOIN ( " +
+//	        "    SELECT i1.* FROM crm_customer_interaction i1 " +
+//	        "    INNER JOIN ( " +
+//	        "        SELECT customer_id, MAX(created_at) AS latest_created " +
+//	        "        FROM crm_customer_interaction " +
+//	        "        GROUP BY customer_id " +
+//	        "    ) i2 ON i1.customer_id = i2.customer_id AND i1.created_at = i2.latest_created " +
+//	        ") latest_interaction ON c.customer_id = latest_interaction.customer_id " +
+//	        "SET c.care_status = " +
+//	        "  CASE " +
+//	        "    WHEN c.main_status = 'Mới' THEN ( " +
+//	        "      CASE " +
+//	        "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
+//	        "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
+//	        "        WHEN latest_interaction.created_at > DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
+//	        "          THEN 'Đã chăm sóc, Chăm sóc trễ hạn' " +
+//	        "        WHEN DATE_ADD(c.remind_date, INTERVAL ? DAY) >= NOW() " +
+//	        "          THEN 'Chưa chăm sóc' " +
+//	        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
+//	        "      END " +
+//	        "    ) " +
+//	        "    WHEN c.main_status = 'Tiềm năng' THEN ( " +
+//	        "      CASE " +
+//	        "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
+//	        "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
+//	        "        WHEN latest_interaction.created_at > DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
+//	        "          THEN 'Đã chăm sóc, Chăm sóc trễ hạn' " +
+//	        "        WHEN DATE_ADD(c.remind_date, INTERVAL ? DAY) >= NOW() " +
+//	        "          THEN 'Chưa chăm sóc' " +
+//	        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
+//	        "      END " +
+//	        "    ) " +
+//	        "    ELSE c.care_status " +
+//	        "  END " +
+//	        "WHERE c.remind_date IS NOT NULL";
+//
+//	    return jdbcTemplate0.update(updateSql,
+//	        reminderDaysForNew, reminderDaysForNew, reminderDaysForNew,
+//	        reminderDaysForPotential, reminderDaysForPotential, reminderDaysForPotential
+//	    );
+//	}
+
 }
