@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<!-- START COMMON META AND TITLE -->
+<th:block th:include="fragments/common_meta_title"></th:block>
+<meta charset="UTF-8">
+<!-- END COMMON META AND TITLE -->
+
+<!-- START COMMON CSS -->
+<th:block th:include="fragments/common_css"></th:block>
+<!-- END COMMON CSS -->
+
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/customerCare.css}" />
+<th:block th:include="fragments/head"></th:block>
+
+</head>
+<body>
+
+	<div class="container text-center">
+        <h4 class="mb-3 fw-bold">Chọn Nội Dung Chăm Sóc</h4>
+        <label class="option-card">
+            <input type="radio" name="option">
+            <div>
+				<h4 style="text-align: justify;" class="text-info" >🎂 Nhắc Nhở Sinh Nhật & Ngày Kỷ Niệm</h4>
+				<p style="text-align: justify;">Gửi email/tin nhắn chúc mừng kèm voucher hoặc ưu đãi đặc biệt.</p>
+			</div>
+		</label>
+        
+        <label class="option-card">
+            <input type="radio" name="option">
+            <div>
+				<h4 style="text-align: justify;" class="text-warning" >🔁 Chăm Sóc Định Kỳ</h4>
+				<p style="text-align: justify;">Gửi email/tin nhắn hỏi thăm, giới thiệu sản phẩm mới, tặng quà cho khách hàng thân thiết</p>
+			</div>
+        </label>
+        
+        <label class="option-card">
+            <input type="radio" name="option">
+            <div>
+				<h4 style="text-align: justify;" class="text-success" >📞 Tư Vấn Chủ Động</h4>
+				<p style="text-align: justify;">Đề xuất sản phẩm/dịch vụ phù hợp dựa trên lịch sử mua hàng, nhân viên chủ động gọi điện hoặc gửi email chăm sóc</p>
+			</div>
+        </label>
+        
+        <button id="okButton" class="btn btn-primary mt-3">OK</button>
+    </div>
+	
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+	
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/customerCare.js}"></script>
+    
+</body>
+</html>

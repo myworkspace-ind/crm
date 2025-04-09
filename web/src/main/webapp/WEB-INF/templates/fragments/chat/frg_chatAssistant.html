@@ -7,6 +7,10 @@
 	<link rel="stylesheet" type="text/css" th:href="@{resources/css/chatAssistant.css}">	
 
 	<th:block th:include="fragments/head"></th:block>
+	
+	<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
+	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+	
 </head>
 
 <body>
@@ -31,7 +35,7 @@
 	            <li class="mb-3">
 	                <div class="bg-light p-2 rounded">
 	                    <p class="mb-1 text-dark">Nhắc nhở: Bạn đang có 
-		                    <span style="font-weight: 600;">10 khách hàng</span> cần chăm sóc ngay. Đừng bỏ lỡ họ!
+		                    <span style="font-weight: 600;">SL khách hàng</span> cần chăm sóc ngay. Đừng bỏ lỡ họ!
 		                    <span class="click-here" id="click-here">Click vào đây!</span>
 	                    </p>
 	                    <small class="text-muted">Hôm nay, 09:00 AM</small>
@@ -69,6 +73,9 @@
 	            <!-- <button id="minimize-btn-modal" class="modal-btn">Minimize</button> -->
 	            <button id="reloadCustomerCare" class="modal-btn btn btn-warning" style="color: black !important">
 					<i class="fa fa-sync"></i> LƯU DANH SÁCH
+				</button>
+				<button id="checkCareStatus" class="modal-btn btn btn-danger" style="color: white !important">
+					<i class="fa fa-check"></i> CẬP NHẬT TÌNH TRẠNG CHĂM SÓC
 				</button>
 				<button id="close-btn-modal" class="modal-btn">Đóng</button>
 	        </div>
@@ -416,9 +423,31 @@
 	<div id="chat-assistant" class="chat-box">
 		<div id="chat-messages"></div>
 	</div>
-</body>
 	
+	<!-- Modal -->
+	<div class="modal fade" id="customerDetailModal_CustomerCare" tabindex="-1" aria-labelledby="customerDetailModalLabel_CustomerCare" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="customerDetailModalLabel_CustomerCare" style="color: white !important">Thông tin khách hàng</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+	      </div>
+	      <div class="modal-body" id="modalCustomerDetailBody_CustomerCare">
+	        <!-- Nội dung sẽ được load động tại đây -->
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<th:block th:replace="~{fragments/frg_Modal_Interaction :: modalFragment('myInteractionCustomerCaresModal')}"></th:block>
+	
+
 	<!-- Chat Assistant JavaScript -->
+	
+	<script type="text/javascript" th:src="@{/resources/js/interaction/interaction.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/js/chat/datatable.js}" ></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/chatAssistant.js}"></script>
+	
+</body>
+	
 </html>

@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -85,17 +86,19 @@ public class AppRepository {
 		// Sử dụng SimpleJdbcInsert để thực hiện lưu bản ghi mới
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0)
 				.withTableName("crm_customer_interaction")
-				.usingColumns("interaction_date", "content", "next_plan", "customer_id", "contact_person")
+				.usingColumns("interaction_date", "content", "next_plan", "customer_id", "contact_person", "created_at")
 				.usingGeneratedKeyColumns("id");
 
 		for (Interaction entity : entities) {
 			Long id;
 
 			MapSqlParameterSource params = new MapSqlParameterSource()
-					.addValue("interaction_date", entity.getInteractionDate()).addValue("content", entity.getContent())
+					.addValue("interaction_date", entity.getInteractionDate())
+					.addValue("content", entity.getContent())
 					.addValue("next_plan", entity.getNextPlan())
 					.addValue("customer_id", entity.getCustomer() != null ? entity.getCustomer().getId() : null)
-					.addValue("contact_person", entity.getContactPerson());
+					.addValue("contact_person", entity.getContactPerson())
+					.addValue("created_at", entity.getCreatedAt());
 
 			if (entity.getId() == null) {
 				// Nếu ID của thực thể là null, thực hiện lưu mới
@@ -195,7 +198,8 @@ public class AppRepository {
 
 		// Log the result
 		if (rowsUpdated > 0) {
-			log.debug("Interaction updated successfully with ID: {}", entity.getId());
+			log.info("✅ Interaction cập nhật thành công: ID={} | Date={} | Content={} | NextPlan={} | ContactPerson={}",
+	                 entity.getId(), entity.getInteractionDate(), entity.getContent(), entity.getNextPlan(), entity.getContactPerson());
 		} else {
 			log.warn("No interaction found with ID: {}", entity.getId());
 		}
@@ -801,44 +805,83 @@ public class AppRepository {
 	}
 	
 	//Khong khai bao bien trong vong lap
-	
-	public void insertCustomerCare(List<CustomerCare> customerCares) {
-	    String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
-	    String insertSql = "INSERT INTO crm_customer_care (customer_id) VALUES (?)";
-	    
-	    Boolean exists;
+	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDays) {
+		String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
+		String insertSql = "INSERT INTO crm_customer_care (customer_id, remind_date) VALUES (?, ?)";
 
-	    for (CustomerCare care : customerCares) {
-	        exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, care.getCustomer().getId());
+		Boolean exists;
+		LocalDateTime reminderTime;
 
-	        if (Boolean.FALSE.equals(exists)) { // Nếu chưa tồn tại, thì insert
-	            jdbcTemplate0.update(insertSql, care.getCustomer().getId());
-	        }
-	    }
+		for (CustomerCare care : customerCares) {
+			exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, care.getCustomer().getId());
+
+			if (Boolean.FALSE.equals(exists)) { // Nếu chưa tồn tại, thì insert
+				if (care.getCustomer().getCreatedAt() != null) {
+					reminderTime = care.getCustomer().getCreatedAt().plusDays(reminderDays);
+				} else {
+					reminderTime = null; 
+				}
+
+				jdbcTemplate0.update(insertSql, care.getCustomer().getId(), reminderTime);
+			}
+		}
 	}
 	
-	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
+//	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
+//	    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
+//	    
+//	    int[] rowsUpdated = jdbcTemplate0.batchUpdate(updateSql, new BatchPreparedStatementSetter() {
+//			
+//			@Override
+//			public void setValues(PreparedStatement ps, int i) throws SQLException {
+//				CustomerCare customerCare = customerCareList.get(i);
+//				ps.setString(1, customerCare.getPriority());
+//				ps.setLong(2, customerCare.getId());
+//			}
+//			
+//			@Override
+//			public int getBatchSize() {
+//				return customerCareList.size();
+//			}
+//		});
+//	    
+//	    int totalUpdated = Arrays.stream(rowsUpdated).sum();
+//	    
+//	    log.debug("Total {} records updated successfully.", totalUpdated);
+//	}
+	
+	public void updatePriorityCustomerCare(CustomerCare customerCare) {
 	    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
-	    
-	    int[] rowsUpdated = jdbcTemplate0.batchUpdate(updateSql, new BatchPreparedStatementSetter() {
-			
-			@Override
-			public void setValues(PreparedStatement ps, int i) throws SQLException {
-				CustomerCare customerCare = customerCareList.get(i);
-				ps.setString(1, customerCare.getPriority());
-				ps.setLong(2, customerCare.getId());
-			}
-			
-			@Override
-			public int getBatchSize() {
-				return customerCareList.size();
-			}
-		});
-	    
-	    int totalUpdated = Arrays.stream(rowsUpdated).sum();
-	    
-	    log.debug("Total {} records updated successfully.", totalUpdated);
+	    int rowsUpdated = jdbcTemplate0.update(updateSql, customerCare.getPriority(), customerCare.getId());
+	    	    
+	    log.debug("✅ Cập nhật priority thành công cho ID: {}, rowsUpdated={}", customerCare.getId(), rowsUpdated);
 	}
+	
+	public int updateCustomerCareStatus(int reminderDays) {
+		String updateSql = 
+		        "UPDATE crm_customer_care c " +
+		        "SET care_status = " +
+		        "    CASE " +
+		        "        WHEN EXISTS ( " +
+		        "            SELECT 1 FROM crm_customer_interaction i " +
+		        "            WHERE i.customer_id = c.customer_id " +
+		        "            AND i.created_at BETWEEN c.remind_date AND c.remind_date + INTERVAL ? DAY " +
+		        "        ) THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
 
+		        "        WHEN EXISTS ( " +
+		        "            SELECT 1 FROM crm_customer_interaction i " +
+		        "            WHERE i.customer_id = c.customer_id " +
+		        "            AND i.created_at > c.remind_date + INTERVAL ? DAY " +
+		        "        ) THEN 'Đã chăm sóc, Chăm sóc trễ hạn' " +
 
+		        "        WHEN c.remind_date + INTERVAL ? DAY >= NOW() " +
+		        "        THEN 'Chưa chăm sóc' " +
+
+		        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
+		        "    END " +
+		        "WHERE c.remind_date IS NOT NULL;";
+
+		    return jdbcTemplate0.update(updateSql, reminderDays, reminderDays, reminderDays);
+	}
+	
 }

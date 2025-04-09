@@ -51,6 +51,7 @@ import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
+import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.CustomerService_Son;
@@ -139,6 +140,33 @@ public class CustomerController extends BaseController {
 //                    .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
 //		}
 //	}
+	
+	@GetMapping("/customerDetailJson")
+	@ResponseBody
+	public ResponseEntity<?> getCustomerDetailJson(@RequestParam("id") Long customerId) {
+		Optional<Customer> customerOpt = customerService.findById_ForCustomerCare(customerId);
+
+		if (customerOpt.isPresent()) {
+			Customer c = customerOpt.get();
+			
+			CustomerDetailDTO dto = new CustomerDetailDTO(
+					c.getId(),
+					c.getCompanyName(),
+					c.getEmail(),
+					c.getPhone(),
+					c.getAddress(),
+					c.getContactPerson(),
+					c.getMainStatus() != null ? c.getMainStatus().getName() : null,
+					c.getSubStatus() != null ? c.getSubStatus().getName(): null,
+					c.getResponsiblePerson() != null ? c.getResponsiblePerson().getName() : null,
+					c.getBirthday() != null ? c.getBirthday().toString() : null,
+					c.getNote()
+			);
+			return ResponseEntity.ok(dto);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+		}
+	}
 	
 	@PostMapping("/send-email-to-customer")
 	public ResponseEntity<?> sendEmail(@RequestParam("to") String to,
@@ -666,8 +694,8 @@ public class CustomerController extends BaseController {
 		List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
 
 		// Cấu trúc bảng
-		int[] colWidths = { 200, 200, 380, 300, 30 };
-		String[] colHeaders = { "Người trao đổi", "Ngày", "Nội dung trao đổi", "Kế hoạch tiếp theo", "" };
+		int[] colWidths = { 200, 200, 300, 300, 200, 30 };
+		String[] colHeaders = { "Người trao đổi", "Ngày tương tác (dự kiến)", "Nội dung trao đổi", "Kế hoạch tiếp theo", "Ngày tạo", "" };
 
 		// Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
 		Map<String, Object> response = new HashMap<>();

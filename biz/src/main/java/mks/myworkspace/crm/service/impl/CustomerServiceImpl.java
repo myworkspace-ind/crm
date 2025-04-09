@@ -238,6 +238,11 @@ public class CustomerServiceImpl implements CustomerService {
         return repo.findAll(combinedSpec, pageable);
     }
 
+	@Override
+	public Optional<Customer> findById_ForCustomerCare(Long customerId) {
+		 return repo.findById_ForCustomerCare(customerId);
+	}
+
 //	@Override
 //	public List<Customer> findPotentialCustomers() {
 //		return repo.findPotentialCustomers();

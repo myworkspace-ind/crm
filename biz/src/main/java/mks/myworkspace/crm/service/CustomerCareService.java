@@ -19,4 +19,6 @@ public interface CustomerCareService {
 	List<Customer> findAllCustomerCare();
 	
 	boolean existsInCustomerCares(Long customerId);
+	
+	boolean checkCustomerCareIDExists(Long customerCareId);
 }

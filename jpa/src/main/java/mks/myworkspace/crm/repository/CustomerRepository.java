@@ -47,6 +47,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSp
     @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss WHERE c.id = :id")
     Optional<Customer> findById(@Param("id") Long id);
     
+    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.mainStatus ms LEFT JOIN FETCH c.subStatus ss LEFT JOIN FETCH c.interactions i WHERE c.id = :id")
+    Optional<Customer> findById_ForCustomerCare(@Param("id") Long id);
+    
     @Query("SELECT COALESCE(MAX(c.id), 0) FROM Customer c")
     Long findMaxId();
     
