@@ -183,9 +183,7 @@ $(document).ready(function() {
 	$('#myInteractionCustomerCaresModal').on('show.bs.modal', function(event) {
 		const button = $(event.relatedTarget);
 		const customerId = button.data('customer-id');
-
-		// Gán vào global để dùng chỗ khác
-		window.customerId = customerId;
+		window.id = customerId;
 
 		if (customerId) {
 			if (typeof loadTableData === 'function') {
@@ -193,6 +191,7 @@ $(document).ready(function() {
 			} else {
 				console.error('Hàm loadTableData chưa được định nghĩa');
 			}
+			console.log("customer id tai datatable cua chat la: ", customerId);
 		} else {
 			console.error('Không có customerId');
 		}
@@ -481,7 +480,7 @@ $(document).ready(function() {
 								targets: 2,
 								data: null,
 								render: function(data, type, row, meta) {
-									const customerId = row[0];
+									const customerId = row[1];
 									const companyName = row[2];
 
 									return `<span class="company-name-link" style="cursor:pointer;" data-customer-id="${customerId}">${companyName}</span>`;

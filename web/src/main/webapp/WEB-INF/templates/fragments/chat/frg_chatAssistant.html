@@ -10,6 +10,7 @@
 	
 	<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
 	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
+	
 </head>
 
 <body>
@@ -440,10 +441,9 @@
 	
 	<th:block th:replace="~{fragments/frg_Modal_Interaction :: modalFragment('myInteractionCustomerCaresModal')}"></th:block>
 	
-	<!-- START COMMON JAVASCRIPT -->
-	<th:block th:include="fragments/common_javascript"></th:block>
-	<!-- END COMMON JAVASCRIPT -->
+
 	<!-- Chat Assistant JavaScript -->
+	
 	<script type="text/javascript" th:src="@{/resources/js/interaction/interaction.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/js/chat/datatable.js}" ></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/chatAssistant.js}"></script>
