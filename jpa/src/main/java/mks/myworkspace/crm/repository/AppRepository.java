@@ -883,5 +883,4 @@ public class AppRepository {
 
 		    return jdbcTemplate0.update(updateSql, reminderDays, reminderDays, reminderDays);
 	}
-	
 }

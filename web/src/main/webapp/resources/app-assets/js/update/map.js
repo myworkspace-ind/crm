@@ -181,7 +181,7 @@ function initMap() {
 
     // Main Autocomplete for address input
     autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById("address"),
+        document.getElementById("address")
     );
 
     autocomplete.addListener("place_changed", function () {
