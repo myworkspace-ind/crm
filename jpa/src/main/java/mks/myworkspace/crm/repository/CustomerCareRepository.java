@@ -19,20 +19,22 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 		       "WHERE ( " +
 		       "   c.mainStatus.name = 'Mới' AND " +
 		       "   (i.id IS NULL OR i.createdAt > cc.remindDate) AND " +
-		       "   c.createdAt <= :twoDaysAgo " +
+		       "   c.createdAt <= :caseDaysAgo_1 " +
 		       ") OR ( " +
 		       "   c.mainStatus.name = 'Tiềm năng' AND " +
 		       "   EXISTS ( " +
 		       "       SELECT 1 FROM Interaction i2 " +
 		       "       WHERE i2.customer.id = c.id " +
 		       "       GROUP BY i2.customer.id " +
-		       "       HAVING MAX(i2.createdAt) <= :case2DaysAgo " +
+		       "       HAVING MAX(i2.createdAt) <= :caseDaysAgo_2 " +
 		       "   ) " +
+		       ") OR (" +
+		       "   cc.remindDate IS NOT NULL " + 
 		       ")")
-		List<Customer> findPotentialCustomers(
-		    @Param("twoDaysAgo") LocalDateTime twoDaysAgo,
-		    @Param("case2DaysAgo") LocalDateTime case2DaysAgo
-		);
+	List<Customer> findPotentialCustomers(
+	    @Param("caseDaysAgo_1") LocalDateTime caseDaysAgo_1,
+	    @Param("caseDaysAgo_2") LocalDateTime caseDaysAgo_2
+	);
 	
 	@Query("SELECT cc FROM CustomerCare cc JOIN FETCH cc.customer")
     List<CustomerCare> findAllCustomerCares();

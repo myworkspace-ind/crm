@@ -75,6 +75,6 @@ public interface StorageService {
 	
 	void updatePriority(CustomerCare lstCustomerCares);
 	
-	public int updateCustomerCareStatus(int reminderDays);
+	public int updateCustomerCareStatus(int reminderDaysForNew_Case1, int reminderDaysForPotential_Case1);
 
 }

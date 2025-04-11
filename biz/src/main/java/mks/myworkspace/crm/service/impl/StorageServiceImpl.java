@@ -3,7 +3,6 @@ package mks.myworkspace.crm.service.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,8 +70,11 @@ public class StorageServiceImpl implements StorageService {
 	@Getter
 	OrderStatusRepository orderStatusRepository;
 	
-	@Value("${customer.care.max-care-days}")
-	private int reminderDays;
+	@Value("${customer.care.max-care-days-new-case1}")
+	private int reminderDaysForNew_Case1;
+	
+	@Value("${customer.care.max-care-days-potential-case1}")
+	private int reminderDaysForPotential_Case1;
 
 
 //	@Override
@@ -453,9 +455,9 @@ public class StorageServiceImpl implements StorageService {
 	}
 	
 	@Override
-	public int updateCustomerCareStatus(int reminderDays) {
+	public int updateCustomerCareStatus(int reminderDaysForNew_Case1, int reminderDaysForPotential_Case1) {
 		try {
-			int rowsUpdated = appRepo.updateCustomerCareStatus(reminderDays);
+			int rowsUpdated = appRepo.updateCustomerCareStatus(reminderDaysForNew_Case1, reminderDaysForPotential_Case1);
 			log.info("Updated care_status for {} records.", rowsUpdated);
 			
 			return rowsUpdated;

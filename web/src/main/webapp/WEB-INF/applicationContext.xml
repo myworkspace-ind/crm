@@ -22,8 +22,10 @@
     <!-- Cấu hình SMTP -->
     <property name="host" value="smtp.gmail.com" /> <!-- Thay bằng SMTP host của bạn -->
     <property name="port" value="587" /> <!-- Cổng SMTP (587 cho TLS) -->
-    <property name="username" value="crm.mekongsolution@gmail.com" /> <!-- Tên người dùng (email gửi) -->
-    <property name="password" value="exfc mvlv ltbp qyfc" /> <!-- Mật khẩu của email gửi -->
+<!--     <property name="username" value="crm.mekongsolution@gmail.com" /> Tên người dùng (email gửi) -->
+<!--     <property name="password" value="exfc mvlv ltbp qyfc" /> Mật khẩu của email gửi -->
+	<property name="username" value="crm.mekongsolution.email2@gmail.com" /> <!-- Tên người dùng (email gửi) -->
+    <property name="password" value="xhgy jxvr vlrm pdgm" /> <!-- Mật khẩu của email gửi -->
 
     <!-- Các thuộc tính thêm cho JavaMail -->
     <property name="javaMailProperties">

@@ -52,6 +52,7 @@ import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
+import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.CustomerService_Son;
@@ -206,34 +207,73 @@ public class CustomerController extends BaseController {
 	    }
 	}
 	
+	//Chuyển sang EmailToCustomerDTO để tránh bị lỗi: LazyInitializationException trong Spring MVC
+	
 	@GetMapping("/get-email-to-customer")
-	public ResponseEntity<List<EmailToCustomer>> getEmailsByCustomerId(@RequestParam("customerId") Long customerId){
+	public ResponseEntity<List<EmailToCustomerDTO>> getEmailsByCustomerId(@RequestParam("customerId") Long customerId){
 		List<EmailToCustomer> emails = emailToCustomerService.getAllEmailToCustomer(customerId);
-		return new ResponseEntity<>(emails, HttpStatus.OK);
+        List<EmailToCustomerDTO> dtos = emails.stream()
+            .map(EmailToCustomerDTO::new)
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
 	}
 	
 	@GetMapping("/get-detail-email-to-customer")
 	@ResponseBody
 	public ResponseEntity<?> getEmailToCustomerById(@RequestParam("emailToCustomerId") Long emailToCustomerId) {
 		try {
-			if(emailToCustomerId == null) {
+			// Validate input
+			if (emailToCustomerId == null) {
 				return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID không được để trống."));
 			}
-			
+
+			// Get data from service
 			Optional<EmailToCustomer> etcOpt = emailToCustomerService.GetEmailToCustomerByID(emailToCustomerId);
-			
-			if(etcOpt.isEmpty()) {
+
+			// Check if email exists
+			if (etcOpt.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(Map.of("errorMessage", "Email với ID " + emailToCustomerId + " không tồn tại."));
 			}
-			
+
+			// Convert to DTO
+			EmailToCustomer email = etcOpt.get();
+			EmailToCustomerDTO emailDTO = new EmailToCustomerDTO(email);
+
+			// Return success response with DTO
 			return ResponseEntity.ok()
-					.body(Map.of("message", "Email gửi tới khách hàng đã được tìm thấy!", "email", etcOpt.get()));
+					.body(Map.of("message", "Email gửi tới khách hàng đã được tìm thấy!", "email", emailDTO));
 		} catch (Exception e) {
+			// Log the error for debugging
+			log.error("Error getting email details for ID: " + emailToCustomerId, e);
+
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
 					"Có lỗi xảy ra khi lấy thông tin email. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
 	}
+	
+//	@GetMapping("/get-detail-email-to-customer")
+//	@ResponseBody
+//	public ResponseEntity<?> getEmailToCustomerById(@RequestParam("emailToCustomerId") Long emailToCustomerId) {
+//		try {
+//			if(emailToCustomerId == null) {
+//				return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID không được để trống."));
+//			}
+//			
+//			Optional<EmailToCustomer> etcOpt = emailToCustomerService.GetEmailToCustomerByID(emailToCustomerId);
+//			
+//			if(etcOpt.isEmpty()) {
+//				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//						.body(Map.of("errorMessage", "Email với ID " + emailToCustomerId + " không tồn tại."));
+//			}
+//			
+//			return ResponseEntity.ok()
+//					.body(Map.of("message", "Email gửi tới khách hàng đã được tìm thấy!", "email", etcOpt.get()));
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
+//					"Có lỗi xảy ra khi lấy thông tin email. Vui lòng thử lại sau!", "details", e.getMessage()));
+//		}
+//	}
 	
 	@Value("classpath:responsible-person/responsible-person-demo.json")
 	private Resource resResponsiblePersonDemo;
