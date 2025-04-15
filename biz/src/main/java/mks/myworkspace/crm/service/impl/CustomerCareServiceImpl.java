@@ -17,6 +17,7 @@ import mks.myworkspace.crm.repository.CustomerCareRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.service.CustomerCareService;
 
+
 @Service
 @Transactional
 @Slf4j
@@ -41,7 +42,18 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	public CustomerCareRepository getRepo() {
 		return repo;
 	}
-
+	
+	/**
+	 * Loads potential customers who need care into the CustomerCare table.
+	 * <p>
+	 * This method identifies potential customers based on specific conditions 
+	 * (e.g., status is "Mới" or "Tiềm năng", remind dates, and latest interaction dates),
+	 * and inserts them into the {@code crm_customer_care} table if they are not already present.
+	 * </p>
+	 * 
+	 * @throws RuntimeException if there are no potential customers to insert,
+	 *                          or if an error occurs during insertion.
+	 */
 	@Override
 	public void loadPotentialCustomersIntoCustomerCare() {
 		try {
@@ -62,12 +74,18 @@ public class CustomerCareServiceImpl implements CustomerCareService{
             throw new RuntimeException("Lỗi khi nạp khách hàng tiềm năng vào CustomerCare: " + e.getMessage());
         }
 	}
-
+	
+	/**
+	 * Find/Fetch all customer_care's data in table crm_customer_care (data from customer_care)
+	 */
 	@Override
 	public List<CustomerCare> findAll() {
 		return repo.findAllCustomerCares();
 	}
-
+	
+	/**
+	 * Find/Fetch all customers' data in table crm_customer who need care (data from customer)
+	 */
 	@Override
 	@Transactional
 	public List<Customer> findAllCustomerCare() {

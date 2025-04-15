@@ -35,6 +35,25 @@ import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 
+/**
+ * This repository class is used for handling data operations such as insert, udpate, delete and 
+ * hide releted to various entities in the application.
+ * <p>
+ * This class uses {@link JdbcTemplate} and {@link SimpleJdbcInsert} for executing
+ * SQL operations directly on the database.
+ * </p>
+ * 
+ * It also interacts with multiple repositories such as:
+ * {@link CustomerRepository}, {@link OrderStatusRepository}, {@link GoodsCategoryRepository}, 
+ * and {@link OrderCategoryRepository}.
+ * 
+ * Logging is supported via Lombok's {@code @Slf4j}.
+ * 
+ * @author Le Ngoc Thach
+ * @author Nguyen Hoang Phuong Ngan
+ * @author CRM Team
+ * @version 1.0
+ */
 @Repository
 @Slf4j
 public class AppRepository {
@@ -54,10 +73,7 @@ public class AppRepository {
 	@Autowired
 	OrderCategoryRepository orderCategoryRepository;
 
-	/**
-	 * @param entities
-	 * @return
-	 */
+	
 //	public Long saveOrUpdate(Customer customer) {
 //		Long id;
 //		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_customer")
@@ -127,6 +143,7 @@ public class AppRepository {
 			log.warn("No interaction found with ID {} to delete.", interactionId);
 		}
 	}
+	
 	public void deletePersonById(Long Id) {
 		// Tạo câu lệnh DELETE với ID duy nhất
 		String sql = "DELETE FROM crm_responsible_person WHERE id = ?";
@@ -801,6 +818,14 @@ public class AppRepository {
 		}
 	}
 	
+	/**
+	 * Inserts a list of customer care records into the {@code crm_customer_care} table
+	 * if they do not already exist.
+	 * Sets the reminder date as customer creation date plus the given days.
+	 * 
+	 * @param customerCares List of {@link CustomerCare} objects representing customer care data.
+	 * @param reminderDays  Days for setting the reminder date in customer_care.
+	 */
 	//Khong khai bao bien trong vong lap
 	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDays) {
 		String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
@@ -824,28 +849,14 @@ public class AppRepository {
 		}
 	}
 	
-//	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
-//	    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
-//	    
-//	    int[] rowsUpdated = jdbcTemplate0.batchUpdate(updateSql, new BatchPreparedStatementSetter() {
-//			
-//			@Override
-//			public void setValues(PreparedStatement ps, int i) throws SQLException {
-//				CustomerCare customerCare = customerCareList.get(i);
-//				ps.setString(1, customerCare.getPriority());
-//				ps.setLong(2, customerCare.getId());
-//			}
-//			
-//			@Override
-//			public int getBatchSize() {
-//				return customerCareList.size();
-//			}
-//		});
-//	    
-//	    int totalUpdated = Arrays.stream(rowsUpdated).sum();
-//	    
-//	    log.debug("Total {} records updated successfully.", totalUpdated);
-//	}
+	/**
+	 * Updates the priority of a specific customer care record.
+	 *
+	 * @param customerCare the {@link CustomerCare} object containing the ID and new priority value
+	 * 
+	 * This method updates the "priority" field of a customer care record in the "crm_customer_care" table
+	 * based on the provided {@code customerCare.getId()} and sets the new value from {@code customerCare.getPriority()}.
+	 */
 	
 	public void updatePriorityCustomerCare(CustomerCare customerCare) {
 	    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
@@ -854,33 +865,25 @@ public class AppRepository {
 	    log.debug("✅ Cập nhật priority thành công cho ID: {}, rowsUpdated={}", customerCare.getId(), rowsUpdated);
 	}
 	
-//	public int updateCustomerCareStatus(int reminderDays) {
-//		String updateSql = 
-//		        "UPDATE crm_customer_care c " +
-//		        "SET care_status = " +
-//		        "    CASE " +
-//		        "        WHEN EXISTS ( " +
-//		        "            SELECT 1 FROM crm_customer_interaction i " +
-//		        "            WHERE i.customer_id = c.customer_id " +
-//		        "            AND i.created_at BETWEEN c.remind_date AND c.remind_date + INTERVAL ? DAY " +
-//		        "        ) THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
-//
-//		        "        WHEN EXISTS ( " +
-//		        "            SELECT 1 FROM crm_customer_interaction i " +
-//		        "            WHERE i.customer_id = c.customer_id " +
-//		        "            AND i.created_at > c.remind_date + INTERVAL ? DAY " +
-//		        "        ) THEN 'Đã chăm sóc, Chăm sóc trễ hạn' " +
-//
-//		        "        WHEN c.remind_date + INTERVAL ? DAY >= NOW() " +
-//		        "        THEN 'Chưa chăm sóc' " +
-//
-//		        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
-//		        "    END " +
-//		        "WHERE c.remind_date IS NOT NULL;";
-//
-//		    return jdbcTemplate0.update(updateSql, reminderDays, reminderDays, reminderDays);
-//	}
-
+	/**
+	 * Updates the care status of all customer care records based on the latest customer interactions.
+	 *
+	 * <p>The method performs a bulk update on the "crm_customer_care" table using business rules
+	 * that depend on the customer's current status ("Mới" or "Tiềm năng") and the time difference
+	 * between their reminder date and the last interaction date.</p>
+	 *
+	 * <p>Status is updated to one of the following:</p>
+	 * <ul>
+	 *   <li>"Đã chăm sóc, Chăm sóc đúng hạn"</li>
+	 *   <li>"Đã chăm sóc, Chăm sóc trễ hạn"</li>
+	 *   <li>"Chưa chăm sóc"</li>
+	 *   <li>"Chưa chăm sóc, Chăm sóc trễ hạn"</li>
+	 * </ul>
+	 *
+	 * @param reminderDaysForNew_Case1 number of allowed reminder days for customers with status "Mới"
+	 * @param reminderDaysForPotential_Case1 number of allowed reminder days for customers with status "Tiềm năng"
+	 * @return number of rows affected by the update
+	 */
 	public int updateCustomerCareStatus(int reminderDaysForNew_Case1, int reminderDaysForPotential_Case1) {
 	    String updateSql =
 	        "UPDATE crm_customer_care c " +
@@ -927,6 +930,55 @@ public class AppRepository {
 	        reminderDaysForPotential_Case1, reminderDaysForPotential_Case1, reminderDaysForPotential_Case1
 	    );
 	}
-
+	
+//	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
+//    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
+//    
+//    int[] rowsUpdated = jdbcTemplate0.batchUpdate(updateSql, new BatchPreparedStatementSetter() {
+//		
+//		@Override
+//		public void setValues(PreparedStatement ps, int i) throws SQLException {
+//			CustomerCare customerCare = customerCareList.get(i);
+//			ps.setString(1, customerCare.getPriority());
+//			ps.setLong(2, customerCare.getId());
+//		}
+//		
+//		@Override
+//		public int getBatchSize() {
+//			return customerCareList.size();
+//		}
+//	});
+//    
+//    int totalUpdated = Arrays.stream(rowsUpdated).sum();
+//    
+//    log.debug("Total {} records updated successfully.", totalUpdated);
+//}
+	
+//	public int updateCustomerCareStatus(int reminderDays) {
+//		String updateSql = 
+//		        "UPDATE crm_customer_care c " +
+//		        "SET care_status = " +
+//		        "    CASE " +
+//		        "        WHEN EXISTS ( " +
+//		        "            SELECT 1 FROM crm_customer_interaction i " +
+//		        "            WHERE i.customer_id = c.customer_id " +
+//		        "            AND i.created_at BETWEEN c.remind_date AND c.remind_date + INTERVAL ? DAY " +
+//		        "        ) THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
+//
+//		        "        WHEN EXISTS ( " +
+//		        "            SELECT 1 FROM crm_customer_interaction i " +
+//		        "            WHERE i.customer_id = c.customer_id " +
+//		        "            AND i.created_at > c.remind_date + INTERVAL ? DAY " +
+//		        "        ) THEN 'Đã chăm sóc, Chăm sóc trễ hạn' " +
+//
+//		        "        WHEN c.remind_date + INTERVAL ? DAY >= NOW() " +
+//		        "        THEN 'Chưa chăm sóc' " +
+//
+//		        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
+//		        "    END " +
+//		        "WHERE c.remind_date IS NOT NULL;";
+//
+//		    return jdbcTemplate0.update(updateSql, reminderDays, reminderDays, reminderDays);
+//	}
 
 }

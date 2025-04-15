@@ -7,10 +7,21 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.CustomerCare;
 
+/**
+ * Repository interface for managing {@link CustomerCare} entities.
+ * <p>
+ * This repository and others repositories with name structure like: {@link CustomerRepository}, {@link OrderStatusRepository}, ...
+ * are just used for querying and managing data (SELECT)
+ *
+ * @author Nguyen Hoang Phuong Ngan
+ * @version 1.0 
+ */
+@Repository
 public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long>, JpaSpecificationExecutor<CustomerCare> {
 	//Chỉ mới xét trường hợp khách hàng Mới và chưa có Interaction hoặc có thời gian tạo mới interaction > thời gian nhắc nhở trong customer care
 	@Query("SELECT DISTINCT c FROM Customer c " +

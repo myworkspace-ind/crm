@@ -486,6 +486,31 @@ $(document).ready(function() {
 									return `<span class="company-name-link" style="cursor:pointer;" data-customer-id="${customerId}">${companyName}</span>`;
 								}
 							},
+							{
+							    targets: 3,
+							    render: function(data, type, row, meta) {
+							        let contactName = data || "Không có tên";
+							        let statusData = row[7] || "";
+
+							        // Chuyển đổi status thành mảng
+							        let statuses = statusData.split(",").map(s => s.trim());
+
+							        let iconHtml = "";
+
+							        // Kiểm tra nếu có "Chăm sóc trễ hạn" thì thêm icon warning
+							        if (statuses.includes("Chăm sóc trễ hạn")) {
+							            iconHtml += `<i class="fa fa-exclamation-triangle text-danger ms-2" title="Chăm sóc trễ hạn"></i>`;
+							        }
+
+							        // Kiểm tra nếu có "Chăm sóc đúng hạn" thì thêm icon check
+							        if (statuses.includes("Chăm sóc đúng hạn")) {
+							            iconHtml += `<i class="fa fa-check-circle text-info ms-2" title="Chăm sóc đúng hạn"></i>`;
+							        }
+
+							        // Trả về tên + icon
+							        return `${contactName} ${iconHtml}`;
+							    }
+							},
 							//							{
 							//								targets: 2,
 							//								className: 'company-name-column'

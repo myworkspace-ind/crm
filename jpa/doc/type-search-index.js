@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"mks.myworkspace.crm.repository","l":"AppRepository"}]
