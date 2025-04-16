@@ -497,18 +497,21 @@ $(document).ready(function() {
 
 							        let iconHtml = "";
 
-							        // Kiểm tra nếu có "Chăm sóc trễ hạn" thì thêm icon warning
 							        if (statuses.includes("Chăm sóc trễ hạn")) {
 							            iconHtml += `<i class="fa fa-exclamation-triangle text-danger ms-2" title="Chăm sóc trễ hạn"></i>`;
 							        }
 
-							        // Kiểm tra nếu có "Chăm sóc đúng hạn" thì thêm icon check
 							        if (statuses.includes("Chăm sóc đúng hạn")) {
-							            iconHtml += `<i class="fa fa-check-circle text-info ms-2" title="Chăm sóc đúng hạn"></i>`;
+							            iconHtml += `<i class="fa fa-check ms-2" style="color: #29992f" "; title="Chăm sóc đúng hạn"></i>`;
 							        }
 
 							        // Trả về tên + icon
-							        return `${contactName} ${iconHtml}`;
+							        return `
+										<div style="display: flex; flex-direction: column; align-items: center;">
+											${iconHtml}
+											<span style=margin-top: 4px;">${contactName}</span>
+										</div>
+									`
 							    }
 							},
 							//							{
@@ -613,19 +616,20 @@ $(document).ready(function() {
 							                        <strong>Chưa chăm sóc</strong>
 							                    </div>`
 											);
-										} else if (status === "Chăm sóc đúng hạn") {
-											alerts.push(
-												`<div class="alert alert-info" role="alert">
-							                        <strong>Chăm sóc đúng hạn</strong>
-							                    </div>`
-											);
-										} else if (status === "Chăm sóc trễ hạn") {
-											alerts.push(
-												`<div class="alert alert-danger" role="alert">
-							                        <strong>Chăm sóc trễ hạn</strong>
-							                    </div>`
-											);
-										}
+										} 
+//										else if (status === "Chăm sóc đúng hạn") {
+//											alerts.push(
+//												`<div class="alert alert-info" role="alert">
+//							                        <strong>Chăm sóc đúng hạn</strong>
+//							                    </div>`
+//											);
+//										} else if (status === "Chăm sóc trễ hạn") {
+//											alerts.push(
+//												`<div class="alert alert-danger" role="alert">
+//							                        <strong>Chăm sóc trễ hạn</strong>
+//							                    </div>`
+//											);
+//										}
 									});
 
 									// Nếu có ít nhất một alert, trả về tất cả các alert kết hợp

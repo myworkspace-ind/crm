@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.CustomerCare;
+import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerCareRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.repository.InteractionRepository;
 import mks.myworkspace.crm.service.CustomerCareService;
 
 
@@ -30,6 +33,9 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	
 	@Autowired
 	CustomerRepository customerRepository;
+	
+	@Autowired
+	InteractionRepository interactionRepository;
 	
 	@Value("${customer.care.days-ago-case1}")
 	private int daysAgo;
@@ -59,7 +65,8 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 		try {
 			LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
 			LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
-            List<Customer> potentialCustomers = repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo);
+			LocalDateTime now = LocalDateTime.now();
+            List<Customer> potentialCustomers = repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo, now);
 
             if (potentialCustomers.isEmpty()) {
                 throw new RuntimeException("Không có khách hàng tiềm năng nào để nạp vào CustomerCare.");
@@ -89,9 +96,22 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Override
 	@Transactional
 	public List<Customer> findAllCustomerCare() {
-		LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(2);
-		LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
-		return repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo);
+	    LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
+	    LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
+	    LocalDateTime now = LocalDateTime.now();
+
+	    // Fetch the list of customers
+	    List<Customer> customers = repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo, now);
+	    
+	    // Initialize the interactions collection explicitly
+	    for (Customer customer : customers) {
+	        Hibernate.initialize(customer.getInteractions());
+	    }
+
+	    // Log the customers list
+	    log.info("List of potential customers: {}", customers);
+
+	    return customers;
 	}
 
 	@Override
@@ -102,6 +122,31 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Override
 	public boolean checkCustomerCareIDExists(Long customerCareId) {
 		return repo.existsByCustomeCareId(customerCareId);
+	}
+
+	@Override
+	public void createRemindersForCustomer(Customer customer) {
+		 // Lấy lần interaction gần nhất
+	    Interaction lastInteraction = interactionRepository.findLastInteractionForCustomer(customer.getId());
+
+	    if (lastInteraction != null) {
+	        LocalDateTime lastInteractionDate = lastInteraction.getCreatedAt();
+	        LocalDateTime today = LocalDateTime.now();
+
+	        // Duyệt từ ngày tương tác gần nhất đến ngày hiện tại
+//	        for (LocalDateTime reminderDate = lastInteractionDate.plusDays(daysAgo_case2); reminderDate.isBefore(today); reminderDate = reminderDate.plusDays(1)) {
+//	            // Kiểm tra nếu chưa có interaction vào ngày này, tạo bản ghi nhắc nhở
+//	            boolean existsReminder = customerCareRepository.existsByCustomerAndRemindDate(customer, reminderDate);
+//	            if (!existsReminder) {
+//	                CustomerCare reminder = new CustomerCare();
+//	                reminder.setCustomer(customer);
+//	                reminder.setRemindDate(reminderDate);
+//	                customerCareRepository.save(reminder);
+//	                log.debug("Tạo bản ghi nhắc nhở cho customer {} vào ngày {}", customer.getCompanyName(), reminderDate);
+//	            }
+//	        }
+	    }
+		
 	}
 
 }

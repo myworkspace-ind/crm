@@ -176,7 +176,9 @@ public class CustomerCareController extends BaseController {
 			// Nếu danh sách cần chăm sóc lấy từ customer bị trống → mặc định hiển thị toàn bộ dữ liệu chăm sóc
 
 
-			Set<Long> customersWithCareIds = customersWithCareData.stream().map(c -> c.getCustomer().getId())
+			Set<Long> customersWithCareIds = customersWithCareData.stream()
+					.filter(c -> c.getId() != null && c.getRemindDate() != null)
+					.map(c -> c.getCustomer().getId())
 					.collect(Collectors.toSet());
 
 			// Danh sách chứa dữ liệu từ crm_customer_care
@@ -192,6 +194,26 @@ public class CustomerCareController extends BaseController {
 				} else {
 					customersWithoutData.add(customer);
 				}
+			}
+			
+			if (customersWithData != null && !customersWithData.isEmpty()) {
+			    log.debug("=== Danh sách customersWithData ({} bản ghi có dữ liệu) ===", customersWithData.size());
+			    for (CustomerCare c : customersWithData) {
+			        log.debug("CustomerCare => ID: {}, Name: {}", 
+			                  c.getId(), c.getCustomer().getCompanyName());
+			    }
+			} else {
+			    log.debug("Danh sách customersWithData trống hoặc null");
+			}
+
+			if (customersWithoutData != null && !customersWithoutData.isEmpty()) {
+			    log.debug("=== Danh sách customersWithoutData ({} bản ghi không có dữ liệu) ===", customersWithoutData.size());
+			    for (Customer customer : customersWithoutData) {
+			        log.debug("Customer => ID: {}, Name: {}", 
+			                  customer.getId(), customer.getCompanyName());
+			    }
+			} else {
+			    log.debug("Danh sách customersWithoutData trống hoặc null");
 			}
 
 			// Chuyển đổi từng danh sách riêng

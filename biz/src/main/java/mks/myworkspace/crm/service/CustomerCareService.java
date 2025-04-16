@@ -11,6 +11,8 @@ public interface CustomerCareService {
 	
 	void loadPotentialCustomersIntoCustomerCare();
 	
+	void createRemindersForCustomer(Customer customer);
+	
 	List<CustomerCare> findAll();
 	
 	// Hiện lên danh sách khách hàng cần chăm sóc thì lấy từ Customer
