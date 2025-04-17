@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import mks.myworkspace.crm.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -24,18 +25,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
-import mks.myworkspace.crm.entity.Customer;
-import mks.myworkspace.crm.entity.CustomerCare;
-import mks.myworkspace.crm.entity.EmailToCustomer;
-import mks.myworkspace.crm.entity.GoodsCategory;
-import mks.myworkspace.crm.entity.HistoryOrder;
-import mks.myworkspace.crm.entity.Interaction;
-import mks.myworkspace.crm.entity.Order;
-import mks.myworkspace.crm.entity.OrderCategory;
-import mks.myworkspace.crm.entity.OrderStatus;
-import mks.myworkspace.crm.entity.Profession;
-import mks.myworkspace.crm.entity.ResponsiblePerson;
-import mks.myworkspace.crm.entity.Status;
+
 
 @Repository
 @Slf4j
@@ -375,7 +365,7 @@ public class AppRepository {
 		return id;
 
 	}
-	
+
 	public Long saveEmailToCustomer(EmailToCustomer emailToCustomer) {
 		Long id;
 		id = createEmail(emailToCustomer);
@@ -383,51 +373,82 @@ public class AppRepository {
 	}
 
 	private int updateCustomer(Customer customer) {
-		// Tạo bản đồ chứa các giá trị cần cập nhật
 		Map<String, Object> parameters = new HashMap<>();
 
-		// Thêm các trường cố định trong entity (không có liên kết bảng)
-		parameters.put("address", customer.getAddress());
+		String getAddressIdSql = "SELECT address_id FROM crm_customer WHERE id = ?";
+		Long addressId = jdbcTemplate0.queryForObject(getAddressIdSql, new Object[]{customer.getId()}, Long.class);
+
+		if (customer.getAddress() != null) {
+			customer.getAddress().setId(addressId);
+			log.debug("Updating address with ID: {}", addressId);
+			log.debug("Street: {}, Ward: {}, District: {}, State: {}",
+					customer.getAddress().getStreet(),
+					customer.getAddress().getWard(),
+					customer.getAddress().getDistrict(),
+					customer.getAddress().getState()
+			);
+		}
+
+		// Các trường cố định
 		parameters.put("company_name", customer.getCompanyName());
 		parameters.put("contact_person", customer.getContactPerson());
-		// parameters.put("updated_at", customer.getUpdatedAt()); // Giả sử bạn có
-		// trường `updated_at`
 		parameters.put("email", customer.getEmail());
 		parameters.put("note", customer.getNote());
 		parameters.put("phone", customer.getPhone());
 
-		// Thêm các khóa ngoại
+		// Khóa ngoại
 		parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
 		parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
 		parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
 		parameters.put("responsible_person_id",
 				customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
 
-		// Chỉ định điều kiện cập nhật (thường là theo ID)
-		String sql = "UPDATE crm_customer SET " + "address = :address, " + "company_name = :company_name, "
-				+ "contact_person = :contact_person, " +
-				// "updated_at = :updated_at, " +
-				"email = :email, " + "note = :note, " + "phone = :phone, " + "main_status_id = :main_status_id, "
-				+ "sub_status_id = :sub_status_id, " + "profession_id = :profession_id, "
-				+ "responsible_person_id = :responsible_person_id " + "WHERE id = :id";
-
-		// Thêm ID vào parameters
 		parameters.put("id", customer.getId());
+		log.debug("Updating address with ID: {}", customer.getAddress().getId());
+		log.debug("Street: {}, Ward: {}, District: {}, State: {}",
+				customer.getAddress().getStreet(),
+				customer.getAddress().getWard(),
+				customer.getAddress().getDistrict(),
+				customer.getAddress().getState());
 
-		// Thực thi câu lệnh SQL với NamedParameterJdbcTemplate
+
+		String sql = "UPDATE crm_customer SET "
+				+ "company_name = :company_name, "
+				+ "contact_person = :contact_person, "
+				+ "email = :email, "
+				+ "note = :note, "
+				+ "phone = :phone, "
+				+ "main_status_id = :main_status_id, "
+				+ "sub_status_id = :sub_status_id, "
+				+ "profession_id = :profession_id, "
+				+ "responsible_person_id = :responsible_person_id "
+				+ "WHERE id = :id";
+
 		int rowsAffected = new NamedParameterJdbcTemplate(jdbcTemplate0).update(sql, parameters);
-		log.debug("Updated rows: {}", rowsAffected);
+		log.debug("Updated customer rows: {}", rowsAffected);
+
+		// Update address if available
+		if (customer.getAddress() != null && customer.getAddress().getId() != null) {
+			updateAddress(customer.getAddress(), customer.getAddress().getId());
+		}
+
 		return rowsAffected;
 	}
+
+
 
 	private Long createCustomer(Customer customer) {
 		Long id;
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_customer")
 				.usingGeneratedKeyColumns("id");
 
+		if (customer.getAddress() != null && customer.getAddress().getId() == null) {
+			Long addressId = createAddress(customer.getAddress());
+			customer.getAddress().setId(addressId);
+		}
+
 		Map<String, Object> parameters = new HashMap<>();
 		// Thêm các trường cố định trong entity (không có liên kết bảng)
-		parameters.put("address", customer.getAddress());
 		parameters.put("company_name", customer.getCompanyName());
 		parameters.put("contact_person", customer.getContactPerson());
 		parameters.put("created_at", customer.getCreatedAt());
@@ -437,6 +458,7 @@ public class AppRepository {
 		parameters.put("account_status", customer.getAccountStatus());
 
 		// Thêm các khóa ngoại
+		parameters.put("address_id", customer.getAddress().getId());
 		parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
 		parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
 		parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
@@ -448,7 +470,70 @@ public class AppRepository {
 		return id;
 
 	}
-	
+
+	private Long createAddress(Address address) {
+		Long id;
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_address")
+				.usingGeneratedKeyColumns("id");
+
+		Map<String, Object> parameters = new HashMap<>();
+		// Thêm các trường cố định trong entity (không có liên kết bảng)
+		parameters.put("street", address.getStreet());
+		parameters.put("ward", address.getWard());
+		parameters.put("district", address.getDistrict());
+		parameters.put("state", address.getState());
+		parameters.put("postcode", address.getPostcode());
+		parameters.put("country", address.getCountry());
+		parameters.put("latitude", address.getLatitude());
+		parameters.put("longitude", address.getLongitude());
+
+
+		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		log.debug("New ID Address: {}", id);
+		return id;
+
+	}
+
+	private int updateAddress(Address address, Long id) {
+		// Create a map to hold the values for the SQL update query
+		Map<String, Object> parameters = new HashMap<>();
+
+		// Add fields to the parameters map
+		parameters.put("street", address.getStreet());
+		parameters.put("ward", address.getWard());
+		parameters.put("district", address.getDistrict());
+		parameters.put("state", address.getState());
+		parameters.put("postcode", address.getPostcode());
+		parameters.put("country", address.getCountry());
+		parameters.put("latitude", address.getLatitude());
+		parameters.put("longitude", address.getLongitude());
+
+		// Check if the address exists and get the address ID
+		if (id != null) {
+			// Update the address if it exists in the database
+			String sql = "UPDATE crm_address SET " +
+					"street = :street, " +
+					"ward = :ward, " +
+					"district = :district, " +
+					"state = :state, " +
+					"postcode = :postcode, " +
+					"country = :country, " +
+					"latitude = :latitude, " +
+					"longitude = :longitude " +
+					"WHERE id = :id";
+
+			parameters.put("id", id);
+
+			// Execute the update query
+			int rowsAffected = new NamedParameterJdbcTemplate(jdbcTemplate0).update(sql, parameters);
+			log.debug("Updated rows for address: {}", rowsAffected);
+			return rowsAffected;
+		} else {
+			return Math.toIntExact(createAddress(address));
+		}
+	}
+
+
 	private Long createEmail(EmailToCustomer emailToCustomer) {
 		Long id;
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_emailtocustomer")

@@ -4,15 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,10 +37,12 @@ public class Customer implements Serializable {
 
 	@Column(name = "phone", length = 10)
 	private String phone;
-	
-	@Column(name = "address", length = 255)
-	private String address;
-	
+
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "address_id", referencedColumnName = "id")
+	private Address address;
+
+
 	@ManyToOne
     @JoinColumn(name = "profession_id")
     private Profession profession;
@@ -73,57 +67,19 @@ public class Customer implements Serializable {
     
     @Column(name = "account_status")
     private Boolean accountStatus;
-    
-    
-//    public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-//			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, LocalDateTime createdAt,
-//			String note, Boolean accountStatus) {
-//		super();
-//		this.id = id;
-//		this.siteId = siteId;
-//		this.companyName = companyName;
-//		this.contactPerson = contactPerson;
-//		this.email = email;
-//		this.phone = phone;
-//		this.address = address;
-//		this.profession = profession;
-//		this.mainStatus = mainStatus;
-//		this.subStatus = subStatus;
-//		this.responsiblePerson = responsiblePerson;
-//		this.createdAt = createdAt;
-//		this.note = note;
-//		this.accountStatus = accountStatus;
-//	}
-//    
-//    public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-//			LocalDateTime createdAt, String note, Boolean accountStatus) {
-//		super();
-//		this.id = id;
-//		this.siteId = siteId;
-//		this.companyName = companyName;
-//		this.contactPerson = contactPerson;
-//		this.email = email;
-//		this.phone = phone;
-//		this.address = address;
-//		this.createdAt = createdAt;
-//		this.note = note;
-//		this.accountStatus = accountStatus;
-//	}
-
-//	public Customer(String contactPerson2) {
-//		// TODO Auto-generated constructor stub
-//	}
-	
 
 	public Customer(Long id) {
 		super();
 		this.id = id;
 	}
-	
+
+
 	public String getFormattedCreatedAt() {
 	    if (createdAt != null) {
 	        return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	    }
 	    return "";
 	}
+
+
 }

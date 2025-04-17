@@ -198,6 +198,7 @@ let apiCallCount = 0;
  *  - Sets up a draggable marker.
  *  - Adds "click" event to map for marker placement.
  *  - Adds autocomplete functionality for the input field.
+ *  - Adds "blur" event to map for auto called google autocomplete.
  * OUTPUT: Configured map with event listeners for marker updates and address lookups.
  */
 function initMap() {
@@ -221,10 +222,12 @@ function initMap() {
     geocoder = new google.maps.Geocoder();
 
     // Main Autocomplete for address input
-    autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById("address"),
-    );
+    const addressInput = document.getElementById("address");
 
+    // Initialize Google Places Autocomplete
+    let autocomplete = new google.maps.places.Autocomplete(addressInput);
+
+    // Add event listener for when the user selects a suggestion from the autocomplete dropdown
     autocomplete.addListener("place_changed", function () {
         apiCallCount++; // Increment counter
         console.log(`Google Places API called: ${apiCallCount} times`);
@@ -234,13 +237,38 @@ function initMap() {
             return;
         }
 
-        map.setCenter(place.geometry.location);
-        map.setZoom(17);
-        marker.setPosition(place.geometry.location);
-        marker.setMap(map);
+        updateMarkerAndMap(place.geometry.location);
 
         document.getElementById("address").value = place.formatted_address;
         fillFormFields(place);
+    });
+
+    // Add event listener for when the input field loses focus (blur)
+    addressInput.addEventListener('blur', function () {
+        const place = autocomplete.getPlace();
+
+        if (place && place.geometry) {
+            // If a place is selected, use it
+            updateMarkerAndMap(place.geometry.location);
+            fillFormFields(place);
+        } else {
+            // If no place is selected, attempt to geocode the input manually
+            const address = addressInput.value.trim();
+
+            if (address) {
+                geocoder.geocode({ address: address }, function (results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        updateMarkerAndMap(results[0].geometry.location);
+                        addressInput.value = results[0].formatted_address;
+                        fillFormFields(results[0]);
+                    } else {
+                        alert("Could not find location: " + status);
+                    }
+                });
+            } else {
+                alert("Please enter a valid address.");
+            }
+        }
     });
 
     // Marker drag event to update address
@@ -265,7 +293,17 @@ function initMap() {
         setTimeout(setupModalAutocomplete, 500); // Delay to ensure modal is fully loaded
     });
 }
-x
+
+
+
+// Helper function to update marker position and map center
+function updateMarkerAndMap(location) {
+    marker.setPosition(location);
+    map.setCenter(location);
+    map.setZoom(17);
+}
+
+
 // Function to setup Autocomplete in modal
 function setupModalAutocomplete() {
     let streetAddress = document.getElementById("street-address");
@@ -297,10 +335,12 @@ function setupModalAutocomplete() {
     }
 }
 
+
 // Attach event when modal opens
 document.getElementById("address-btn").addEventListener("click", function () {
     setTimeout(setupModalAutocomplete, 500); // Ensure modal is loaded
 });
+
 
 // Reverse geocode to update form when marker moves
 function geocodePosition(pos) {
@@ -341,6 +381,7 @@ function toggleFormFields(isVietnam) {
  * PROCESSING:
  *  - Extracts parts of an address (street address, suburb, state, etc.).
  *  - Updates corresponding modal fields with extracted values.
+ *  - Sort Value by VietNam or NonVietNam Address
  * OUTPUT:
  *  - None (updates HTML input fields directly).
  */
@@ -414,6 +455,16 @@ function fillFormFields(place) {
         if (document.getElementById("state")) document.getElementById("state").value = state;
         if (document.getElementById("postcode")) document.getElementById("postcode").value = postcode;
         if (document.getElementById("country")) document.getElementById("country").value = country;
+    }
+
+    // Extract and fill latitude and longitude
+    if (place.geometry && place.geometry.location) {
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        if(document.getElementById("latitude")) document.getElementById("latitude").value = lat;
+        if(document.getElementById("longitude")) document.getElementById("longitude").value = lng;
+        console.log("Latitude:", lat);
+        console.log("Longitude:", lng);
     }
 
     // Toggle form visibility based on country (Vietnam or not)
