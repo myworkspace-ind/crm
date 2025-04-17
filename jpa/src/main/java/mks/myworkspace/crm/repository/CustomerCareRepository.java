@@ -52,15 +52,15 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 		    @Param("now") LocalDateTime now
 		);
 
-//	@Query("SELECT cc FROM CustomerCare cc JOIN FETCH cc.customer")
-//    List<CustomerCare> findAllCustomerCares();
+	@Query("SELECT cc FROM CustomerCare cc JOIN FETCH cc.customer")
+    List<CustomerCare> findAllCustomerCares();
 	
-	@Query("SELECT cc FROM CustomerCare cc " +
-		       "JOIN FETCH cc.customer c " +
-		       "LEFT JOIN Interaction i ON i.customer.id = c.id " +
-		       "WHERE c.mainStatus.name = 'Tiềm năng' " +
-		       "ORDER BY i.createdAt DESC")
-	List<CustomerCare> findAllCustomerCares();
+//	@Query("SELECT cc FROM CustomerCare cc " +
+//		       "JOIN FETCH cc.customer c " +
+//		       "LEFT JOIN Interaction i ON i.customer.id = c.id " +
+//		       "WHERE c.mainStatus.name = 'Tiềm năng' " +
+//		       "ORDER BY i.createdAt DESC")
+//	List<CustomerCare> findAllCustomerCares();
 	
 	@Query("SELECT COUNT(cc) > 0 FROM CustomerCare cc WHERE cc.customer = :customer AND cc.remindDate = :remindDate")
 	boolean existsByCustomerAndRemindDate(@Param("customer") Customer customer, @Param("remindDate") LocalDateTime remindDate);

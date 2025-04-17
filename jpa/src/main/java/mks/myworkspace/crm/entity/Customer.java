@@ -139,10 +139,13 @@ public class Customer implements Serializable {
 		this.id = id;
 	}
 	
+	
+	
 	public String getFormattedCreatedAt() {
 	    if (createdAt != null) {
 	        return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	    }
 	    return "";
 	}
+
 }
