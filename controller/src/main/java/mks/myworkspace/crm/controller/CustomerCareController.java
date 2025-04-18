@@ -2,9 +2,11 @@ package mks.myworkspace.crm.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.CustomerCare;
+import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.service.CustomerCareService;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.StorageService;
@@ -101,7 +104,7 @@ public class CustomerCareController extends BaseController {
 	public ResponseEntity<?> checkUnsavedCustomerCare() {
 		try {
 			List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();
-			List<CustomerCare> customersWithCareData = customerCareService.findAll();
+			List<CustomerCare> customersWithCareData = customerCareService.findAll(); 
 
 			if (customersNeedCares.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Không có khách hàng nào cần chăm sóc.");
@@ -147,16 +150,24 @@ public class CustomerCareController extends BaseController {
 	public ResponseEntity<?> getPotentialCustomers() {
 		try {
 			List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();
-			List<CustomerCare> customersWithCareData = customerCareService.findAll();
-			
-			if (customersNeedCares != null && !customersNeedCares.isEmpty()) {
-			    log.debug("=== Danh sách customersNeedCares ({} khách hàng) ===", customersNeedCares.size());
-			    for (Customer c : customersNeedCares) {
-			        log.debug("Customer => ID: {}, Name: {}, Phone: {}, Email: {}", 
-			                  c.getId(), c.getCompanyName(), c.getPhone(), c.getEmail());
+			List<CustomerCare> customersWithCareData = customerCareService.findAll();//Danh sách đã có sẵn trong bảng crm_customer_care
+			List<Customer> allCustomers = customerService.getAllCustomers();
+		
+			for (Customer c : customersNeedCares) {
+			    String latestCreatedAtInteraction = "Không có tương tác";
+
+			    if (c.getInteractions() != null && !c.getInteractions().isEmpty()) {
+			        Optional<Interaction> latestInteraction = c.getInteractions().stream()
+			            .filter(i -> i.getCreatedAt() != null)
+			            .max(Comparator.comparing(Interaction::getCreatedAt));
+
+			        if (latestInteraction.isPresent()) {
+			            latestCreatedAtInteraction = latestInteraction.get().getCreatedAt().toString();
+			        }
 			    }
-			} else {
-			    log.debug("Danh sách customersNeedCares trống hoặc null");
+
+			    log.debug("Customer => ID: {}, Name: {}, Phone: {}, Email: {}, LatestCreatedAtInteraction: {}", 
+			              c.getId(), c.getCompanyName(), c.getPhone(), c.getEmail(), latestCreatedAtInteraction);
 			}
 			
 			if (customersWithCareData != null && !customersWithCareData.isEmpty()) {
@@ -182,10 +193,11 @@ public class CustomerCareController extends BaseController {
 					.collect(Collectors.toSet());
 
 			// Danh sách chứa dữ liệu từ crm_customer_care
-			List<CustomerCare> customersWithData = new ArrayList<>();
+			List<CustomerCare> customersWithData = new ArrayList<>(); //--> danh sách sẽ hiện lên giao diện
 			// Danh sách chưa có dữ liệu
-			List<Customer> customersWithoutData = new ArrayList<>();
-
+			List<Customer> customersWithoutData = new ArrayList<>(); //--> danh sách sẽ hiện lên giao diện
+			
+			//TODO: Nạp những khách hàng cần chăm sóc mà CHƯA CÓ DỮ LIỆU trong customer_care
 			for (Customer customer : customersNeedCares) {
 				if (customersWithCareIds.contains(customer.getId())) {
 					// Lấy CustomerCare tương ứng
@@ -194,6 +206,19 @@ public class CustomerCareController extends BaseController {
 				} else {
 					customersWithoutData.add(customer);
 				}
+			}
+			
+			//TODO: Bổ sung các bản ghi còn thiếu từ customersWithCareData vào customersWithData
+			Set<Long> existingCustomerIds = customersWithData.stream()
+					.map(c -> c.getCustomer().getId())
+					.collect(Collectors.toSet());
+			
+			for(CustomerCare care: customersWithCareData) {
+				Long careCustomerId = care.getCustomer().getId();
+				if (!existingCustomerIds.contains(careCustomerId)) {
+			        customersWithData.add(care);
+			        log.debug("✅ Bổ sung thêm CustomerCare => ID: {}, Name: {}", care.getId(), care.getCustomer().getCompanyName());
+			    }
 			}
 			
 			if (customersWithData != null && !customersWithData.isEmpty()) {
@@ -217,8 +242,10 @@ public class CustomerCareController extends BaseController {
 			}
 
 			// Chuyển đổi từng danh sách riêng
+//			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
+//					customersNeedCares);
 			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
-					customersNeedCares);
+					allCustomers);
 			List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData,
 					reminderDays, reminderDays_case2);
 

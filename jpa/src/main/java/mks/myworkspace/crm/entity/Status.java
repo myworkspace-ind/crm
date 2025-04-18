@@ -87,5 +87,10 @@ public class Status implements Serializable {
 		this.seqno = seqno;
 	}
 
-
+	@Override
+	public String toString() {
+		return "Status [id=" + id + ", siteId=" + siteId + ", name=" + name + ", backgroundColor=" + backgroundColor
+				+ ", seqno=" + seqno + "]";
+	}
+	
 }

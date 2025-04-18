@@ -53,14 +53,22 @@
 							<label for="mainStatus" class="form-label">Trạng thái chính</label>
 							<select class="form-select" id="mainStatus">
 								<option value="">Chọn trạng thái chính</option>
-					            <option th:each="status : ${statuses}" th:value="${status.id}" th:text="${status.name}"></option>
+					            <option th:each="status : ${statuses}" 
+							            th:value="${status.id}" 
+							            th:text="${status.name}" 
+							            >
+							    </option>
 							</select>
 						</div>
 						<div class="mb-3">
 							<label for="subStatus" class="form-label">Trạng thái phụ</label>
 							<select class="form-select" id="subStatus">
 								<option value="">Chọn trạng thái phụ</option>
-					            <option th:each="status : ${statuses}" th:value="${status.id}" th:text="${status.name}"></option>
+					            <option th:each="status : ${statuses}" 
+					            		th:value="${status.id}" 
+					            		th:text="${status.name}"
+					            		>
+					           </option>
 							</select>
 						</div>
 					</form>
@@ -154,6 +162,9 @@
 					// Set trạng thái chính và phụ nếu cần
 					const mainStatusSelect = document.getElementById('mainStatus');
 					const subStatusSelect = document.getElementById('subStatus');
+					
+// 					document.getElementById('mainStatus').value = data.customer.mainStatus?.id || '';
+// 					document.getElementById('subStatus').value = data.customer.subStatus?.id || '';
 
 					// Lặp qua các option và chọn giá trị phù hợp
 					for (let option of mainStatusSelect.options) {
@@ -186,11 +197,17 @@
 	}
 	
 	function submitUpdate() {
+		
+		const mainStatusValue = document.getElementById('mainStatus').value;
+		const subStatusValue = document.getElementById('subStatus').value;
+		
+		console.log("mainStatus value:", document.getElementById('mainStatus').value);
+		console.log("subStatus value:", document.getElementById('subStatus').value);
 	    // Lấy giá trị từ các trường input
 	    const updatedCustomer = {
 	        id: Number(document.getElementById('customerId').value),  
 	        phone: document.getElementById('customerPhone').value,
-	        name: document.getElementById('customerName').value,
+	        companyName: document.getElementById('customerName').value,
 	        mainStatus: document.getElementById('mainStatus').value ? { id: Number(document.getElementById('mainStatus').value) } : null,
 	        subStatus: document.getElementById('subStatus').value ? { id: Number(document.getElementById('subStatus').value) } : null
     	};

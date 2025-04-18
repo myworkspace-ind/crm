@@ -24,33 +24,91 @@ import mks.myworkspace.crm.entity.CustomerCare;
 @Repository
 public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long>, JpaSpecificationExecutor<CustomerCare> {
 	//Chỉ mới xét trường hợp khách hàng Mới và chưa có Interaction hoặc có thời gian tạo mới interaction > thời gian nhắc nhở trong customer care
-	@Query("SELECT c FROM Customer c " +
-		       "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
-		       "LEFT JOIN Interaction i ON i.customer.id = c.id " +
-		       "WHERE ( " +
-		       "    c.mainStatus.name = 'Mới' AND " +
-		       "    NOT EXISTS ( " +
-		       "        SELECT 1 FROM Interaction iSub WHERE iSub.customer.id = c.id " +
-		       "    ) AND " +
-		       "    c.createdAt <= :caseDaysAgo_1 " +
-		       ") " +
-		       "OR ( " +
-		       "    c.mainStatus.name = 'Tiềm năng' AND " +
-		       "    EXISTS ( " +
-		       "        SELECT 1 FROM Interaction iSub " +
-		       "        WHERE iSub.customer.id = c.id " +
-		       "        GROUP BY iSub.customer.id " +
-		       "        HAVING MAX(iSub.createdAt) <= :caseDaysAgo_2 " +
-		       "    ) " +
-		       ") " +
-		       "OR ( " +
-		       "    cc.remindDate IS NOT NULL AND cc.remindDate <= :now " +
-		       ")")
-		List<Customer> findPotentialCustomers(
-		    @Param("caseDaysAgo_1") LocalDateTime caseDaysAgo_1,
-		    @Param("caseDaysAgo_2") LocalDateTime caseDaysAgo_2,
-		    @Param("now") LocalDateTime now
-		);
+	
+	//TODO: Lấy khách hàng "Mới"
+    @Query("SELECT c FROM Customer c " +
+            "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
+            "WHERE c.mainStatus.name = 'Mới' " +
+            "AND NOT EXISTS ( " +
+            "    SELECT 1 FROM Interaction iSub WHERE iSub.customer.id = c.id " +
+            ") " +
+            "AND c.createdAt <= :caseDaysAgo_1")
+     List<Customer> findNewCustomersWithEmptyInteraction(@Param("caseDaysAgo_1") LocalDateTime caseDaysAgo_1);
+//	@Query("SELECT c FROM Customer c " + 
+//		       "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
+//		       "WHERE ( " +
+//		       "    c.mainStatus.name = 'Mới' AND " +
+//		       "    NOT EXISTS ( " +
+//		       "        SELECT 1 FROM Interaction iSub WHERE iSub.customer.id = c.id " +
+//		       "    ) AND " +
+//		       "    c.createdAt <= :caseDaysAgo_1 " +
+//		       ") " +
+//		       "OR ( " +
+//		       "    cc.remindDate IS NOT NULL AND cc.remindDate <= :now " +
+//		       ")")
+//	List<Customer> findNewCustomersWithEmptyInteraction(
+//	    @Param("caseDaysAgo_1") LocalDateTime caseDaysAgo_1,
+//	    @Param("now") LocalDateTime now
+//	);
+	
+	 @Query("SELECT c FROM Customer c " +
+	           "WHERE c.mainStatus.name = 'Tiềm năng' " +
+	           "AND EXISTS ( " +
+	           "    SELECT 1 FROM Interaction iSub " +
+	           "    WHERE iSub.customer.id = c.id " +
+	           "    GROUP BY iSub.customer.id " +
+	           "    HAVING MAX(iSub.createdAt) < :caseDaysAgo_2 " +
+	           ")")
+	 List<Customer> findPotentialCustomers(@Param("caseDaysAgo_2") LocalDateTime caseDaysAgo_2);
+	
+//	@Query("SELECT c FROM Customer c " +
+//		       "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
+//		       "WHERE ( " +
+//		       "    c.mainStatus.name = 'Tiềm năng' AND " +
+//		       "    EXISTS ( " +
+//		       "        SELECT 1 FROM Interaction iSub " +
+//		       "        WHERE iSub.customer.id = c.id " +
+//		       "        GROUP BY iSub.customer.id " +
+//		       "        HAVING MAX(iSub.createdAt) <= :caseDaysAgo_2 " +
+//		       "    ) " +
+//		       ") " +
+//		       "OR ( " +
+//		       "    cc.remindDate IS NOT NULL AND cc.remindDate <= :now " +
+//		       ")")
+//	List<Customer> findPotentialCustomers(
+//	    @Param("caseDaysAgo_2") LocalDateTime caseDaysAgo_2,
+//	    @Param("now") LocalDateTime now
+//	);
+
+	
+//	@Query("SELECT c FROM Customer c " +
+//		       "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
+//		       "LEFT JOIN Interaction i ON i.customer.id = c.id " +
+//		       "WHERE ( " +
+//		       "    c.mainStatus.name = 'Mới' AND " +
+//		       "    NOT EXISTS ( " +
+//		       "        SELECT 1 FROM Interaction iSub WHERE iSub.customer.id = c.id " +
+//		       "    ) AND " +
+//		       "    c.createdAt <= :caseDaysAgo_1 " +
+//		       ") " +
+//		       "OR ( " +
+//		       "    c.mainStatus.name = 'Tiềm năng' AND " +
+//		       "    EXISTS ( " +
+//		       "        SELECT 1 FROM Interaction iSub " +
+//		       "        WHERE iSub.customer.id = c.id " +
+//		       "        GROUP BY iSub.customer.id " +
+//		       "        HAVING MAX(iSub.createdAt) <= :caseDaysAgo_2 " +
+//		       "    ) " +
+//		       ") " +
+//		       "OR ( " +
+//		       "    cc.remindDate IS NOT NULL AND cc.remindDate <= :now " +
+//		       ")")
+//		List<Customer> findPotentialCustomers(
+//		    @Param("caseDaysAgo_1") LocalDateTime caseDaysAgo_1,
+//		    @Param("caseDaysAgo_2") LocalDateTime caseDaysAgo_2,
+//		    @Param("now") LocalDateTime now
+//		);
+
 
 	@Query("SELECT cc FROM CustomerCare cc JOIN FETCH cc.customer")
     List<CustomerCare> findAllCustomerCares();

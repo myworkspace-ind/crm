@@ -1,20 +1,20 @@
 package mks.myworkspace.crm.entity.dto;
 
-public class CustomerDetailDTO {
+public class CustomerDetailJsonDTO {
 	private Long id;
 	private String companyName;
 	private String email;
 	private String phone;
 	private String address;
 	private String contactPerson;
-	private Long mainStatus;
-	private Long subStatus;
-	private Long responsiblePerson;
+	private String mainStatus;
+	private String subStatus;
+	private String responsiblePerson;
 	private String birthday;
 	private String note;
-
-	public CustomerDetailDTO(Long id, String companyName, String email, String phone, String address,
-			String contactPerson, Long mainStatus, Long subStatus, Long responsiblePerson, String birthday,
+	
+	public CustomerDetailJsonDTO(Long id, String companyName, String email, String phone, String address,
+			String contactPerson, String mainStatus, String subStatus, String responsiblePerson, String birthday,
 			String note) {
 		super();
 		this.id = id;
@@ -78,27 +78,27 @@ public class CustomerDetailDTO {
 		this.contactPerson = contactPerson;
 	}
 
-	public Long getMainStatus() {
+	public String getMainStatus() {
 		return mainStatus;
 	}
 
-	public void setMainStatus(Long mainStatus) {
+	public void setMainStatus(String mainStatus) {
 		this.mainStatus = mainStatus;
 	}
 
-	public Long getSubStatus() {
+	public String getSubStatus() {
 		return subStatus;
 	}
 
-	public void setSubStatus(Long subStatus) {
+	public void setSubStatus(String subStatus) {
 		this.subStatus = subStatus;
 	}
 
-	public Long getResponsiblePerson() {
+	public String getResponsiblePerson() {
 		return responsiblePerson;
 	}
 
-	public void setResponsiblePerson(Long responsiblePerson) {
+	public void setResponsiblePerson(String responsiblePerson) {
 		this.responsiblePerson = responsiblePerson;
 	}
 
@@ -117,14 +117,7 @@ public class CustomerDetailDTO {
 	public void setNote(String note) {
 		this.note = note;
 	}
-
-	@Override
-	public String toString() {
-		return "CustomerDetailDTO [id=" + id + ", companyName=" + companyName + ", email=" + email + ", phone=" + phone
-				+ ", address=" + address + ", contactPerson=" + contactPerson + ", mainStatus=" + mainStatus
-				+ ", subStatus=" + subStatus + ", responsiblePerson=" + responsiblePerson + ", birthday=" + birthday
-				+ ", note=" + note + "]";
-	}
+	
 	
 
 }

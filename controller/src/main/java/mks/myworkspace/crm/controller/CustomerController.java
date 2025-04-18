@@ -52,6 +52,7 @@ import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
+import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.service.CustomerService;
@@ -62,6 +63,7 @@ import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.service.impl.EmailService;
+import mks.myworkspace.crm.transformer.CustomerMapper;
 import mks.myworkspace.crm.transformer.JpaTransformer_Interaction_Handsontable;
 import mks.myworkspace.crm.transformer.JpaTransformer_ResponsiblePerson_Handsontable;
 import mks.myworkspace.crm.validate.GoodsCategoryValidator;
@@ -150,7 +152,7 @@ public class CustomerController extends BaseController {
 		if (customerOpt.isPresent()) {
 			Customer c = customerOpt.get();
 			
-			CustomerDetailDTO dto = new CustomerDetailDTO(
+			CustomerDetailJsonDTO dtoJson = new CustomerDetailJsonDTO(
 					c.getId(),
 					c.getCompanyName(),
 					c.getEmail(),
@@ -163,7 +165,7 @@ public class CustomerController extends BaseController {
 					c.getBirthday() != null ? c.getBirthday().toString() : null,
 					c.getNote()
 			);
-			return ResponseEntity.ok(dto);
+			return ResponseEntity.ok(dtoJson);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
 		}
@@ -458,28 +460,62 @@ public class CustomerController extends BaseController {
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
 	}
-
+	
 	@GetMapping("/get-customer/{id}")
 	@ResponseBody
 	public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
 		try {
 			if (id == null) {
-				return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID khách hàng không được để trống."));
+				return ResponseEntity.badRequest().body(
+					Map.of("errorMessage", "ID khách hàng không được để trống.")
+				);
 			}
 
 			Optional<Customer> customerOpt = customerService.findById(id);
+
 			if (customerOpt.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body(Map.of("errorMessage", "Khách hàng với ID " + id + " không tồn tại."));
+					.body(Map.of("errorMessage", "Khách hàng với ID " + id + " không tồn tại."));
 			}
 
-			return ResponseEntity.ok()
-					.body(Map.of("message", "Thông tin khách hàng đã được tìm thấy!", "customer", customerOpt.get()));
+			Customer customer = customerOpt.get();
+			CustomerDetailDTO customerDTO = CustomerMapper.toDTO(customer);
+
+			return ResponseEntity.ok().body(
+				Map.of("message", "Thông tin khách hàng đã được tìm thấy!", "customer", customerDTO)
+			);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
-					"Có lỗi xảy ra khi lấy thông tin khách hàng. Vui lòng thử lại sau!", "details", e.getMessage()));
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+				Map.of(
+					"errorMessage", "Có lỗi xảy ra khi lấy thông tin khách hàng. Vui lòng thử lại sau!",
+					"details", e.getMessage()
+				)
+			);
 		}
 	}
+
+//	@GetMapping("/get-customer/{id}")
+//	@ResponseBody
+//	public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
+//		try {
+//			if (id == null) {
+//				return ResponseEntity.badRequest().body(Map.of("errorMessage", "ID khách hàng không được để trống."));
+//			}
+//
+//			Optional<Customer> customerOpt = customerService.findById(id);
+//			
+//			if (customerOpt.isEmpty()) {
+//				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//						.body(Map.of("errorMessage", "Khách hàng với ID " + id + " không tồn tại."));
+//			}
+//
+//			return ResponseEntity.ok()
+//					.body(Map.of("message", "Thông tin khách hàng đã được tìm thấy!", "customer", customerOpt.get()));
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
+//					"Có lỗi xảy ra khi lấy thông tin khách hàng. Vui lòng thử lại sau!", "details", e.getMessage()));
+//		}
+//	}
 	
 //	@GetMapping("/get-customer/{id}")
 //	@ResponseBody
@@ -520,19 +556,38 @@ public class CustomerController extends BaseController {
 //	        ));
 //	    }
 //	}
-
+	
 	@PostMapping("/update-customer-status")
-	@ResponseBody
-	public ResponseEntity<?> updateCustomerStatus(@RequestBody Customer customer) {
-		try {
-			Customer updatedCustomer = storageService.updateCustomerStatus(customer);
-			return ResponseEntity.ok()
-					.body(Map.of("message", "Cập nhật trạng thái thành công!", "customer", updatedCustomer));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật trạng thái"));
-		}
-	}
+    @ResponseBody
+    public ResponseEntity<?> updateCustomerStatus(@RequestBody Customer customer) {
+		log.debug("==> Dữ liệu customer nhận được từ client: {}", customer);
+        try {
+        	
+            Customer updatedCustomer = storageService.updateCustomerStatus(customer);
+            log.debug("==> Dữ liệu customer sau khi cập nhật: {}", updatedCustomer);
+            
+            CustomerDetailDTO dto = CustomerMapper.toDTO(updatedCustomer);
+            log.debug("==> Dữ liệu customerDTO sau khi cập nhật: {}", dto);
+            return ResponseEntity.ok()
+                    .body(Map.of("message", "Cập nhật trạng thái thành công!", "customer", dto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật trạng thái"));
+        }
+    }
+
+//	@PostMapping("/update-customer-status")
+//	@ResponseBody
+//	public ResponseEntity<?> updateCustomerStatus(@RequestBody Customer customer) {
+//		try {
+//			Customer updatedCustomer = storageService.updateCustomerStatus(customer);
+//			return ResponseEntity.ok()
+//					.body(Map.of("message", "Cập nhật trạng thái thành công!", "customer", updatedCustomer));
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//					.body(Map.of("errorMessage", "Có lỗi xảy ra khi cập nhật trạng thái"));
+//		}
+//	}
 
 //	@RequestMapping(value = { "/create-customer" }, method = RequestMethod.POST)
 //	public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, HttpServletRequest request, HttpSession httpSession) {
@@ -964,7 +1019,7 @@ public class CustomerController extends BaseController {
 		}
     }
 	
-	// Hàm edit-customer của Đạt
+	// Hàm edit-customer
 	@PutMapping("/newedit-customer")
 	@ResponseBody
 	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {

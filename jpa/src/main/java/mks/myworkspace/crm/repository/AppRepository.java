@@ -3,6 +3,7 @@ package mks.myworkspace.crm.repository;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -827,27 +828,66 @@ public class AppRepository {
 	 * @param reminderDays  Days for setting the reminder date in customer_care.
 	 */
 	//Khong khai bao bien trong vong lap
-	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDays) {
+	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential) {
 		String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
+		String maxInteractionSql = "SELECT MAX(created_at) FROM crm_customer_interaction WHERE customer_id = ?";
 		String insertSql = "INSERT INTO crm_customer_care (customer_id, remind_date) VALUES (?, ?)";
 
-		Boolean exists;
-		LocalDateTime reminderTime;
+		Long customerId = null;
+		String mainStatus = null;
+		Boolean exists = false;
+		LocalDateTime reminderTime = null;
+		Timestamp latestInteraction = null;
+		LocalDateTime createdAt = null;
 
 		for (CustomerCare care : customerCares) {
-			exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, care.getCustomer().getId());
+			customerId = care.getCustomer().getId();
+			mainStatus = care.getCustomer().getMainStatus().getName();
+			exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, customerId);
 
-			if (Boolean.FALSE.equals(exists)) { // Nếu chưa tồn tại, thì insert
-				if (care.getCustomer().getCreatedAt() != null) {
-					reminderTime = care.getCustomer().getCreatedAt().plusDays(reminderDays);
-				} else {
-					reminderTime = null; 
-				}
-
-				jdbcTemplate0.update(insertSql, care.getCustomer().getId(), reminderTime);
+			if (Boolean.TRUE.equals(exists)) {
+				continue;
 			}
+
+			reminderTime = null;
+			if ("Mới".equalsIgnoreCase(mainStatus)) {
+				createdAt = care.getCustomer().getCreatedAt();
+				if (createdAt != null) {
+					reminderTime = createdAt.plusDays(reminderDaysForNewWithEmptyInteraction);
+				}
+			} else if ("Tiềm năng".equalsIgnoreCase(mainStatus)) {
+				latestInteraction = jdbcTemplate0.queryForObject(maxInteractionSql, Timestamp.class, customerId);
+				if (latestInteraction != null) {
+					reminderTime = latestInteraction.toLocalDateTime().plusDays(reminderDaysForPotential);
+				}
+			}
+
+			jdbcTemplate0.update(insertSql, customerId, reminderTime);
 		}
 	}
+
+	
+//	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDays) {
+//		String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
+//		String insertSql = "INSERT INTO crm_customer_care (customer_id, remind_date) VALUES (?, ?)";
+//
+//		Boolean exists;
+//		LocalDateTime reminderTime;
+//
+//		for (CustomerCare care : customerCares) {
+//			exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, care.getCustomer().getId());
+//
+//			if (Boolean.FALSE.equals(exists)) { // Nếu chưa tồn tại, thì insert
+//				if (care.getCustomer().getCreatedAt() != null) {
+//					reminderTime = care.getCustomer().getCreatedAt().plusDays(reminderDays);
+//				} else {
+//					reminderTime = null; 
+//				}
+//
+//				jdbcTemplate0.update(insertSql, care.getCustomer().getId(), reminderTime);
+//			}
+//		}
+//	}
 	
 	/**
 	 * Updates the priority of a specific customer care record.

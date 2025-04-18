@@ -91,7 +91,6 @@ public class Customer implements Serializable {
     
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Interaction> interactions;
-
     
     
 //    public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
@@ -146,6 +145,18 @@ public class Customer implements Serializable {
 	        return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	    }
 	    return "";
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", siteId=" + siteId + ", companyName=" + companyName + ", contactPerson="
+				+ contactPerson + ", email=" + email + ", phone=" + phone + ", address=" + address + ", profession="
+				+ profession + ", mainStatus=" + mainStatus + ", subStatus=" + subStatus + ", responsiblePerson="
+				+ responsiblePerson + ", birthday=" + birthday + ", classification=" + classification + ", createdAt="
+				+ createdAt + ", note=" + note + ", accountStatus=" + accountStatus + ", interactions=" + interactions
+				+ "]";
 	}
 
 }

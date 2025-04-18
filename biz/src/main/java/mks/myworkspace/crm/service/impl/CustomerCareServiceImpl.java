@@ -1,7 +1,10 @@
 package mks.myworkspace.crm.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
@@ -62,25 +65,59 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	 */
 	@Override
 	public void loadPotentialCustomersIntoCustomerCare() {
-		try {
-			LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
-			LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
-			LocalDateTime now = LocalDateTime.now();
-            List<Customer> potentialCustomers = repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo, now);
+	    try {
+	        LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);         
+	        LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2); 
+	        LocalDateTime now = LocalDateTime.now();                                  
 
-            if (potentialCustomers.isEmpty()) {
-                throw new RuntimeException("Không có khách hàng tiềm năng nào để nạp vào CustomerCare.");
-            }
+	        // Gọi 3 phương thức đã tách riêng
+	        List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(twoDaysAgo);
+	        List<Customer> potentialCustomers = repo.findPotentialCustomers(case2DaysAgo);
+	        //List<Customer> remindCustomers = repo.findRemindCustomers(now);
 
-            List<CustomerCare> customerCares = potentialCustomers.stream()
-                .map(customer -> new CustomerCare(null, customer, null, null, null)) // ID tự động tăng, các trường còn lại null
-                .collect(Collectors.toList());
+	        // Gộp lại, dùng Set để loại trùng nếu có
+	        Set<Customer> allCustomersSet = new HashSet<>();
+	        allCustomersSet.addAll(newCustomers);
+	        allCustomersSet.addAll(potentialCustomers);
+	        //allCustomersSet.addAll(remindCustomers);
 
-            appRepository.insertCustomerCare(customerCares, daysAgo);
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi nạp khách hàng tiềm năng vào CustomerCare: " + e.getMessage());
-        }
+	        if (allCustomersSet.isEmpty()) {
+	            throw new RuntimeException("Không có khách hàng nào đủ điều kiện để nạp vào CustomerCare.");
+	        }
+
+	        // Tạo danh sách CustomerCare từ danh sách khách hàng
+	        List<CustomerCare> customerCares = allCustomersSet.stream()
+	            .map(customer -> new CustomerCare(null, customer, null, null, null)) // ID = null để auto, các field còn lại null
+	            .collect(Collectors.toList());
+
+	        // Lưu vào DB
+	        appRepository.insertCustomerCare(customerCares, daysAgo, daysAgo_case2);
+	    } catch (Exception e) {
+	        throw new RuntimeException("Lỗi khi nạp khách hàng vào CustomerCare: " + e.getMessage(), e);
+	    }
 	}
+
+//	@Override
+//	public void loadPotentialCustomersIntoCustomerCare() {
+//		try {
+//			LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
+//			LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
+//			LocalDateTime now = LocalDateTime.now();
+//            List<Customer> potentialCustomers = repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo, now);
+//
+//            if (potentialCustomers.isEmpty()) {
+//                throw new RuntimeException("Không có khách hàng tiềm năng nào để nạp vào CustomerCare.");
+//            }
+//
+//            List<CustomerCare> customerCares = potentialCustomers.stream()
+//                .map(customer -> new CustomerCare(null, customer, null, null, null)) // ID tự động tăng, các trường còn lại null
+//                .collect(Collectors.toList());
+//
+//            appRepository.insertCustomerCare(customerCares, daysAgo);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Lỗi khi nạp khách hàng tiềm năng vào CustomerCare: " + e.getMessage());
+//        }
+//	}
 	
 	/**
 	 * Find/Fetch all customer_care's data in table crm_customer_care (data from customer_care)
@@ -99,20 +136,61 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	    LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
 	    LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
 	    LocalDateTime now = LocalDateTime.now();
-
-	    // Fetch the list of customers
-	    List<Customer> customers = repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo, now);
 	    
-	    // Initialize the interactions collection explicitly
-	    for (Customer customer : customers) {
+	    // Gọi từng repo riêng biệt
+	    List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(twoDaysAgo);
+	    List<Customer> potentialCustomers = repo.findPotentialCustomers(case2DaysAgo);
+	    
+	    //Gộp danh sách lại
+	    Set<Customer> combinedSet = new HashSet<>();
+	    combinedSet.addAll(newCustomers);
+	    combinedSet.addAll(potentialCustomers);
+	    
+	    List<Customer> finalList = new ArrayList<>(combinedSet);
+
+//	    // Fetch the list of customers
+//	    List<Customer> customers = repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo, now);
+//	    // Initialize the interactions collection explicitly
+	    
+	    for (Customer customer : finalList) {
 	        Hibernate.initialize(customer.getInteractions());
 	    }
 
 	    // Log the customers list
-	    log.info("List of potential customers: {}", customers);
+	    for (Customer customer : finalList) {
+	        Hibernate.initialize(customer.getInteractions());
+	        // Ghi log từng khách hàng
+	        log.info("Customer ID: {}, Name: {}, Status: {}, CreatedAt: {}", 
+	                 customer.getId(), 
+	                 customer.getCompanyName(), 
+	                 customer.getMainStatus() != null ? customer.getMainStatus().getName() : "null", 
+	                 customer.getCreatedAt());
+	    }
 
-	    return customers;
+	    log.info("Total customers to care: {}", finalList.size());
+
+	    return finalList;
 	}
+//	@Override
+//	@Transactional
+//	public List<Customer> findAllCustomerCare() {
+//	    LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
+//	    LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
+//	    LocalDateTime now = LocalDateTime.now();
+//
+//	    // Fetch the list of customers
+//	    List<Customer> customers = repo.findPotentialCustomers(twoDaysAgo, case2DaysAgo, now);
+//	    
+//	    // Initialize the interactions collection explicitly
+//	    for (Customer customer : customers) {
+//	        Hibernate.initialize(customer.getInteractions());
+//	    }
+//
+//	    // Log the customers list
+//	    log.info("List of potential customers: {}", customers);
+//
+//	    return customers;
+//	}
 
 	@Override
 	public boolean existsInCustomerCares(Long customerId) {
