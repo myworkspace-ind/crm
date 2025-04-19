@@ -149,7 +149,7 @@
 
 	//Lấy thông tin chi tiết khách hàng và điền vào form
 	function populateCustomerForm(customerId) {
-		fetch(`${_ctx}customer/get-customer/${customerId}`)
+		fetch(`${_ctx}customer/get-customer/${customerId}`)	
 			.then(response => response.json())
 			.then(data => {
 				console.log('Dữ liệu chi tiết khách hàng:', data);
@@ -160,26 +160,26 @@
 					document.getElementById('customerPhone').value = data.customer.phone;
 					document.getElementById('customerName').value = data.customer.contactPerson;
 					// Set trạng thái chính và phụ nếu cần
-					const mainStatusSelect = document.getElementById('mainStatus');
-					const subStatusSelect = document.getElementById('subStatus');
+// 					const mainStatusSelect = document.getElementById('mainStatus');
+// 					const subStatusSelect = document.getElementById('subStatus');
 					
-// 					document.getElementById('mainStatus').value = data.customer.mainStatus?.id || '';
-// 					document.getElementById('subStatus').value = data.customer.subStatus?.id || '';
+					document.getElementById('mainStatus').value = data.customer.mainStatus || '';
+					document.getElementById('subStatus').value = data.customer.subStatus || '';
 
 					// Lặp qua các option và chọn giá trị phù hợp
-					for (let option of mainStatusSelect.options) {
-						if (option.text === data.customer.mainStatus.name) {
-							option.selected = true;
-							break;
-						}
-					}
+// 					for (let option of mainStatusSelect.options) {
+// 						if (option.text === data.customer.mainStatus.name) {
+// 							option.selected = true;
+// 							break;
+// 						}
+// 					}
 
-					for (let option of subStatusSelect.options) {
-						if (option.text === data.customer.subStatus.name) {
-							option.selected = true;
-							break;
-						}
-					}
+// 					for (let option of subStatusSelect.options) {
+// 						if (option.text === data.customer.subStatus.name) {
+// 							option.selected = true;
+// 							break;
+// 						}
+// 					}
 				}
 			})
 			.catch(error => {

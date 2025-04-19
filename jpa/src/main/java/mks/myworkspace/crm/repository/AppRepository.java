@@ -829,7 +829,7 @@ public class AppRepository {
 	 */
 	//Khong khai bao bien trong vong lap
 	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential) {
-		String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
+		String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ? AND remind_date = ?)";
 		String maxInteractionSql = "SELECT MAX(created_at) FROM crm_customer_interaction WHERE customer_id = ?";
 		String insertSql = "INSERT INTO crm_customer_care (customer_id, remind_date) VALUES (?, ?)";
 
@@ -843,11 +843,11 @@ public class AppRepository {
 		for (CustomerCare care : customerCares) {
 			customerId = care.getCustomer().getId();
 			mainStatus = care.getCustomer().getMainStatus().getName();
-			exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, customerId);
+			//exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, customerId);
 
-			if (Boolean.TRUE.equals(exists)) {
-				continue;
-			}
+//			if (Boolean.TRUE.equals(exists)) {
+//				continue;
+//			}
 
 			reminderTime = null;
 			if ("Mới".equalsIgnoreCase(mainStatus)) {
@@ -862,7 +862,17 @@ public class AppRepository {
 				}
 			}
 
-			jdbcTemplate0.update(insertSql, customerId, reminderTime);
+			// Kiểm tra nếu reminderTime hợp lệ
+	        if (reminderTime != null) {
+	            exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, customerId, Timestamp.valueOf(reminderTime));
+	            if (Boolean.TRUE.equals(exists)) {
+	                continue; // Đã tồn tại bản ghi với customer_id + remind_date này
+	            }
+
+	            // Insert bản ghi mới
+	            jdbcTemplate0.update(insertSql, customerId, Timestamp.valueOf(reminderTime));
+	        }
+
 		}
 	}
 
