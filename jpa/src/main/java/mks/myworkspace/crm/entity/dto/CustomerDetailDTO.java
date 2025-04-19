@@ -12,10 +12,11 @@ public class CustomerDetailDTO {
 	private Long responsiblePerson;
 	private String birthday;
 	private String note;
+	private Long profession;
 
 	public CustomerDetailDTO(Long id, String companyName, String email, String phone, String address,
 			String contactPerson, Long mainStatus, Long subStatus, Long responsiblePerson, String birthday,
-			String note) {
+			String note, Long profession) {
 		super();
 		this.id = id;
 		this.companyName = companyName;
@@ -28,6 +29,7 @@ public class CustomerDetailDTO {
 		this.responsiblePerson = responsiblePerson;
 		this.birthday = birthday;
 		this.note = note;
+		this.profession = profession;
 	}
 
 	public Long getId() {
@@ -117,14 +119,22 @@ public class CustomerDetailDTO {
 	public void setNote(String note) {
 		this.note = note;
 	}
+	
+
+	public Long getProfession() {
+		return profession;
+	}
+
+	public void setProfession(Long profession) {
+		this.profession = profession;
+	}
 
 	@Override
 	public String toString() {
 		return "CustomerDetailDTO [id=" + id + ", companyName=" + companyName + ", email=" + email + ", phone=" + phone
 				+ ", address=" + address + ", contactPerson=" + contactPerson + ", mainStatus=" + mainStatus
 				+ ", subStatus=" + subStatus + ", responsiblePerson=" + responsiblePerson + ", birthday=" + birthday
-				+ ", note=" + note + "]";
+				+ ", note=" + note + ", profession=" + profession + "]";
 	}
-	
 
 }

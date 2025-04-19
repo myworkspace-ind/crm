@@ -1023,77 +1023,125 @@ public class CustomerController extends BaseController {
 	@PutMapping("/newedit-customer")
 	@ResponseBody
 	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {
-		System.out.println(customer.getId());
-		Customer updatedCustomer;
-		try {
+	    System.out.println(customer.getId());
+	    Customer updatedCustomer;
+	    try {
+	        Optional<Customer> customerOpt = customerService.findById(customer.getId());
 
-			// Lấy khách hàng cũ từ cơ sở dữ liệu
-			Optional<Customer> customerOpt = customerService.findById(customer.getId());
+	        if (customerOpt.isPresent()) {
+	            Customer existingCustomer = customerOpt.get();
 
-			if (customerOpt.isPresent()) {
+	            existingCustomer.setCompanyName(customer.getCompanyName());
+	            existingCustomer.setContactPerson(customer.getContactPerson());
+	            existingCustomer.setEmail(customer.getEmail());
+	            existingCustomer.setPhone(customer.getPhone());
+	            existingCustomer.setAddress(customer.getAddress());
+	            existingCustomer.setResponsiblePerson(customer.getResponsiblePerson());
+	            existingCustomer.setNote(customer.getNote());
+	            existingCustomer.setProfession(customer.getProfession());
+	            existingCustomer.setMainStatus(customer.getMainStatus());
+	            existingCustomer.setSubStatus(customer.getSubStatus());
 
-				// Cập nhật thông tin khách hàng
-				Customer existingCustomer = customerOpt.get();
+	            updatedCustomer = storageService.saveOrUpdate(existingCustomer);
+	        } else {
+	            customer.setCreatedAt(LocalDateTime.now());
+	            customer.setSiteId(getCurrentSiteId());
+	            updatedCustomer = storageService.saveOrUpdate(customer);
+	        }
 
-				existingCustomer.setCompanyName(customer.getCompanyName());
-				existingCustomer.setContactPerson(customer.getContactPerson());
-				existingCustomer.setEmail(customer.getEmail());
-				existingCustomer.setPhone(customer.getPhone());
-				existingCustomer.setAddress(customer.getAddress());
-				existingCustomer.setResponsiblePerson(customer.getResponsiblePerson());
-				existingCustomer.setNote(customer.getNote());
-				existingCustomer.setProfession(customer.getProfession());
-				existingCustomer.setMainStatus(customer.getMainStatus());
-				existingCustomer.setSubStatus(customer.getSubStatus());
-				// existingCustomer.setUpdatedAt(new Date()); // Cập nhật thời gian sửa nếu cần
+	        CustomerDetailDTO dto = CustomerMapper.toDTO(updatedCustomer);
 
-				// Lưu lại khách hàng đã cập nhật
-				updatedCustomer = storageService.saveOrUpdate(existingCustomer);
+	        String message = customerOpt.isPresent()
+	            ? "Khách hàng đã được cập nhật thành công!"
+	            : "Khách hàng đã được thêm mới thành công!";
 
-			}
+	        return ResponseEntity.ok().body(Map.of(
+	            "message", message,
+	            "customer", dto
+	        ));
 
-			else {
-				customer.setCreatedAt(LocalDateTime.now());
-				customer.setSiteId(getCurrentSiteId());
-				updatedCustomer = storageService.saveOrUpdate(customer);
-			}
-
-			log.info("Khách hàng đã được cập nhật thành công:");
-			log.info("ID: {}", updatedCustomer.getId());
-			log.info("Tên công ty: {}", updatedCustomer.getCompanyName());
-			log.info("Người liên hệ: {}", updatedCustomer.getContactPerson());
-			log.info("Email: {}", updatedCustomer.getEmail());
-			log.info("Số điện thoại: {}", updatedCustomer.getPhone());
-			log.info("Địa chỉ: {}", updatedCustomer.getAddress());
-			// log.info("Ngày sửa: {}", updatedCustomer.getUpdatedAt()); // Cập nhật ngày
-			// sửa nếu có
-			log.info("Ghi chú: {}", updatedCustomer.getNote());
-
-			if (updatedCustomer.getProfession() != null) {
-				log.info("Ngành nghề: {}", updatedCustomer.getProfession().getName());
-			} else {
-				log.info("Ngành nghề: Không có");
-			}
-
-			if (updatedCustomer.getResponsiblePerson() != null) {
-				log.info("Người phụ trách: {}", updatedCustomer.getResponsiblePerson().getName());
-			} else {
-				log.info("Người phụ trách: Không có");
-			}
-			if (customerOpt.isPresent()) {
-				return ResponseEntity.ok().body(
-						Map.of("message", "Khách hàng đã được cập nhật thành công!", "customer", updatedCustomer));
-			} else {
-				return ResponseEntity.ok().body(
-						Map.of("message", "Khách hàng đã được thêm mới thành công!", "customer", updatedCustomer));
-			}
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
-					"Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng kiểm tra lại độ dài SDT!" + customer.getId()));
-		}
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
+	                "Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng kiểm tra lại độ dài SDT! ID: " + customer.getId()));
+	    }
 	}
+
+//	@PutMapping("/newedit-customer")
+//	@ResponseBody
+//	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {
+//		System.out.println(customer.getId());
+//		Customer updatedCustomer;
+//		try {
+//
+//			// Lấy khách hàng cũ từ cơ sở dữ liệu
+//			Optional<Customer> customerOpt = customerService.findById(customer.getId());
+//
+//			if (customerOpt.isPresent()) {
+//
+//				// Cập nhật thông tin khách hàng
+//				Customer existingCustomer = customerOpt.get();
+//
+//				existingCustomer.setCompanyName(customer.getCompanyName());
+//				existingCustomer.setContactPerson(customer.getContactPerson());
+//				existingCustomer.setEmail(customer.getEmail());
+//				existingCustomer.setPhone(customer.getPhone());
+//				existingCustomer.setAddress(customer.getAddress());
+//				existingCustomer.setResponsiblePerson(customer.getResponsiblePerson());
+//				existingCustomer.setNote(customer.getNote());
+//				existingCustomer.setProfession(customer.getProfession());
+//				existingCustomer.setMainStatus(customer.getMainStatus());
+//				existingCustomer.setSubStatus(customer.getSubStatus());
+//				// existingCustomer.setUpdatedAt(new Date()); // Cập nhật thời gian sửa nếu cần
+//
+//				// Lưu lại khách hàng đã cập nhật
+//				updatedCustomer = storageService.saveOrUpdate(existingCustomer);
+//
+//			}
+//
+//			else {
+//				customer.setCreatedAt(LocalDateTime.now());
+//				customer.setSiteId(getCurrentSiteId());
+//				updatedCustomer = storageService.saveOrUpdate(customer);
+//			}
+//
+//			log.info("Khách hàng đã được cập nhật thành công:");
+//			log.info("ID: {}", updatedCustomer.getId());
+//			log.info("Tên công ty: {}", updatedCustomer.getCompanyName());
+//			log.info("Người liên hệ: {}", updatedCustomer.getContactPerson());
+//			log.info("Email: {}", updatedCustomer.getEmail());
+//			log.info("Số điện thoại: {}", updatedCustomer.getPhone());
+//			log.info("Địa chỉ: {}", updatedCustomer.getAddress());
+//			// log.info("Ngày sửa: {}", updatedCustomer.getUpdatedAt()); // Cập nhật ngày
+//			// sửa nếu có
+//			log.info("Ghi chú: {}", updatedCustomer.getNote());
+//
+//			if (updatedCustomer.getProfession() != null) {
+//				log.info("Ngành nghề: {}", updatedCustomer.getProfession().getName());
+//			} else {
+//				log.info("Ngành nghề: Không có");
+//			}
+//
+//			if (updatedCustomer.getResponsiblePerson() != null) {
+//				log.info("Người phụ trách: {}", updatedCustomer.getResponsiblePerson().getName());
+//			} else {
+//				log.info("Người phụ trách: Không có");
+//			}
+//			if (customerOpt.isPresent()) {
+//				return ResponseEntity.ok().body(
+//						Map.of("message", "Khách hàng đã được cập nhật thành công!", "customer", updatedCustomer));
+//			} else {
+//				return ResponseEntity.ok().body(
+//						Map.of("message", "Khách hàng đã được thêm mới thành công!", "customer", updatedCustomer));
+//			}
+//		} catch (IllegalArgumentException e) {
+//			return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
+//					"Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng kiểm tra lại độ dài SDT!" + customer.getId()));
+//		}
+//	}
 
 	@RequestMapping(value = { "/customer-list-search-son" }, method = RequestMethod.GET)
 	public ModelAndView displayCustomerListCRMSearch(

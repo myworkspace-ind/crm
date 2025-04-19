@@ -91,54 +91,11 @@ public class Customer implements Serializable {
     
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Interaction> interactions;
-    
-    
-//    public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-//			Profession profession, Status mainStatus, Status subStatus, ResponsiblePerson responsiblePerson, LocalDateTime createdAt,
-//			String note, Boolean accountStatus) {
-//		super();
-//		this.id = id;
-//		this.siteId = siteId;
-//		this.companyName = companyName;
-//		this.contactPerson = contactPerson;
-//		this.email = email;
-//		this.phone = phone;
-//		this.address = address;
-//		this.profession = profession;
-//		this.mainStatus = mainStatus;
-//		this.subStatus = subStatus;
-//		this.responsiblePerson = responsiblePerson;
-//		this.createdAt = createdAt;
-//		this.note = note;
-//		this.accountStatus = accountStatus;
-//	}
-//    
-//    public Customer(Long id, String siteId, String companyName, String contactPerson, String email, String phone, String address,
-//			LocalDateTime createdAt, String note, Boolean accountStatus) {
-//		super();
-//		this.id = id;
-//		this.siteId = siteId;
-//		this.companyName = companyName;
-//		this.contactPerson = contactPerson;
-//		this.email = email;
-//		this.phone = phone;
-//		this.address = address;
-//		this.createdAt = createdAt;
-//		this.note = note;
-//		this.accountStatus = accountStatus;
-//	}
-
-//	public Customer(String contactPerson2) {
-//		// TODO Auto-generated constructor stub
-//	}
-	
 
 	public Customer(Long id) {
 		super();
 		this.id = id;
 	}
-	
-	
 	
 	public String getFormattedCreatedAt() {
 	    if (createdAt != null) {
@@ -146,8 +103,6 @@ public class Customer implements Serializable {
 	    }
 	    return "";
 	}
-
-
 
 	@Override
 	public String toString() {
@@ -158,5 +113,6 @@ public class Customer implements Serializable {
 				+ createdAt + ", note=" + note + ", accountStatus=" + accountStatus + ", interactions=" + interactions
 				+ "]";
 	}
+
 
 }

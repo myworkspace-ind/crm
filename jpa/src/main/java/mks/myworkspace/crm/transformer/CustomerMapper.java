@@ -19,7 +19,8 @@ public class CustomerMapper {
             customer.getSubStatus() != null ? customer.getSubStatus().getId() : null,   
             customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null, 
             customer.getBirthday() != null ? customer.getBirthday().toString() : null,
-            customer.getNote()
+            customer.getNote(), 
+            customer.getProfession() != null ? customer.getProfession().getId() : null
         );
     }
 }
