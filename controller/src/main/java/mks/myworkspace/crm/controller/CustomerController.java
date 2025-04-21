@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import mks.myworkspace.crm.entity.*;
+import mks.myworkspace.crm.service.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,25 +45,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
-import mks.myworkspace.crm.entity.Customer;
-import mks.myworkspace.crm.entity.EmailToCustomer;
-import mks.myworkspace.crm.entity.GoodsCategory;
-import mks.myworkspace.crm.entity.Interaction;
-import mks.myworkspace.crm.entity.Profession;
-import mks.myworkspace.crm.entity.ResponsiblePerson;
-import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
-import mks.myworkspace.crm.service.CustomerService;
-import mks.myworkspace.crm.service.CustomerService_Son;
-import mks.myworkspace.crm.service.EmailToCustomerService;
-import mks.myworkspace.crm.service.ProfessionService;
-import mks.myworkspace.crm.service.ResponsiblePersonService;
-import mks.myworkspace.crm.service.StatusService;
-import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.service.impl.EmailService;
 import mks.myworkspace.crm.transformer.CustomerMapper;
 import mks.myworkspace.crm.transformer.JpaTransformer_Interaction_Handsontable;
@@ -81,7 +69,7 @@ import mks.myworkspace.crm.validate.StatusValidator;
 public class CustomerController extends BaseController {
 	/**
 	 * This method is called when binding the HTTP parameter to bean (or model).
-	 * 
+	 *
 	 * @param binder
 	 */
 	@InitBinder
@@ -96,7 +84,7 @@ public class CustomerController extends BaseController {
 
 	/**
 	 * Simply selects the home view to render by returning its name.
-	 * 
+	 *
 	 * @return
 	 */
 
@@ -117,21 +105,21 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	CustomerService_Son customerServiceSon;
-	
+
 	@Autowired
 	EmailService emailService;
-	
+
 	@Autowired
 	EmailToCustomerService emailToCustomerService;
-	
+
 	@Autowired
 	private CustomerRepository customerRepository;
-	
+
 //	@GetMapping("/get-potential-customer")
 //	public ResponseEntity<?> getPotentialCustomers() {
 //		try {
 //			List<Customer> customers = customerService.findPotentialCustomers();
-//	        
+//
 //	        if (customers.isEmpty()) {
 //	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
 //	                                 .body("Không có khách hàng tiềm năng nào.");
@@ -143,7 +131,7 @@ public class CustomerController extends BaseController {
 //                    .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
 //		}
 //	}
-	
+
 	@GetMapping("/customerDetailJson")
 	@ResponseBody
 	public ResponseEntity<?> getCustomerDetailJson(@RequestParam("id") Long customerId) {
@@ -180,35 +168,35 @@ public class CustomerController extends BaseController {
 	    try {
 	        String loggedInUserEmail = authentication.getName();
 	        log.info("Sender email: {}", loggedInUserEmail);
-	        
-	        
+
+
 	        Customer customer = customerRepository.findById(customerId).orElse(null);
 	        if (customer == null) {
 	            return ResponseEntity.badRequest().body("Không tìm thấy khách hàng!");
 	        }
-	        
+
 	        EmailToCustomer email = new EmailToCustomer();
 	        email.setSender(loggedInUserEmail);
 	        email.setCustomer(customer);
 //	        email.setSubject(new String(subject.getBytes(), "UTF-8"));
 //	        email.setContent(new String(content.getBytes(), "UTF-8"));
-	        
+
 //	        email.setSubject(new String(subject.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
 //	        email.setContent(new String(content.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
-	        
+
 	        email.setSubject(subject);
 	        email.setContent(content);
-	        
+
 	        email.setStatus(EmailToCustomer.EmailStatus.SENT);
-	        
+
 	        emailService.sendEmailToCustomer(email);
-	        
+
 	        return ResponseEntity.ok("Gửi email thành công!");
 	    } catch (Exception e) {
 	        return ResponseEntity.status(500).body("Gửi email thất bại!");
 	    }
 	}
-	
+
 	//Chuyển sang EmailToCustomerDTO để tránh bị lỗi: LazyInitializationException trong Spring MVC
 	
 	@GetMapping("/get-email-to-customer")
@@ -219,7 +207,7 @@ public class CustomerController extends BaseController {
             .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
 	}
-	
+
 	@GetMapping("/get-detail-email-to-customer")
 	@ResponseBody
 	public ResponseEntity<?> getEmailToCustomerById(@RequestParam("emailToCustomerId") Long emailToCustomerId) {
@@ -253,7 +241,7 @@ public class CustomerController extends BaseController {
 					"Có lỗi xảy ra khi lấy thông tin email. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
 	}
-	
+
 //	@GetMapping("/get-detail-email-to-customer")
 //	@ResponseBody
 //	public ResponseEntity<?> getEmailToCustomerById(@RequestParam("emailToCustomerId") Long emailToCustomerId) {
@@ -290,12 +278,12 @@ public class CustomerController extends BaseController {
 		int page = 1;
         try {
             if(customerCriteriaDTO.getPage().isPresent()){
-                page = Integer.parseInt(customerCriteriaDTO.getPage().get()); 
+                page = Integer.parseInt(customerCriteriaDTO.getPage().get());
             }
         } catch (Exception e) {
             // TODO: handle exception
         }
-        
+
         String queryString = request.getQueryString();
         String updatedQueryString = queryString != null
                 ? Arrays.stream(queryString.split("&"))
@@ -390,7 +378,7 @@ public class CustomerController extends BaseController {
 					.body(Map.of("errorMessage", "Có lỗi xảy ra khi thêm khách hàng. Vui lòng thử lại sau!"));
 		}
 	}
-	
+
 	@Transactional
 	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
 	@ResponseBody
@@ -595,15 +583,15 @@ public class CustomerController extends BaseController {
 //
 //	    try {
 //	    	storageService.saveOrUpdate(customer);
-//	    	
+//
 //	     // Điều hướng về trang danh sách khách hàng sau khi lưu thành công
 //	        mav.setViewName("redirect:/customer-list");
 //	        //mav.addObject("successMessage", "Khách hàng đã được thêm thành công!");
-//	    
+//
 //	    } catch (IllegalArgumentException e) {
 //	    	mav.setViewName("createCustomer");
-//	    	mav.addObject("errorMessage", e.getMessage()); 
-//	        mav.addObject("customer", customer); 
+//	    	mav.addObject("errorMessage", e.getMessage());
+//	        mav.addObject("customer", customer);
 //	    }
 //
 //	    initSession(request, httpSession);
@@ -631,13 +619,13 @@ public class CustomerController extends BaseController {
 //	@RequestMapping(value = { "/add-customer" }, method = RequestMethod.GET)
 //	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
 //		ModelAndView mav = new ModelAndView("createCustomer");
-//		
+//
 //		mav.addObject("customer", new Customer());
 //
 //		initSession(request, httpSession);
 //		mav.addObject("currentSiteId", getCurrentSiteId());
 //		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-//		
+//
 //		//Long newId = customerService.getNextCustomerId(); // Lấy ID tiếp theo
 //	    //Customer customer = new Customer(); // Tạo đối tượng Customer mới
 //	    //customer.setId(newId); // Thiết lập ID mới cho khách hàng
@@ -880,17 +868,17 @@ public class CustomerController extends BaseController {
 
 		return mav;
 	}
-	
+
 	private String getDefaultResponsiblePerson() throws IOException {
 		return IOUtils.toString(resResponsiblePersonDemo.getInputStream(), StandardCharsets.UTF_8);
 	}
-	
+
 	@GetMapping("/load-responsible-person")
 	@ResponseBody
 	public Object getResponsiblePersonData(@RequestParam("type") String type) throws IOException {
 		log.debug("Get sample data from responsible person file.");
 		//String jsonResponPersonTable = getDefaultResponsiblePerson();
-		
+
 		List<ResponsiblePerson> lstResponPerson;
 		List<Profession> lstProfession;
 		List<Status> lstStatus;
@@ -925,9 +913,9 @@ public class CustomerController extends BaseController {
 		TableStructure tblOrderCate = new TableStructure(colWidths, colHeaders, tblData);
 
 		return tblOrderCate;
-		
+
 	}
-	
+
 	@PostMapping(value = "/save-responsible-person")
 	@ResponseBody
 	public TableStructure saveResponsiblePerson(@RequestBody TableStructure tableData, @RequestParam("type") String type) {
@@ -941,13 +929,13 @@ public class CustomerController extends BaseController {
 			List<GoodsCategory> lstGoodsCategory;
 
 			if(type.equals("customPerson")) {
-				lstResponsiblePerson = ResponsiblePersonValidator.validateAndCleasing(tableData.getData());	
+				lstResponsiblePerson = ResponsiblePersonValidator.validateAndCleasing(tableData.getData());
 				lstResponsiblePerson = storageService.saveOrUpdateResponsiblePerson(lstResponsiblePerson);
 				List<String> fields = List.of("id", "name", "note", "seqno");
 				tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstResponsiblePerson, fields);
 			}
 			else if(type.equals("customProfession")) {
-				lstProfession = ProfessionValidator.validateAndCleasing(tableData.getData());				
+				lstProfession = ProfessionValidator.validateAndCleasing(tableData.getData());
 				lstProfession = storageService.saveOrUpdateProfession(lstProfession);
 				List<String> fields = List.of("id", "name", "note", "seqno");
 				tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstProfession, fields);
@@ -971,7 +959,7 @@ public class CustomerController extends BaseController {
 		}
 		return tableData;
 	}
-	
+
 	@RequestMapping(value = "/delete-object", method = RequestMethod.DELETE)
 	@ResponseBody
 	public ResponseEntity<?> deleteObjectById(@RequestParam("id") Long id, @RequestParam("type") String type) {
@@ -1001,9 +989,9 @@ public class CustomerController extends BaseController {
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
 	}
-	
+
 	@PostMapping("/swap")
-    public ResponseEntity<?> swapRows(@RequestParam("rowIndex1") Long rowIndex1, 
+    public ResponseEntity<?> swapRows(@RequestParam("rowIndex1") Long rowIndex1,
 							            @RequestParam("rowIndex2") Long rowIndex2,
 							            @RequestParam("type") String type) {
 		try {
@@ -1018,18 +1006,20 @@ public class CustomerController extends BaseController {
 					.body(Map.of("errorMessage", "Có lỗi xảy ra. Vui lòng thử lại sau!", "details", e.getMessage()));
 		}
     }
-	
+
 	// Hàm edit-customer
 	@PutMapping("/newedit-customer")
 	@ResponseBody
+	@Transactional
 	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {
-	    System.out.println(customer.getId());
+	    log.debug("Khách cần edit: {}",customer.toString());
 	    Customer updatedCustomer;
 	    try {
 	        Optional<Customer> customerOpt = customerService.findById(customer.getId());
 
 	        if (customerOpt.isPresent()) {
 	            Customer existingCustomer = customerOpt.get();
+	            log.debug("Address from frontend: {} ", customer.getAddress());
 
 	            existingCustomer.setCompanyName(customer.getCompanyName());
 	            existingCustomer.setContactPerson(customer.getContactPerson());
@@ -1041,6 +1031,7 @@ public class CustomerController extends BaseController {
 	            existingCustomer.setProfession(customer.getProfession());
 	            existingCustomer.setMainStatus(customer.getMainStatus());
 	            existingCustomer.setSubStatus(customer.getSubStatus());
+				//Customer existingCustomer = customerOpt.get();
 
 	            updatedCustomer = storageService.saveOrUpdate(existingCustomer);
 	        } else {

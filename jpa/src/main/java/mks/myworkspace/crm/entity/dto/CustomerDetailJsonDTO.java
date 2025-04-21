@@ -1,5 +1,7 @@
 package mks.myworkspace.crm.entity.dto;
 
+import mks.myworkspace.crm.entity.Address;
+
 public class CustomerDetailJsonDTO {
 	private Long id;
 	private String companyName;
@@ -28,6 +30,12 @@ public class CustomerDetailJsonDTO {
 		this.responsiblePerson = responsiblePerson;
 		this.birthday = birthday;
 		this.note = note;
+	}
+
+	public CustomerDetailJsonDTO(Long id2, String companyName2, String email2, String phone2, Address address2,
+			String contactPerson2, String mainStatus2, String subStatus2, String responsiblePerson2, String birthday2,
+			String note2) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public Long getId() {
