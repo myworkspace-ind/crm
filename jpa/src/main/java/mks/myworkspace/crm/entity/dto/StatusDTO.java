@@ -16,7 +16,7 @@ import lombok.Setter;
 public class StatusDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Long id;
-    private String siteId;
+    //private String siteId;
     private String name;
     private String backgroundColor;
     private Long seqno;

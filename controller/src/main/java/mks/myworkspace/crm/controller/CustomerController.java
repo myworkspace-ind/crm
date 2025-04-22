@@ -51,9 +51,13 @@ import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.service.impl.EmailService;
+import mks.myworkspace.crm.transformer.AddressMapper;
 import mks.myworkspace.crm.transformer.CustomerMapper;
 import mks.myworkspace.crm.transformer.JpaTransformer_Interaction_Handsontable;
 import mks.myworkspace.crm.transformer.JpaTransformer_ResponsiblePerson_Handsontable;
+import mks.myworkspace.crm.transformer.ProfessionMapper;
+import mks.myworkspace.crm.transformer.ResponsiblePersonMapper;
+import mks.myworkspace.crm.transformer.StatusMapper;
 import mks.myworkspace.crm.validate.GoodsCategoryValidator;
 import mks.myworkspace.crm.validate.InteractionValidator;
 import mks.myworkspace.crm.validate.ProfessionValidator;
@@ -139,20 +143,22 @@ public class CustomerController extends BaseController {
 
 		if (customerOpt.isPresent()) {
 			Customer c = customerOpt.get();
-			
+
 			CustomerDetailJsonDTO dtoJson = new CustomerDetailJsonDTO(
-					c.getId(),
-					c.getCompanyName(),
-					c.getEmail(),
-					c.getPhone(),
-					c.getAddress(),
-					c.getContactPerson(),
-					c.getMainStatus() != null ? c.getMainStatus().getName() : null,
-					c.getSubStatus() != null ? c.getSubStatus().getName(): null,
-					c.getResponsiblePerson() != null ? c.getResponsiblePerson().getName() : null,
-					c.getBirthday() != null ? c.getBirthday().toString() : null,
-					c.getNote()
+				c.getId(),
+				c.getCompanyName(),
+				c.getEmail(),
+				c.getPhone(),
+				AddressMapper.toDTO(c.getAddress()), // ✅ Chuyển Address → AddressDTO
+				c.getContactPerson(),
+				StatusMapper.toDTO(c.getMainStatus()), // ✅ Trả về StatusDTO
+				StatusMapper.toDTO(c.getSubStatus()),
+				ResponsiblePersonMapper.toDTO(c.getResponsiblePerson()), // ✅
+				c.getBirthday(), // ✅ Không cần toString, đúng kiểu rồi
+				c.getNote(),
+				ProfessionMapper.toDTO(c.getProfession()) // ✅
 			);
+
 			return ResponseEntity.ok(dtoJson);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");

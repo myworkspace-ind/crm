@@ -65,7 +65,10 @@ public class CustomerMapper {
 		// Main Status
 		Status ms = customer.getMainStatus();
 		if (ms != null) {
-			StatusDTO msDto = new StatusDTO(ms.getId(), ms.getSiteId(), ms.getName(), ms.getBackgroundColor(),
+			StatusDTO msDto = new StatusDTO(ms.getId(), 
+					//ms.getSiteId(), 
+					ms.getName(), 
+					ms.getBackgroundColor(),
 					ms.getSeqno());
 			dto.setMainStatus(msDto);
 		}
@@ -73,7 +76,10 @@ public class CustomerMapper {
 		// Sub Status
 		Status ss = customer.getSubStatus();
 		if (ss != null) {
-			StatusDTO ssDto = new StatusDTO(ss.getId(), ss.getSiteId(), ss.getName(), ss.getBackgroundColor(),
+			StatusDTO ssDto = new StatusDTO(ss.getId(), 
+					//ss.getSiteId(), 
+					ss.getName(), 
+					ss.getBackgroundColor(),
 					ss.getSeqno());
 			dto.setSubStatus(ssDto);
 		}
@@ -131,7 +137,7 @@ public class CustomerMapper {
 		if (msDto != null) {
 			Status ms = new Status();
 			ms.setId(msDto.getId());
-			ms.setSiteId(msDto.getSiteId());
+			//ms.setSiteId(msDto.getSiteId());
 			ms.setName(msDto.getName());
 			ms.setBackgroundColor(msDto.getBackgroundColor());
 			ms.setSeqno(msDto.getSeqno());
@@ -143,7 +149,7 @@ public class CustomerMapper {
 		if (ssDto != null) {
 			Status ss = new Status();
 			ss.setId(ssDto.getId());
-			ss.setSiteId(ssDto.getSiteId());
+			//ss.setSiteId(ssDto.getSiteId());
 			ss.setName(ssDto.getName());
 			ss.setBackgroundColor(ssDto.getBackgroundColor());
 			ss.setSeqno(ssDto.getSeqno());
