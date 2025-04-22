@@ -506,7 +506,24 @@ public class AppRepository {
 		parameters.put("latitude", address.getLatitude());
 		parameters.put("longitude", address.getLongitude());
 
-
+		log.debug("Insert Address with details: \n" +
+		            "Street: {} \n" +
+		            "Ward: {} \n" +
+		            "District: {} \n" +
+		            "State: {} \n" +
+		            "Postcode: {} \n" +
+		            "Country: {} \n" +
+		            "Latitude: {} \n" +
+		            "Longitude: {}",
+		            address.getStreet(),
+		            address.getWard(),
+		            address.getDistrict(),
+		            address.getState(),
+		            address.getPostcode(),
+		            address.getCountry(),
+		            address.getLatitude(),
+		            address.getLongitude()
+		);
 		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 		log.debug("New ID Address: {}", id);
 		return id;
@@ -540,11 +557,16 @@ public class AppRepository {
 					"latitude = :latitude, " +
 					"longitude = :longitude " +
 					"WHERE id = :id";
-
 			parameters.put("id", id);
-
+			log.debug("Executing UPDATE for address ID: {}", id);
 			// Execute the update query
 			int rowsAffected = new NamedParameterJdbcTemplate(jdbcTemplate0).update(sql, parameters);
+			// ✅ Log kết quả sau khi cập nhật
+	        log.debug("Address updated. ID: {}, Rows affected: {}, New values -> street: {}, ward: {}, district: {}, state: {}, postcode: {}, country: {}, latitude: {}, longitude: {}",
+	                id, rowsAffected,
+	                address.getStreet(), address.getWard(), address.getDistrict(),
+	                address.getState(), address.getPostcode(), address.getCountry(),
+	                address.getLatitude(), address.getLongitude());
 			log.debug("Updated rows for address: {}", rowsAffected);
 			return rowsAffected;
 		} else {

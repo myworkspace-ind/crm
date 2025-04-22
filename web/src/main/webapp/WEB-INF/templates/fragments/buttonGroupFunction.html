@@ -163,8 +163,8 @@
 // 					const mainStatusSelect = document.getElementById('mainStatus');
 // 					const subStatusSelect = document.getElementById('subStatus');
 					
-					document.getElementById('mainStatus').value = data.customer.mainStatus || '';
-					document.getElementById('subStatus').value = data.customer.subStatus || '';
+					document.getElementById('mainStatus').value = data.customer.mainStatus.id || '';
+					document.getElementById('subStatus').value = data.customer.subStatus.id || '';
 
 					// Lặp qua các option và chọn giá trị phù hợp
 // 					for (let option of mainStatusSelect.options) {

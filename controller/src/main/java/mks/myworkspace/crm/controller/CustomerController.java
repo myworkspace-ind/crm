@@ -1014,6 +1014,7 @@ public class CustomerController extends BaseController {
 	public ResponseEntity<?> editCustomer(@RequestBody Customer customer, HttpServletRequest request) {
 	    log.debug("Khách cần edit: {}",customer.toString());
 	    Customer updatedCustomer;
+	    
 	    try {
 	        Optional<Customer> customerOpt = customerService.findById(customer.getId());
 
@@ -1032,7 +1033,6 @@ public class CustomerController extends BaseController {
 	            existingCustomer.setMainStatus(customer.getMainStatus());
 	            existingCustomer.setSubStatus(customer.getSubStatus());
 				//Customer existingCustomer = customerOpt.get();
-
 	            updatedCustomer = storageService.saveOrUpdate(existingCustomer);
 	        } else {
 	            customer.setCreatedAt(LocalDateTime.now());
