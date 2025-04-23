@@ -188,7 +188,6 @@ let marker;
 let geocoder;
 let autocomplete;
 let modalAutocomplete;
-let apiCallCount = 0;
 
 /**
  * Initialize Google Map and its event listeners.
@@ -204,6 +203,7 @@ let apiCallCount = 0;
 function initMap() {
     // Default location (Sydney, Australia)
     const defaultLocation = { lat: -33.8568, lng: 151.2153 };
+    let placeSelected = false;
 
     // Initialize the map
     map = new google.maps.Map(document.getElementById("map"), {
@@ -223,23 +223,19 @@ function initMap() {
 
     // Main Autocomplete for address input
     const addressInput = document.getElementById("address");
-//    autocomplete = new google.maps.places.Autocomplete(
-//        document.getElementById("address")
-//    );
 
     // Initialize Google Places Autocomplete
-    let autocomplete = new google.maps.places.Autocomplete(addressInput);
+    autocomplete = new google.maps.places.Autocomplete(addressInput);
 
     // Add event listener for when the user selects a suggestion from the autocomplete dropdown
     autocomplete.addListener("place_changed", function () {
-        apiCallCount++; // Increment counter
-        console.log(`Google Places API called: ${apiCallCount} times`);
         let place = autocomplete.getPlace();
         if (!place.geometry) {
             alert("No details available for the selected address.");
             return;
         }
 
+        placeSelected = true;
         updateMarkerAndMap(place.geometry.location);
 
         document.getElementById("address").value = place.formatted_address;
@@ -248,16 +244,13 @@ function initMap() {
 
     // Add event listener for when the input field loses focus (blur)
     addressInput.addEventListener('blur', function () {
-        const place = autocomplete.getPlace();
+        setTimeout(() => {
+            if (placeSelected) {
+                placeSelected = false;
+                return;
+            }
 
-        if (place && place.geometry) {
-            // If a place is selected, use it
-            updateMarkerAndMap(place.geometry.location);
-            fillFormFields(place);
-        } else {
-            // If no place is selected, attempt to geocode the input manually
             const address = addressInput.value.trim();
-
             if (address) {
                 geocoder.geocode({ address: address }, function (results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
@@ -271,7 +264,11 @@ function initMap() {
             } else {
                 alert("Please enter a valid address.");
             }
-        }
+        }, 300);
+    });
+
+    google.maps.event.addListener(marker, "dragend", function () {
+        geocodePosition(marker.getPosition());
     });
 
     // Marker drag event to update address

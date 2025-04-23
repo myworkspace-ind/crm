@@ -52,7 +52,7 @@ public class Address {
             if (state != null && !state.isEmpty()) sb.append(", ").append(state);
             sb.append(", Vietnam");
         } else {
-            // Non-Vietnam format (Western-style)
+            // Non-Vietnam format
             if (street != null && !street.isEmpty()) sb.append(street);
             if (district != null && !district.isEmpty()) sb.append(", ").append(district);
             if (state != null && !state.isEmpty()) sb.append(" ").append(state);

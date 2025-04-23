@@ -7,32 +7,43 @@
                     <span id="close-modal" class="close-btn">&times;</span>
                     <h4>New | Edit Address</h4>
                     <hr>
-                    <form id="address-form">
+                    <form id="address-form" method="post">
                         <div class="form-group">
                             <label for="street-address">Street Address:</label>
-                            <input type="text" id="street-address" placeholder="e.g. Collins Rd">
+                            <input type="text" id="street-address" name="streetAddress"
+                                   th:value="${address.street != null ? address.street : ''}"
+                                   placeholder="e.g. Collins Rd">
                             <span class="error-message"></span>
                         </div>
+
                         <!-- Default Form (Non-Vietnam) -->
                         <div id="default-address-form">
                             <div class="form-group">
                                 <label for="suburb">Suburb/District:</label>
-                                <input type="text" id="suburb" placeholder="e.g. Sydney / Hoàn Kiếm">
+                                <input type="text" id="suburb" name="suburb"
+                                       th:value="${address.district != null ? address.district : ''}"
+                                       placeholder="e.g. Sydney / Hoàn Kiếm">
                                 <span class="error-message"></span>
                             </div>
                             <div class="form-group">
                                 <label for="state">State/Province:</label>
-                                <input type="text" id="state" placeholder="e.g. New South Wales / Hà Nội">
+                                <input type="text" id="state" name="state"
+                                       th:value="${address.state != null ? address.state : ''}"
+                                       placeholder="e.g. New South Wales / Hà Nội">
                                 <span class="error-message"></span>
                             </div>
                             <div class="form-group">
                                 <label for="postcode">Postcode/Zip Code:</label>
-                                <input type="text" id="postcode" placeholder="e.g. 2000">
+                                <input type="text" id="postcode" name="postcode"
+                                       th:value="${address.postcode != null ? address.postcode : ''}"
+                                       placeholder="e.g. 2000">
                                 <span class="error-message"></span>
                             </div>
                             <div class="form-group">
                                 <label for="country">Country:</label>
-                                <input type="text" id="country" placeholder="e.g. AUS">
+                                <input type="text" id="country" name="country"
+                                       th:value="${address.country != null ? address.country : ''}"
+                                       placeholder="e.g. AUS">
                             </div>
                         </div>
 
@@ -40,26 +51,35 @@
                         <div id="vietnam-address-form" style="display: none;">
                             <div class="form-group">
                                 <label for="vn-ward">Ward:</label>
-                                <input type="text" id="vn-ward" placeholder="e.g. Phường 5">
+                                <input type="text" id="vn-ward" name="vnWard"
+                                       th:value="${address.ward != null ? address.ward : ''}"
+                                       placeholder="e.g. Phường 5">
                                 <span class="error-message"></span>
                             </div>
                             <div class="form-group">
                                 <label for="vn-district">District:</label>
-                                <input type="text" id="vn-district" placeholder="e.g. Quận 1">
+                                <input type="text" id="vn-district" name="vnDistrict"
+                                       th:value="${address.district != null ? address.district : ''}"
+                                       placeholder="e.g. Quận 1">
                                 <span class="error-message"></span>
                             </div>
                             <div class="form-group">
                                 <label for="vn-city">City:</label>
-                                <input type="text" id="vn-city" placeholder="e.g. Hồ Chí Minh">
+                                <input type="text" id="vn-city" name="vnCity"
+                                       th:value="${address.state != null ? address.state : ''}"
+                                       placeholder="e.g. Hồ Chí Minh">
                                 <span class="error-message"></span>
                             </div>
                             <div class="form-group">
                                 <label for="vn-country">Country:</label>
-                                <input type="text" id="vn-country" value="Vietnam" readonly>
+                                <input type="text" id="vn-country" name="vnCountry" value="Vietnam" readonly>
                             </div>
                         </div>
-                        <input type="hidden" id="longitude" />
-                        <input type="hidden" id="latitude" />
+
+                        <input type="hidden" id="longitude" name="longitude"
+                               th:value="${address.longitude != null ? address.longitude : ''}" />
+                        <input type="hidden" id="latitude" name="latitude"
+                               th:value="${address.latitude != null ? address.latitude : ''}" />
                         <button type="submit" id="submit" class="submit-btn">Submit Address</button>
                     </form>
                 </div>
