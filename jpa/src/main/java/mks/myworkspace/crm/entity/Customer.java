@@ -93,6 +93,9 @@ public class Customer implements Serializable {
     
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Interaction> interactions;
+    
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<BirthdayEmailLog> birthdayEmailLogs;
 
 	public Customer(Long id) {
 		super();

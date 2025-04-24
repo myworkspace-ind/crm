@@ -12,4 +12,5 @@ public interface EmailToCustomerService {
 	List<EmailToCustomer> getAllEmailToCustomer(Long customerID);
 	
 	Optional<EmailToCustomer> GetEmailToCustomerByID (Long emailToCustomerID);
+		
 }
