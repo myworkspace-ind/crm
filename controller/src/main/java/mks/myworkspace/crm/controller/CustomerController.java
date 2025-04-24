@@ -855,7 +855,12 @@ public class CustomerController extends BaseController {
 		Customer customer = (customerId == null) ? new Customer()
 				: customerService.findById(customerId).orElse(new Customer());
 
+		if (customer.getAddress() == null) {
+			customer.setAddress(new Address());
+		}
+
 		mav.addObject("customer", customer);
+		mav.addObject("address", customer.getAddress());
 
 		// Lấy danh sách Status, ResponsiblePersons và Professions
 		List<Status> statuses = statusService.getRepo().findAllOrderBySeqno();
