@@ -1,62 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Chúc mừng sinh nhật</title>
-<style>
-.card {
-	width: 600px;
-	margin: auto;
-	background-color: #fff5f8;
-	border-radius: 20px;
-	padding: 30px;
-	font-family: 'Segoe UI', sans-serif;
-	text-align: center;
-	border: 2px dashed #ff6f91;
-}
+  <meta charset="UTF-8">
+  <title>Chúc mừng sinh nhật</title>
+  <style>
+    body {
+      background-color: #fefefe;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px 0;
+    }
 
-.header {
-	font-size: 26px;
-	font-weight: bold;
-	color: #ff6f91;
-	margin-bottom: 10px;
-}
+    .card {
+      width: 650px;
+      margin: auto;
+      background-color: #fff5f8;
+      border-radius: 20px;
+      padding: 40px 30px;
+      border: 2px dashed #ff6f91;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
 
-.message {
-	font-size: 18px;
-	color: #333;
-	margin: 20px 0;
-}
+    .header {
+      font-size: 28px;
+      font-weight: bold;
+      color: #ff6f91;
+      margin-bottom: 15px;
+    }
 
-.promotion {
-	font-size: 20px;
-	color: #d63447;
-	margin-top: 20px;
-	font-weight: bold;
-}
+    .message {
+      font-size: 18px;
+      color: #333;
+      margin: 25px 0;
+      line-height: 1.6;
+    }
 
-.footer {
-	font-size: 16px;
-	color: #888;
-	margin-top: 30px;
-}
-</style>
+    .customer-name {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .promotion {
+      font-size: 20px;
+      color: #d63447;
+      margin-top: 25px;
+      font-weight: bold;
+      line-height: 1.5;
+      text-align: justify;
+    }
+
+    .footer-message {
+      font-size: 16px;
+      color: #888;
+      margin-top: 35px;
+    }
+
+    .footer-contact {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .footer-contact div {
+      margin: 8px 0;
+    }
+
+    .footer-contact a {
+      color: #0d47a1;
+      text-decoration: none;
+    }
+
+    .footer-contact a:hover {
+      text-decoration: underline;
+    }
+
+    .icon {
+      margin-right: 8px;
+    }
+  </style>
 </head>
 <body>
-	<div class="card">
-		<div class="header">🌟 Chúc Mừng Sinh Nhật! 🎂</div>
-		<div class="message">
-			Kính gửi quý khách hàng: {{customerName}},<br /> Nhân dịp sinh nhật, chúng tôi xin
-			gửi lời chúc tốt đẹp nhất đến quý khách:<br /> 💝 Chúc quý khách một
-			ngày thật ý nghĩa và tràn ngập niềm vui!
-		</div>
-		<div class="promotion" style="color: #555;">
-			👉 Nếu quý khách quan tâm đến giải pháp quản lý khách hàng (CRM),<br />
-			chúng tôi luôn sẵn sàng hỗ trợ quý khách trải nghiệm dùng thử!
-		</div>
-		<div class="footer">
-			Trân trọng,<br /> Đội ngũ hỗ trợ khách hàng
-		</div>
-	</div>
+  <div class="card">
+    <div class="header">🌟 Chúc Mừng Sinh Nhật! 🎂</div>
+    <div class="message">
+      Kính gửi quý khách hàng: <span class="customer-name" th:text="${customerName}">[CUSTOMERNAME]</span>,<br />
+      Nhân dịp sinh nhật, chúng tôi xin gửi những lời chúc tốt đẹp nhất đến quý khách.<br />
+      💝 Chúc quý khách một ngày thật ý nghĩa và tràn ngập niềm vui!
+    </div>
+    <div class="promotion">
+      👉 Nếu quý khách quan tâm đến giải pháp quản lý khách hàng (CRM),
+      chúng tôi luôn sẵn sàng hỗ trợ quý khách trải nghiệm dùng thử!
+    </div>
+    <div class="footer-message">
+      Trân trọng,<br /> Đội ngũ hỗ trợ khách hàng
+    </div>
+
+    <div class="footer-contact">
+      <div><strong>MEKONG SOLUTION (MKS)</strong></div>
+      <div>🏛️ 10A Đường 182, KP3, Phường Tăng Nhơn Phú A, TP. Thủ Đức, Thủ Đức, Hồ Chí Minh 700000</div>
+      <div>📞 0977 548 348 &nbsp;&nbsp;|&nbsp;&nbsp; ✉️ <a href="mailto:ThachLN@mks.com.vn">ThachLN@mks.com.vn</a></div>
+      <div>🌐 <a href="https://mksol.vn/">mksol.vn</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://mks.com.vn/">mks.com.vn</a></div>
+      <div style="margin-top: 10px;">
+        Để được tư vấn thêm, vui lòng để lại thông tin <a href="#">tại đây</a>.<br />
+        Để ngừng nhận các email với nội dung tương tự, vui lòng bấm <a href="#">vào đây</a>.
+      </div>
+    </div>
+  </div>
 </body>
 </html>

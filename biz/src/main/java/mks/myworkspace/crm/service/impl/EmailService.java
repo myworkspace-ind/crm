@@ -40,7 +40,7 @@ public class EmailService {
 	public void sendBirthdayCard(Customer customer) {
 		String subject = "🎂 CHÚC MỪNG SINH NHẬT";
 		Context context = new Context();
-		context.setVariable("customerName", customer.getContactPerson());
+		context.setVariable("customerName", customer.getCompanyName());
 //		context.setVariable("discount", "30%");
 //		context.setVariable("duration", "3 tháng");
 		String htmlContent = templateEngine.process("emailBirthdayTemplate1", context);
