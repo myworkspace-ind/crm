@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Address form not found!");
         return;
     }
+    initializeAddressForm();
 
     // Submit the address form
     addressForm.addEventListener("submit", (event) => {
@@ -267,9 +268,6 @@ function initMap() {
         }, 300);
     });
 
-    google.maps.event.addListener(marker, "dragend", function () {
-        geocodePosition(marker.getPosition());
-    });
 
     // Marker drag event to update address
     google.maps.event.addListener(marker, "dragend", function () {
@@ -357,6 +355,31 @@ function geocodePosition(pos) {
     });
 }
 
+// Check initial value to determine which form to show on page load
+function initializeAddressForm() {
+    const countryInput = document.getElementById("country");
+    if (!countryInput) return;
+
+    const country = countryInput.value.trim();
+    const isVietnam = country.toLowerCase() === "vietnam";
+
+    // Toggle form visibility based on country
+    toggleFormFields(isVietnam);
+
+    //update the marker and map base on latitude ang longitude
+    const latitude = parseFloat(document.getElementById("latitude")?.value);
+    const longitude = parseFloat(document.getElementById("longitude")?.value);
+
+    if (!isNaN(latitude) && !isNaN(longitude)) {
+        // Update marker position and map center if coordinates are available
+        const location = new google.maps.LatLng(latitude, longitude);
+        if (marker) {
+            marker.setPosition(location);
+            map.setCenter(location);
+            map.setZoom(17);
+        }
+    }
+}
 
 // Toggle the form visibility based on the country
 function toggleFormFields(isVietnam) {
@@ -394,7 +417,8 @@ function fillFormFields(place) {
     let ward = "";
     let isVietnam = false;
 
-    console.log("Address Components:", place.adr_address);
+    console.log("Address Components:", place.address_components);
+    console.log("Formated Address: ", place.formatted_address)
 
     // Check if the country is Vietnam
     isVietnam = place.address_components.some(component =>
@@ -423,13 +447,35 @@ function fillFormFields(place) {
         }
     });
 
-    // Extract ward for Vietnam if available
-    if (isVietnam && place.adr_address) {
-        const tempDiv = document.createElement("div");
-        tempDiv.innerHTML = place.adr_address;
-        const wardSpan = tempDiv.querySelector(".extended-address");
-        if (wardSpan) {
-            ward = wardSpan.textContent.trim();
+    // Extract ward for Vietnam
+    if (isVietnam) {
+        // Try to extract from adr_address if available
+        if (place.adr_address) {
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = place.adr_address;
+            const wardSpan = tempDiv.querySelector(".extended-address");
+            if (wardSpan && wardSpan.textContent.trim()) {
+                ward = wardSpan.textContent.trim();
+            }
+        }
+
+        // If adr_address failed, try formatted_address fallback
+        if (!ward && place.formatted_address) {
+            const parts = place.formatted_address.split(",").map(p => p.trim());
+
+            // 1. Try to find part that looks like a ward
+            const wardPart = parts.find(p => /Phường|Xã|Thị trấn/i.test(p));
+            if (wardPart) {
+                ward = wardPart;
+            } else if (suburb) {
+                // 2. Find the part just before the district
+                const districtIndex = parts.findIndex(p =>
+                    p.toLowerCase() === suburb.toLowerCase()
+                );
+                if (districtIndex > 0) {
+                    ward = parts[districtIndex - 1];
+                }
+            }
         }
     }
 
