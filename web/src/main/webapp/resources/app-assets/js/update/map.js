@@ -367,9 +367,15 @@ function initializeAddressForm() {
     toggleFormFields(isVietnam);
 
     //update the marker and map base on latitude ang longitude
-    const latitude = parseFloat(document.getElementById("latitude")?.value);
-    const longitude = parseFloat(document.getElementById("longitude")?.value);
+//    const latitude = parseFloat(document.getElementById("latitude")?.value);
+//    const longitude = parseFloat(document.getElementById("longitude")?.value);
 
+	const latitudeInput = document.getElementById("latitude");
+	const longitudeInput = document.getElementById("longitude");
+	
+	const latitude = latitudeInput ? parseFloat(latitudeInput.value) : NaN;
+	const longitude = longitudeInput ? parseFloat(longitudeInput.value) : NaN;
+//
     if (!isNaN(latitude) && !isNaN(longitude)) {
         // Update marker position and map center if coordinates are available
         const location = new google.maps.LatLng(latitude, longitude);
