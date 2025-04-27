@@ -30,15 +30,21 @@ public class EmailService {
 	@Autowired
 	private AppRepository appRepository;
 
-	// Constructor injection for JavaMailSender
+	//
+	/**
+	 * Constructor injection for JavaMailSender
+	 * @param mailSender: (giải thích ý nghĩa từng tham số)
+	 * @param servletContext: //
+	 * @param templateEngine: //
+	 */
 	public EmailService(JavaMailSender mailSender, ServletContext servletContext, SpringTemplateEngine templateEngine) {
 		this.mailSender = mailSender;
 		this.servletContext = servletContext;
 		this.templateEngine = templateEngine;
 	}
-
+	
 	public void sendBirthdayCard(Customer customer) {
-		String subject = "🎂 CHÚC MỪNG SINH NHẬT";
+		String subject = "🎂 CHÚC MỪNG SINH NHẬT";// nên để trong file cấu hình
 		Context context = new Context();
 		context.setVariable("customerName", customer.getCompanyName());
 //		context.setVariable("discount", "30%");
