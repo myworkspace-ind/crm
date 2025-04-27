@@ -44,7 +44,6 @@ public interface CustomerService {
 
 	List<Customer> findByInteractDateRange(Date startDate, Date enDate);
 	
-	
 	Page<Customer> findAllWithSpecs(Pageable pageable, CustomerCriteriaDTO customerCriteriaDTO);
 	
 	Page<Customer> findAllWithStatuses(Pageable pageable);
@@ -52,6 +51,14 @@ public interface CustomerService {
 	Page<Customer> findAllKeyword(Pageable pageable, String keyword);
 
 	Optional<Customer> findById_ForCustomerCare(Long customerId);
+	
+	List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<Long> selectedCareers,
+			String contactPerson, String address, String email);
+	
+	List<Customer> advancedSearchCustomersNotCareer(String nameCompany, String phone, List<Long> selectedCareers,
+			String contactPerson, String address, String email);
+	
+	List<Customer> findByselectedCareers(List<Long> selectedCareers);
 	
 //	List<Customer> findPotentialCustomers();
 }

@@ -11,21 +11,30 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.EmailToCustomer;
 import mks.myworkspace.crm.repository.AppRepository;
 
+@Slf4j
 @Service
 public class EmailService {
 	private final JavaMailSender mailSender;
 	private final ServletContext servletContext;
 	private final SpringTemplateEngine templateEngine;
+	
+	@Value("${email.birthday.subject}")
+	private String birthdaySubject;
+
+	@Value("${email.birthday.template}")
+	private String birthdayTemplate;
 
 	@Autowired
 	private AppRepository appRepository;
@@ -33,9 +42,9 @@ public class EmailService {
 	//
 	/**
 	 * Constructor injection for JavaMailSender
-	 * @param mailSender: (giải thích ý nghĩa từng tham số)
-	 * @param servletContext: //
-	 * @param templateEngine: //
+	 * @param mailSender: JavaMailSender for sending emails.
+	 * @param servletContext: ServletContext for accessing web resources.
+	 * @param templateEngine: SpringTemplateEngine for rendering email templates (html)//
 	 */
 	public EmailService(JavaMailSender mailSender, ServletContext servletContext, SpringTemplateEngine templateEngine) {
 		this.mailSender = mailSender;
@@ -44,30 +53,26 @@ public class EmailService {
 	}
 	
 	public void sendBirthdayCard(Customer customer) {
-		String subject = "🎂 CHÚC MỪNG SINH NHẬT";// nên để trong file cấu hình
 		Context context = new Context();
 		context.setVariable("customerName", customer.getCompanyName());
 //		context.setVariable("discount", "30%");
 //		context.setVariable("duration", "3 tháng");
-		String htmlContent = templateEngine.process("emailBirthdayTemplate1", context);
+		String htmlContent = templateEngine.process(birthdayTemplate, context);
 
 		try {
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
 			helper.setTo(customer.getEmail());
-			helper.setSubject(subject);
-			helper.setText(htmlContent, true); // true để gửi HTML
+			helper.setSubject(birthdaySubject);
+			helper.setText(htmlContent, true);
 
 			mailSender.send(message);
 
-			// Ghi log nếu cần hoặc cập nhật trạng thái
-			System.out.println("Đã gửi thiệp sinh nhật cho: " + customer.getEmail());
+			log.info("Đã gửi thiệp sinh nhật cho: {}" + customer.getEmail());
 
 		} catch (MessagingException e) {
-			// Ghi log lỗi
-			System.err.println("Lỗi khi gửi email sinh nhật: " + e.getMessage());
-			e.printStackTrace();
+			log.error("Lỗi khi gửi email sinh nhật: {}" + e.getMessage());
 		}
 
 	}

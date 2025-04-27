@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import mks.myworkspace.crm.entity.*;
-import mks.myworkspace.crm.service.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,11 +43,25 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
+import mks.myworkspace.crm.entity.Address;
+import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.EmailToCustomer;
+import mks.myworkspace.crm.entity.GoodsCategory;
+import mks.myworkspace.crm.entity.Interaction;
+import mks.myworkspace.crm.entity.Profession;
+import mks.myworkspace.crm.entity.ResponsiblePerson;
+import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.service.CustomerService;
+import mks.myworkspace.crm.service.EmailToCustomerService;
+import mks.myworkspace.crm.service.ProfessionService;
+import mks.myworkspace.crm.service.ResponsiblePersonService;
+import mks.myworkspace.crm.service.StatusService;
+import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.service.impl.EmailService;
 import mks.myworkspace.crm.transformer.AddressMapper;
 import mks.myworkspace.crm.transformer.CustomerMapper;
@@ -106,9 +118,6 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	ProfessionService professionService;
-
-	@Autowired
-	CustomerService_Son customerServiceSon;
 
 	@Autowired
 	EmailService emailService;
@@ -783,8 +792,9 @@ public class CustomerController extends BaseController {
 		List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
 
 		// Cấu trúc bảng
-		int[] colWidths = { 200, 200, 300, 300, 200, 30 };
-		String[] colHeaders = { "Người trao đổi", "Ngày tương tác (dự kiến)", "Nội dung trao đổi", "Kế hoạch tiếp theo", "Ngày tạo", "" };
+		int[] colWidths = { 200, 300, 200, 300, 200, 30 };
+		//String[] colHeaders = { "Người trao đổi", "Ngày tương tác (dự kiến)", "Nội dung trao đổi", "Kế hoạch tiếp theo", "Ngày tạo", "" };
+		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "" };
 
 		// Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
 		Map<String, Object> response = new HashMap<>();
@@ -1171,13 +1181,17 @@ public class CustomerController extends BaseController {
 			customers = customerService.getAllCustomersWithStatuses();
 			log.debug("No keyword or field provided. Fetching all customers.");
 		} else if (selectedCareers == null || selectedCareers.isEmpty()) {
-			customers = customerServiceSon.advancedSearchCustomersNotCareer(nameCompany, phone, selectedCareers,
+//			customers = customerServiceSon.advancedSearchCustomersNotCareer(nameCompany, phone, selectedCareers,
+//					contactPerson, address, email);
+			customers = customerService.advancedSearchCustomersNotCareer(nameCompany, phone, selectedCareers,
 					contactPerson, address, email);
 
 		}
 
 		else {
-			customers = customerServiceSon.findCustomersAdvanced(nameCompany, phone, selectedCareers, contactPerson,
+//			customers = customerServiceSon.findCustomersAdvanced(nameCompany, phone, selectedCareers, contactPerson,
+//					address, email);
+			customers = customerService.findCustomersAdvanced(nameCompany, phone, selectedCareers, contactPerson,
 					address, email);
 
 			mav.addObject("nameCompany", nameCompany);

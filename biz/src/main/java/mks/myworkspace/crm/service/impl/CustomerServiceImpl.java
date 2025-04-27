@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.repository.CustomerRepository_Son;
 import mks.myworkspace.crm.repository.StatusRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.specification.CustomerSpecs;
@@ -34,6 +36,9 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Autowired
     private CustomerRepository repo;
+	
+	 @Autowired
+	    private CustomerRepository_Son sonRepo;
     
     @Autowired
     private StatusRepository statusRepo;
@@ -241,6 +246,28 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Optional<Customer> findById_ForCustomerCare(Long customerId) {
 		 return repo.findById_ForCustomerCare(customerId);
+	}
+
+	@Override
+	public List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<Long> selectedCareers,
+			String contactPerson, String address, String email) {
+        return sonRepo.advancedSearchCustomers(nameCompany, phone, selectedCareers, contactPerson, address, email);
+
+	}
+
+	@Override
+	public List<Customer> advancedSearchCustomersNotCareer(String nameCompany, String phone, List<Long> selectedCareers,
+			String contactPerson, String address, String email) {
+        return sonRepo.advancedSearchCustomersNotCareer(nameCompany, phone, selectedCareers, contactPerson, address, email);
+
+	}
+
+	@Override
+	public List<Customer> findByselectedCareers(List<Long> selectedCareers) {
+		if (selectedCareers == null || selectedCareers.isEmpty()) {
+            return new ArrayList<>();
+        }
+    	return sonRepo.findByselectedCareers(selectedCareers);
 	}
 
 //	@Override

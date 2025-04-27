@@ -73,12 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
 			//	            modalOverlay.style.display = "none";
 			//	        }
 				if (unSavedCustomers.length > 0) {
-					const customerList = unSavedCustomers.map(c => `<li> - ${c[2]} </li>`).join("");
+					const customerList = unSavedCustomers.map(c => {
+						const reminderDate = new Date(c[9]);
+						const formattedDate = reminderDate.toLocaleDateString('vi-VN');
+						return `<li> - ${c[2]} - Ngày nhắc nhở: ${formattedDate} </li>`
+					})
 					Swal.fire({
 						title: "⚠ Khách hàng chưa được lưu!",
 						html: `<p>Các khách hàng sau chưa được lưu vào hệ thống:</p>
-					                   <ul style="text-align: left; list-style-type: none;">${customerList}</ul>`,
-						icon: "warning",
+					                   <ul style="text-align: left; list-style-type: none;">${customerList.join('')}</ul>`,
+						icon: "warning",	
 						showCancelButton: true,
 						confirmButtonText: "Lưu KH",
 						cancelButtonText: "Đóng"

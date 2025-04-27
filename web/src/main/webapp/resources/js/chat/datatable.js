@@ -37,23 +37,22 @@ function notifyPotentialCustomers() {
 					status: customerData[4] || "Không xác định"
 				};
 
-				showMessageNotification(customer);
+				const isCustomerWithoutData = customersWithoutData.some(item => item[0] === customer.id);
+				const backgroundColorClass = isCustomerWithoutData ? "bg-warning" : "bg-light";
+
+				showMessageNotification(customer, backgroundColorClass);
 			});
 		})
 		.catch(error => console.error('Lỗi khi lấy danh sách khách hàng', error));
 }
 
-function showMessageNotification(customer) {
+function showMessageNotification(customer, backgroundColorClass) {
 	const reminderList = document.getElementById("customer-reminder");
 	if (!reminderList) return;
 
 	if (document.querySelector(`#customer-reminder li[data-id='${customer.id}']`)) {
 		return;
 	}
-
-	let reminderItem = document.createElement("li");
-	reminderItem.classList.add("mb-3");
-	reminderItem.setAttribute("data-id", customer.id);
 
 	let now = new Date();
 	let currentDate = now.toISOString().split("T")[0]; // Lấy ngày hiện tại (YYYY-MM-DD)
@@ -73,16 +72,21 @@ function showMessageNotification(customer) {
 	}
 
 	let currentTime = now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+	
+	const reminderItem = document.createElement("li");
+	reminderItem.classList.add("mb-3");
+	reminderItem.setAttribute("data-id", customer.id);
 
 	reminderItem.innerHTML = `
-        <div class="bg-light p-2 rounded">
-            <p class="mb-1 text-dark">
-                Nhắc nhở: Khách hàng 
-                <a href="#" onclick="highlightCustomer('${customer.id}')" class="fw-bold">${customer.companyName}</a> 
-                cần chăm sóc ngay!
-            </p>
-            <small class="text-muted">${displayDate}, ${currentTime}</small>
-        </div>`;
+	        <div class="${backgroundColorClass} p-2 rounded">
+	            <p class="mb-1 text-dark">
+	                Nhắc nhở: Khách hàng 
+	                <a href="#" onclick="highlightCustomer('${customer.id}')" class="fw-bold">${customer.companyName}</a> 
+	                cần chăm sóc ngay!
+	            </p>
+	            <small class="text-muted">${displayDate}, ${currentTime}</small>
+	        </div>
+	    `;
 
 	reminderList.appendChild(reminderItem);
 }
@@ -487,32 +491,32 @@ $(document).ready(function() {
 								}
 							},
 							{
-							    targets: 3,
-							    render: function(data, type, row, meta) {
-							        let contactName = data || "Không có tên";
-							        let statusData = row[7] || "";
+								targets: 3,
+								render: function(data, type, row, meta) {
+									let contactName = data || "Không có tên";
+									let statusData = row[7] || "";
 
-							        // Chuyển đổi status thành mảng
-							        let statuses = statusData.split(",").map(s => s.trim());
+									// Chuyển đổi status thành mảng
+									let statuses = statusData.split(",").map(s => s.trim());
 
-							        let iconHtml = "";
+									let iconHtml = "";
 
-							        if (statuses.includes("Chăm sóc trễ hạn")) {
-							            iconHtml += `<i class="fa fa-exclamation-triangle text-danger ms-2" title="Chăm sóc trễ hạn"></i>`;
-							        }
+									if (statuses.includes("Chăm sóc trễ hạn")) {
+										iconHtml += `<i class="fa fa-exclamation-triangle text-danger ms-2" title="Chăm sóc trễ hạn"></i>`;
+									}
 
-							        if (statuses.includes("Chăm sóc đúng hạn")) {
-							            iconHtml += `<i class="fa fa-check ms-2" style="color: #29992f" "; title="Chăm sóc đúng hạn"></i>`;
-							        }
+									if (statuses.includes("Chăm sóc đúng hạn")) {
+										iconHtml += `<i class="fa fa-check ms-2" style="color: #29992f" "; title="Chăm sóc đúng hạn"></i>`;
+									}
 
-							        // Trả về tên + icon
-							        return `
+									// Trả về tên + icon
+									return `
 										<div style="display: flex; flex-direction: column; align-items: center;">
 											${iconHtml}
 											<span style=margin-top: 4px;">${contactName}</span>
 										</div>
 									`
-							    }
+								}
 							},
 							//							{
 							//								targets: 2,
@@ -616,20 +620,20 @@ $(document).ready(function() {
 							                        <strong>Chưa chăm sóc</strong>
 							                    </div>`
 											);
-										} 
-//										else if (status === "Chăm sóc đúng hạn") {
-//											alerts.push(
-//												`<div class="alert alert-info" role="alert">
-//							                        <strong>Chăm sóc đúng hạn</strong>
-//							                    </div>`
-//											);
-//										} else if (status === "Chăm sóc trễ hạn") {
-//											alerts.push(
-//												`<div class="alert alert-danger" role="alert">
-//							                        <strong>Chăm sóc trễ hạn</strong>
-//							                    </div>`
-//											);
-//										}
+										}
+										//										else if (status === "Chăm sóc đúng hạn") {
+										//											alerts.push(
+										//												`<div class="alert alert-info" role="alert">
+										//							                        <strong>Chăm sóc đúng hạn</strong>
+										//							                    </div>`
+										//											);
+										//										} else if (status === "Chăm sóc trễ hạn") {
+										//											alerts.push(
+										//												`<div class="alert alert-danger" role="alert">
+										//							                        <strong>Chăm sóc trễ hạn</strong>
+										//							                    </div>`
+										//											);
+										//										}
 									});
 
 									// Nếu có ít nhất một alert, trả về tất cả các alert kết hợp
