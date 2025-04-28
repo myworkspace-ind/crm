@@ -1,3 +1,8 @@
 CREATE database crm default character set utf8;
 CREATE user 'crm_user'@'%' identified by 'Crm@123';
 GRANT ALL PRIVILEGES ON crm.* TO 'crm_user'@'%';
+
+-- Remove user
+REVOKE ALL PRIVILEGES ON crm.* FROM 'crm_user'@'%';
+DROP USER 'crm_user'@'%';
+DROP DATABASE crm;
