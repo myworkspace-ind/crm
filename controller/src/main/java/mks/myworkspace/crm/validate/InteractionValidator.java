@@ -32,10 +32,10 @@ public class InteractionValidator {
 						: "";
 
 				Object[] rowData = new Object[] { interaction.getContactPerson(), // Người trao đổi
-						formattedDate, // Ngày
 						interaction.getContent(), // Nội dung trao đổi
-						interaction.getNextPlan(), // Kế hoạch tiếp theo
 						createdAt, // Ngày tạo (createdAt)
+						interaction.getNextPlan(), // Kế hoạch tiếp theo
+						formattedDate, // Ngày tương tác dự kiến
 						interaction.getId(), // ID (để xóa/thao tác khác)
 
 				};
@@ -56,25 +56,22 @@ public class InteractionValidator {
 			if (CommonUtil.isNNNE(rowData)) {
 				try {
 					String contactPerson = (String) rowData[0];
-
-					String dateString = (String) rowData[1];
-					Date date = dateFormat.parse(dateString);
-
-					String content = (String) rowData[2];
-
-					String nextPlan = (String) rowData[3];
-
+					String content = (String) rowData[1];
 					// Xử lý createdAt
 	                LocalDateTime createdAt = LocalDateTime.now(); 
-	                if (rowData[4] != null && !rowData[4].toString().isEmpty()) {
+	                if (rowData[2] != null && !rowData[2].toString().isEmpty()) {
 	                    try {
-	                        String createdAtStr = rowData[4].toString().trim();
+	                        String createdAtStr = rowData[2].toString().trim();
 	                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	                        createdAt = LocalDateTime.parse(createdAtStr, formatter);
 	                    } catch (DateTimeParseException e) {
 	                        log.warn("⚠ Lỗi khi chuyển đổi createdAt (sử dụng thời gian hiện tại): {}", e.getMessage());
 	                    }
 	                }
+					String nextPlan = (String) rowData[3];
+
+					String dateString = (String) rowData[4];
+					Date date = dateFormat.parse(dateString);
 
 	                // Xử lý interactionId
 	                Long interactionId = null;

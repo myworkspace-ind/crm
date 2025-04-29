@@ -203,14 +203,6 @@ function initTable(colHeaders, colWidths, data) {
 			colWidths: colWidths,
 			columns: [
 				{ type: 'text' },
-				{
-					type: 'date',
-					dateFormat: 'YYYY-MM-DD',
-					correctFormat: true,
-					defaultDate: new Date(),
-					datePickerConfig: { format: 'YYYY-MM-DD' }
-				},
-				{ type: 'text' },
 				{ type: 'text' },
 				{
 					type: 'date',
@@ -220,6 +212,14 @@ function initTable(colHeaders, colWidths, data) {
 					datePickerConfig: { format: 'YYYY-MM-DD' },
 					readOnly: true
 				}, //Ngày tạo
+				{ type: 'text' },
+				{
+					type: 'date',
+					dateFormat: 'YYYY-MM-DD',
+					correctFormat: true,
+					defaultDate: new Date(),
+					datePickerConfig: { format: 'YYYY-MM-DD' }
+				},
 				{ renderer: deleteButtonRenderer },
 			],
 			height: 400,
