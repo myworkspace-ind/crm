@@ -111,7 +111,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
         <custom-filter ref="singleLogoutFilter" before="LOGOUT_FILTER" />
         <custom-filter ref="casAuthenticationFilter" position="CAS_FILTER" />
         <logout logout-url="/logout"
-            logout-success-url="https://myworkspace.vn/cas/logout?service=http://localhost:8080/crm-web" />
+            logout-success-url="https://myworkspace.vn/cas/logout?service=https://mksol.vn/crm" />
         <form-login default-target-url="/" />
         <!-- <form-login default-target-url="/members" always-use-default-target="true" /> -->
     </http>
@@ -172,7 +172,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
     <!-- This section is used to configure CAS. The service is the actual redirect that will be triggered after the CAS login 
         sequence. -->
     <beans:bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
-        <beans:property name="service" value="http://localhost:8080/crm-web/j_spring_cas_security_check" />
+        <beans:property name="service" value="https://mksol.vn/crm/j_spring_cas_security_check" />
         <beans:property name="sendRenew" value="false"></beans:property>
     </beans:bean>
 
