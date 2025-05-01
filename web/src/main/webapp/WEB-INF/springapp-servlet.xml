@@ -73,11 +73,11 @@
 		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		
-<!-- 		<property name="location" value="file:///etc/myworkspace/crm/app-config.properties"/> -->
+		<property name="location" value="file:///etc/myworkspace/crm/app-config.properties"/>
 		
-		<property name="location">
-			<value>/WEB-INF/app-config.properties</value>
-		</property>
+<!-- 		<property name="location"> -->
+<!-- 			<value>/WEB-INF/app-config.properties</value> -->
+<!-- 		</property> -->
 	</bean>
 	
 	<!-- Quét các @Component, @Service, @Scheduled,... -->
