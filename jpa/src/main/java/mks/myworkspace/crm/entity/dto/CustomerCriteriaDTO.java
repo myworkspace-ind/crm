@@ -12,7 +12,9 @@ public class CustomerCriteriaDTO {
 	private Optional<String> nameCompany;
 	private Optional<String> phone;
 	private Optional<String> contactPerson;
+	
 	private Optional<String> address;
+	
 	private Optional<String> email;
 	private Optional<List<Long>> careers;
 	

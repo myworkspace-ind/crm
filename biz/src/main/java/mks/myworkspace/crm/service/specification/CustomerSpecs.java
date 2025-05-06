@@ -25,15 +25,37 @@ public class CustomerSpecs {
     public static Specification<Customer> matchStatus(Long statusId) {
     	return (root, query, criteriaBuilder) ->criteriaBuilder.or(criteriaBuilder.equal(root.get("mainStatus").get("id"), statusId),criteriaBuilder.equal(root.get("subStatus").get("id"), statusId)) ;
     }
+    
     public static Specification<Customer> matchPhone(String phone) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("phone"),"%" + phone + "%");
     }
     public static Specification<Customer> matchContactPerson(String contactPerson) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("contactPerson"),"%" + contactPerson+ "%");
     }
-    public static Specification<Customer> matchAddress(String address) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("address"),"%" + address+ "%");
+    
+//    public static Specification<Customer> matchAddress(String address) {
+//        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("address"),"%" + address+ "%");
+//    }
+    
+	public static Specification<Customer> matchAddress(String keyword) {
+    	return (root, query, criteriaBuilder)  -> {
+    		if(keyword == null || keyword.trim().isEmpty()) {
+    			return criteriaBuilder.conjunction(); //Khong filter neu keyword trong
+    		}
+    		 var addressPath = root.get("address");
+    		 String likePattern = "%" + keyword.trim() + "%";
+    		 
+    		 return criteriaBuilder.or(
+    				 criteriaBuilder.like(addressPath.get("street"), likePattern),
+    				 criteriaBuilder.like(addressPath.get("ward"), likePattern),
+    		         criteriaBuilder.like(addressPath.get("district"), likePattern),
+    		         criteriaBuilder.like(addressPath.get("state"), likePattern),
+    		         criteriaBuilder.like(addressPath.get("country"), likePattern)
+    		 );
+    	};
     }
+    
+    
     public static Specification<Customer> matchEmail(String email) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("email"),"%" + email+ "%");
         
