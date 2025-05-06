@@ -35,7 +35,11 @@
     <!-- Center form -->
     <th:block th:include="fragments/frg_customerListCRMScreen"></th:block>
 
-    <!-- START CUSTOMIZE BUTTON -->
+	<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+		<span th:text="${errorMessage}"></span>
+	</div>
+
+	<!-- START CUSTOMIZE BUTTON -->
 	<th:block th:include="fragments/customizeButton"></th:block>
 	<!-- END CUSTOMIZE BUTTON -->
 

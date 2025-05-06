@@ -282,6 +282,7 @@ public class CustomerController extends BaseController {
 	
 	@Value("classpath:responsible-person/responsible-person-demo.json")
 	private Resource resResponsiblePersonDemo;
+	
 	@GetMapping("list")
 	public ModelAndView displayCustomerListCRMScreen(
 			CustomerCriteriaDTO customerCriteriaDTO,
@@ -289,62 +290,67 @@ public class CustomerController extends BaseController {
 			HttpSession httpSession) {
 
 		ModelAndView mav = new ModelAndView("customer_list_v2");
-		initSession(request, httpSession);
-		int page = 1;
-        try {
-            if(customerCriteriaDTO.getPage().isPresent()){
-                page = Integer.parseInt(customerCriteriaDTO.getPage().get());
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-
-        String queryString = request.getQueryString();
-        String updatedQueryString = queryString != null
-                ? Arrays.stream(queryString.split("&"))
-                        .filter(param -> !param.matches("^page=.*$")) // Loại bỏ tham số page
-                        .collect(Collectors.joining("&"))
-                : ""; // Nếu không có query string, gán chuỗi rỗng
-        if(!updatedQueryString.isBlank())
-        {
-        	updatedQueryString = updatedQueryString + "&";
-        }
-		Pageable pageable = PageRequest.of(page - 1,10);
-		Page<Customer> pageCustomer;
-        if(customerCriteriaDTO.getKeyword()!=null && customerCriteriaDTO.getKeyword().isPresent())
-        {
-        	pageCustomer = customerService.findAllKeyword(pageable, customerCriteriaDTO.getKeyword().get());
-        }
-        else
-        {
-        	pageCustomer = customerService.findAllWithSpecs(pageable, customerCriteriaDTO);
-        }
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-
-		List<Customer> customers = pageCustomer.getContent().size() > 0 ?  pageCustomer.getContent() : new ArrayList<Customer>();
-		List<Status> statuses = statusService.getAllStatuses();
-		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
-		List<Profession> professions = professionService.getAllProfessions();
-
-		Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
-
-		if (statusCounts == null) {
-			statusCounts = new HashMap<>();
+		try {
+			initSession(request, httpSession);
+			int page = 1;
+	        try {
+	            if(customerCriteriaDTO.getPage().isPresent()){
+	                page = Integer.parseInt(customerCriteriaDTO.getPage().get());
+	            }
+	        } catch (Exception e) {
+	            // TODO: handle exception
+	        }
+	
+	        String queryString = request.getQueryString();
+	        String updatedQueryString = queryString != null
+	                ? Arrays.stream(queryString.split("&"))
+	                        .filter(param -> !param.matches("^page=.*$")) // Loại bỏ tham số page
+	                        .collect(Collectors.joining("&"))
+	                : ""; // Nếu không có query string, gán chuỗi rỗng
+	        if(!updatedQueryString.isBlank())
+	        {
+	        	updatedQueryString = updatedQueryString + "&";
+	        }
+			Pageable pageable = PageRequest.of(page - 1,10);
+			Page<Customer> pageCustomer;
+	        if(customerCriteriaDTO.getKeyword()!=null && customerCriteriaDTO.getKeyword().isPresent())
+	        {
+	        	pageCustomer = customerService.findAllKeyword(pageable, customerCriteriaDTO.getKeyword().get());
+	        }
+	        else
+	        {
+	        	pageCustomer = customerService.findAllWithSpecs(pageable, customerCriteriaDTO);
+	        }
+			mav.addObject("currentSiteId", getCurrentSiteId());
+			mav.addObject("userDisplayName", getCurrentUserDisplayName());
+	
+			List<Customer> customers = pageCustomer.getContent().size() > 0 ?  pageCustomer.getContent() : new ArrayList<Customer>();
+			List<Status> statuses = statusService.getAllStatuses();
+			List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+			List<Profession> professions = professionService.getAllProfessions();
+	
+			Map<Long, Long> statusCounts = customerService.getCustomerCountsByStatus();
+	
+			if (statusCounts == null) {
+				statusCounts = new HashMap<>();
+			}
+	
+			long totalCustomerCount = customerService.getTotalCustomerCount();
+			mav.addObject("filter", updatedQueryString);
+	        mav.addObject("currentPage", page);
+	        mav.addObject("totalPages", pageCustomer.getTotalPages());
+	        mav.addObject("totalCustomerWithSpec", pageCustomer.getTotalElements());
+			mav.addObject("customers", customers);
+			mav.addObject("statuses", statuses);
+			mav.addObject("responsiblePersons", responsiblePersons);
+			mav.addObject("professions", professions);
+			mav.addObject("statusCounts", statusCounts);
+			mav.addObject("totalCustomerCount", totalCustomerCount);
+			mav.addObject("numberOfElementsInCurrentPage", pageCustomer.getNumberOfElements());
+		} catch (Exception ex){
+			mav.addObject("errorMessage", "Đã xảy ra lỗi trong quá trình tải danh sách khách hàng. Vui lòng thử lại sau hoặc liên hệ quản trị hệ thống.");
 		}
-
-		long totalCustomerCount = customerService.getTotalCustomerCount();
-		mav.addObject("filter", updatedQueryString);
-        mav.addObject("currentPage", page);
-        mav.addObject("totalPages", pageCustomer.getTotalPages());
-        mav.addObject("totalCustomerWithSpec", pageCustomer.getTotalElements());
-		mav.addObject("customers", customers);
-		mav.addObject("statuses", statuses);
-		mav.addObject("responsiblePersons", responsiblePersons);
-		mav.addObject("professions", professions);
-		mav.addObject("statusCounts", statusCounts);
-		mav.addObject("totalCustomerCount", totalCustomerCount);
-		mav.addObject("numberOfElementsInCurrentPage", pageCustomer.getNumberOfElements());
+		
 		return mav;
 	}
 
@@ -374,25 +380,25 @@ public class CustomerController extends BaseController {
 		return mav;
 	}
 
-	@PostMapping("/create-customer")
-	@ResponseBody
-	public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request) {
-		try {
-			customer.setCreatedAt(LocalDateTime.now());
-			customer.setSiteId(getCurrentSiteId());
-			customer.setAccountStatus(true);
-
-			Customer savedCustomer = storageService.saveOrUpdate(customer);
-
-			return ResponseEntity.ok()
-					.body(Map.of("message", "Khách hàng mới đã được thêm thành công!", "customer", savedCustomer));
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("errorMessage", "Có lỗi xảy ra khi thêm khách hàng. Vui lòng thử lại sau!"));
-		}
-	}
+//	@PostMapping("/create-customer")
+//	@ResponseBody
+//	public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request) {
+//		try {
+//			customer.setCreatedAt(LocalDateTime.now());
+//			customer.setSiteId(getCurrentSiteId());
+//			customer.setAccountStatus(true);
+//
+//			Customer savedCustomer = storageService.saveOrUpdate(customer);
+//
+//			return ResponseEntity.ok()
+//					.body(Map.of("message", "Khách hàng mới đã được thêm thành công!", "customer", savedCustomer));
+//		} catch (IllegalArgumentException e) {
+//			return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//					.body(Map.of("errorMessage", "Có lỗi xảy ra khi thêm khách hàng. Vui lòng thử lại sau!"));
+//		}
+//	}
 
 	@Transactional
 	@RequestMapping(value = "/delete-customers", method = RequestMethod.DELETE)
@@ -649,36 +655,36 @@ public class CustomerController extends BaseController {
 //	}
 
 	// Hiển thị trang thêm mới khách hàng
-	@GetMapping("/add")
-	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
-		// ModelAndView mav = new ModelAndView("addCustomer");
-		ModelAndView mav = new ModelAndView("addCustomer_v2");
-		Customer customer = new Customer();
-
-		// Thêm đối tượng Customer mới vào Model để truyền vào form
-		mav.addObject("customer", customer);
-
-		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
-		List<Status> statuses = statusService.getAllStatuses();
-		mav.addObject("statuses", statuses);
-
-		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
-		mav.addObject("responsiblePersons", responsiblePersons);
-
-		List<Profession> professions = professionService.getAllProfessions();
-		mav.addObject("professions", professions);
-
-		// Thiết lập các thuộc tính của session
-		initSession(request, httpSession);
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-
-		long selectedProfession = 3L;
-		mav.addObject("selectedProfession", selectedProfession);
-
-		return mav;
-	}
-
+//	@GetMapping("/add")
+//	public ModelAndView displayAddCustomerScreen(HttpServletRequest request, HttpSession httpSession) {
+//		// ModelAndView mav = new ModelAndView("addCustomer");
+//		ModelAndView mav = new ModelAndView("addCustomer_v2");
+//		Customer customer = new Customer();
+//
+//		// Thêm đối tượng Customer mới vào Model để truyền vào form
+//		mav.addObject("customer", customer);
+//
+//		// Lấy danh sách Status để đổ vào các dropdown chọn trạng thái
+//		List<Status> statuses = statusService.getAllStatuses();
+//		mav.addObject("statuses", statuses);
+//
+//		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+//		mav.addObject("responsiblePersons", responsiblePersons);
+//
+//		List<Profession> professions = professionService.getAllProfessions();
+//		mav.addObject("professions", professions);
+//
+//		// Thiết lập các thuộc tính của session
+//		initSession(request, httpSession);
+//		mav.addObject("currentSiteId", getCurrentSiteId());
+//		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+//
+//		long selectedProfession = 3L;
+//		mav.addObject("selectedProfession", selectedProfession);
+//
+//		return mav;
+//	}
+//
 	@GetMapping("interact")
 	public ModelAndView displayCustomerListScreen(@RequestParam(value = "keyword", required = false) String keyword,
 			@RequestParam(value = "statusId", required = false) Long statusId,
@@ -751,9 +757,9 @@ public class CustomerController extends BaseController {
 	 * @param httpSession
 	 * @return
 	 */
-	@GetMapping("edit")
+	@GetMapping("interact-edit")
 	public ModelAndView edit(@RequestParam("id") Long customerId, HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("editCustomerStatus_khoa");
+		ModelAndView mav = new ModelAndView("customerInteractionDetail");
 
 		initSession(request, httpSession);
 		mav.addObject("currentSiteId", getCurrentSiteId());

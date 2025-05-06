@@ -87,7 +87,7 @@ function saveInteraction(customerId) {
 	);
 
 	const isValid = tableData.every(row =>
-		[0, 1, 2, 3].every(colIndex => row[colIndex] !== null && row[colIndex] !== '')
+		[0, 1, 3, 4].every(colIndex => row[colIndex] !== null && row[colIndex] !== '')
 	);
 
 	if (!isValid) {
