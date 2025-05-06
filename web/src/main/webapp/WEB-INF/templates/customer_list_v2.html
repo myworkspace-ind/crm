@@ -18,6 +18,11 @@
 <link rel="stylesheet" type="text/css" th:href="@{/resources/css/buttonRestoreHidedCustomers.css}">
 
 <th:block th:include="fragments/head"></th:block>
+
+<!-- Shepherd CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/css/shepherd.css" />
+<!-- Shepherd JS -->
+<script src="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/js/shepherd.min.js"></script>
 </head>
 <!-- class="vertical-layout vertical-compact-menu menu-expanded fixed-navbar" Bỏ khoảng trống ở dòng bên trái, dòng này đặt ngay dưới "<body" -->
 <body>
@@ -59,6 +64,17 @@
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/addCustomer.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/buttonGroupFunction.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/showHidedCustomers.js}"></script>
+	
+	<script type="text/javascript">
+	    /*<![CDATA[*/
+	    let shouldStartTour = /*[[${startTour}]]*/ false;
+	    if (shouldStartTour) {
+	        window.addEventListener('DOMContentLoaded', function () {
+	            startTourCustomer();
+	        });
+	    }
+	    /*]]>*/
+	</script>
 
 </body>
 </html>

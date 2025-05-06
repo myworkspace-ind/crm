@@ -54,8 +54,7 @@ public class CustomerSpecs {
     		 );
     	};
     }
-    
-    
+        
     public static Specification<Customer> matchEmail(String email) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("email"),"%" + email+ "%");
         

@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Shepherd CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/css/shepherd.css" />
+<!-- Shepherd JS -->
+<script src="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/js/shepherd.min.js"></script>
+</head>
 
+<body>
 	<!--  BEGIN CONTENT -->
 	<div class="app-content content">
 
@@ -35,14 +42,13 @@
 							<div class="addCustomerAndRestoreCustomer">
 							<!-- Thay đổi nút Thêm khách hàng -->
 								<a th:href = "@{/customer/newEditCustomer}">
-									<button class="addCustomerbtn">
+									<button class="addCustomerbtn" data-tour="step-1" data-tour-title="Thêm khách hàng" data-tour-content="Bấm vào đây để thêm một khách hàng mới.">
 										<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
 										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
 									</button>
 								</a>
 								
-								
-								<button class="restoreHidedCustomerbtn" id="restoreHidedCustomerbtn" onclick="showHidedCustomers()">
+								<button class="restoreHidedCustomerbtn" data-tour="step-2" data-tour-title="Khôi phục khách hàng bị ẩn" data-tour-content="Bấm vào đây để khôi phục những khách hàng đang bị ẩn" id="restoreHidedCustomerbtn" onclick="showHidedCustomers()">
 									<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
 									<i class="fa-solid fa-arrows-rotate"></i> Khôi phục khách hàng bị ẩn
 								</button>
@@ -427,5 +433,8 @@
 	</div>
 
 	<!-- END CONTENT -->
+</body>
+
+</html>
 
 

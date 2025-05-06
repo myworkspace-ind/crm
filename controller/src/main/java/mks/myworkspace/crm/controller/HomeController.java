@@ -40,7 +40,7 @@ public class HomeController extends BaseController {
 	 */
 	@GetMapping("/")
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("intro");
+		ModelAndView mav = new ModelAndView("homepage");
 		
 		initSession(request, httpSession);
 		

@@ -1,18 +1,34 @@
 <!-- Fragment: Horizontal menu -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+	<script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+</head>
 <div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-light navbar-without-dd-arrow navbar-shadow navbar-brand-center" role="navigation" data-menu="menu-wrapper" data-nav="brand-center">
       <div class="main-menu-content center-layout" data-menu="menu-container">
         
         <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+        
+        <li class="dropdown nav-item active" data-menu="dropdown">
+               	<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-home"></i><span data-i18n="nav.dash.main">Hướng dẫn sử dụng</span></a>
+                <ul class="dropdown-menu">
+                	<li class="active" data-menu=""><a class="dropdown-item" data-toggle="dropdown" onclick="startTour()">Thanh menu ngang</a></li>
+                	<li class="active" data-menu=""><a class="dropdown-item" data-toggle="dropdown" th:href="@{/customer/list?startTour=true}">Khách hàng</a></li>
+<!--                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/ecosystem}" data-toggle="dropdown">Hệ sinh thái</a></li> -->
+<!--                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/contact}" data-toggle="dropdown">Liên hệ</a></li> -->
+<!--                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/feature-introduction}" data-toggle="dropdown">Đặc trưng</a></li> -->
+<!--                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/feedback}" data-toggle="dropdown">Phản hồi</a></li> -->
+                </ul>
+         </li>
         	<!-- <li class="nav-item active" data-page="crm-web/home">
 			    <a class="nav-link" th:href="@{/}" id="homeLink">
 			        <i class="icon-home"></i>
 			        <span class="menu-title" data-i18n="nav.dash.main">Trang chủ</span>
 			    </a>
 			</li> -->
-			 <li class="dropdown nav-item active" data-menu="dropdown">
-                <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-home"></i><span data-i18n="nav.dash.main">Giới thiệu</span></a>
+		 	<li class="dropdown nav-item active" data-menu="dropdown" data-step="1" data-intro="Đây là phần Giới thiệu. Bạn có thể xem trang chủ, hệ sinh thái và các chức năng liên hệ.">
+               	<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-home"></i><span data-i18n="nav.dash.main">Giới thiệu</span></a>
                 <ul class="dropdown-menu">
                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/}" data-toggle="dropdown">Trang chủ</a></li>
                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/ecosystem}" data-toggle="dropdown">Hệ sinh thái</a></li>
@@ -20,8 +36,10 @@
                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/feature-introduction}" data-toggle="dropdown">Đặc trưng</a></li>
                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/feedback}" data-toggle="dropdown">Phản hồi</a></li>
                 </ul>
-            </li>
-            <li class="dropdown nav-item active" data-menu="dropdown">
+           	</li>
+            
+            
+           	<li class="dropdown nav-item active" data-menu="dropdown" data-step="2" data-intro="Quản lý khách hàng tại đây: tạo mới, xem danh sách, quản lý tương tác.">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-user-following"></i><span data-i18n="nav.dash.main">Khách hàng</span></a>
                 <ul class="dropdown-menu">
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer/newEditCustomer}" data-toggle="dropdown">Tạo mới khách hàng</a></li>
@@ -34,7 +52,7 @@
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer-care/general}" data-toggle="dropdown">Chăm sóc khách hàng</a></li>
                 </ul>
             </li>
-            <li class="dropdown nav-item" data-menu="dropdown">
+            <li class="dropdown nav-item" data-menu="dropdown" data-step="3" data-intro="Tạo, tìm kiếm và cập nhật đơn hàng tại mục này.">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-docs"></i><span data-i18n="nav.dash.main">Đơn hàng</span></a>
                 <ul class="dropdown-menu">
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/new}" data-toggle="dropdown">Tạo mới đơn hàng</a></li>
@@ -50,7 +68,7 @@
                   </li>
                 </ul>
             </li>
-            <li class="dropdown nav-item" data-menu="dropdown">
+            <li class="dropdown nav-item" data-menu="dropdown" data-step="4" data-intro="Cấu hình loại đơn hàng, loại hàng hóa và trạng thái hàng hóa">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-settings"></i><span data-i18n="nav.dash.main">Cài đặt</span></a>
                    <ul class="dropdown-menu">
                       <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration/status}" data-toggle="dropdown">Cấu hình đơn hàng</a></li>
@@ -59,7 +77,8 @@
                       <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Chung</a></li>
                   </ul>
             </li>
-            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">Báo cáo</span></a>
+            <li class="dropdown nav-item" data-menu="dropdown" data-step="5" data-intro="Danh mục này đang phát triển.">
+            	<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">Báo cáo</span></a>
                 <ul class="dropdown-menu">
                    <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Khách hàng</a></li>
                    <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Đơn hàng</a></li>
@@ -79,7 +98,7 @@
              <!-- <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">About</span></a> -->
              
             <!--  <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" th:href="'https://myworkspace.vn/cas/login?service=http://localhost:8080/crm-web/j_spring_cas_security_check'" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">LOG IN</span></a> -->
-        	 <li class="dropdown nav-item">
+        	 <li class="dropdown nav-item" data-menu="dropdown" data-step="6" data-intro="Hãy đăng nhập tại đây để sử dụng tại khoản">
 			    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">
 			        <!-- Kiểm tra trạng thái đăng nhập -->
 			        <span th:if="${#request.userPrincipal}" style="color: green; font-weight: bold;" 
@@ -143,4 +162,10 @@
 <!--     </span> -->
 <!--   </li> -->
 <!-- </ul> -->
+
+<script>
+  function startTour() {
+    introJs().start();
+  }
+</script>
 </html>

@@ -284,10 +284,8 @@ public class CustomerController extends BaseController {
 	private Resource resResponsiblePersonDemo;
 	
 	@GetMapping("list")
-	public ModelAndView displayCustomerListCRMScreen(
-			CustomerCriteriaDTO customerCriteriaDTO,
-			HttpServletRequest request,
-			HttpSession httpSession) {
+	public ModelAndView displayCustomerListCRMScreen(CustomerCriteriaDTO customerCriteriaDTO, HttpServletRequest request, HttpSession httpSession, 
+			@RequestParam(name = "startTour", required = false) Boolean startTour) {
 
 		ModelAndView mav = new ModelAndView("customer_list_v2");
 		try {
@@ -350,6 +348,9 @@ public class CustomerController extends BaseController {
 		} catch (Exception ex){
 			mav.addObject("errorMessage", "Đã xảy ra lỗi trong quá trình tải danh sách khách hàng. Vui lòng thử lại sau hoặc liên hệ quản trị hệ thống.");
 		}
+		if (Boolean.TRUE.equals(startTour)) {
+	        mav.addObject("startTour", true);
+	    }
 		
 		return mav;
 	}
