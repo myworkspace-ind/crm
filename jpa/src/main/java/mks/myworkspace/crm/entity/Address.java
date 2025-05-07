@@ -16,6 +16,9 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(name = "site_id", length = 99)
+	private String siteId;
 
     @Column(name = "street", length = 255)
     private String street;
