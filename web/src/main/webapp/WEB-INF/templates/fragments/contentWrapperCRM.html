@@ -22,7 +22,7 @@
 				<form id="frmSearchCustomer" th:action="@{/customer/list}" method="get">
 					<fieldset
 						class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-						<input class="form-control" name="keyword" id="iconLeft"
+						<input data-tour data-step="4" data-intro="Bạn có thể tìm kiếm khách hàng theo tên công ty, người liên hệ chính, email, số điện thoại,..." class="form-control" name="keyword" id="iconLeft"
 							type="text" placeholder="Tìm kiếm thông tin..."
 							onkeypress="handleKeyPress(event)">
 						<div class="form-control-position">

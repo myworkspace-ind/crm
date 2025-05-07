@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<!-- Shepherd CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/css/shepherd.css" />
-<!-- Shepherd JS -->
-<script src="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/js/shepherd.min.js"></script>
+<!-- 	<script src="https://cdn.jsdelivr.net/npm/shepherd.js@13.0.0/dist/js/shepherd.min.js"></script> -->
+<!-- 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@13.0.0/dist/css/shepherd.css" /> -->
 </head>
 
 <body>
@@ -31,8 +29,9 @@
 
 						<div style="display: flex; align-items: center;">
 							<!-- Status của khách hàng -->
-							<th:block th:include="fragments/statusOfCustomer"></th:block>
-
+							<div style="margin-left: 20px" data-tour data-step="1" data-intro="Nhấn vào từng trạng thái để tìm kiếm khách hàng.">
+								<th:block th:include="fragments/statusOfCustomer"></th:block>
+							</div>
 							<!-- Nút thêm mới khách hàng -->
 <!-- 							<button class="addCustomerbtn" data-toggle="modal" -->
 <!-- 								data-target="#addNewCustomerModal"> -->
@@ -42,13 +41,13 @@
 							<div class="addCustomerAndRestoreCustomer">
 							<!-- Thay đổi nút Thêm khách hàng -->
 								<a th:href = "@{/customer/newEditCustomer}">
-									<button class="addCustomerbtn" data-tour="step-1" data-tour-title="Thêm khách hàng" data-tour-content="Bấm vào đây để thêm một khách hàng mới.">
+									<button class="addCustomerbtn" data-tour data-step="2" data-intro="Nhấn vào đây để thêm khách hàng mới." >
 										<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
 										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
 									</button>
 								</a>
 								
-								<button class="restoreHidedCustomerbtn" data-tour="step-2" data-tour-title="Khôi phục khách hàng bị ẩn" data-tour-content="Bấm vào đây để khôi phục những khách hàng đang bị ẩn" id="restoreHidedCustomerbtn" onclick="showHidedCustomers()">
+								<button class="restoreHidedCustomerbtn" data-tour data-step="3" data-intro="Bấm vào đây để khôi phục những khách hàng đang bị ẩn" id="restoreHidedCustomerbtn" onclick="showHidedCustomers()">
 									<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
 									<i class="fa-solid fa-arrows-rotate"></i> Khôi phục khách hàng bị ẩn
 								</button>
@@ -112,7 +111,7 @@
 										<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
 										<div class="container-flex">
 											<div class="filter-container">
-												<button id="filter-toggle" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+												<button data-tour data-step="5" data-tour-title="Tìm kiếm nâng cao" data-intro="Nhấn vào đây để tìm kiếm khách hàng theo nhiều điều kiện." id="filter-toggle" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 													<i class="fa-solid fa-filter"></i>
 												</button>
 
@@ -260,7 +259,7 @@
 
 											<!-- BEGIN TABLE CUSTOMER LIST -->
 											<div class="table-container">
-												<div class="table-responsive">
+												<div data-tour data-step="6" data-intro="Danh sách khách hàng của người dùng" class="table-responsive">
 													<div class="scrollable-table">
 														<table id="table" class="table table-bordered">
 															<thead class="thead">
