@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Address;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.CustomerStatusHistory;
 import mks.myworkspace.crm.entity.EmailToCustomer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Interaction;
@@ -56,6 +58,7 @@ import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.repository.CustomerStatusHistoryRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.EmailToCustomerService;
 import mks.myworkspace.crm.service.ProfessionService;
@@ -127,6 +130,9 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private CustomerStatusHistoryRepository customerStatusHistoryRepository;
 
 //	@GetMapping("/get-potential-customer")
 //	public ResponseEntity<?> getPotentialCustomers() {
@@ -354,32 +360,79 @@ public class CustomerController extends BaseController {
 		
 		return mav;
 	}
-
+	
 	@RequestMapping(value = { "/customerDetail" }, method = RequestMethod.GET)
-	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
-			HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("customerDetail");
+	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId,
+	                                                HttpServletRequest request,
+	                                                HttpSession httpSession) {
+	    ModelAndView mav = new ModelAndView("customerDetail");
 
-		initSession(request, httpSession);
+	    initSession(request, httpSession);
 
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		log.debug("Customer Detail is running....");
+	    mav.addObject("currentSiteId", getCurrentSiteId());
+	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+	    log.debug("Customer Detail is running....");
 
-		Optional<Customer> customerOpt = customerService.findById(customerId);
+	    Optional<Customer> customerOpt = customerService.findById(customerId);
 
-		// Check if the customer exists and add to model
-		customerOpt.ifPresentOrElse(customer -> {
-			mav.addObject("customer", customer);
-		}, () -> {
-			mav.addObject("errorMessage", "Customer not found.");
-		});
+	    if (customerOpt.isEmpty()) {
+	        mav.addObject("errorMessage", "Customer not found.");
+	        return mav;
+	    }
 
-		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
-		mav.addObject("responsiblePersons", responsiblePersons);
+	    Customer customer = customerOpt.get();
+	    mav.addObject("customer", customer);
 
-		return mav;
+	    // Thêm đoạn xử lý lịch sử trạng thái chính của khách hàng
+	    List<CustomerStatusHistory> historyList = customerStatusHistoryRepository.findByCustomerOrderByChangeDateAsc(customer);
+
+	    Map<Integer, Map<String, String>> groupedByStage = new TreeMap<>();
+
+	    for (CustomerStatusHistory history : historyList) {
+	        int stage = history.getStage();
+	        String statusName = history.getMainStatus().getName();
+	        String changeDateStr = history.getChangeDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+	        groupedByStage
+	                .computeIfAbsent(stage, k -> new HashMap<>())
+	                .put(statusName, changeDateStr);
+	    }
+
+	    mav.addObject("statusHistoryByStage", groupedByStage);
+
+	    // Thêm thông tin người phụ trách
+	    List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+	    mav.addObject("responsiblePersons", responsiblePersons);
+
+	    return mav;
 	}
+
+
+//	@RequestMapping(value = { "/customerDetail" }, method = RequestMethod.GET)
+//	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
+//			HttpSession httpSession) {
+//		ModelAndView mav = new ModelAndView("customerDetail");
+//
+//		initSession(request, httpSession);
+//
+//		mav.addObject("currentSiteId", getCurrentSiteId());
+//		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+//		log.debug("Customer Detail is running....");
+//
+//		Optional<Customer> customerOpt = customerService.findById(customerId);
+//
+//		// Check if the customer exists and add to model
+//		customerOpt.ifPresentOrElse(customer -> {
+//			mav.addObject("customer", customer);
+//		}, () -> {
+//			mav.addObject("errorMessage", "Customer not found.");
+//		});
+//
+//		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+//		mav.addObject("responsiblePersons", responsiblePersons);
+//
+//		return mav;
+//	}
 
 //	@PostMapping("/create-customer")
 //	@ResponseBody

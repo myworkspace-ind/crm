@@ -1088,6 +1088,20 @@ public class AppRepository {
 	    );
 	}
 	
+	public void save(CustomerStatusHistory history) {
+	    String sql = "INSERT INTO crm_customer_status_history (customer_id, status_id, change_date, stage) " +
+	                 "VALUES (?, ?, ?, ?)";
+
+	    jdbcTemplate0.update(sql,
+	        history.getCustomer().getId(),
+	        history.getMainStatus().getId(),
+	        java.sql.Date.valueOf(history.getChangeDate()), // convert LocalDate to SQL Date
+	        history.getStage()
+	    );
+
+	    log.debug("Saved status history for customer ID {}", history.getCustomer().getId());
+	}
+	
 //	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
 //    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
 //    

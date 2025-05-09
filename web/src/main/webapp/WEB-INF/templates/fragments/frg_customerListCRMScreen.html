@@ -275,16 +275,16 @@
 																		liên hệ chính</th>
 																	<th data-field="email" class="th5">Email</th>
 																	<th data-field="phone" class="th6">Số điện thoại</th>
-																	<th data-field="phone" class="th7">Sinh nhật/Ngày thành lập CTY</th>
-																	<th data-field="address" class="th8">Địa chỉ khách
-																		hàng</th>
+																	<!-- <th data-field="phone" class="th7">Sinh nhật/Ngày thành lập CTY</th> -->
+<!-- 																	<th data-field="address" class="th8">Địa chỉ khách -->
+<!-- 																		hàng</th> -->
 																	<th data-field="profession" class="th9">Ngành nghề</th>
 																	<th data-field="main_status" class="th10">Trạng
 																		thái chính</th>
-																	<th data-field="sub_status" class="th11">Trạng
-																		thái phụ</th>
-																	<th data-field="responsible_person" class="th12">Người
-																		phụ trách</th>
+<!-- 																	<th data-field="sub_status" class="th11">Trạng -->
+<!-- 																		thái phụ</th> -->
+<!-- 																	<th data-field="responsible_person" class="th12">Người -->
+<!-- 																		phụ trách</th> -->
 																	<th data-field="created_at" class="th13">Thời gian
 																		tạo</th>
 																	<th data-field="note" class="th14">Ghi chú</th>
@@ -304,21 +304,21 @@
 																	<td th:text="${customer.email != null ? customer.email : ''}"></td>
 																	<td th:text="${customer.phone != null ? customer.phone : ''}"></td>
 																	
-																	<td th:text="${customer.birthday != null ? customer.birthday : ''}"></td>
+																	<!-- <td th:text="${customer.birthday != null ? customer.birthday : ''}"></td> -->
 																	
-																	<td th:text="${customer.address != null ? customer.address : ''}"></td>
+																	<!-- <td th:text="${customer.address != null ? customer.address : ''}"></td> -->
 																	<td th:text="${customer.profession != null ? customer.profession.name : ''}"></td>
 																	<td th:class="'status-cell main-status'"
 																		th:style="${customer.mainStatus != null ? 'background-color: ' + customer.mainStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
 																		<span
 																		th:text="${customer.mainStatus != null ? customer.mainStatus.name : ''}"></span>
 																	</td>
-																	<td th:class="'status-cell sub-status'"
+																	<!-- <td th:class="'status-cell sub-status'"
 																		th:style="${customer.subStatus != null ? 'background-color: ' + customer.subStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
 																		<span
 																		th:text="${customer.subStatus != null ? customer.subStatus.name : ''}"></span>
-																	</td>
-																	<td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : ''}"></td>
+																	</td> -->
+																	<!-- <td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : ''}"></td> -->
 
 																	<!-- <td th:text="${customer.createdAt != null ? #temporals.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td> -->
 																	<td th:text="${customer.createdAt != null ? customer.formattedCreatedAt : ''}"></td>

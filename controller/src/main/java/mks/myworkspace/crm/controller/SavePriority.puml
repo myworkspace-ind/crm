@@ -1,0 +1,47 @@
+@startuml SavePriority
+actor User
+participant UI as "Bảng Danh sách khách hàng cần chăm sóc"
+participant CustomerCareController
+participant StorageService
+participant StorageServiceImpl
+participant AppRepository
+database Database
+
+== User updates priority ==
+User -> UI : Chọn độ ưu tiên\nvà nhấn nút "Lưu"
+UI -> CustomerCareController : PUT /update-priority\nRequestBody: CustomerCare
+activate CustomerCareController
+
+alt Invalid data
+    CustomerCareController --> UI : 400 Bad Request\n"Dữ liệu khách hàng không hợp lệ"
+    UI --> User : Thông báo lỗi
+    deactivate CustomerCareController
+else Valid data
+    CustomerCareController -> StorageService : updatePriority(customerCare)
+    activate StorageService
+
+    StorageService -> StorageServiceImpl : updatePriority(customerCare)
+    activate StorageServiceImpl
+
+    StorageServiceImpl -> AppRepository : updatePriorityCustomerCare(customerCare)
+    activate AppRepository
+
+    AppRepository -> Database : UPDATE crm_customer_care\nSET priority = ?\nWHERE id = ?
+    note right of Database
+        Cập nhật độ ưu tiên trong DB
+    end note
+
+    AppRepository --> StorageServiceImpl : void
+    deactivate AppRepository
+
+    StorageServiceImpl --> StorageService : void
+    deactivate StorageServiceImpl
+
+    StorageService --> CustomerCareController : void
+    deactivate StorageService
+
+    CustomerCareController --> UI : 200 OK\n"Cập nhật thành công"
+    UI --> User : Hiển thị thông báo thành công
+    deactivate CustomerCareController
+end
+@enduml

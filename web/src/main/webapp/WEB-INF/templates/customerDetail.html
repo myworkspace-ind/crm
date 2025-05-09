@@ -171,6 +171,30 @@
 				<div class="right-container">
 					<div class="common-info" id="common-info">
 						<h2>Overview</h2>
+						
+						<h4>Lịch sử chuyển đổi trạng thái</h4>
+				        <table border="1">
+				            <thead>
+				                <tr>
+				                    <th>Giai đoạn</th>
+				                    <th>New</th>
+				                    <th>Potential</th>
+				                    <th>Converted</th>
+				                    <th>Leave</th>
+				                    <th>Back</th>
+				                </tr>
+				            </thead>
+				            <tbody>
+				            <tr th:each="entry : ${statusHistoryByStage}">
+				                <td th:text="'Giai đoạn ' + ${entry.key}"></td>
+				                <td th:text="${entry.value['New']} ?: '-'"></td>
+				                <td th:text="${entry.value['Potential']} ?: '-'"></td>
+				                <td th:text="${entry.value['Converted']} ?: '-'"></td>
+				                <td th:text="${entry.value['Leave']} ?: '-'"></td>
+				                <td th:text="${entry.value['Back']} ?: '-'"></td>
+				            </tr>
+				            </tbody>
+				        </table>
 					</div>
 					
 					<div class="email-to-customer" id="email-to-customer">

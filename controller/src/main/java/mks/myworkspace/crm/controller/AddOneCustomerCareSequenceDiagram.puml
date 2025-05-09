@@ -1,0 +1,50 @@
+@startuml AddOneCustomerCareSequenceDiagram
+actor User
+participant UI as "Bảng Danh sách khách hàng cần chăm sóc"
+participant CustomerCareController
+participant CustomerCareService
+participant CustomerCareServiceImpl
+participant AppRepository
+database Database
+== Add customer care ==
+User -> UI : Nhấn nút "LƯU DANH SÁCH"
+UI -> CustomerCareController : GET /load-potential
+activate CustomerCareController
+
+CustomerCareController -> CustomerCareService : loadPotentialCustomersIntoCustomerCare()
+activate CustomerCareService
+
+CustomerCareService -> CustomerCareServiceImpl : loadPotentialCustomersIntoCustomerCare()
+activate CustomerCareServiceImpl
+
+CustomerCareServiceImpl -> CustomerCareServiceImpl : findNewCustomersWithEmptyInteraction()
+CustomerCareServiceImpl -> CustomerCareServiceImpl : findPotentialCustomers()
+
+note right of CustomerCareServiceImpl
+Tổng hợp khách hàng mới và tiềm năng
+thành danh sách cần chăm sóc
+end note
+
+CustomerCareServiceImpl -> AppRepository : insertCustomerCare(customers, daysAgo, daysAgo_case2)
+activate AppRepository
+
+AppRepository -> Database : INSERT INTO crm_customer_care ...
+note right of Database
+Dù là HTTP GET, vẫn có
+INSERT vào DB
+end note
+
+AppRepository --> CustomerCareServiceImpl : void
+deactivate AppRepository
+
+CustomerCareServiceImpl --> CustomerCareService : void
+deactivate CustomerCareServiceImpl
+
+CustomerCareService --> CustomerCareController : void
+deactivate CustomerCareService
+
+CustomerCareController --> UI : 200 OK - "Nạp khách hàng thành công"
+deactivate CustomerCareController
+
+UI --> User : Hiển thị thông báo "Nạp khách hàng thành công"
+@enduml
