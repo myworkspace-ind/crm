@@ -364,22 +364,21 @@ body {
 }
 
 .detail-email-modal {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    right: -100%; 
-    width: 810px !important;
-    height: auto;
-    background: white;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-    transition: right 0.5s ease-in-out, opacity 0.3s ease-in-out;
-    border-radius: 8px;
-    overflow-y: auto;
-    z-index: 11;
-    opacity: 0; 
-    pointer-events: none; 
+	position: fixed;
+	top: 50%;
+	transform: translateY(-50%);
+	right: -100%;
+	width: 810px !important;
+	height: auto;
+	background: white;
+	box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+	transition: right 0.5s ease-in-out, opacity 0.3s ease-in-out;
+	border-radius: 8px;
+	overflow-y: auto;
+	z-index: 11;
+	opacity: 0;
+	pointer-events: none;
 }
-
 
 .detail-email-modal-content {
 	background-color: white;
@@ -390,13 +389,73 @@ body {
 }
 
 .detail-email-modal.show {
-    right: 10px;
-    opacity: 1; 
-    pointer-events: auto; 
-    z-index:11;
+	right: 10px;
+	opacity: 1;
+	pointer-events: auto;
+	z-index: 11;
 }
 
-#closeDetailEmailModal{
+#closeDetailEmailModal {
 	margin-top: 10px;
 	margin-left: 700px;
+}
+
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.status-history-table {
+	width: 90%;
+	border-collapse: collapse;
+	background-color: #fff;
+	box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+.status-history-table th,
+.status-history-table td {
+  padding: 12px 16px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+/* Màu riêng cho từng trạng thái */
+.stage-header {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.new-header {
+  background-color: #e94b4b;
+  color: white;
+}
+
+.potential-header {
+  background-color: #3f51b5;
+  color: white;
+}
+
+.converted-header {
+  background-color: #38993c;
+  color: white;
+}
+
+.leave-header {
+  background-color: #5c5c5c;
+  color: white;
+}
+
+.back-header {
+  background-color: #ee9020;
+  color: white;
+}
+
+.status-history-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.status-history-table tbody tr:hover {
+  background-color: #eef6ff;
 }

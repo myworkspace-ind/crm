@@ -45,7 +45,12 @@
                   <!-- Chức năng không khác gì Customer>List. Cần thay đổi lại -->
                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer/list}" data-toggle="dropdown">Tìm kiếm</a></li>  
                   
-                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/customer-care/general}" data-toggle="dropdown">Chăm sóc khách hàng</a></li>
+                  <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Công việc</a>
+                    <ul class="dropdown-menu">
+                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Danh sách công việc</a></li>
+                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Tạo mới công việc</a></li>
+                     </ul>
+                   </li>
                 </ul>
             </li>
             <li class="dropdown nav-item" data-menu="dropdown" data-step="3" data-intro="Tạo, tìm kiếm và cập nhật đơn hàng tại mục này.">

@@ -169,37 +169,41 @@
 
 				<!-- Right panel -->
 				<div class="right-container">
-					<div class="common-info" id="common-info">
-						<h2>Overview</h2>
+					<div class="common-info" id="common-info">						
+						<div class="card-header">
+							<h3 class="card-title" style="padding-left: 20px;">TỔNG QUAN</h3>
+						</div>
 						
-						<h4>Lịch sử chuyển đổi trạng thái</h4>
-				        <table border="1">
-				            <thead>
-				                <tr>
-				                    <th>Giai đoạn</th>
-				                    <th>New</th>
-				                    <th>Potential</th>
-				                    <th>Converted</th>
-				                    <th>Leave</th>
-				                    <th>Back</th>
-				                </tr>
-				            </thead>
-				            <tbody>
-				            <tr th:each="entry : ${statusHistoryByStage}">
-				                <td th:text="'Giai đoạn ' + ${entry.key}"></td>
-				                <td th:text="${entry.value['New']} ?: '-'"></td>
-				                <td th:text="${entry.value['Potential']} ?: '-'"></td>
-				                <td th:text="${entry.value['Converted']} ?: '-'"></td>
-				                <td th:text="${entry.value['Leave']} ?: '-'"></td>
-				                <td th:text="${entry.value['Back']} ?: '-'"></td>
-				            </tr>
-				            </tbody>
-				        </table>
+						<h4 style="font-size: 1.2rem; margin-bottom: 10px; margin-left: 20px; color: #0288d1;">Lịch sử chuyển đổi trạng thái</h4>
+						<div class="table-wrapper">
+					        <table class="status-history-table">
+					            <thead>
+									<tr>
+										<th class="stage-header">Giai đoạn</th>
+										<th class="new-header">New</th>
+										<th class="potential-header">Potential</th>
+										<th class="converted-header">Converted</th>
+										<th class="leave-header">Leave</th>
+										<th class="back-header">Back</th>
+									</tr>
+								</thead>
+					            <tbody>
+					            <tr th:each="entry : ${statusHistoryByStage}">
+					                <td th:text="'Giai đoạn ' + ${entry.key}"></td>
+					                <td th:text="${entry.value['New']} ?: '-'"></td>
+					                <td th:text="${entry.value['Potential']} ?: '-'"></td>
+					                <td th:text="${entry.value['Converted']} ?: '-'"></td>
+					                <td th:text="${entry.value['Leave']} ?: '-'"></td>
+					                <td th:text="${entry.value['Back']} ?: '-'"></td>
+					            </tr>
+					            </tbody>
+					        </table>
+						</div>
 					</div>
 					
 					<div class="email-to-customer" id="email-to-customer">
 						<div class="card-header">
-							<h3 class="card-title" style="padding-left: 20px;">Email</h3>
+							<h3 class="card-title" style="padding-left: 20px;">EMAIL</h3>
 						</div>
 						
 						<div class="card-body">
@@ -274,7 +278,7 @@
 					
 					<div class="right-panel">
 					<div class="comments-section" id="comments-section">
-						<h3>Exchange</h3>
+						<h3>TRAO ĐỔI</h3>
 
 						 Comment 1
 						<div class="comment">

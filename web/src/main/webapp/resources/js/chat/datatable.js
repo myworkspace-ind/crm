@@ -530,11 +530,11 @@ $(document).ready(function() {
 
 									if (mainStatus) {
 										switch (mainStatus) {
-											case "Mới":
+											case "New":
 												return `<span class="badge badge-new">${mainStatus}</span>`;
-											case "Tiềm năng":
+											case "Potential":
 												return `<span class="badge badge-potential">${mainStatus}</span>`;
-											case "Chốt":
+											case "Converted":
 												return `<span class="badge badge-stay">${mainStatus}</span>`;
 											default:
 												return `<span class="badge badge-default">${mainStatus || "Chưa có dữ liệu"}</span>`;

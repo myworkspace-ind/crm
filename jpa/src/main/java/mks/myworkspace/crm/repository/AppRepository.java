@@ -1056,7 +1056,7 @@ public class AppRepository {
 	        "JOIN crm_status s ON s.id = cu.main_status_id " +
 	        "SET c.care_status = " +
 	        "  CASE " +
-	        "    WHEN s.name = 'Mới' THEN ( " +
+	        "    WHEN s.name = 'New' THEN ( " +
 	        "      CASE " +
 	        "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
 	        "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
@@ -1067,7 +1067,7 @@ public class AppRepository {
 	        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
 	        "      END " +
 	        "    ) " +
-	        "    WHEN s.name = 'Tiềm năng' THEN ( " +
+	        "    WHEN s.name = 'Potential' THEN ( " +
 	        "      CASE " +
 	        "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
 	        "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
