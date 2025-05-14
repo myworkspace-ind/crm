@@ -27,26 +27,26 @@
 									<div class="form-group">
 										<label for="contact_person">Người Liên Hệ Chính:</label>
 										<input type="text" class="form-control" id="contact_person" name="contact_person" maxlength="99"
-										   th:value="${customer?.contactPerson}" required>
+										   th:value="${customer?.contactPerson}">
 									</div>
 
 									<div class="form-group">
 										<label for="email">Email:</label>
 										<input type="email" class="form-control" id="email" name="email" maxlength="99"
-										   th:value="${customer?.email}" required>
+										   th:value="${customer?.email}">
 									</div>
 
 									<div class="form-group">
 										<label for="phone">Số Điện Thoại:</label>
 										<input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name="phone" maxlength="10"
-										   th:value="${customer?.phone}" required>
+										   th:value="${customer?.phone}">
 									</div>
 
 									<div class="form-group">
 										<label for="address">Địa Chỉ:</label>
 										<div class="d-flex align-items-center">
 											<input type="text" class="form-control me-2" id="address" name="address" maxlength="255"
-												   th:value="${customer?.address}" required>
+												   th:value="${customer?.address}">
 											<button type="button" id="address-btn" class="btn btn-outline-secondary">📍</button>
 										</div>
 									</div>
@@ -54,7 +54,7 @@
 
 									<div class="form-group">
 										<label for="profession">Ngành Nghề:</label>
-										<select class="form-control" id="profession" name="profession" required>
+										<select class="form-control" id="profession" name="profession">
 											<option value="">Chọn Ngành Nghề</option>
 											<th:block th:each="profession : ${professions}">
 												<option th:value="${profession.id}"
@@ -70,7 +70,7 @@
 
 									<div class="form-group">
 										<label for="main_status">Trạng Thái Chính:</label>
-										<select class="form-control" id="main_status" name="main_status" required>
+										<select class="form-control" id="main_status" name="main_status">
 											<option value="">Chọn Trạng Thái Chính</option>
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}"
@@ -86,7 +86,7 @@
 
 									<div class="form-group">
 										<label for="sub_status">Trạng Thái Phụ:</label>
-										<select class="form-control" id="sub_status" name="sub_status" required>
+										<select class="form-control" id="sub_status" name="sub_status">
 											<option value="">Chọn Trạng Thái Phụ</option>
 											<th:block th:each="status : ${statuses}">
 												<option th:value="${status.id}"
@@ -102,7 +102,7 @@
 
 									<div class="form-group">
 										<label for="responsible_person">Người Phụ Trách:</label>
-										<select class="form-control" id="responsible_person" name="responsible_person" required>
+										<select class="form-control" id="responsible_person" name="responsible_person"s>
 											<option value="">Chọn Người Phụ Trách</option>
 											<th:block th:each="person : ${responsiblePersons}">
 												<option th:value="${person.id}"

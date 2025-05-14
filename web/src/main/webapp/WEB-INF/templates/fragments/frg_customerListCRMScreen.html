@@ -287,7 +287,7 @@
 <!-- 																		phụ trách</th> -->
 																	<th data-field="created_at" class="th13">Thời gian
 																		tạo</th>
-																	<th data-field="note" class="th14">Ghi chú</th>
+																	<!-- <th data-field="note" class="th14">Ghi chú</th> -->
 																	<th class="th15">Hành động</th>
 																</tr>
 															</thead>
@@ -322,7 +322,7 @@
 
 																	<!-- <td th:text="${customer.createdAt != null ? #temporals.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td> -->
 																	<td th:text="${customer.createdAt != null ? customer.formattedCreatedAt : ''}"></td>
-																	<td th:text="${customer.note != null ? customer.note : ''}"></td>
+																	<!-- <td th:text="${customer.note != null ? customer.note : ''}"></td> -->
 																	<td> 
 																		<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><span data-i18n="nav.dash.main">Hành động</span></a>
 														                <ul class="dropdown-menu">
