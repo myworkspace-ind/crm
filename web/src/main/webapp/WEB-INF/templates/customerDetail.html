@@ -175,17 +175,53 @@
 						</div>
 						<div class="card shadow profile-card d-flex flex-row justify-content-between p-3" style="display: flex; gap: 20px; flex-wrap: wrap;">
 							<ul class="list-group list-group-flush" style="flex: 1;">
-								<li class="list-group-item"><strong>Tên công ty:</strong> CTY ABC</li>
-								<li class="list-group-item"><strong>Người liên hệ chính:</strong> Nguyễn Văn A</li>
-		                        <li class="list-group-item"><strong>Email:</strong> nguyenvana@example.com</li>
-		                        <li class="list-group-item"><strong>Số điện thoại:</strong> 0123 456 789</li>
-		                        <li class="list-group-item"><strong>Địa chỉ:</strong> 123 Đường ABC, Quận 1, TP.HCM</li>
-		                        <li class="list-group-item"><strong>Ngành nghề:</strong> Kinh doanh</li>
-		                        <li class="list-group-item"><strong>Trạng thái chính:</strong> Mới</li>
-		                        <li class="list-group-item"><strong>Trạng thái phụ:</strong> Mới cập nhật</li>
-		                        <li class="list-group-item"><strong>Người phụ trách:</strong> Nguyễn Trọng Minh</li>
-		                        <li class="list-group-item"><strong>Ghi chú:</strong> </li>
+								<li class="list-group-item"><strong>Tên công ty:</strong><span th:text="${customer.companyName}"></span></li>
+								<li class="list-group-item"><strong>Người liên hệ chính:</strong><span th:text="${customer.contactPerson}"></span></li>
+		                        <li class="list-group-item"><strong>Email:</strong><span th:text="${customer.email}"></span></li>
+		                        <li class="list-group-item"><strong>Số điện thoại:</strong><span th:text="${customer.phone}"></span></li>
+		                        <li class="list-group-item"><strong>Địa chỉ:</strong><span th:text="${customer.address}"></span></li>
+		                        <li class="list-group-item"><strong>Ngành nghề:</strong><span th:text="${customer.profession.name}"></span></li>
+		                        <li class="list-group-item"><strong>Trạng thái chính:</strong><span th:text="${customer.mainStatus.name}"></span></li>
+		                        <li class="list-group-item"><strong>Trạng thái phụ:</strong><span th:text="${customer.subStatus.name}"></span></li>
+		                        <li class="list-group-item"><strong>Người phụ trách:</strong><span th:text="${customer.responsiblePerson.name}"></span></li>
+		                        <li class="list-group-item"><strong>Ghi chú:</strong><span th:text="${customer.note}"></span></li>
 	                    	</ul>
+	                    	<h3>Gửi Email cho khách hàng</h3>
+							<form th:action="@{/customer/send-email-using-gmail}" method="post" enctype="multipart/form-data">
+								 <input type="hidden" name="customer" value="${customer.id}" />
+							    <!-- Người gửi (readonly) -->
+<!-- 							    <label>Người gửi:</label> -->
+<!-- 							    <input style="width: 50%" type="text" name="sender" th:value="${#request.userPrincipal.name}" readonly/><br/> -->
+							
+							    <!-- Người nhận (readonly) -->
+							    <label>Người nhận:</label>
+							    <input style="width: 50%" type="text" name="to" th:value="${customer.email}" readonly/><br/>
+							
+							    <!-- CC -->
+							    <label>CC:</label>
+							    <input style="width: 50%" type="text" name="cc" placeholder="cc@example.com" /><br/>
+							
+							    <!-- BCC -->
+							    <label>BCC:</label>
+							    <input style="width: 50%" type="text" name="bcc" placeholder="bcc@example.com" /><br/>
+							
+							    <!-- Tiêu đề -->
+							    <label>Tiêu đề:</label>
+							    <input style="width: 50%" type="text" name="subject" required /><br/>
+							
+							    <!-- Nội dung (rich text) -->
+							    <label>Nội dung:</label><br/>
+							    <textarea id="editor" name="body" rows="10" cols="60" required></textarea><br/>
+							
+							    <!-- Đính kèm -->
+							    <label>Đính kèm tệp:</label>
+							    <input type="file" name="attachment" /><br/><br/>
+							
+							    <button type="submit">Gửi Email</button>
+							</form>
+							
+							<!-- Kết quả -->
+							<p th:if="${message}" th:text="${message}" style="color: green;"></p>
 	                    </div>
 	                    
 	                     <!-- Progress bar bên phải -->
@@ -388,7 +424,11 @@
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/deleteCustomer.js}" defer></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/customerDetail.js}" defer></script>
-	
+	<!-- Thêm CKEditor -->
+	<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+	<script>
+	    CKEDITOR.replace('editor');
+	</script>
 </body>
 
 </html>

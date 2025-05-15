@@ -40,7 +40,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.google.api.client.auth.oauth2.Credential;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
@@ -66,6 +70,7 @@ import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.service.impl.EmailService;
+import mks.myworkspace.crm.service.impl.GmailService;
 import mks.myworkspace.crm.transformer.AddressMapper;
 import mks.myworkspace.crm.transformer.CustomerMapper;
 import mks.myworkspace.crm.transformer.JpaTransformer_Interaction_Handsontable;
@@ -127,6 +132,9 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	EmailToCustomerService emailToCustomerService;
+	
+	@Autowired
+	private GmailService gmailService;
 
 	@Autowired
 	private CustomerRepository customerRepository;
@@ -179,6 +187,46 @@ public class CustomerController extends BaseController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
 		}
 	}
+	
+	@PostMapping("/send-email-using-gmail")
+	public String sendEmail(@RequestParam String to,
+	                        @RequestParam String subject,
+	                        @RequestParam String body,
+	                        @RequestParam(required = false) String cc,
+	                        @RequestParam(required = false) String bcc,
+	                        @RequestParam(required = false) MultipartFile attachment,
+	                        HttpSession session,
+	                        RedirectAttributes redirectAttributes) {
+	    
+	    Credential credential = (Credential) session.getAttribute("credential");
+	    log.debug("Credential: {}", credential);
+	    Long customerId = (Long) session.getAttribute("customerId");
+
+	    // Nếu không có credential (hoặc muốn xóa cũ), redirect đi authorize lại
+	    if (credential == null) {
+	        return "redirect:/authorize?customerId=" + customerId;
+	    }
+
+	    try {
+	        String senderEmail = gmailService.getSenderEmail(credential);
+	        // Gửi email
+	        gmailService.sendEmailWithOptionalParams(customerId.toString(), credential, senderEmail, to, cc, bcc, subject, body, attachment);
+	        redirectAttributes.addFlashAttribute("message", "Email đã gửi thành công!");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+
+	        // Nếu gặp lỗi 403 do permission, xóa credential khỏi session để buộc authorize lại
+	        if (e.getMessage().contains("403") || e.getMessage().contains("insufficientPermissions")) {
+	            session.removeAttribute("credential");
+	            return "redirect:/authorize?customerId=" + customerId;
+	        }
+
+	        redirectAttributes.addFlashAttribute("message", "Gửi email thất bại: " + e.getMessage());
+	    }
+
+	    return "redirect:/customer/customerDetail?id=" + customerId;
+	}
+
 	
 	@PostMapping("/send-email-to-customer")
 	public ResponseEntity<?> sendEmail(@RequestParam("to") String to,
@@ -371,6 +419,7 @@ public class CustomerController extends BaseController {
 
 	    mav.addObject("currentSiteId", getCurrentSiteId());
 	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+	    httpSession.setAttribute("customerId", customerId);
 	    log.debug("Customer Detail is running....");
 
 	    Optional<Customer> customerOpt = customerService.findById(customerId);
@@ -403,7 +452,7 @@ public class CustomerController extends BaseController {
 	    // Thêm thông tin người phụ trách
 	    List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 	    mav.addObject("responsiblePersons", responsiblePersons);
-
+	    
 	    return mav;
 	}
 

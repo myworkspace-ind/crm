@@ -5,14 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
-import javax.persistence.Converter;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -43,6 +41,7 @@ public class EmailToCustomer implements Serializable{
 	@Column(name = "subject", length = 255)
     private String subject;
 	
+	@Lob
 	@Column(name = "content")
     private String content;  
 //	ALTER TABLE crm_emailtocustomer MODIFY content LONGTEXT;
