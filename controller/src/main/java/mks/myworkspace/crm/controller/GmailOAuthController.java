@@ -1,6 +1,8 @@
 package mks.myworkspace.crm.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,7 +30,8 @@ public class GmailOAuthController {
 	private static final String CLIENT_SECRET = "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";
 	private static final String REDIRECT_URI = "http://localhost:8080/crm-web/oauth2callback";
 
-	private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_SEND);
+	//private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_SEND);
+	private static final List<String> SCOPES = Arrays.asList(GmailScopes.GMAIL_SEND, GmailScopes.GMAIL_LABELS, GmailScopes.GMAIL_MODIFY, GmailScopes.GMAIL_COMPOSE, "https://www.googleapis.com/auth/userinfo.email");
 
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
@@ -62,6 +65,7 @@ public class GmailOAuthController {
 		
 		if (customerId != null) {
 			return "redirect:/customer/customerDetail?id=" + customerId;
+			//return "redirect:/customer/send-email-using-gmail"; 
 		}
 		
 		return "redirect:/"; // chuyển tới trang gửi email

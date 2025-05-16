@@ -187,41 +187,51 @@
 		                        <li class="list-group-item"><strong>Ghi chú:</strong><span th:text="${customer.note}"></span></li>
 	                    	</ul>
 	                    	<h3>Gửi Email cho khách hàng</h3>
-							<form th:action="@{/customer/send-email-using-gmail}" method="post" enctype="multipart/form-data">
-								 <input type="hidden" name="customer" value="${customer.id}" />
-							    <!-- Người gửi (readonly) -->
-<!-- 							    <label>Người gửi:</label> -->
-<!-- 							    <input style="width: 50%" type="text" name="sender" th:value="${#request.userPrincipal.name}" readonly/><br/> -->
-							
-							    <!-- Người nhận (readonly) -->
-							    <label>Người nhận:</label>
-							    <input style="width: 50%" type="text" name="to" th:value="${customer.email}" readonly/><br/>
-							
-							    <!-- CC -->
-							    <label>CC:</label>
-							    <input style="width: 50%" type="text" name="cc" placeholder="cc@example.com" /><br/>
-							
-							    <!-- BCC -->
-							    <label>BCC:</label>
-							    <input style="width: 50%" type="text" name="bcc" placeholder="bcc@example.com" /><br/>
-							
-							    <!-- Tiêu đề -->
-							    <label>Tiêu đề:</label>
-							    <input style="width: 50%" type="text" name="subject" required /><br/>
-							
-							    <!-- Nội dung (rich text) -->
-							    <label>Nội dung:</label><br/>
-							    <textarea id="editor" name="body" rows="10" cols="60" required></textarea><br/>
-							
-							    <!-- Đính kèm -->
-							    <label>Đính kèm tệp:</label>
-							    <input type="file" name="attachment" /><br/><br/>
-							
-							    <button type="submit">Gửi Email</button>
-							</form>
-							
-							<!-- Kết quả -->
-							<p th:if="${message}" th:text="${message}" style="color: green;"></p>
+	                    	<!-- Nếu chưa đăng nhập Gmail -->
+							<div th:if="${!credentialExists}">
+							    <p>⚠️ Bạn cần đăng nhập Gmail để có thể gửi email.</p>
+							    <a th:href="@{'/authorize?customerId=' + ${customerId}}">
+							        <button>Đăng nhập Gmail</button>
+							    </a>
+							</div>
+							<div th:if="${credentialExists}">
+								<form th:action="@{/customer/send-email-using-gmail}" method="post" enctype="multipart/form-data">
+									 <input type="hidden" name="customer" value="${customer.id}" />
+								    <!-- Người gửi (readonly) -->
+	<!-- 							    <label>Người gửi:</label> -->
+	<!-- 							    <input style="width: 50%" type="text" name="sender" th:value="${#request.userPrincipal.name}" readonly/><br/> -->
+								
+								    <!-- Người nhận (readonly) -->
+								    <label>Người nhận:</label>
+								    <input style="width: 50%" type="text" name="to" th:value="${customer.email}" readonly/><br/>
+								
+								    <!-- CC -->
+								    <label>CC:</label>
+								    <input style="width: 50%" type="text" name="cc" placeholder="cc@example.com" /><br/>
+								
+								    <!-- BCC -->
+								    <label>BCC:</label>
+								    <input style="width: 50%" type="text" name="bcc" placeholder="bcc@example.com" /><br/>
+								
+								    <!-- Tiêu đề -->
+								    <label>Tiêu đề:</label>
+								    <input style="width: 50%" type="text" name="subject" required /><br/>
+								
+								    <!-- Nội dung (rich text) -->
+								    <label>Nội dung:</label><br/>
+								    <textarea id="editor" name="body" rows="10" cols="60" required></textarea><br/>
+								
+								    <!-- Đính kèm -->
+								    <label>Đính kèm tệp:</label>
+								    <input type="file" name="attachments" id="attachment" multiple onchange="previewAttachments()" /><br/><br/>
+								    <div id="preview-area" style="margin-top: 10px;"></div>
+								
+								    <button type="submit">Gửi Email</button>
+								</form>
+								
+								<!-- Kết quả -->
+								<p th:if="${message}" th:text="${message}" style="color: green;"></p>
+							</div>
 	                    </div>
 	                    
 	                     <!-- Progress bar bên phải -->
@@ -426,8 +436,109 @@
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/customerDetail.js}" defer></script>
 	<!-- Thêm CKEditor -->
 	<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+	<script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+	<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+	
 	<script>
 	    CKEDITOR.replace('editor');
+	    
+	    function previewAttachments() {
+	        const fileInput = document.getElementById('attachment');
+	        const previewArea = document.getElementById('preview-area');
+	        previewArea.innerHTML = ''; // Clear cũ
+
+	        const files = fileInput.files;
+	        if (!files.length) return;
+
+	        Array.from(files).forEach(file => {
+	            const container = document.createElement('div');
+	            container.style.border = '1px solid #ccc';
+	            container.style.padding = '10px';
+	            container.style.marginBottom = '15px';
+	            container.style.background = '#fafafa';
+
+	            const info = document.createElement('p');
+	            info.textContent = `📎 ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+	            container.appendChild(info);
+
+	            const reader = new FileReader();
+
+	            if (file.type.startsWith('image/')) {
+	                reader.onload = function (e) {
+	                    const img = document.createElement('img');
+	                    img.src = e.target.result;
+	                    img.style.maxWidth = '300px';
+	                    container.appendChild(img);
+	                };
+	                reader.readAsDataURL(file);
+	            }
+	            else if (file.type === 'application/pdf') {
+	                reader.onload = function (e) {
+	                    const iframe = document.createElement('iframe');
+	                    iframe.src = e.target.result;
+	                    iframe.style.width = '100%';
+	                    iframe.style.height = '500px';
+	                    container.appendChild(iframe);
+	                };
+	                reader.readAsDataURL(file);
+	            }
+	            else if (file.type === 'text/plain') {
+	                reader.onload = function (e) {
+	                    const pre = document.createElement('pre');
+	                    pre.textContent = e.target.result;
+	                    pre.style.maxHeight = '400px';
+	                    pre.style.overflow = 'auto';
+	                    pre.style.background = '#f4f4f4';
+	                    pre.style.padding = '10px';
+	                    container.appendChild(pre);
+	                };
+	                reader.readAsText(file);
+	            }
+	            else if (file.name.endsWith(".docx") || file.name.endsWith(".doc")) {
+	                reader.onload = function (e) {
+	                    const arrayBuffer = e.target.result;
+	                    mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+	                        .then(result => {
+	                            const docxDiv = document.createElement('div');
+	                            docxDiv.innerHTML = result.value;
+	                            docxDiv.style.border = '1px solid #eee';
+	                            docxDiv.style.padding = '10px';
+	                            docxDiv.style.maxHeight = '400px';
+	                            docxDiv.style.overflow = 'auto';
+	                            container.appendChild(docxDiv);
+	                        })
+	                        .catch(err => {
+	                            const errMsg = document.createElement('p');
+	                            errMsg.textContent = "❌ Không thể xem trước file DOCX.";
+	                            container.appendChild(errMsg);
+	                            console.error("DOCX Preview Error:", err);
+	                        });
+	                };
+	                reader.readAsArrayBuffer(file);
+	            }
+	            else if (fileName.endsWith(".xls") || fileName.endsWith(".xlsx")){
+	            	const reader = new FileReader();
+	                reader.onload = function (e) {
+	                    const data = new Uint8Array(e.target.result);
+	                    const workbook = XLSX.read(data, { type: "array" });
+	                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+	                    const html = XLSX.utils.sheet_to_html(firstSheet);
+
+	                    const section = document.createElement("div");
+	                    section.innerHTML = `<h4>${file.name}</h4>` + html;
+	                    preview.appendChild(section);
+	                };
+	                reader.readAsArrayBuffer(file);
+	            }
+	            else {
+	                const note = document.createElement('p');
+	                note.textContent = "❌ Không hỗ trợ xem trước định dạng tệp này.";
+	                container.appendChild(note);
+	            }
+
+	            previewArea.appendChild(container);
+	        });
+	    }
 	</script>
 </body>
 

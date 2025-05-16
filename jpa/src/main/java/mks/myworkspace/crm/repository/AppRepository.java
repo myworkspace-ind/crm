@@ -385,6 +385,12 @@ public class AppRepository {
 
 	}
 
+	public Long saveEmailToCustomerUsingGmail(EmailToCustomer emailToCustomer) {
+		Long id;
+		id = createGmail(emailToCustomer);
+		return id;
+	}
+	
 	public Long saveEmailToCustomer(EmailToCustomer emailToCustomer) {
 		Long id;
 		id = createEmail(emailToCustomer);
@@ -573,7 +579,34 @@ public class AppRepository {
 			return Math.toIntExact(createAddress(address));
 		}
 	}
+	
+	private Long createGmail(EmailToCustomer emailToCustomer) {
+		Long id;
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_emailtocustomer")
+				.usingGeneratedKeyColumns("id");
+		Map<String, Object> parameters = new HashMap<>();
+		
+		// Thêm các trường cố định trong entity (không có liên kết bảng)
+		//String subjectUtf8 = new String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+		//String contentUtf8 = new String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
+		//parameters.put("subject", subjectUtf8);
+		//parameters.put("content", contentUtf8);
+		parameters.put("subject", emailToCustomer.getSubject());
+		parameters.put("content", emailToCustomer.getContent());
+		parameters.put("sender", emailToCustomer.getSender());
+		
+		// Thêm send_date và status
+	    parameters.put("send_date", emailToCustomer.getSendDate() != null ? emailToCustomer.getSendDate() : new Date());
+	    parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
+
+		// Thêm các khóa ngoại
+		//parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
+		parameters.put("receiver_id", emailToCustomer.getCustomer() != null ? emailToCustomer.getCustomer().getId() : null);
+		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		
+		return id;
+	}
 
 	private Long createEmail(EmailToCustomer emailToCustomer) {
 		Long id;

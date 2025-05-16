@@ -194,29 +194,50 @@ public class CustomerController extends BaseController {
 	                        @RequestParam String body,
 	                        @RequestParam(required = false) String cc,
 	                        @RequestParam(required = false) String bcc,
-	                        @RequestParam(required = false) MultipartFile attachment,
-	                        HttpSession session,
-	                        RedirectAttributes redirectAttributes) {
-	    
+	                        @RequestParam(required = false) MultipartFile[] attachments,
+	                        HttpSession session, RedirectAttributes redirectAttributes) {
+
 	    Credential credential = (Credential) session.getAttribute("credential");
-	    log.debug("Credential: {}", credential);
 	    Long customerId = (Long) session.getAttribute("customerId");
 
-	    // Nếu không có credential (hoặc muốn xóa cũ), redirect đi authorize lại
+	    log.debug("Credential from session: {}", credential);
+//	    log.debug("Access Token: {}", credential.getAccessToken());
+//	    log.debug("Refresh Token: {}", credential.getRefreshToken());
+//	    log.debug("Expiration Time (ms): {}", credential.getExpirationTimeMilliseconds());
+	    log.info("Preparing to send email for customerId: {}", customerId);
+	    log.info("Email details -> To: {}, Subject: {}, CC: {}, BCC: {}", to, subject, cc, bcc);
+	    
+		if (attachments != null && attachments.length > 0) {
+			for (MultipartFile file : attachments) {
+				if (file != null && !file.isEmpty()) {
+					log.info("Attachment file name: {}, size: {} bytes", file.getOriginalFilename(), file.getSize());
+				}
+			}
+		} else {
+			log.info("No attachment provided");
+		}
+
 	    if (credential == null) {
+	        log.warn("Credential is null, redirecting to /authorize");
 	        return "redirect:/authorize?customerId=" + customerId;
 	    }
 
 	    try {
 	        String senderEmail = gmailService.getSenderEmail(credential);
+	        log.info("Sender email retrieved: {}", senderEmail);
+
 	        // Gửi email
-	        gmailService.sendEmailWithOptionalParams(customerId.toString(), credential, senderEmail, to, cc, bcc, subject, body, attachment);
+	        gmailService.sendEmailWithOptionalParams(
+	            customerId.toString(), credential, senderEmail, to, cc, bcc, subject, body, attachments
+	        );
+
+	        log.info("Email sent successfully to {}", to);
 	        redirectAttributes.addFlashAttribute("message", "Email đã gửi thành công!");
 	    } catch (Exception e) {
-	        e.printStackTrace();
+	        log.error("Error occurred while sending email: {}", e.getMessage(), e);
 
-	        // Nếu gặp lỗi 403 do permission, xóa credential khỏi session để buộc authorize lại
 	        if (e.getMessage().contains("403") || e.getMessage().contains("insufficientPermissions")) {
+	            log.warn("Permission error encountered (403). Removing credential from session.");
 	            session.removeAttribute("credential");
 	            return "redirect:/authorize?customerId=" + customerId;
 	        }
@@ -226,6 +247,7 @@ public class CustomerController extends BaseController {
 
 	    return "redirect:/customer/customerDetail?id=" + customerId;
 	}
+
 
 	
 	@PostMapping("/send-email-to-customer")
@@ -419,7 +441,13 @@ public class CustomerController extends BaseController {
 
 	    mav.addObject("currentSiteId", getCurrentSiteId());
 	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+	    mav.addObject("customerId", customerId);
 	    httpSession.setAttribute("customerId", customerId);
+	    
+	    // Kiểm tra credential có tồn tại không
+	    boolean isAuthenticated = httpSession.getAttribute("credential") != null;
+	    mav.addObject("credentialExists", isAuthenticated);
+	    
 	    log.debug("Customer Detail is running....");
 
 	    Optional<Customer> customerOpt = customerService.findById(customerId);
