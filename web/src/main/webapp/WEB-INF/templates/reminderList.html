@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Thiết lập nhắc nhở</title>
+      <!-- COMMON META AND TITLE -->
+    <th:block th:include="fragments/common_meta_title"></th:block>
+
+    <!-- HEAD FRAGMENT -->
+    <th:block th:include="fragments/head"></th:block>
+     <!-- COMMON CSS -->
+    <th:block th:include="fragments/common_css"></th:block>
+
+	<link rel="stylesheet" type="text/css" href="/library/webjars/bootstrap/5.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/new_style.css}">
+	<link rel="stylesheet" th:href="@{/resources/css/status.css}" />
+    <link rel="stylesheet" th:href="@{/resources/css/buttonGroupFunction.css}" />
+    <link rel="stylesheet" th:href="@{/resources/css/buttonRestoreHidedCustomers.css}" />
+    
+	<!-- Intro.js CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+	<!-- Intro.js JS -->
+	<script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+  <style>
+    .card-icon {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+	<!-- BEGIN HEADER  -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER  -->
+	<section class="container my-5">
+	  <div class="d-flex justify-content-between align-items-center mb-3">
+	    <h5 class="text-muted mb-0">Tính năng nhắc nhở</h5>
+	    <a href="#" class="text-primary small">Xem tất cả</a>
+	  </div>
+	
+	  <div class="row row-cols-1 row-cols-md-3 g-4">
+	    <!-- Card 1 -->
+	    <div class="col">
+	      <div class="card h-100 shadow-sm border-0">
+	        <div class="card-body">
+	          <div class="mb-3"><img src="https://cdn-icons-png.flaticon.com/512/3989/3989835.png" class="card-icon"></div>
+	          <h5 class="card-title mb-1">Nhắc CSKH định kỳ</h5>
+	          <p class="card-subtitle text-muted mb-2">CRM</p>
+	          <p class="card-text text-secondary small">Nhắc gọi lại khách định kỳ theo cấu hình.</p>
+	        </div>
+	      </div>
+	    </div>
+	
+	    <!-- Card 2 -->
+	    <div class="col">
+	      <div class="card h-100 shadow-sm border-0">
+	        <div class="card-body">
+	          <div class="mb-3"><img src="https://cdn-icons-png.flaticon.com/512/595/595067.png" class="card-icon"></div>
+	          <h5 class="card-title mb-1">Sinh nhật khách hàng</h5>
+	          <p class="card-subtitle text-muted mb-2">CRM</p>
+	          <p class="card-text text-secondary small">Nhắc gửi lời chúc/ưu đãi sinh nhật.</p>
+	        </div>
+	      </div>
+	    </div>
+	
+	    <!-- Card 3 -->
+	    <div class="col">
+	      <div class="card h-100 shadow-sm border-0">
+	        <div class="card-body">
+	          <div class="mb-3"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712105.png" class="card-icon"></div>
+	          <h5 class="card-title mb-1">Nhắc nhở công việc</h5>
+	          <p class="card-subtitle text-muted mb-2">Quản lý công việc</p>
+	          <p class="card-text text-secondary small">Thông báo công việc trong ngày, sắp tới, quá hạn.</p>
+	        </div>
+	      </div>
+	    </div>
+	
+	    <!-- Card 4 -->
+	    <div class="col">
+	      <div class="card h-100 shadow-sm border-0">
+	        <div class="card-body">
+	          <div class="mb-3"><img src="https://cdn-icons-png.flaticon.com/512/1521/1521213.png" class="card-icon"></div>
+	          <h5 class="card-title mb-1">Nhắc gia hạn hợp đồng</h5>
+	          <p class="card-subtitle text-muted mb-2">Hợp đồng</p>
+	          <p class="card-text text-secondary small">Thông báo sắp hết hạn hợp đồng.</p>
+	        </div>
+	      </div>
+	    </div>
+	
+	    <!-- Card 5 -->
+	    <div class="col">
+	      <div class="card h-100 shadow-sm border-0">
+	        <div class="card-body">
+	          <div class="mb-3"><img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" class="card-icon"></div>
+	          <h5 class="card-title mb-1">Nhắc thanh toán</h5>
+	          <p class="card-subtitle text-muted mb-2">Kế toán</p>
+	          <p class="card-text text-secondary small">Nhắc các khoản cần thu hoặc chi.</p>
+	        </div>
+	      </div>
+	    </div>
+	
+	    <!-- Card 6 -->
+	    <div class="col">
+	      <div class="card h-100 shadow-sm border-0">
+	        <div class="card-body">
+	          <div class="mb-3"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077976.png" class="card-icon"></div>
+	          <h5 class="card-title mb-1">Nhắc nhở chăm sóc mới</h5>
+	          <p class="card-subtitle text-muted mb-2">CRM</p>
+	          <p class="card-text text-secondary small">Tự động nhắc chăm sóc khách hàng mới.</p>
+	        </div>
+	      </div>
+	    </div>
+	
+	    <!-- Card 7 -->
+	    <div class="col">
+	      <div class="card h-100 shadow-sm border-0">
+	        <div class="card-body">
+	          <div class="mb-3"><img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" class="card-icon"></div>
+	          <h5 class="card-title mb-1">Theo dõi phản hồi KH</h5>
+	          <p class="card-subtitle text-muted mb-2">Phản hồi</p>
+	          <p class="card-text text-secondary small">Nhắc theo dõi xử lý phản hồi khách hàng.</p>
+	        </div>
+	      </div>
+	    </div>
+	
+	    <!-- Card 8 -->
+	    <div class="col">
+	      <div class="card h-100 shadow-sm border-0">
+	        <div class="card-body">
+	          <div class="mb-3"><img src="https://cdn-icons-png.flaticon.com/512/545/545705.png" class="card-icon"></div>
+	          <h5 class="card-title mb-1">Lịch hẹn tư vấn</h5>
+	          <p class="card-subtitle text-muted mb-2">Lịch hẹn</p>
+	          <p class="card-text text-secondary small">Nhắc đến lịch hẹn với khách hàng.</p>
+	        </div>
+	      </div>
+	    </div>
+	
+	    <!-- Card 9 -->
+	    <div class="col">
+	      <div class="card h-100 shadow-sm border-0">
+	        <div class="card-body">
+	          <div class="mb-3"><img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png" class="card-icon"></div>
+	          <h5 class="card-title mb-1">Gửi email định kỳ</h5>
+	          <p class="card-subtitle text-muted mb-2">Marketing</p>
+	          <p class="card-text text-secondary small">Nhắc gửi email chăm sóc theo lịch định kỳ.</p>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</section>
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+
+	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/introTour.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/status.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/search.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/fetchCustomersByStatus.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/customerList_JS.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/customerList_Pagination.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/toggleCheckboxActions.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/addCustomer.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/buttonGroupFunction.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/showHidedCustomers.js}"></script>
+	
+	<script th:inline="javascript">
+	    /*<![CDATA[*/
+	    let shouldStartTour = /*[[${startTour}]]*/ false;
+	    if (shouldStartTour) {
+	        window.addEventListener('DOMContentLoaded', function () {
+	            startTourCustomer();
+	        });
+	    }
+	    /*]]>*/
+	</script>
+</body>
+</html>

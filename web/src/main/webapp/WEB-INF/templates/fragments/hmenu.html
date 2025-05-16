@@ -47,10 +47,12 @@
                   
                   <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Công việc</a>
                     <ul class="dropdown-menu">
-                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Danh sách công việc</a></li>
+                      <li data-menu=""><a class="dropdown-item" th:href="@{/task/list}" data-toggle="dropdown">Danh sách công việc</a></li>
                       <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Tạo mới công việc</a></li>
                      </ul>
                    </li>
+                   
+                   <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/reminder/list}" data-toggle="dropdown">Thiết lập nhắc nhở</a></li>
                 </ul>
             </li>
             <li th:if="${#request.userPrincipal}" class="dropdown nav-item" data-menu="dropdown" data-step="3" data-intro="Tạo, tìm kiếm và cập nhật đơn hàng tại mục này.">
@@ -116,7 +118,7 @@
 <!-- 			    <ul class="dropdown-menu"> -->
 
 			        <li th:if="${#request.userPrincipal}" class="dropdown-toggle nav-link" data-i18n="nav.templates.main" data-menu="">
-			            <a class="dropdown-item" th:href="@{/logout-handler}">
+			            <a class="" th:href="@{/logout-handler}">
 			                <i class="icon-logout"></i>
 			                <span data-i18n="nav.templates.main">Đăng xuất</span>
 			            </a>
