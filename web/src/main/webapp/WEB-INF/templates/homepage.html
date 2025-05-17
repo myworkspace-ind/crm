@@ -136,8 +136,8 @@
 	</button>
 
 	<!-- CHAT ASSISTANT -->
-	<th:block th:if=${#request.userPrincipal}>
-		<th:block th:include="fragments/chat/frg_chatAssistant"></th:block>
+	<th:block th:if="${#request.userPrincipal != null and toggleCCEnabled}">
+   		<th:block th:include="fragments/chat/frg_chatAssistant"></th:block>
 	</th:block>
 
 	<!-- Footer Section -->

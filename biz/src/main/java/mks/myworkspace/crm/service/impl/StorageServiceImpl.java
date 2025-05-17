@@ -604,4 +604,14 @@ public class StorageServiceImpl implements StorageService {
 			throw new RuntimeException("Lỗi khi cập nhật trạng thái chăm sóc khách hàng: " + e.getMessage());
 		}
 	}
+
+	@Override
+	public void toggleById(Long featureReminderId) {
+		appRepo.toggleById(featureReminderId);
+	}
+
+	@Override
+	public boolean isFeatureEnabledByCode(String featureReminderCode) {
+		return appRepo.isFeatureEnabledByCode(featureReminderCode);
+	}
 }

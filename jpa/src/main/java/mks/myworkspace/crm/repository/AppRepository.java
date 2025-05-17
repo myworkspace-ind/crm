@@ -1135,6 +1135,23 @@ public class AppRepository {
 	    log.debug("Saved status history for customer ID {}", history.getCustomer().getId());
 	}
 	
+	public void toggleById(Long id) {
+		String sqlSelect = "SELECT enabled FROM crm_reminder_features WHERE id = ?";
+		Boolean current = jdbcTemplate0.queryForObject(sqlSelect, Boolean.class, id);
+
+		if (current != null) {
+			boolean newStatus = !current;
+			String sqlUpdate = "UPDATE crm_reminder_features SET enabled = ? WHERE id = ?";
+			jdbcTemplate0.update(sqlUpdate, newStatus, id);
+		}
+	}
+	
+	public boolean isFeatureEnabledByCode(String code) {
+	    String sql = "SELECT enabled FROM crm_reminder_features WHERE code = ?";
+	    Boolean enabled = jdbcTemplate0.queryForObject(sql, Boolean.class, code);
+	    return enabled != null && enabled;
+	}
+	
 //	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
 //    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
 //    

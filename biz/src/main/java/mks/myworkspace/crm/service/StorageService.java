@@ -77,4 +77,8 @@ public interface StorageService {
 	
 	public int updateCustomerCareStatus(int reminderDaysForNew_Case1, int reminderDaysForPotential_Case1);
 
+	void toggleById(Long featureEnabledById);
+	
+	public boolean isFeatureEnabledByCode(String featureReminderCode);
+
 }
