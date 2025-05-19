@@ -36,43 +36,6 @@ resizables.forEach(th => {
 });
 
 */
-function startTourCustomer() {
-    const tour = new Shepherd.Tour({
-        useModalOverlay: true,
-        defaultStepOptions: {
-            cancelIcon: {
-                enabled: true
-            },
-            classes: 'shadow-md bg-purple-dark',
-            scrollTo: { behavior: 'smooth', block: 'center' }
-        }
-    });
-
-    document.querySelectorAll('[data-tour]').forEach((el, index) => {
-        const title = el.getAttribute('data-tour-title') || `Bước ${index + 1}`;
-        const content = el.getAttribute('data-tour-content') || '';
-        tour.addStep({
-            title: title,
-            text: content,
-            attachTo: {
-                element: el,
-                on: 'bottom'
-            },
-            buttons: [
-                {
-                    text: 'Tiếp',
-                    action: tour.next
-                },
-                {
-                    text: 'Thoát',
-                    action: tour.cancel
-                }
-            ]
-        });
-    });
-
-    tour.start();
-}
 
 function savePerson(e, rowId) {
 	var person = e.value;

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách công việc</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .task-group-header {
+            font-weight: bold;
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+
+        .task-row:hover {
+            background-color: #f9f9f9;
+        }
+
+        .status-delay {
+            color: red;
+        }
+
+        .status-working {
+            color: #0d6efd;
+        }
+
+        .status-done {
+            color: green;
+        }
+
+        .task-progress {
+            width: 120px;
+        }
+
+        .task-title-orange {
+            color: #f57c00;
+        }
+    </style>
+</head>
+<body class="container mt-4">
+    <h4 class="mb-4">Danh sách công việc</h4>
+
+    <!-- Hôm nay -->
+    <div class="task-group mb-3">
+        <div class="task-group-header">Hôm nay (2)</div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Công việc</th>
+                    <th>Dự án</th>
+                    <th>Thời gian</th>
+                    <th>Trạng thái</th>
+                    <th>Tiến độ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="task-row">
+                    <td>1</td>
+                    <td><a href="#">Viết báo cáo tuần</a></td>
+                    <td>WebApp A</td>
+                    <td>15/05</td>
+                    <td><span class="status-working">Đang tiến hành</span></td>
+                    <td>
+                        <div class="progress task-progress">
+                            <div class="progress-bar" role="progressbar" style="width: 50%;">50%</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="task-row">
+                    <td>2</td>
+                    <td><a href="#">Thiết kế giao diện mobile</a></td>
+                    <td>Mobile UI</td>
+                    <td>15/05</td>
+                    <td><span class="status-working">Đang tiến hành</span></td>
+                    <td>
+                        <div class="progress task-progress">
+                            <div class="progress-bar" role="progressbar" style="width: 30%;">30%</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Quá hạn -->
+    <div class="task-group mb-3">
+        <div class="task-group-header">Quá hạn (1)</div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Công việc</th>
+                    <th>Dự án</th>
+                    <th>Thời gian</th>
+                    <th>Trạng thái</th>
+                    <th>Tiến độ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="task-row">
+                    <td>1</td>
+                    <td><a href="#" class="task-title-orange">Cập nhật API backend</a></td>
+                    <td>Server B</td>
+                    <td>10/05 - 12/05</td>
+                    <td><span class="status-delay">Trễ hạn</span></td>
+                    <td>
+                        <div class="progress task-progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 80%;">80%</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Hoàn thành -->
+    <div class="task-group mb-5">
+        <div class="task-group-header">Hoàn thành (2)</div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Công việc</th>
+                    <th>Dự án</th>
+                    <th>Thời gian</th>
+                    <th>Trạng thái</th>
+                    <th>Tiến độ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="task-row">
+                    <td>1</td>
+                    <td><a href="#">Kiểm thử tính năng đăng nhập</a></td>
+                    <td>App Login</td>
+                    <td>08/05 - 09/05</td>
+                    <td><span class="status-done">Đã hoàn thành</span></td>
+                    <td>
+                        <div class="progress task-progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%;">100%</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="task-row">
+                    <td>2</td>
+                    <td><a href="#">Cập nhật giao diện dashboard</a></td>
+                    <td>Admin Panel</td>
+                    <td>05/05 - 07/05</td>
+                    <td><span class="status-done">Đã hoàn thành</span></td>
+                    <td>
+                        <div class="progress task-progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%;">100%</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

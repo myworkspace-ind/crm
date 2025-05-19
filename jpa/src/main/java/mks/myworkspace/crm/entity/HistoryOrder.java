@@ -14,6 +14,9 @@ public class HistoryOrder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // ID của lịch sử
+    
+    @Column(name = "site_id", length = 99)
+	private String siteId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)

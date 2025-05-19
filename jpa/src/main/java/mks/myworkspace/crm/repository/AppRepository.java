@@ -385,6 +385,12 @@ public class AppRepository {
 
 	}
 
+	public Long saveEmailToCustomerUsingGmail(EmailToCustomer emailToCustomer) {
+		Long id;
+		id = createGmail(emailToCustomer);
+		return id;
+	}
+	
 	public Long saveEmailToCustomer(EmailToCustomer emailToCustomer) {
 		Long id;
 		id = createEmail(emailToCustomer);
@@ -573,7 +579,34 @@ public class AppRepository {
 			return Math.toIntExact(createAddress(address));
 		}
 	}
+	
+	private Long createGmail(EmailToCustomer emailToCustomer) {
+		Long id;
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_emailtocustomer")
+				.usingGeneratedKeyColumns("id");
+		Map<String, Object> parameters = new HashMap<>();
+		
+		// Thêm các trường cố định trong entity (không có liên kết bảng)
+		//String subjectUtf8 = new String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+		//String contentUtf8 = new String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
+		//parameters.put("subject", subjectUtf8);
+		//parameters.put("content", contentUtf8);
+		parameters.put("subject", emailToCustomer.getSubject());
+		parameters.put("content", emailToCustomer.getContent());
+		parameters.put("sender", emailToCustomer.getSender());
+		
+		// Thêm send_date và status
+	    parameters.put("send_date", emailToCustomer.getSendDate() != null ? emailToCustomer.getSendDate() : new Date());
+	    parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
+
+		// Thêm các khóa ngoại
+		//parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
+		parameters.put("receiver_id", emailToCustomer.getCustomer() != null ? emailToCustomer.getCustomer().getId() : null);
+		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		
+		return id;
+	}
 
 	private Long createEmail(EmailToCustomer emailToCustomer) {
 		Long id;
@@ -1056,7 +1089,7 @@ public class AppRepository {
 	        "JOIN crm_status s ON s.id = cu.main_status_id " +
 	        "SET c.care_status = " +
 	        "  CASE " +
-	        "    WHEN s.name = 'Mới' THEN ( " +
+	        "    WHEN s.name = 'New' THEN ( " +
 	        "      CASE " +
 	        "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
 	        "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
@@ -1067,7 +1100,7 @@ public class AppRepository {
 	        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
 	        "      END " +
 	        "    ) " +
-	        "    WHEN s.name = 'Tiềm năng' THEN ( " +
+	        "    WHEN s.name = 'Potential' THEN ( " +
 	        "      CASE " +
 	        "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
 	        "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
@@ -1086,6 +1119,37 @@ public class AppRepository {
 	        reminderDaysForNew_Case1, reminderDaysForNew_Case1, reminderDaysForNew_Case1,
 	        reminderDaysForPotential_Case1, reminderDaysForPotential_Case1, reminderDaysForPotential_Case1
 	    );
+	}
+	
+	public void save(CustomerStatusHistory history) {
+	    String sql = "INSERT INTO crm_customer_status_history (customer_id, status_id, change_date, stage) " +
+	                 "VALUES (?, ?, ?, ?)";
+
+	    jdbcTemplate0.update(sql,
+	        history.getCustomer().getId(),
+	        history.getMainStatus().getId(),
+	        java.sql.Date.valueOf(history.getChangeDate()), // convert LocalDate to SQL Date
+	        history.getStage()
+	    );
+
+	    log.debug("Saved status history for customer ID {}", history.getCustomer().getId());
+	}
+	
+	public void toggleById(Long id) {
+		String sqlSelect = "SELECT enabled FROM crm_reminder_features WHERE id = ?";
+		Boolean current = jdbcTemplate0.queryForObject(sqlSelect, Boolean.class, id);
+
+		if (current != null) {
+			boolean newStatus = !current;
+			String sqlUpdate = "UPDATE crm_reminder_features SET enabled = ? WHERE id = ?";
+			jdbcTemplate0.update(sqlUpdate, newStatus, id);
+		}
+	}
+	
+	public boolean isFeatureEnabledByCode(String code) {
+	    String sql = "SELECT enabled FROM crm_reminder_features WHERE code = ?";
+	    Boolean enabled = jdbcTemplate0.queryForObject(sql, Boolean.class, code);
+	    return enabled != null && enabled;
 	}
 	
 //	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {

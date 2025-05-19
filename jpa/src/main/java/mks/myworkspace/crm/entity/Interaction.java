@@ -31,6 +31,9 @@ public class Interaction implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  // ID tự động tăng
+	
+	@Column(name = "site_id", length = 99)
+	private String siteId;
 
 	@Column(name = "interaction_date")
     //@Temporal(TemporalType.DATE)

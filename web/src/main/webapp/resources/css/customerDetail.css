@@ -364,22 +364,21 @@ body {
 }
 
 .detail-email-modal {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    right: -100%; 
-    width: 810px !important;
-    height: auto;
-    background: white;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-    transition: right 0.5s ease-in-out, opacity 0.3s ease-in-out;
-    border-radius: 8px;
-    overflow-y: auto;
-    z-index: 11;
-    opacity: 0; 
-    pointer-events: none; 
+	position: fixed;
+	top: 50%;
+	transform: translateY(-50%);
+	right: -100%;
+	width: 810px !important;
+	height: auto;
+	background: white;
+	box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+	transition: right 0.5s ease-in-out, opacity 0.3s ease-in-out;
+	border-radius: 8px;
+	overflow-y: auto;
+	z-index: 11;
+	opacity: 0;
+	pointer-events: none;
 }
-
 
 .detail-email-modal-content {
 	background-color: white;
@@ -390,13 +389,151 @@ body {
 }
 
 .detail-email-modal.show {
-    right: 10px;
-    opacity: 1; 
-    pointer-events: auto; 
-    z-index:11;
+	right: 10px;
+	opacity: 1;
+	pointer-events: auto;
+	z-index: 11;
 }
 
-#closeDetailEmailModal{
+#closeDetailEmailModal {
 	margin-top: 10px;
 	margin-left: 700px;
+}
+
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.status-history-table {
+	width: 90%;
+	border-collapse: collapse;
+	background-color: #fff;
+	box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+.status-history-table th,
+.status-history-table td {
+  padding: 12px 16px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+/* Màu riêng cho từng trạng thái */
+.stage-header {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.new-header {
+  background-color: #e94b4b;
+  color: white;
+}
+
+.potential-header {
+  background-color: #3f51b5;
+  color: white;
+}
+
+.converted-header {
+  background-color: #38993c;
+  color: white;
+}
+
+.leave-header {
+  background-color: #5c5c5c;
+  color: white;
+}
+
+.back-header {
+  background-color: #ee9020;
+  color: white;
+}
+
+.status-history-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.status-history-table tbody tr:hover {
+  background-color: #eef6ff;
+}
+
+.profile-card {
+    transition: box-shadow 0.3s ease-in-out !important;
+}
+
+.profile-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 136, 209, 0.25) !important;
+}
+
+.list-group-item {
+    font-size: 1rem;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 12px 20px;
+    transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f9f9f9;
+}
+
+.list-group-item strong {
+    color: #333;
+    width: 150px;
+    display: inline-block;
+}
+
+.card.shadow.profile-card, .card.shadow.progress-card{
+	width: 90%;
+	margin-left: 30px;
+	margin-top: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.info-column p {
+    margin: 8px 0;
+    font-size: 1rem;
+}
+
+.info-column strong {
+    color: #333;
+    min-width: 150px;
+    display: inline-block;
+}
+
+.progress-block {
+  margin-bottom: 20px;
+}
+
+.progress-block label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+.progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 26px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #42a5f5;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+  line-height: 26px;
+  transition: width 0.3s ease;
 }

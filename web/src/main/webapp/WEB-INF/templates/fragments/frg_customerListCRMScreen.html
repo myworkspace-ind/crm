@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<!-- Shepherd CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/css/shepherd.css" />
-<!-- Shepherd JS -->
-<script src="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/js/shepherd.min.js"></script>
+<!-- 	<script src="https://cdn.jsdelivr.net/npm/shepherd.js@13.0.0/dist/js/shepherd.min.js"></script> -->
+<!-- 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@13.0.0/dist/css/shepherd.css" /> -->
 </head>
 
 <body>
@@ -31,8 +29,9 @@
 
 						<div style="display: flex; align-items: center;">
 							<!-- Status của khách hàng -->
-							<th:block th:include="fragments/statusOfCustomer"></th:block>
-
+							<div style="margin-left: 20px" data-tour data-step="1" data-intro="Nhấn vào từng trạng thái để tìm kiếm khách hàng.">
+								<th:block th:include="fragments/statusOfCustomer"></th:block>
+							</div>
 							<!-- Nút thêm mới khách hàng -->
 <!-- 							<button class="addCustomerbtn" data-toggle="modal" -->
 <!-- 								data-target="#addNewCustomerModal"> -->
@@ -42,13 +41,13 @@
 							<div class="addCustomerAndRestoreCustomer">
 							<!-- Thay đổi nút Thêm khách hàng -->
 								<a th:href = "@{/customer/newEditCustomer}">
-									<button class="addCustomerbtn" data-tour="step-1" data-tour-title="Thêm khách hàng" data-tour-content="Bấm vào đây để thêm một khách hàng mới.">
+									<button class="addCustomerbtn" data-tour data-step="2" data-intro="Nhấn vào đây để thêm khách hàng mới." >
 										<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
 										<i class="fa-solid fa-plus"></i> Thêm mới khách hàng
 									</button>
 								</a>
 								
-								<button class="restoreHidedCustomerbtn" data-tour="step-2" data-tour-title="Khôi phục khách hàng bị ẩn" data-tour-content="Bấm vào đây để khôi phục những khách hàng đang bị ẩn" id="restoreHidedCustomerbtn" onclick="showHidedCustomers()">
+								<button class="restoreHidedCustomerbtn" data-tour data-step="3" data-intro="Bấm vào đây để khôi phục những khách hàng đang bị ẩn" id="restoreHidedCustomerbtn" onclick="showHidedCustomers()">
 									<!-- onclick="window.location.href='/crm-web/add-customer-dan'"> -->
 									<i class="fa-solid fa-arrows-rotate"></i> Khôi phục khách hàng bị ẩn
 								</button>
@@ -112,7 +111,7 @@
 										<!-- BEGIN BẢNG DANH SÁCH KHÁCH HÀNG VÀ BỘ LỌC -->
 										<div class="container-flex">
 											<div class="filter-container">
-												<button id="filter-toggle" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+												<button data-tour data-step="5" data-tour-title="Tìm kiếm nâng cao" data-intro="Nhấn vào đây để tìm kiếm khách hàng theo nhiều điều kiện." id="filter-toggle" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 													<i class="fa-solid fa-filter"></i>
 												</button>
 
@@ -260,7 +259,7 @@
 
 											<!-- BEGIN TABLE CUSTOMER LIST -->
 											<div class="table-container">
-												<div class="table-responsive">
+												<div data-tour data-step="6" data-intro="Danh sách khách hàng của người dùng" class="table-responsive">
 													<div class="scrollable-table">
 														<table id="table" class="table table-bordered">
 															<thead class="thead">
@@ -276,19 +275,19 @@
 																		liên hệ chính</th>
 																	<th data-field="email" class="th5">Email</th>
 																	<th data-field="phone" class="th6">Số điện thoại</th>
-																	<th data-field="phone" class="th7">Sinh nhật/Ngày thành lập CTY</th>
-																	<th data-field="address" class="th8">Địa chỉ khách
-																		hàng</th>
+																	<!-- <th data-field="phone" class="th7">Sinh nhật/Ngày thành lập CTY</th> -->
+<!-- 																	<th data-field="address" class="th8">Địa chỉ khách -->
+<!-- 																		hàng</th> -->
 																	<th data-field="profession" class="th9">Ngành nghề</th>
 																	<th data-field="main_status" class="th10">Trạng
 																		thái chính</th>
-																	<th data-field="sub_status" class="th11">Trạng
-																		thái phụ</th>
-																	<th data-field="responsible_person" class="th12">Người
-																		phụ trách</th>
+<!-- 																	<th data-field="sub_status" class="th11">Trạng -->
+<!-- 																		thái phụ</th> -->
+<!-- 																	<th data-field="responsible_person" class="th12">Người -->
+<!-- 																		phụ trách</th> -->
 																	<th data-field="created_at" class="th13">Thời gian
 																		tạo</th>
-																	<th data-field="note" class="th14">Ghi chú</th>
+																	<!-- <th data-field="note" class="th14">Ghi chú</th> -->
 																	<th class="th15">Hành động</th>
 																</tr>
 															</thead>
@@ -305,25 +304,25 @@
 																	<td th:text="${customer.email != null ? customer.email : ''}"></td>
 																	<td th:text="${customer.phone != null ? customer.phone : ''}"></td>
 																	
-																	<td th:text="${customer.birthday != null ? customer.birthday : ''}"></td>
+																	<!-- <td th:text="${customer.birthday != null ? customer.birthday : ''}"></td> -->
 																	
-																	<td th:text="${customer.address != null ? customer.address : ''}"></td>
+																	<!-- <td th:text="${customer.address != null ? customer.address : ''}"></td> -->
 																	<td th:text="${customer.profession != null ? customer.profession.name : ''}"></td>
 																	<td th:class="'status-cell main-status'"
 																		th:style="${customer.mainStatus != null ? 'background-color: ' + customer.mainStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
 																		<span
 																		th:text="${customer.mainStatus != null ? customer.mainStatus.name : ''}"></span>
 																	</td>
-																	<td th:class="'status-cell sub-status'"
+																	<!-- <td th:class="'status-cell sub-status'"
 																		th:style="${customer.subStatus != null ? 'background-color: ' + customer.subStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
 																		<span
 																		th:text="${customer.subStatus != null ? customer.subStatus.name : ''}"></span>
-																	</td>
-																	<td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : ''}"></td>
+																	</td> -->
+																	<!-- <td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : ''}"></td> -->
 
 																	<!-- <td th:text="${customer.createdAt != null ? #temporals.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td> -->
 																	<td th:text="${customer.createdAt != null ? customer.formattedCreatedAt : ''}"></td>
-																	<td th:text="${customer.note != null ? customer.note : ''}"></td>
+																	<!-- <td th:text="${customer.note != null ? customer.note : ''}"></td> -->
 																	<td> 
 																		<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><span data-i18n="nav.dash.main">Hành động</span></a>
 														                <ul class="dropdown-menu">

@@ -138,8 +138,7 @@ public class EmailService {
 
 			appRepository.saveEmailToCustomer(email);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Gửi email thất bại!");
+			log.error("Gửi email thất bại: {}" + e.getMessage());
 		}
 	}
 }

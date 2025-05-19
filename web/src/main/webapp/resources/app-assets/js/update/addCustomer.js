@@ -14,10 +14,10 @@ function saveNewCustomer() {
 	// Kiểm tra các trường bắt buộc
 	let errorMessage = '';
 	if (!companyName) errorMessage += 'Tên công ty không được để trống\n';
-	if (!contactPerson) errorMessage += 'Người liên hệ chính không được để trống\n';
-	if (!email) errorMessage += 'Email không được để trống\n';
-	if (!phone) errorMessage += 'Số điện thoại không được để trống\n';
-	if (!address) errorMessage += 'Địa chỉ không được để trống\n';
+//	if (!contactPerson) errorMessage += 'Người liên hệ chính không được để trống\n';
+//	if (!email) errorMessage += 'Email không được để trống\n';
+//	if (!phone) errorMessage += 'Số điện thoại không được để trống\n';
+//	if (!address) errorMessage += 'Địa chỉ không được để trống\n';
 
 	// Kiểm tra định dạng email và số điện thoại
 	if (!isValidPhoneNumber(phone)) errorMessage += 'Số điện thoại không đúng định dạng\n';

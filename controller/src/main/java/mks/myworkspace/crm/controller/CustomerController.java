@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,12 +40,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.google.api.client.auth.oauth2.Credential;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.common.model.TableStructure;
 import mks.myworkspace.crm.entity.Address;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.CustomerStatusHistory;
 import mks.myworkspace.crm.entity.EmailToCustomer;
 import mks.myworkspace.crm.entity.GoodsCategory;
 import mks.myworkspace.crm.entity.Interaction;
@@ -56,6 +62,7 @@ import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
+import mks.myworkspace.crm.repository.CustomerStatusHistoryRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.EmailToCustomerService;
 import mks.myworkspace.crm.service.ProfessionService;
@@ -63,6 +70,7 @@ import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.service.impl.EmailService;
+import mks.myworkspace.crm.service.impl.GmailService;
 import mks.myworkspace.crm.transformer.AddressMapper;
 import mks.myworkspace.crm.transformer.CustomerMapper;
 import mks.myworkspace.crm.transformer.JpaTransformer_Interaction_Handsontable;
@@ -124,9 +132,15 @@ public class CustomerController extends BaseController {
 
 	@Autowired
 	EmailToCustomerService emailToCustomerService;
+	
+	@Autowired
+	private GmailService gmailService;
 
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private CustomerStatusHistoryRepository customerStatusHistoryRepository;
 
 //	@GetMapping("/get-potential-customer")
 //	public ResponseEntity<?> getPotentialCustomers() {
@@ -173,6 +187,68 @@ public class CustomerController extends BaseController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
 		}
 	}
+	
+	@PostMapping("/send-email-using-gmail")
+	public String sendEmail(@RequestParam String to,
+	                        @RequestParam String subject,
+	                        @RequestParam String body,
+	                        @RequestParam(required = false) String cc,
+	                        @RequestParam(required = false) String bcc,
+	                        @RequestParam(required = false) MultipartFile[] attachments,
+	                        HttpSession session, RedirectAttributes redirectAttributes) {
+
+	    Credential credential = (Credential) session.getAttribute("credential");
+	    Long customerId = (Long) session.getAttribute("customerId");
+
+	    log.debug("Credential from session: {}", credential);
+//	    log.debug("Access Token: {}", credential.getAccessToken());
+//	    log.debug("Refresh Token: {}", credential.getRefreshToken());
+//	    log.debug("Expiration Time (ms): {}", credential.getExpirationTimeMilliseconds());
+	    log.info("Preparing to send email for customerId: {}", customerId);
+	    log.info("Email details -> To: {}, Subject: {}, CC: {}, BCC: {}", to, subject, cc, bcc);
+	    
+		if (attachments != null && attachments.length > 0) {
+			for (MultipartFile file : attachments) {
+				if (file != null && !file.isEmpty()) {
+					log.info("Attachment file name: {}, size: {} bytes", file.getOriginalFilename(), file.getSize());
+				}
+			}
+		} else {
+			log.info("No attachment provided");
+		}
+
+	    if (credential == null) {
+	        log.warn("Credential is null, redirecting to /authorize");
+	        return "redirect:/authorize?customerId=" + customerId;
+	    }
+
+	    try {
+	        String senderEmail = gmailService.getSenderEmail(credential);
+	        log.info("Sender email retrieved: {}", senderEmail);
+
+	        // Gửi email
+	        gmailService.sendEmailWithOptionalParams(
+	            customerId.toString(), credential, senderEmail, to, cc, bcc, subject, body, attachments
+	        );
+
+	        log.info("Email sent successfully to {}", to);
+	        redirectAttributes.addFlashAttribute("message", "Email đã gửi thành công!");
+	    } catch (Exception e) {
+	        log.error("Error occurred while sending email: {}", e.getMessage(), e);
+
+	        if (e.getMessage().contains("403") || e.getMessage().contains("insufficientPermissions")) {
+	            log.warn("Permission error encountered (403). Removing credential from session.");
+	            session.removeAttribute("credential");
+	            return "redirect:/authorize?customerId=" + customerId;
+	        }
+
+	        redirectAttributes.addFlashAttribute("message", "Gửi email thất bại: " + e.getMessage());
+	    }
+
+	    return "redirect:/customer/customerDetail?id=" + customerId;
+	}
+
+
 	
 	@PostMapping("/send-email-to-customer")
 	public ResponseEntity<?> sendEmail(@RequestParam("to") String to,
@@ -354,32 +430,86 @@ public class CustomerController extends BaseController {
 		
 		return mav;
 	}
-
+	
 	@RequestMapping(value = { "/customerDetail" }, method = RequestMethod.GET)
-	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
-			HttpSession httpSession) {
-		ModelAndView mav = new ModelAndView("customerDetail");
+	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId,
+	                                                HttpServletRequest request,
+	                                                HttpSession httpSession) {
+	    ModelAndView mav = new ModelAndView("customerDetail");
 
-		initSession(request, httpSession);
+	    initSession(request, httpSession);
 
-		mav.addObject("currentSiteId", getCurrentSiteId());
-		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		log.debug("Customer Detail is running....");
+	    mav.addObject("currentSiteId", getCurrentSiteId());
+	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
+	    mav.addObject("customerId", customerId);
+	    httpSession.setAttribute("customerId", customerId);
+	    
+	    // Kiểm tra credential có tồn tại không
+	    boolean isAuthenticated = httpSession.getAttribute("credential") != null;
+	    mav.addObject("credentialExists", isAuthenticated);
+	    
+	    log.debug("Customer Detail is running....");
 
-		Optional<Customer> customerOpt = customerService.findById(customerId);
+	    Optional<Customer> customerOpt = customerService.findById(customerId);
 
-		// Check if the customer exists and add to model
-		customerOpt.ifPresentOrElse(customer -> {
-			mav.addObject("customer", customer);
-		}, () -> {
-			mav.addObject("errorMessage", "Customer not found.");
-		});
+	    if (customerOpt.isEmpty()) {
+	        mav.addObject("errorMessage", "Customer not found.");
+	        return mav;
+	    }
 
-		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
-		mav.addObject("responsiblePersons", responsiblePersons);
+	    Customer customer = customerOpt.get();
+	    mav.addObject("customer", customer);
 
-		return mav;
+	    // Thêm đoạn xử lý lịch sử trạng thái chính của khách hàng
+	    List<CustomerStatusHistory> historyList = customerStatusHistoryRepository.findByCustomerOrderByChangeDateAsc(customer);
+
+	    Map<Integer, Map<String, String>> groupedByStage = new TreeMap<>();
+
+	    for (CustomerStatusHistory history : historyList) {
+	        int stage = history.getStage();
+	        String statusName = history.getMainStatus().getName();
+	        String changeDateStr = history.getChangeDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+	        groupedByStage
+	                .computeIfAbsent(stage, k -> new HashMap<>())
+	                .put(statusName, changeDateStr);
+	    }
+
+	    mav.addObject("statusHistoryByStage", groupedByStage);
+
+	    // Thêm thông tin người phụ trách
+	    List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+	    mav.addObject("responsiblePersons", responsiblePersons);
+	    
+	    return mav;
 	}
+
+
+//	@RequestMapping(value = { "/customerDetail" }, method = RequestMethod.GET)
+//	public ModelAndView displaycustomerDetailScreen(@RequestParam("id") Long customerId, HttpServletRequest request,
+//			HttpSession httpSession) {
+//		ModelAndView mav = new ModelAndView("customerDetail");
+//
+//		initSession(request, httpSession);
+//
+//		mav.addObject("currentSiteId", getCurrentSiteId());
+//		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+//		log.debug("Customer Detail is running....");
+//
+//		Optional<Customer> customerOpt = customerService.findById(customerId);
+//
+//		// Check if the customer exists and add to model
+//		customerOpt.ifPresentOrElse(customer -> {
+//			mav.addObject("customer", customer);
+//		}, () -> {
+//			mav.addObject("errorMessage", "Customer not found.");
+//		});
+//
+//		List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
+//		mav.addObject("responsiblePersons", responsiblePersons);
+//
+//		return mav;
+//	}
 
 //	@PostMapping("/create-customer")
 //	@ResponseBody

@@ -256,7 +256,7 @@ public class OrderConfigurationController extends BaseController {
 			List<Object[]> tblData = JpaTransformer_OrderCate_Handsontable.convert2D(lstOrderCategories);
 			tableData.setData(tblData);
 		} catch (Exception ex) {
-			log.error("Could not save task.", ex);
+			log.error("Could not save order category.", ex);
 		}
 
 		return tableData;

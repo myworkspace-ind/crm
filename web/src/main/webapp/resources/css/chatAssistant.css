@@ -354,7 +354,7 @@ input[type="radio"]:checked+label.badge-primary {
 }
 
 .badge-stay {
-	background-color: #baffc9;
+	background-color: #acebba !important;
     color: #04a436 !important;
     font-size: 15px !important;
 }

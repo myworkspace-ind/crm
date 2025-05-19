@@ -2,27 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<!-- START COMMON META AND TITLE -->
-<th:block th:include="fragments/common_meta_title"></th:block>
-<!-- END COMMON META AND TITLE -->
-	<th:block th:include="fragments/common_meta_title"></th:block>
+    <!-- COMMON META AND TITLE -->
+    <th:block th:include="fragments/common_meta_title"></th:block>
+
+    <!-- HEAD FRAGMENT -->
     <th:block th:include="fragments/head"></th:block>
+
+    <!-- COMMON CSS -->
     <th:block th:include="fragments/common_css"></th:block>
-<!-- START COMMON CSS -->
-<th:block th:include="fragments/common_css"></th:block>
-<!-- END COMMON CSS -->
-<th:block th:include="fragments/head"></th:block>
-<link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
-<link rel="stylesheet" type="text/css" th:href="@{/resources/css/status.css}">
-<link rel="stylesheet" type="text/css" th:href="@{/resources/css/buttonGroupFunction.css}">
-<link rel="stylesheet" type="text/css" th:href="@{/resources/css/buttonRestoreHidedCustomers.css}">
 
-<th:block th:include="fragments/head"></th:block>
+    <!-- PAGE-SPECIFIC CSS -->
+    <link rel="stylesheet" th:href="@{/resources/css/new_style.css}" />
+    <link rel="stylesheet" th:href="@{/resources/css/status.css}" />
+    <link rel="stylesheet" th:href="@{/resources/css/buttonGroupFunction.css}" />
+    <link rel="stylesheet" th:href="@{/resources/css/buttonRestoreHidedCustomers.css}" />
 
-<!-- Shepherd CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/css/shepherd.css" />
-<!-- Shepherd JS -->
-<script src="https://cdn.jsdelivr.net/npm/shepherd.js@8.4.1/dist/js/shepherd.min.js"></script>
+	<!-- Intro.js CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+	<!-- Intro.js JS -->
+	<script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
 </head>
 <!-- class="vertical-layout vertical-compact-menu menu-expanded fixed-navbar" Bỏ khoảng trống ở dòng bên trái, dòng này đặt ngay dưới "<body" -->
 <body>
@@ -54,6 +52,7 @@
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/introTour.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/status.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/search.js}"></script>
@@ -65,7 +64,7 @@
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/buttonGroupFunction.js}"></script>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/showHidedCustomers.js}"></script>
 	
-	<script type="text/javascript">
+	<script th:inline="javascript">
 	    /*<![CDATA[*/
 	    let shouldStartTour = /*[[${startTour}]]*/ false;
 	    if (shouldStartTour) {

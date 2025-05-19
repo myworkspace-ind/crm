@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Thiết lập nhắc nhở</title>
+      <!-- COMMON META AND TITLE -->
+    <th:block th:include="fragments/common_meta_title"></th:block>
+
+    <!-- HEAD FRAGMENT -->
+    <th:block th:include="fragments/head"></th:block>
+     <!-- COMMON CSS -->
+    <th:block th:include="fragments/common_css"></th:block>
+
+	<link rel="stylesheet" type="text/css" href="/library/webjars/bootstrap/5.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/new_style.css}">
+	<link rel="stylesheet" th:href="@{/resources/css/status.css}" />
+    <link rel="stylesheet" th:href="@{/resources/css/buttonGroupFunction.css}" />
+    <link rel="stylesheet" th:href="@{/resources/css/buttonRestoreHidedCustomers.css}" />
+    
+	<!-- Intro.js CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+	<!-- Intro.js JS -->
+	<script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+  <style>
+    .card-icon {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+    .reminder-card {
+	  transition: transform 0.5s ease;
+	}
+	
+	.reminder-card:hover {
+	  transform: translateY(-2px);
+	  cursor: pointer;
+	}
+	
+	.hover-description {
+	  max-height: 0;
+	  overflow: hidden;
+	  background: rgba(33, 37, 41, 0.9);
+	  color: white;
+	  padding: 0 12px;
+	  font-size: 0.875rem;
+	  transition: max-height 0.4s ease, padding 0.4s ease;
+	}
+	
+	.reminder-card:hover .hover-description {
+	  max-height: 200px; /* đủ chiều cao để hiện mô tả */
+	  padding: 12px;
+	}
+  </style>
+</head>
+<body>
+	<!-- BEGIN HEADER  -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER  -->
+	<section class="container my-5">
+	  <div class="d-flex justify-content-between align-items-center mb-3">
+	    <h4 class="text-muted mb-0">TÍNH NĂNG NHẮC NHỞ</h4>
+	    <!-- <a href="#" class="text-primary small">Xem tất cả</a> -->
+	  </div>
+	
+	<div class="row row-cols-1 row-cols-md-3 g-4">
+	    <div class="col" th:each="reminder : ${reminderFeatures}">
+			<div class="col">
+				  <div class="card h-100 shadow-sm border-0 position-relative reminder-card">
+				    <div class="card-body">
+				      <div class="mb-3">
+				        <img th:src="${reminder.icon}" class="card-icon">
+				      </div>
+				      <h5 class="card-title mb-1" th:text="${reminder.name}">Reminder Name</h5>
+			
+					     <div class="d-flex align-items-center mt-3">
+							  <!-- Toggle bật/tắt -->
+							  <form th:action="@{/reminder/enable/toggle}" method="post" class="d-flex align-items-center">
+							    <input type="hidden" name="id" th:value="${reminder.id}" />
+							    <div class="form-check form-switch m-0">
+							      <input class="form-check-input"
+							             type="checkbox" 
+							             name="enabled" 
+							             th:checked="${reminder.enabled}"
+							             onchange="this.form.submit()">
+							      <label class="form-check-label ms-2" 
+							             th:text="${reminder.enabled} ? 'Disable' : 'Enable'">
+							        Enable
+							      </label>
+							    </div>
+							  </form>
+							
+							  <!-- Nút cấu hình (chỉ hiển thị khi enabled = true) -->
+							  <button class="btn btn-outline-primary btn-sm ms-3"
+							          th:if="${reminder.enabled}"
+							          th:onclick="'openConfigModal(' + ${reminder.id} + ')'" >
+							    Cấu hình
+							  </button>
+						</div>
+				    </div>
+				
+				    <!-- Mô tả chi tiết hiển thị khi hover -->
+				    <div class="hover-description">
+				      <p class="text-white small mb-0" th:text="${reminder.description}">
+				        Reminder Description
+				      </p>
+				    </div>
+				  </div>
+			  
+			</div>
+		</div>
+	</div>
+	
+	</section>
+	
+	<!-- Modal cấu hình cho từng tính năng nhắc nhở -->
+	<div class="modal fade" id="configModal" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg modal-dialog-centered">
+	    <div class="modal-content border-0 shadow-lg rounded-4">
+	
+	      <!-- Header màu đẹp -->
+	      <div class="modal-header bg-gradient text-white rounded-top-4" style="background-color: #aac9ff">
+	        <h5 class="modal-title fw-semibold" id="configModalLabel">
+	          <i class="bi bi-sliders me-2"></i> Cấu hình nhắc nhở
+	        </h5>
+	        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+	      </div>
+	
+	     <!-- Nội dung -->
+		<div class="modal-body bg-light-subtle text-center py-5">
+		  <!-- Loading spinner -->
+		  <div id="configContent">
+		    <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;">
+		      <span class="visually-hidden">Loading...</span>
+		    </div>
+		    <div class="mt-3 text-secondary fs-6">Đang tải cấu hình, vui lòng chờ...</div>
+		  </div>
+		</div>
+	
+	    </div>
+	  </div>
+	</div>
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+
+	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/introTour.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/search.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/buttonGroupFunction.js}"></script>
+	
+	<script th:inline="javascript">
+	    /*<![CDATA[*/
+	    let shouldStartTour = /*[[${startTour}]]*/ false;
+	    if (shouldStartTour) {
+	        window.addEventListener('DOMContentLoaded', function () {
+	            startTourCustomer();
+	        });
+	    }
+	    /*]]>*/
+	</script>
+	
+	<script>
+	  function openConfigModal(reminderId) {
+	    const modal = new bootstrap.Modal(document.getElementById('configModal'));
+	    document.getElementById('configContent').innerHTML = "Đang tải cấu hình cho ID: " + reminderId + "...";
+	    
+	    // TODO: AJAX load nội dung cấu hình theo reminderId
+	    // fetch('/reminder/config/' + reminderId).then(...)
+	
+	    modal.show();
+	  }
+	</script>
+</body>
+</html>

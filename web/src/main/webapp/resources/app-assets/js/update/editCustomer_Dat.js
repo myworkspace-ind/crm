@@ -20,9 +20,9 @@ function saveCustomerChanges() {
 
     let errorMessage = '';
     if (!companyName) errorMessage += '- Tên công ty không được để trống\n';
-    if (!contactPerson) errorMessage += '- Người liên hệ chính không được để trống\n';
-    if (!email) errorMessage += '- Email không được để trống\n';
-    if (!phone) errorMessage += '- Số điện thoại không được để trống\n';
+//    if (!contactPerson) errorMessage += '- Người liên hệ chính không được để trống\n';
+//    if (!email) errorMessage += '- Email không được để trống\n';
+//    if (!phone) errorMessage += '- Số điện thoại không được để trống\n';
 
     if (errorMessage) {
         alert('Vui lòng điền đầy đủ thông tin:\n' + errorMessage);

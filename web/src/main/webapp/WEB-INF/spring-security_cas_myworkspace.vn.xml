@@ -102,6 +102,8 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 		<intercept-url pattern="/orders-configuration-ky/**" access="isAuthenticated()" />
 		<intercept-url pattern="/orders-configuration/**" access="isAuthenticated()" />
 		<intercept-url pattern="/customer-care/**" access="isAuthenticated()" />
+		<intercept-url pattern="/task/**" access="isAuthenticated()" />
+		<intercept-url pattern="/reminder/**" access="isAuthenticated()" />
 		<!-- <intercept-url pattern="/send-email-to-customer/**" access="isAuthenticated()" /> -->
 		
 
