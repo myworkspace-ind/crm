@@ -1,5 +1,6 @@
 package mks.myworkspace.crm.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -63,8 +64,10 @@ import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.CustomerStatusHistoryRepository;
+import mks.myworkspace.crm.repository.FilesUploadRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.EmailToCustomerService;
+import mks.myworkspace.crm.service.FilesUploadService;
 import mks.myworkspace.crm.service.ProfessionService;
 import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
@@ -141,6 +144,9 @@ public class CustomerController extends BaseController {
 	
 	@Autowired
 	private CustomerStatusHistoryRepository customerStatusHistoryRepository;
+	
+	@Autowired
+	private FilesUploadService filesUploadService;
 
 //	@GetMapping("/get-potential-customer")
 //	public ResponseEntity<?> getPotentialCustomers() {
@@ -158,6 +164,38 @@ public class CustomerController extends BaseController {
 //                    .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
 //		}
 //	}
+	
+	@PostMapping("/upload-files")
+	@ResponseBody
+	public ResponseEntity<?> uploadFiles(@RequestParam("interaction_id") Long interactionId,
+			@RequestParam("files") List<MultipartFile> files) {
+		List<String> uploadedFileNames = new ArrayList<>();
+
+		for (MultipartFile file : files) {
+			if (!file.isEmpty()) {
+				try {
+					String uploadDir = "uploads/interactions/" + interactionId;
+					File dir = new File(uploadDir);
+					if (!dir.exists())
+						dir.mkdirs();
+
+					String filePath = uploadDir + "/" + file.getOriginalFilename();
+					file.transferTo(new File(filePath));
+
+					// Gọi repo thay vì viết logic SQL trực tiếp
+					storageService.saveFilesUpload(interactionId, file.getOriginalFilename(), file.getContentType(), filePath);
+
+					uploadedFileNames.add(file.getOriginalFilename());
+
+				} catch (IOException e) {
+					return ResponseEntity.status(500).body("Lỗi khi upload file: " + file.getOriginalFilename());
+				}
+			}
+		}
+		String absolutePath = new File("uploads/interactions/" + interactionId).getAbsolutePath();
+		log.debug("Đường dẫn tuyệt đối: {}", absolutePath);
+		return ResponseEntity.ok("Uploaded: " + String.join(", ", uploadedFileNames));
+	}
 
 	@GetMapping("/customerDetailJson")
 	@ResponseBody
@@ -929,9 +967,9 @@ public class CustomerController extends BaseController {
 		List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
 
 		// Cấu trúc bảng
-		int[] colWidths = { 200, 300, 200, 300, 200, 30 };
+		int[] colWidths = { 200, 300, 200, 300, 200, 200, 30 };
 		//String[] colHeaders = { "Người trao đổi", "Ngày tương tác (dự kiến)", "Nội dung trao đổi", "Kế hoạch tiếp theo", "Ngày tạo", "" };
-		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "" };
+		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "Tài liệu/Hình ảnh", "" };
 
 		// Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
 		Map<String, Object> response = new HashMap<>();

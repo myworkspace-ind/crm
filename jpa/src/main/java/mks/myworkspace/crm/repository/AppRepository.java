@@ -1152,6 +1152,12 @@ public class AppRepository {
 	    return enabled != null && enabled;
 	}
 	
+	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
+        String sql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) " +
+                     "VALUES (?, ?, ?, ?)";
+        jdbcTemplate0.update(sql, interactionId, fileName, fileType, filePath);
+    }
+	
 //	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
 //    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
 //    

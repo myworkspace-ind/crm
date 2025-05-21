@@ -220,6 +220,9 @@ function initTable(colHeaders, colWidths, data) {
 					defaultDate: new Date(),
 					datePickerConfig: { format: 'YYYY-MM-DD' }
 				},
+				{	
+					renderer: fileUploadRenderer
+				},
 				{ renderer: deleteButtonRenderer },
 			],
 			height: 400,
@@ -235,7 +238,7 @@ function initTable(colHeaders, colWidths, data) {
 		});
 	} else {
 		console.error("Container tblInteraction không tồn tại.");
-	}
+	}	
 }
 
 function deleteButtonRenderer(instance, td, row, col, prop, value, cellProperties) {
@@ -345,4 +348,159 @@ function showSuccessToast(message) {
 function showErrorToast(message) {
 	showToast(message, 'warning');
 }
+
+// Cache để lưu file theo ô
+const fileCache = {};
+
+function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties) {
+	td.innerHTML = '';
+	const key = `${row}-${col}`;
+
+	const files = fileCache[key] || [];
+
+	// Hiển thị lại ảnh từ cache
+	files.forEach(file => {
+		if (file.type.startsWith('image/')) {
+			const img = document.createElement('img');
+			img.src = URL.createObjectURL(file);
+			img.style.width = '50px';
+			img.style.height = '50px';
+			img.style.objectFit = 'cover';
+			img.style.marginRight = '5px';
+			td.appendChild(img);
+		} else {
+			const span = document.createElement('span');
+			span.textContent = file.name;
+			span.style.marginRight = '5px';
+			td.appendChild(span);
+		}
+	});
+
+	const fileInput = document.createElement('input');
+	fileInput.type = 'file';
+	fileInput.multiple = true;
+	fileInput.className = 'htFileInput';
+
+	fileInput.addEventListener('change', (e) => {
+		const newFiles = Array.from(e.target.files);
+		const existingFiles = fileCache[key] || [];
+
+		// Gộp file cũ và mới, tránh trùng tên
+		const mergedFiles = [...existingFiles];
+
+		newFiles.forEach(newFile => {
+			if (!existingFiles.some(f => f.name === newFile.name && f.size === newFile.size)) {
+				mergedFiles.push(newFile);
+			}
+		});
+
+		fileCache[key] = mergedFiles;
+
+		// Gọi lại renderer để hiển thị tất cả file
+		instance.render();
+	});
+
+	td.appendChild(fileInput);
+}
+
+
+//function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties) {
+//	td.innerHTML = '';
+//
+//	const wrapper = document.createElement('label');
+//	wrapper.className = 'htCustomUpload';
+//	wrapper.textContent = '📁 Choose Files';
+//
+//	const fileInput = document.createElement('input');
+//	fileInput.type = 'file';
+//	fileInput.multiple = true;
+//	fileInput.style.display = 'none';
+//
+//	fileInput.addEventListener('change', (e) => {
+//		const files = Array.from(e.target.files);
+//		const fileNames = files.map(file => file.name).join(', ');
+//		instance.setDataAtCell(row, col, fileNames);
+//	});
+//
+//	wrapper.appendChild(fileInput);
+//	td.appendChild(wrapper);
+//}
+
+
+
+
+//function fileRenderer(instance, td, row, col, prop, value, cellProperties) {
+//	Handsontable.renderers.TextRenderer.apply(this, arguments);
+//	td.innerHTML = ''; // Clear ô
+//
+//	const button = document.createElement('button');
+//	button.innerText = '📎 Tải file';
+//	button.style.cursor = 'pointer';
+//	button.className = 'upload-file-btn';
+//
+//	button.onclick = function () {
+//		const input = document.getElementById('fileUploader');
+//		input.value = '';
+//		input.accept = ''; // Chấp nhận tất cả loại file
+//
+//		input.onchange = function (e) {
+//			const file = e.target.files[0];
+//			if (file) {
+//				const url = URL.createObjectURL(file); // tạm
+//				instance.setDataAtCell(row, col, url); // gán giá trị
+//			}
+//		};
+//
+//		input.click(); // Mở hộp thoại
+//	};
+//
+//	// Nếu đã có file
+//	if (value) {
+//		const link = document.createElement('a');
+//		link.href = value;
+//		link.innerText = '📄 Xem file';
+//		link.target = '_blank';
+//		td.appendChild(link);
+//		td.appendChild(document.createElement('br'));
+//	}
+//
+//	td.appendChild(button);
+//}
+//
+//function imageRenderer(instance, td, row, col, prop, value, cellProperties) {
+//	Handsontable.renderers.TextRenderer.apply(this, arguments);
+//	td.innerHTML = '';
+//
+//	const button = document.createElement('button');
+//	button.innerText = '🖼 Tải ảnh';
+//	button.style.cursor = 'pointer';
+//	button.className = 'upload-image-btn';
+//
+//	button.onclick = function () {
+//		const input = document.getElementById('fileUploader');
+//		input.value = '';
+//		input.accept = 'image/*';
+//
+//		input.onchange = function (e) {
+//			const file = e.target.files[0];
+//			if (file) {
+//				const url = URL.createObjectURL(file);
+//				instance.setDataAtCell(row, col, url);
+//			}
+//		};
+//
+//		input.click();
+//	};
+//
+//	if (value) {
+//		const img = document.createElement('img');
+//		img.src = value;
+//		img.style.maxWidth = '80px';
+//		img.style.maxHeight = '60px';
+//		td.appendChild(img);
+//		td.appendChild(document.createElement('br'));
+//	}
+//
+//	td.appendChild(button);
+//}
 

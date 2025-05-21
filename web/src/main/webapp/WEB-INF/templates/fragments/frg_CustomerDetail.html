@@ -18,7 +18,6 @@
 				</div>
 			</div>
 			<div class="container ms-2 w-100 mw-100">
-				<!-- Left panel -->
 				<div class="left-panel">
 					<div class="user-info">
 						<div class="user-avatar">
@@ -26,32 +25,39 @@
 						</div>
 						<div class="user-details">
 							<h2 th:text="${customer.companyName}"></h2>
-							<p th:text="${customer.address}"></p>
-							<p th:text="${customer.phone}"></p>
+							
+							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;">
+							  <i class="fa fa-map-marker"></i>
+							  <p th:text="${customer.address}" style="display: inline; margin: 0;"></p>
+							</div>
+							
+							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;	">
+							  <i class="fa fa-volume-control-phone"></i>
+							  <p th:text="${customer.phone}" style="display: inline; margin: 0;"></p>
+							</div>
+							
+							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px; display: inline-flex; white-space: nowrap;">
+							  <i class="fa fa-envelope-open"></i>
+							  <p th:text="${customer.email}" style="display: inline-flex; margin-top: -6px; margin-left: 5px"></p>
+							</div>
+							
 						</div>
 					</div>
-
 					<div class="actions">
-						<a th:href="@{newEditCustomer(id=${customer.id})}" style="text-decoration: none;">
-						    <button type="button" style="cursor: pointer;">Edit</button>
+						<a th:href="@{newEditCustomer(id=${customer.id})}" >
+						    <button type="button"
+						    	style="cursor: pointer;">
+						    <i class="icon-pencil"></i> Edit
+						    </button>
 						</a>
-						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer_Interaction(' + ${customer.id} + ')'">Hide</button>
+						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer(' + ${customer.id} + ')'">Hide</button>
+						<button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Edit Interaction</button>
 					</div>
-					
-					
-
 					<div class="person-in-charge">
-						<label class="label-bold" for="person-in-charge">Người phụ trách:</label> 
-						<select id="person-in-charge">
-							<option value="ngan">Nguyễn Hoàng Phương Ngân</option>
-							<option value="other">Khác</option>
-						</select>
-					</div>
-
-					<div class="creation-info">
-						<p><span class="label-bold">Ngày tạo:</span> 9/8/2024 9:00</p>
-						<p><span class="label-bold">Người tạo:</span> Nguyễn Hoàng Phương Ngân</p>
-						<p><span class="label-bold">Đã mua:</span> 0 lần</p>
+						<p>
+					        <span class="label-bold">Nhân viên phụ trách:</span>
+					        <span th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : 'Chưa có'}"></span>
+					    </p>
 					</div>
 				</div>
 
@@ -62,6 +68,8 @@
 
 		</div>
 	</div>
+	<!-- <input type="file" name="attachments" id="fileUploader" style="display: none;" /> -->
+	
 	<th:block th:include="fragments/frg_ModalConfirmation"></th:block>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/deleteCustomer.js}" defer></script>
 

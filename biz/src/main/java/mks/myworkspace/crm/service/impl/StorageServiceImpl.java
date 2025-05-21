@@ -614,4 +614,9 @@ public class StorageServiceImpl implements StorageService {
 	public boolean isFeatureEnabledByCode(String featureReminderCode) {
 		return appRepo.isFeatureEnabledByCode(featureReminderCode);
 	}
+
+	@Override
+	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
+		appRepo.saveFilesUpload(interactionId, fileName, fileType, filePath);
+	}
 }
