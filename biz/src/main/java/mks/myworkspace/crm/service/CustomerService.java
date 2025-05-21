@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
+import mks.myworkspace.crm.entity.dto.InteractionDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 
 public interface CustomerService {
@@ -36,7 +37,8 @@ public interface CustomerService {
 	
 	long getTotalCustomerCount();
 	
-	List<Interaction> getAllCustomerInteraction(Long customerID);
+//	List<Interaction> getAllCustomerInteraction(Long customerID);
+	List<InteractionDTO> getAllCustomerInteractionWithFiles(Long customerID);
 	
 	List<Interaction> saveOrUpdateInteraction(List<Interaction> entities);
 	

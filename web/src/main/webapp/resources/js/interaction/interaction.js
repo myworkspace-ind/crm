@@ -351,28 +351,60 @@ function showErrorToast(message) {
 
 // Cache để lưu file theo ô
 const fileCache = {};
-
 function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties) {
 	td.innerHTML = '';
 	const key = `${row}-${col}`;
 
-	const files = fileCache[key] || [];
+	let files = value;
+	if (!Array.isArray(files)) files = [];
 
-	// Hiển thị lại ảnh từ cache
+	//const cachedFiles = fileCache[key] || [];
+	files = [...files];
+
+	// Cập nhật cache
+	fileCache[key] = files;
+
 	files.forEach(file => {
-		if (file.type.startsWith('image/')) {
-			const img = document.createElement('img');
-			img.src = URL.createObjectURL(file);
-			img.style.width = '50px';
-			img.style.height = '50px';
-			img.style.objectFit = 'cover';
-			img.style.marginRight = '5px';
-			td.appendChild(img);
+		if (file.filePath) {
+			const fileUrl = `${_ctx}${file.filePath}`;
+			const isImage = file.fileType?.startsWith('image/');
+
+			if (isImage) {
+				const img = document.createElement('img');
+				img.src = fileUrl;
+				img.style.width = '50px';
+				img.style.height = '50px';
+				img.style.objectFit = 'cover';
+				img.style.marginRight = '5px';
+				td.appendChild(img);
+			} else {
+				const link = document.createElement('a');
+				link.href = fileUrl;
+				link.textContent = file.fileName || 'Tải tài liệu';
+				link.target = '_blank';
+				link.style.display = 'block';
+				link.style.marginBottom = '5px';
+				td.appendChild(link);
+			}
 		} else {
-			const span = document.createElement('span');
-			span.textContent = file.name;
-			span.style.marginRight = '5px';
-			td.appendChild(span);
+			// File upload từ client (File object)
+			const isImage = file.type?.startsWith('image/');
+
+			if (isImage) {
+				const img = document.createElement('img');
+				img.src = URL.createObjectURL(file);
+				img.style.width = '50px';
+				img.style.height = '50px';
+				img.style.objectFit = 'cover';
+				img.style.marginRight = '5px';
+				td.appendChild(img);
+			} else {
+				const span = document.createElement('span');
+				span.textContent = file.name || 'Tài liệu';
+				span.style.display = 'block';
+				span.style.marginBottom = '5px';
+				td.appendChild(span);
+			}
 		}
 	});
 
@@ -385,9 +417,7 @@ function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties)
 		const newFiles = Array.from(e.target.files);
 		const existingFiles = fileCache[key] || [];
 
-		// Gộp file cũ và mới, tránh trùng tên
 		const mergedFiles = [...existingFiles];
-
 		newFiles.forEach(newFile => {
 			if (!existingFiles.some(f => f.name === newFile.name && f.size === newFile.size)) {
 				mergedFiles.push(newFile);
@@ -396,12 +426,55 @@ function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties)
 
 		fileCache[key] = mergedFiles;
 
-		// Gọi lại renderer để hiển thị tất cả file
 		instance.render();
 	});
 
 	td.appendChild(fileInput);
 }
+
+
+
+//function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties) {
+//	td.innerHTML = '';
+//	const key = `${row}-${col}`;
+//
+//	const files = fileCache[key] || [];
+//
+//	// Hiển thị lại ảnh từ cache
+//	files.forEach(file => {
+//		if (file.type.startsWith('image/')) {
+//			const img = document.createElement('img');
+//			img.src = URL.createObjectURL(file);
+//			img.style.width = '50px';
+//			img.style.height = '50px';
+//			img.style.objectFit = 'cover';
+//			img.style.marginRight = '5px';
+//			td.appendChild(img);
+//		} else {
+//			const span = document.createElement('span');
+//			span.textContent = file.name;
+//			span.style.marginRight = '5px';
+//			td.appendChild(span);
+//		}
+//	});
+//
+//	const fileInput = document.createElement('input');
+//	fileInput.type = 'file';
+//	fileInput.multiple = true;
+//	fileInput.className = 'htFileInput';
+//
+//	fileInput.addEventListener('change', (e) => {
+//		const selectedFiles = Array.from(e.target.files);
+//
+//		// Lưu vào cache
+//		fileCache[key] = selectedFiles;
+//
+//		// Force re-render cell
+//		instance.render();  // Gọi lại renderer cho toàn bảng
+//	});
+//
+//	td.appendChild(fileInput);
+//}
 
 
 //function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties) {

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,6 +63,8 @@ import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
+import mks.myworkspace.crm.entity.dto.FilesUploadDTO;
+import mks.myworkspace.crm.entity.dto.InteractionDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.CustomerStatusHistoryRepository;
 import mks.myworkspace.crm.repository.FilesUploadRepository;
@@ -946,41 +949,103 @@ public class CustomerController extends BaseController {
 
 		return mav;
 	}
-
+	
 	@GetMapping("/load-interaction")
 	@ResponseBody
-	public Object getInteractionData(@RequestParam("id") Long customerId) throws IOException {
-		log.debug("Get interaction data for customer with ID: " + customerId);
+	public Object getInteractionData(@RequestParam("id") Long customerId) {
+	    log.debug("Get interaction data for customer with ID: " + customerId);
 
-		// Lấy tất cả các tương tác của khách hàng từ service
-		List<Interaction> interactions = customerService.getAllCustomerInteraction(customerId);
+	    List<InteractionDTO> interactions = customerService.getAllCustomerInteractionWithFiles(customerId);
 
-		// Lấy danh sách tất cả contactPerson từ các tương tác của khách hàng
-		List<String> contactPersons = interactions.stream().map(Interaction::getContactPerson) // Giả sử bạn có phương
-																								// thức
-																								// getContactPerson()
-																								// trong Interaction
-				.distinct() // Loại bỏ các giá trị trùng lặp
-				.collect(Collectors.toList());
+	    List<String> contactPersons = interactions.stream()
+	            .map(InteractionDTO::getContactPerson)
+	            .distinct()
+	            .collect(Collectors.toList());
 
-		// Chuyển đổi danh sách Interaction thành dữ liệu bảng
-		List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
+	    // Tạo lambda để fetch files cho mỗi interaction
+	    Function<Long, List<FilesUploadDTO>> filesFetcher = id ->
+	            filesUploadService.findFilesByInteractionId(id);
 
-		// Cấu trúc bảng
-		int[] colWidths = { 200, 300, 200, 300, 200, 200, 30 };
-		//String[] colHeaders = { "Người trao đổi", "Ngày tương tác (dự kiến)", "Nội dung trao đổi", "Kế hoạch tiếp theo", "Ngày tạo", "" };
-		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "Tài liệu/Hình ảnh", "" };
+	    // Truyền filesFetcher vào convert function
+	    List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions, filesFetcher);
 
-		// Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
-		Map<String, Object> response = new HashMap<>();
-		response.put("colWidths", colWidths);
-		response.put("colHeaders", colHeaders);
-		response.put("data", tblData);
-		response.put("contactPersons", contactPersons); // Thêm contactPersons vào response
+	    int[] colWidths = { 200, 300, 200, 300, 200, 200, 30 };
+	    String[] colHeaders = {
+	        "Người trao đổi",
+	        "Nội dung trao đổi",
+	        "Ngày tạo",
+	        "Kế hoạch tiếp theo",
+	        "Ngày tương tác (dự kiến)",
+	        "Tài liệu/Hình ảnh",
+	        ""
+	    };
 
-		// Trả về đối tượng chứa các thông tin bảng và contactPersons
-		return response;
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("colWidths", colWidths);
+	    response.put("colHeaders", colHeaders);
+	    response.put("data", tblData);
+	    response.put("contactPersons", contactPersons);
+
+	    return response;
 	}
+
+		
+//	@GetMapping("/load-interaction")
+//	@ResponseBody
+//	public Object getInteractionData(@RequestParam("id") Long customerId) {
+//	    log.debug("Get interaction data for customer with ID: " + customerId);
+//
+//	    List<InteractionDTO> interactions = customerService.getAllCustomerInteractionWithFiles(customerId);
+//
+//	    // Lấy danh sách contactPersons
+//	    List<String> contactPersons = interactions.stream()
+//	            .map(InteractionDTO::getContactPerson)
+//	            .distinct()
+//	            .collect(Collectors.toList());
+//	    
+//	    Map<String, Object> response = new HashMap<>();
+//		// Cấu trúc bảng
+//		int[] colWidths = { 200, 300, 200, 300, 200, 200, 30 };
+//		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "Tài liệu/Hình ảnh", "" };
+//
+//		response.put("colWidths", colWidths);
+//		response.put("colHeaders", colHeaders);
+//	    response.put("data", interactions);
+//	    response.put("contactPersons", contactPersons);
+//	    return response;
+//	}
+
+//	@GetMapping("/load-interaction")
+//	@ResponseBody
+//	public Object getInteractionData(@RequestParam("id") Long customerId) throws IOException {
+//		log.debug("Get interaction data for customer with ID: " + customerId);
+//
+//		// Lấy tất cả các tương tác của khách hàng từ service
+//		List<Interaction> interactions = customerService.getAllCustomerInteraction(customerId);
+//
+//		// Lấy danh sách tất cả contactPerson từ các tương tác của khách hàng
+//		List<String> contactPersons = interactions.stream().map(Interaction::getContactPerson) 
+//				.distinct() // Loại bỏ các giá trị trùng lặp
+//				.collect(Collectors.toList());
+//
+//		// Chuyển đổi danh sách Interaction thành dữ liệu bảng
+//		List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
+//
+//		// Cấu trúc bảng
+//		int[] colWidths = { 200, 300, 200, 300, 200, 200, 30 };
+//		//String[] colHeaders = { "Người trao đổi", "Ngày tương tác (dự kiến)", "Nội dung trao đổi", "Kế hoạch tiếp theo", "Ngày tạo", "" };
+//		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "Tài liệu/Hình ảnh", "" };
+//
+//		// Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
+//		Map<String, Object> response = new HashMap<>();
+//		response.put("colWidths", colWidths);
+//		response.put("colHeaders", colHeaders);
+//		response.put("data", tblData);
+//		response.put("contactPersons", contactPersons); // Thêm contactPersons vào response
+//
+//		// Trả về đối tượng chứa các thông tin bảng và contactPersons
+//		return response;
+//	}
 
 	@PostMapping(value = "/save-interaction")
 	@ResponseBody

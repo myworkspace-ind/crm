@@ -1,11 +1,14 @@
 package mks.myworkspace.crm.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,9 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
+import mks.myworkspace.crm.entity.dto.FilesUploadDTO;
+import mks.myworkspace.crm.entity.dto.InteractionDTO;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.CustomerRepository_Son;
+import mks.myworkspace.crm.repository.FilesUploadRepository;
 import mks.myworkspace.crm.repository.StatusRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.specification.CustomerSpecs;
@@ -37,11 +43,14 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
     private CustomerRepository repo;
 	
-	 @Autowired
+	@Autowired
 	    private CustomerRepository_Son sonRepo;
     
     @Autowired
     private StatusRepository statusRepo;
+    
+    @Autowired
+    private FilesUploadRepository filesUploadRepository;
 
     @Override
     public CustomerRepository getRepo() {
@@ -151,10 +160,29 @@ public class CustomerServiceImpl implements CustomerService {
         return repo.countAllCustomers();
     }
     
+//    @Override
+//    public List<Interaction> getAllCustomerInteraction(Long customerId) {
+//        return repo.getAllCustomerInteraction(customerId);
+//    };
+    
     @Override
-    public List<Interaction> getAllCustomerInteraction(Long customerId) {
-        return repo.getAllCustomerInteraction(customerId);
-    };
+    public List<InteractionDTO> getAllCustomerInteractionWithFiles(Long customerID) {
+        List<Interaction> interactions = repo.getAllCustomerInteraction(customerID);
+
+        return interactions.stream().map(interaction -> {
+            List<FilesUploadDTO> files = filesUploadRepository.findFilesByInteractionId(interaction.getId());
+
+            return new InteractionDTO(
+                interaction.getId(),
+                interaction.getContactPerson(),
+                interaction.getContent(),
+                interaction.getNextPlan(),
+                interaction.getInteractionDate(),  // Trả về LocalDateTime
+                interaction.getCreatedAt(),        // Trả về LocalDateTime
+                files
+            );
+        }).collect(Collectors.toList());
+    }
     
     @Override
     public List<Interaction> saveOrUpdateInteraction(List<Interaction> lstInteractions) {
