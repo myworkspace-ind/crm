@@ -1153,10 +1153,23 @@ public class AppRepository {
 	}
 	
 	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
-        String sql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) " +
-                     "VALUES (?, ?, ?, ?)";
-        jdbcTemplate0.update(sql, interactionId, fileName, fileType, filePath);
-    }
+	    String checkSql = "SELECT COUNT(*) FROM crm_files_upload WHERE interaction_id = ? AND file_name = ?";
+	    Integer count = jdbcTemplate0.queryForObject(checkSql, Integer.class, interactionId, fileName);
+
+	    if (count != null && count == 0) {
+	        String insertSql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) " +
+	                           "VALUES (?, ?, ?, ?)";
+	        jdbcTemplate0.update(insertSql, interactionId, fileName, fileType, filePath);
+	    } else {
+	        log.debug("File đã tồn tại, không insert: " + fileName);
+	    }
+	}
+	
+//	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
+//        String sql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) " +
+//                     "VALUES (?, ?, ?, ?)";
+//        jdbcTemplate0.update(sql, interactionId, fileName, fileType, filePath);
+//    }
 	
 //	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
 //    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";

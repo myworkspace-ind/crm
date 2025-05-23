@@ -15,5 +15,7 @@ public interface FilesUploadRepository extends JpaRepository<FilesUpload, Long> 
 	@Query("SELECT new mks.myworkspace.crm.entity.dto.FilesUploadDTO(f.id, f.fileName, f.filePath, f.fileType) "
 			+ "FROM FilesUpload f WHERE f.interaction.id = :interactionId")
 	List<FilesUploadDTO> findFilesByInteractionId(@Param("interactionId") Long interactionId);
+	
+	boolean existsByInteraction_IdAndFileName(Long interactionId, String fileName);
 
 }

@@ -222,8 +222,15 @@ public class CustomerController extends BaseController {
 	
 	public void uploadFiles(Long interactionId, List<MultipartFile> files) throws IOException {
 	    for (MultipartFile file : files) {
+	    	
 	        if (!file.isEmpty()) {
 	            String originalFilename = file.getOriginalFilename();
+	            
+	            if(filesUploadService.isFileExists(interactionId, originalFilename)) {
+	            	// Bỏ qua file đã tồn tại
+	            	continue;
+	            }
+	            
 	            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf('.') + 1).toLowerCase();
 
 	            String resourceType;

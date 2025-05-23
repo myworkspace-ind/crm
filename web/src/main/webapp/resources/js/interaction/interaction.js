@@ -350,10 +350,16 @@ function buttonRenderer(instance, td, row, col, prop, value, cellProperties) {
 	return td;
 }
 
+let currentInteractionId = null;
+
 function openUploadModal(row, interactionId) {
 	console.log("ID interaction: ", interactionId);
 	const modal = document.getElementById('uploadModal');
 	if (modal) {
+		// Gán interaction ID vào biến toàn cục để dùng khi upload
+
+		currentInteractionId = interactionId;
+		
 		// Đặt interaction ID vào modal để sử dụng khi upload
 		modal.dataset.row = row;
 		modal.dataset.interactionId = interactionId;
@@ -451,6 +457,31 @@ function loadExistingFiles(interactionId) {
     });
 }
 
+function uploadSelectedFiles() {
+    const files = document.getElementById('uploadInputFiles').files;
+    if (!files.length) return;
+
+    const formData = new FormData();
+    formData.append("interaction_id", currentInteractionId);
+    for (let i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);
+    }
+	
+	$.ajax({
+	       url: `${_ctx}customer/upload-files`,
+	       type: 'POST',
+	       data: formData,
+	       processData: false,  // Không xử lý dữ liệu
+	       contentType: false,  // Không đặt Content-Type (để tự động là multipart/form-data)
+	       success: function (result) {
+	           alert(result);
+	           loadExistingFiles(currentInteractionId);
+	       },
+	       error: function (xhr, status, error) {
+	           alert("Lỗi upload: " + error);
+	       }
+	   });
+}
 
 function closeUploadModal() {
     $('#uploadModal').modal('hide');

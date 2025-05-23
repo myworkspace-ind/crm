@@ -21,4 +21,9 @@ public class FilesUploadServiceImpl implements FilesUploadService{
 		return repo.findFilesByInteractionId(interactionId);
 	}
 
+	@Override
+	public boolean isFileExists(Long interactionId, String filename) {
+		return repo.existsByInteraction_IdAndFileName(interactionId, filename);
+	}
+
 }
