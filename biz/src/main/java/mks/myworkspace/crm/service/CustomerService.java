@@ -38,7 +38,7 @@ public interface CustomerService {
 	long getTotalCustomerCount();
 	
 //	List<Interaction> getAllCustomerInteraction(Long customerID);
-	List<InteractionDTO> getAllCustomerInteractionWithFiles(Long customerID);
+//	List<InteractionDTO> getAllCustomerInteractionWithFiles(Long customerID);
 	
 	List<Interaction> saveOrUpdateInteraction(List<Interaction> entities);
 	
@@ -61,6 +61,8 @@ public interface CustomerService {
 			String contactPerson, String address, String email);
 	
 	List<Customer> findByselectedCareers(List<Long> selectedCareers);
+
+	List<Interaction> getAllCustomerInteraction(Long customerId);
 	
 //	List<Customer> findPotentialCustomers();
 }

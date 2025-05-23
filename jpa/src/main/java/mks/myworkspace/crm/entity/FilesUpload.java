@@ -46,7 +46,7 @@ public class FilesUpload implements Serializable {
     @Column(name = "file_path", length = 255)
     private String filePath;
 
-    @Column(name = "uploaded_at", insertable = true, updatable = false)
+    @Column(name = "uploaded_at", insertable = false, updatable = false)
     private Timestamp uploadedAt;
 
 	public FilesUpload(Long id, Interaction interaction, String fileName, String fileType, String filePath,

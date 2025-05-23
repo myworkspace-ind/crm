@@ -160,30 +160,30 @@ public class CustomerServiceImpl implements CustomerService {
         return repo.countAllCustomers();
     }
     
-//    @Override
-//    public List<Interaction> getAllCustomerInteraction(Long customerId) {
-//        return repo.getAllCustomerInteraction(customerId);
-//    };
-    
     @Override
-    public List<InteractionDTO> getAllCustomerInteractionWithFiles(Long customerID) {
-        List<Interaction> interactions = repo.getAllCustomerInteraction(customerID);
-
-        return interactions.stream().map(interaction -> {
-            List<FilesUploadDTO> files = filesUploadRepository.findFilesByInteractionId(interaction.getId());
-
-            return new InteractionDTO(
-                interaction.getId(),
-                interaction.getContactPerson(),
-                interaction.getContent(),
-                interaction.getNextPlan(),
-                interaction.getInteractionDate(),  // Trả về LocalDateTime
-                interaction.getCreatedAt(),        // Trả về LocalDateTime
-                files
-            );
-        }).collect(Collectors.toList());
-    }
+    public List<Interaction> getAllCustomerInteraction(Long customerId) {
+        return repo.getAllCustomerInteraction(customerId);
+    };
     
+//    @Override
+//    public List<InteractionDTO> getAllCustomerInteractionWithFiles(Long customerID) {
+//        List<Interaction> interactions = repo.getAllCustomerInteraction(customerID);
+//
+//        return interactions.stream().map(interaction -> {
+//            List<FilesUploadDTO> files = filesUploadRepository.findFilesByInteractionId(interaction.getId());
+//
+//            return new InteractionDTO(
+//                interaction.getId(),
+//                interaction.getContactPerson(),
+//                interaction.getContent(),
+//                interaction.getNextPlan(),
+//                interaction.getInteractionDate(),  // Trả về LocalDateTime
+//                interaction.getCreatedAt(),        // Trả về LocalDateTime
+//                files
+//            );
+//        }).collect(Collectors.toList());
+//    }
+//    
     @Override
     public List<Interaction> saveOrUpdateInteraction(List<Interaction> lstInteractions) {
         // Gọi repository để lưu hoặc cập nhật và lấy danh sách ID sau khi xử lý

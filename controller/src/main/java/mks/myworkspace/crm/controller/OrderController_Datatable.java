@@ -411,16 +411,12 @@ public class OrderController_Datatable extends BaseController {
 			
 			
 			
-			System.out.println("Saved Order: " + savedOrder.toString());
-			System.out.println("Sender: " + (savedOrder.getSender() != null ? savedOrder.getSender().getId() : "null"));
-			System.out.println(
-					"Receiver: " + (savedOrder.getReceiver() != null ? savedOrder.getReceiver().getId() : "null"));
-			System.out.println("GoodsCategory: "
-					+ (savedOrder.getGoodsCategory() != null ? savedOrder.getGoodsCategory().getId() : "null"));
-			System.out.println("OrderStatus: "
-					+ (savedOrder.getOrderStatus() != null ? savedOrder.getOrderStatus().getId() : "null"));
-			System.out.println("OrderCategory: "
-					+ (savedOrder.getOrderCategory() != null ? savedOrder.getOrderCategory().getId() : "null"));
+			log.debug("Saved Order: {}", savedOrder.toString());
+			log.debug("Sender: {}", (savedOrder.getSender() != null ? savedOrder.getSender().getId() : "null"));
+			log.debug( "Receiver: {}", (savedOrder.getReceiver() != null ? savedOrder.getReceiver().getId() : "null"));
+			log.debug("GoodsCategory: {}", (savedOrder.getGoodsCategory() != null ? savedOrder.getGoodsCategory().getId() : "null"));
+			log.debug("OrderStatus: {}", (savedOrder.getOrderStatus() != null ? savedOrder.getOrderStatus().getId() : "null"));
+			log.debug("OrderCategory: {}", (savedOrder.getOrderCategory() != null ? savedOrder.getOrderCategory().getId() : "null"));
 			response.put("status", "success");
 			response.put("message", "Order created successfully.");
 			log.debug("Order saved with ID: {}", savedOrder.getId()); // Log kết quả ID

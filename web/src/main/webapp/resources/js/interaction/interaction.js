@@ -79,6 +79,85 @@ function handleFormSubmit(e) {
 	//	});
 }
 
+//function saveInteraction(customerId) {
+//	console.log("ID cua customer lan 1: ", customerId);
+//
+//	const tableData = htInteraction.getData().filter(row =>
+//		row.some(cell => cell !== null && cell !== '')
+//	);
+//
+//	const isValid = tableData.every(row =>
+//		[0, 1, 3, 4].every(colIndex => row[colIndex] !== null && row[colIndex] !== '')
+//	);
+//
+//	if (!isValid) {
+//		showErrorToast('Vui lòng nhập đầy đủ thông tin trước khi lưu.');
+//		return;
+//	}
+//
+//	const colHeaders = htInteraction.getColHeader();
+//	const colWidths = [];
+//
+//	for (let i = 0; i < colHeaders.length; i++) {
+//		colWidths.push(htInteraction.getColWidth(i));
+//	}
+//
+//	const dataObject = {
+//		colWidths: colWidths,
+//		colHeaders: colHeaders,
+//		data: tableData
+//	};
+//
+//	const formData = new FormData();
+//	//formData.append("data", new Blob([JSON.stringify(dataObject)], { type: "application/json" }));
+//	formData.append("data", JSON.stringify(dataObject)); // plain text
+//	console.log("Data: ", JSON.stringify(dataObject));
+//	formData.append("customer_id", customerId);
+//
+//	// Thay vì dùng ?. kiểm tra thủ công
+//	const inputElement = $("#htFileInput")[0];
+//	console.log('Input file element:', inputElement);
+//	console.log('Files:', inputElement ? inputElement.files : 'inputElement null');
+//	const files = inputElement ? inputElement.files : null;
+//
+////	if (files && files.length > 0) {
+////		for (let i = 0; i < files.length; i++) {
+////			formData.append("files", files[i]); // key "files" phải khớp với @RequestPart("files")
+////		}
+////	}
+//
+//	for (const [key, files] of Object.entries(fileCache)) {
+//		const [row, col] = key.split('-');
+//
+//		files.forEach((file, index) => {
+//			if (file instanceof File) {
+//				formData.append(`files[${row}][${col}][]`, file);
+//				//formData.append("files", file);
+//			}
+//		});
+//	}
+//
+//	$.ajax({
+//		url: `${_ctx}customer/save-interaction`,
+//		type: 'POST',
+//		data: formData,
+//		processData: false,  // không chuyển FormData thành chuỗi
+//		contentType: false,  // để jQuery tự set header đúng multipart/form-data
+//		success: function(result) {
+//			console.log("Server Response:", result);
+//			reloadAndFilterData();
+//			showSuccessToast('Cập nhật thành công');
+//		},
+//		error: function(xhr) {
+//			console.error("AJAX Error:", xhr.responseText);
+//		}
+//	});
+//
+//	console.log("ID cua customer lan 2: ", customerId);
+//}
+
+
+
 function saveInteraction(customerId) {
 	console.log("ID cua customer lan 1: ", customerId);
 
@@ -220,10 +299,12 @@ function initTable(colHeaders, colWidths, data) {
 					defaultDate: new Date(),
 					datePickerConfig: { format: 'YYYY-MM-DD' }
 				},
-				{	
-					renderer: fileUploadRenderer
+//				{	
+//					renderer: fileUploadRenderer
+//				},
+				{ 	renderer: deleteButtonRenderer 
+					
 				},
-				{ renderer: deleteButtonRenderer },
 			],
 			height: 400,
 			currentRowClassName: 'currentRow',
@@ -366,31 +447,19 @@ function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties)
 
 	files.forEach(file => {
 		if (file.filePath) {
-			const fileUrl = `${_ctx}${file.filePath}`;
-			const isImage = file.fileType?.startsWith('image/');
+			const fileUrl = `${file.filePath}`;
 
-			if (isImage) {
-				const img = document.createElement('img');
-				img.src = fileUrl;
-				img.style.width = '50px';
-				img.style.height = '50px';
-				img.style.objectFit = 'cover';
-				img.style.marginRight = '5px';
-				td.appendChild(img);
-			} else {
-				const link = document.createElement('a');
-				link.href = fileUrl;
-				link.textContent = file.fileName || 'Tải tài liệu';
-				link.target = '_blank';
-				link.style.display = 'block';
-				link.style.marginBottom = '5px';
-				td.appendChild(link);
-			}
+			const link = document.createElement('a');
+			link.href = fileUrl;
+			link.textContent = file.fileName || 'Tải tài liệu';
+			link.target = '_blank';
+			link.style.display = 'block';
+			link.style.marginBottom = '5px';
+			td.appendChild(link);
+
 		} else {
 			// File upload từ client (File object)
-			const isImage = file.type?.startsWith('image/');
-
-			if (isImage) {
+			if (file.type.startsWith('image/')) {
 				const img = document.createElement('img');
 				img.src = URL.createObjectURL(file);
 				img.style.width = '50px';
@@ -412,6 +481,7 @@ function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties)
 	fileInput.type = 'file';
 	fileInput.multiple = true;
 	fileInput.className = 'htFileInput';
+	fileInput.id = "htFileInput"
 
 	fileInput.addEventListener('change', (e) => {
 		const newFiles = Array.from(e.target.files);
@@ -425,8 +495,9 @@ function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties)
 		});
 
 		fileCache[key] = mergedFiles;
-
-		instance.render();
+	
+		//Cập nhật giá trị ô của Handsontable
+		instance.setDataAtCell(row, col, mergedFiles);
 	});
 
 	td.appendChild(fileInput);
@@ -475,32 +546,6 @@ function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties)
 //
 //	td.appendChild(fileInput);
 //}
-
-
-//function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties) {
-//	td.innerHTML = '';
-//
-//	const wrapper = document.createElement('label');
-//	wrapper.className = 'htCustomUpload';
-//	wrapper.textContent = '📁 Choose Files';
-//
-//	const fileInput = document.createElement('input');
-//	fileInput.type = 'file';
-//	fileInput.multiple = true;
-//	fileInput.style.display = 'none';
-//
-//	fileInput.addEventListener('change', (e) => {
-//		const files = Array.from(e.target.files);
-//		const fileNames = files.map(file => file.name).join(', ');
-//		instance.setDataAtCell(row, col, fileNames);
-//	});
-//
-//	wrapper.appendChild(fileInput);
-//	td.appendChild(wrapper);
-//}
-
-
-
 
 //function fileRenderer(instance, td, row, col, prop, value, cellProperties) {
 //	Handsontable.renderers.TextRenderer.apply(this, arguments);
