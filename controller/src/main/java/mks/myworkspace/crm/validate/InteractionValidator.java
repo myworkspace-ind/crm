@@ -134,7 +134,6 @@ public class InteractionValidator {
 
 	                // Xử lý interactionId
 	                Long interactionId = null;
-	                log.debug("rowData[5]: {}",Long.valueOf(rowData[5].toString()));
 	                
 	                if (rowData[5] != null) {
 	                    try {

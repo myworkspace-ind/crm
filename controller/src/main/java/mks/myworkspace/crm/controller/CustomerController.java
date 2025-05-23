@@ -8,12 +8,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +25,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -42,16 +39,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.auth.oauth2.Credential;
 
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +64,6 @@ import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
 import mks.myworkspace.crm.entity.dto.FilesUploadDTO;
-import mks.myworkspace.crm.entity.dto.InteractionDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.CustomerStatusHistoryRepository;
 import mks.myworkspace.crm.service.CustomerService;
@@ -208,6 +201,12 @@ public class CustomerController extends BaseController {
 //		log.debug("Đường dẫn tuyệt đối: {}", absolutePath);
 //		return ResponseEntity.ok("Uploaded: " + String.join(", ", uploadedFileNames));
 //	}
+	
+	@GetMapping("/interaction-files-upload/{interactionId}")
+	@ResponseBody
+	public List<FilesUploadDTO> getFilesByInteraction(@PathVariable Long interactionId) {
+	    return filesUploadService.findFilesByInteractionId(interactionId);
+	}
 	
 	@PostMapping("/upload-files")
 	@ResponseBody
@@ -1092,7 +1091,7 @@ public class CustomerController extends BaseController {
 		// Cấu trúc bảng
 		int[] colWidths = { 200, 300, 200, 300, 200, 100 };
 		//String[] colHeaders = { "Người trao đổi", "Ngày tương tác (dự kiến)", "Nội dung trao đổi", "Kế hoạch tiếp theo", "Ngày tạo", "" };
-		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "" };
+		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "Thao tác"};
 
 		// Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
 		Map<String, Object> response = new HashMap<>();

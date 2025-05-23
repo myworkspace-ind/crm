@@ -1,45 +1,45 @@
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 15px;
-    background: #fff; /* Nền trắng */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 15px;
+	background: #fff; /* Nền trắng */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
 }
 
 .title {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    margin-right: 50px;
-    color: #007bff; /* Màu xanh dương nhấn */
+	font-size: 24px;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 20px;
+	margin-right: 50px;
+	color: #007bff; /* Màu xanh dương nhấn */
 }
 
 /* Bảng */
 #tblInteraction {
-    margin: 20px 0px;
-    border: 1px solid #dee2e6; /* Viền bảng */
-    overflow: hidden;
+	margin: 20px 0px;
+	border: 1px solid #dee2e6; /* Viền bảng */
+	overflow: hidden;
 }
 
 /* Form */
 form#frmInteractionConfiguration {
-    margin-left: 0;
-    padding: 15px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	margin-left: 0;
+	padding: 15px;
+	background-color: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Nút */
 button {
-    background: none;
-    border: none;
-    color: #007bff;
-    font: inherit;
-    padding: 0;
-    cursor: pointer;
-    font-size: 16px;
-    text-align: center;
+	background: none;
+	border: none;
+	color: #007bff;
+	font: inherit;
+	padding: 0;
+	cursor: pointer;
+	font-size: 16px;
+	text-align: center;
 }
 
 .htCustomUpload {
@@ -54,4 +54,83 @@ button {
 
 .htCustomUpload:hover {
 	background-color: #2980b9;
+}
+
+#uploadModal {
+  position: fixed; top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: #333;
+}
+
+.file-input {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.file-list {
+  text-align: left;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: filter 0.2s ease-in-out;
+}
+
+.btn-upload {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-closeUpload {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-upload:hover {
+  background-color: green;
+  color: white;
+}
+
+.btn-closeUpload:hover {
+	background-color: #cc1313;
+	color: white;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
