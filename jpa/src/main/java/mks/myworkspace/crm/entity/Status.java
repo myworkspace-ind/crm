@@ -28,8 +28,8 @@ public class Status implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // system field
 
-	@Column(name = "site_id", length = 99)
-	private String siteId; // system field
+//	@Column(name = "site_id", length = 99)
+//	private String siteId;
 
 	@Column(name = "name", length = 99)
 	private String name;
@@ -53,10 +53,9 @@ public class Status implements Serializable {
 	// @OneToMany(mappedBy = "subStatus", fetch = FetchType.EAGER)
 	// private Set<Customer> subStatusCustomers = new HashSet<>();
 
-	public Status(Long id, String siteId, String name, String backgroundColor, Set<Customer> customers) {
+	public Status(Long id, String name, String backgroundColor, Set<Customer> customers) {
 		super();
 		this.id = id;
-		this.siteId = siteId;
 		this.name = name;
 		this.backgroundColor = backgroundColor;
 	}
@@ -89,8 +88,8 @@ public class Status implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Status [id=" + id + ", siteId=" + siteId + ", name=" + name + ", backgroundColor=" + backgroundColor
-				+ ", seqno=" + seqno + "]";
+		return "Status [id=" + id + ", name=" + name + ", backgroundColor=" + backgroundColor + ", seqno=" + seqno
+				+ "]";
 	}
-	
+
 }

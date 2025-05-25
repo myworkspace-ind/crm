@@ -14,6 +14,7 @@
 
 	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}" />
 	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/customerDetail.css}" />
+
 	<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
 	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
 	<script>
@@ -78,7 +79,7 @@
 				        <div id="detailEmailContent"></div>
 				        <button id="closeDetailEmailModal">Đóng</button>
 		        	</div>
-			     </div>
+			   </div>
 			</div>
 
 			<div class="container">
@@ -89,21 +90,21 @@
 							<img th:src="@{/resources/app-assets/images/portrait/small/avatar-s-10.png}" alt="User Avatar">
 						</div>
 						<div class="user-details">
-							<h2 th:text="${customer.companyName}"></h2>
-							
+							<h2 th:text="${#strings.isEmpty(customer.companyName) ? 'Chưa cập nhật' : customer.companyName}"></h2>
 							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;">
 							  <i class="fa fa-map-marker"></i>
-							  <p th:text="${customer.address}" style="display: inline; margin: 0;"></p>
+							  <p th:text="${#strings.isEmpty(customer.address) ?  'Chưa cập nhật' : customer.address}" style="display: inline; margin: 0;"></p>
 							</div>
 							
 							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;	">
 							  <i class="fa fa-volume-control-phone"></i>
-							  <p th:text="${customer.phone}" style="display: inline; margin: 0;"></p>
+							  <p th:text="${#strings.isEmpty(customer.phone) ? 'Chưa cập nhật' : customer.phone}" style="display: inline; margin: 0;"></p>
 							</div>
 							
 							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px; display: inline-flex; white-space: nowrap;">
-							  <i class="fa fa-envelope-open"></i>
-							  <p th:text="${customer.email}" style="display: inline-flex; margin-top: -6px; margin-left: 5px"></p>
+								<i class="fa fa-envelope-open"></i>
+								<p th:text="${#strings.isEmpty(customer.email) ? 'Chưa cập nhật' : customer.email}" 
+								   style="display: inline-flex; margin-top: -6px; margin-left: 5px;"></p>
 							</div>
 							
 						</div>
@@ -175,17 +176,47 @@
 						</div>
 						<div class="card shadow profile-card d-flex flex-row justify-content-between p-3" style="display: flex; gap: 20px; flex-wrap: wrap;">
 							<ul class="list-group list-group-flush" style="flex: 1;">
-								<li class="list-group-item"><strong>Tên công ty:</strong><span th:text="${customer.companyName}"></span></li>
-								<li class="list-group-item"><strong>Người liên hệ chính:</strong><span th:text="${customer.contactPerson}"></span></li>
-		                        <li class="list-group-item"><strong>Email:</strong><span th:text="${customer.email}"></span></li>
-		                        <li class="list-group-item"><strong>Số điện thoại:</strong><span th:text="${customer.phone}"></span></li>
-		                        <li class="list-group-item"><strong>Địa chỉ:</strong><span th:text="${customer.address}"></span></li>
-		                        <li class="list-group-item"><strong>Ngành nghề:</strong><span th:text="${customer.profession.name}"></span></li>
-		                        <li class="list-group-item"><strong>Trạng thái chính:</strong><span th:text="${customer.mainStatus.name}"></span></li>
-		                        <li class="list-group-item"><strong>Trạng thái phụ:</strong><span th:text="${customer.subStatus.name}"></span></li>
-		                        <li class="list-group-item"><strong>Người phụ trách:</strong><span th:text="${customer.responsiblePerson.name}"></span></li>
-		                        <li class="list-group-item"><strong>Ghi chú:</strong><span th:text="${customer.note}"></span></li>
-	                    	</ul>
+								<li class="list-group-item">
+									<strong>Tên công ty:</strong>
+									<span th:text="${#strings.isEmpty(customer.companyName) ? 'Chưa cập nhật' : customer.companyName}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Người liên hệ chính:</strong>
+									<span th:text="${#strings.isEmpty(customer.contactPerson) ? 'Chưa cập nhật' : customer.contactPerson}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Email:</strong>
+									<span th:text="${#strings.isEmpty(customer.email) ? 'Chưa cập nhật' : customer.email}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Số điện thoại:</strong>
+									<span th:text="${#strings.isEmpty(customer.phone) ? 'Chưa cập nhật' : customer.phone}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Địa chỉ:</strong>
+									<span th:text="${customer.address != null and !#strings.isEmpty(customer.address) ? customer.address : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Ngành nghề:</strong>
+									<span th:text="${customer.profession != null and !#strings.isEmpty(customer.profession.name) ? customer.profession.name : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Trạng thái chính:</strong>
+									<span th:text="${customer.mainStatus != null and !#strings.isEmpty(customer.mainStatus.name) ? customer.mainStatus.name : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Trạng thái phụ:</strong>
+									<span th:text="${customer.subStatus != null and !#strings.isEmpty(customer.subStatus.name) ? customer.subStatus.name : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Người phụ trách:</strong>
+									<span th:text="${customer.responsiblePerson != null and !#strings.isEmpty(customer.responsiblePerson.name) ? customer.responsiblePerson.name : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Ghi chú:</strong>
+									<span th:text="${#strings.isEmpty(customer.note) ? 'Chưa cập nhật' : customer.note}"></span>
+								</li>
+							</ul>
 	                    	<h3>Gửi Email cho khách hàng</h3>
 	                    	<!-- Nếu chưa đăng nhập Gmail -->
 							<div th:if="${!credentialExists}">
@@ -197,13 +228,13 @@
 							<div th:if="${credentialExists}">
 								<form th:action="@{/customer/send-email-using-gmail}" method="post" enctype="multipart/form-data">
 									 <input type="hidden" name="customer" value="${customer.id}" />
-								    <!-- Người gửi (readonly) -->
+								     <!-- Người gửi (readonly) -->
 	<!-- 							    <label>Người gửi:</label> -->
 	<!-- 							    <input style="width: 50%" type="text" name="sender" th:value="${#request.userPrincipal.name}" readonly/><br/> -->
 								
 								    <!-- Người nhận (readonly) -->
 								    <label>Người nhận:</label>
-								    <input style="width: 50%" type="text" name="to" th:value="${customer.email}" readonly/><br/>
+								    <input style="width: 50%" type="text" name="to" th:value="${#strings.isEmpty(customer.email) ? 'Chưa cập nhật' : customer.email}" readonly/><br/>
 								
 								    <!-- CC -->
 								    <label>CC:</label>
@@ -251,13 +282,7 @@
 					            <div class="progress-fill" style="width: 60%;">60%</div>
 					          </div>
 					        </div>
-					
-<!-- 					        <div class="progress-block"> -->
-<!-- 					          <label>Ký hợp đồng</label> -->
-<!-- 					          <div class="progress-bar"> -->
-<!-- 					            <div class="progress-fill" style="width: 90%;">90%</div> -->
-<!-- 					          </div> -->
-<!-- 					        </div> -->
+
 					      </div>
 					</div>
 					
@@ -336,32 +361,6 @@
 		                                <th>Password</th>
 		                            </tr>
 		                        </thead>
-		                        <tbody>
-		                            <tr>
-		                                <td>John</td>
-		                                <td>Doe</td>
-		                                <td>john@example.com</td>
-		                                <td>********</td>
-		                            </tr>
-		                            <tr>
-		                                <td>Mary</td>
-		                                <td>Moe</td>
-		                                <td>mary@example.com</td>
-		                                <td>*****</td>
-		                            </tr>
-		                            <tr>
-		                                <td>July</td>
-		                                <td>Dooley</td>
-		                                <td>july@example.com</td>
-		                                <td>**********</td>
-		                            </tr>
-		                            <tr>
-		                                <td>Piter</td>
-		                                <td>pan</td>
-		                                <td>july@example.com</td>
-		                                <td>********</td>
-		                            </tr>
-		                        </tbody>
 		                    </table>
 		                </div> 
 					</div>
@@ -411,6 +410,8 @@
 			</div>
 		</div>
 	</div>
+	
+
 	
 	<th:block th:replace="~{fragments/frg_Modal_Interaction :: modalFragment('myModal')}"></th:block>
 

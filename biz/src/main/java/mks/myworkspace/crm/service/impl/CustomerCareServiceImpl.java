@@ -133,12 +133,12 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Override
 	@Transactional
 	public List<Customer> findAllCustomerCare() {
-	    LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
+	    LocalDateTime case1DaysAgo = LocalDateTime.now().minusDays(daysAgo);
 	    LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
 	    LocalDateTime now = LocalDateTime.now();
 	    
 	    // Gọi từng repo riêng biệt
-	    List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(twoDaysAgo);
+	    List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(case1DaysAgo);
 	    List<Customer> potentialCustomers = repo.findPotentialCustomers(case2DaysAgo);
 	    
 	    //Gộp danh sách lại

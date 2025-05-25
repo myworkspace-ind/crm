@@ -30,6 +30,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -202,13 +203,24 @@ public class CustomerController extends BaseController {
 //		return ResponseEntity.ok("Uploaded: " + String.join(", ", uploadedFileNames));
 //	}
 	
+	@DeleteMapping("/interaction-files-upload/{fileId}")
+	@ResponseBody
+	public ResponseEntity<?> deleteFile(@PathVariable Long fileId) {
+	    try {
+	        storageService.deleteFileById(fileId);
+	        return ResponseEntity.ok("Xóa file thành công.");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(500).body("Lỗi khi xóa file: " + e.getMessage());
+	    }
+	}
+	
 	@GetMapping("/interaction-files-upload/{interactionId}")
 	@ResponseBody
 	public List<FilesUploadDTO> getFilesByInteraction(@PathVariable Long interactionId) {
 	    return filesUploadService.findFilesByInteractionId(interactionId);
 	}
 	
-	@PostMapping("/upload-files")
+	@PostMapping("interaction-files-upload/upload-files")
 	@ResponseBody
 	public ResponseEntity<?> uploadFilesEndpoint(@RequestParam("interaction_id") Long interactionId,
 	                                             @RequestParam("files") List<MultipartFile> files) {
@@ -1439,7 +1451,7 @@ public class CustomerController extends BaseController {
 	            updatedCustomer = storageService.saveOrUpdate(existingCustomer);
 	        } else {
 	            customer.setCreatedAt(LocalDateTime.now());
-	            customer.setSiteId(getCurrentSiteId());
+	            //customer.setSiteId(getCurrentSiteId());
 	            updatedCustomer = storageService.saveOrUpdate(customer);
 	        }
 
@@ -1458,7 +1470,7 @@ public class CustomerController extends BaseController {
 	        return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
-	                "Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng kiểm tra lại độ dài SDT! ID: " + customer.getId()));
+	                "Có lỗi xảy ra khi cập nhật khách hàng. ID: " + customer.getId()));
 	    }
 	}
 

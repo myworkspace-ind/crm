@@ -459,42 +459,98 @@ public class AppRepository {
 
 		return rowsAffected;
 	}
-
-
-
+	
 	private Long createCustomer(Customer customer) {
 		Long id;
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_customer")
 				.usingGeneratedKeyColumns("id");
 
+		// Nếu có address nhưng chưa có id thì tạo mới address trước
 		if (customer.getAddress() != null && customer.getAddress().getId() == null) {
 			Long addressId = createAddress(customer.getAddress());
 			customer.getAddress().setId(addressId);
 		}
 
 		Map<String, Object> parameters = new HashMap<>();
-		// Thêm các trường cố định trong entity (không có liên kết bảng)
-		parameters.put("company_name", customer.getCompanyName());
-		parameters.put("contact_person", customer.getContactPerson());
-		parameters.put("created_at", customer.getCreatedAt());
-		parameters.put("email", customer.getEmail());
-		parameters.put("note", customer.getNote());
-		parameters.put("phone", customer.getPhone());
-		parameters.put("account_status", customer.getAccountStatus());
 
-		// Thêm các khóa ngoại
-		parameters.put("address_id", customer.getAddress().getId());
-		parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
-		parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
-		parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
-		parameters.put("responsible_person_id",
-				customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
+		// Trường bắt buộc
+		parameters.put("company_name", customer.getCompanyName());
+
+		// Thêm các trường nếu có (tùy chọn)
+		if (customer.getContactPerson() != null) {
+			parameters.put("contact_person", customer.getContactPerson());
+		}
+		if (customer.getCreatedAt() != null) {
+			parameters.put("created_at", customer.getCreatedAt());
+		}
+		if (customer.getEmail() != null) {
+			parameters.put("email", customer.getEmail());
+		}
+		if (customer.getNote() != null) {
+			parameters.put("note", customer.getNote());
+		}
+		if (customer.getPhone() != null) {
+			parameters.put("phone", customer.getPhone());
+		}
+		if (customer.getAccountStatus() != null) {
+			parameters.put("account_status", customer.getAccountStatus());
+		}
+
+		// Thêm các khóa ngoại nếu có
+		if (customer.getAddress() != null && customer.getAddress().getId() != null) {
+			parameters.put("address_id", customer.getAddress().getId());
+		}
+		if (customer.getMainStatus() != null) {
+			parameters.put("main_status_id", customer.getMainStatus().getId());
+		}
+		if (customer.getSubStatus() != null) {
+			parameters.put("sub_status_id", customer.getSubStatus().getId());
+		}
+		if (customer.getProfession() != null) {
+			parameters.put("profession_id", customer.getProfession().getId());
+		}
+		if (customer.getResponsiblePerson() != null) {
+			parameters.put("responsible_person_id", customer.getResponsiblePerson().getId());
+		}
 
 		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 		log.debug("New ID: {}", id);
 		return id;
-
 	}
+
+//	private Long createCustomer(Customer customer) {
+//		Long id;
+//		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_customer")
+//				.usingGeneratedKeyColumns("id");
+//
+//		if (customer.getAddress() != null && customer.getAddress().getId() == null) {
+//			Long addressId = createAddress(customer.getAddress());
+//			customer.getAddress().setId(addressId);
+//		}
+//
+//		Map<String, Object> parameters = new HashMap<>();
+//		// Thêm các trường cố định trong entity (không có liên kết bảng)
+//		parameters.put("company_name", customer.getCompanyName());
+//		parameters.put("contact_person", customer.getContactPerson());
+//		parameters.put("created_at", customer.getCreatedAt());
+//		parameters.put("email", customer.getEmail());
+//		parameters.put("note", customer.getNote());
+//		parameters.put("phone", customer.getPhone());
+//		parameters.put("account_status", customer.getAccountStatus());
+//
+//		// Thêm các khóa ngoại
+//		parameters.put("address_id", customer.getAddress().getId());
+//		parameters.put("main_status_id", customer.getMainStatus() != null ? customer.getMainStatus().getId() : null);
+//		parameters.put("sub_status_id", customer.getSubStatus() != null ? customer.getSubStatus().getId() : null);
+//		parameters.put("profession_id", customer.getProfession() != null ? customer.getProfession().getId() : null);
+//		parameters.put("responsible_person_id",
+//				customer.getResponsiblePerson() != null ? customer.getResponsiblePerson().getId() : null);
+//
+//		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+//		log.debug("New ID: {}", id);
+//		return id;
+//
+//	}
 
 	private Long createAddress(Address address) {
 		Long id;
@@ -775,7 +831,7 @@ public class AppRepository {
 					public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
 						Order ord = new Order();
 						ord.setId(rs.getLong("id"));
-						ord.setSiteId(rs.getString("site_id"));
+						//ord.setSiteId(rs.getString("site_id"));
 						ord.setName(rs.getString("name"));
 						ord.setCode(rs.getString("code"));
 						ord.setCreateDate(rs.getDate("create_date"));
@@ -1163,6 +1219,11 @@ public class AppRepository {
 	    } else {
 	        log.debug("File đã tồn tại, không insert: " + fileName);
 	    }
+	}
+
+	public void deleteFileById(Long fileId) {
+	    String sql = "DELETE FROM crm_files_upload WHERE id = ?";
+	    jdbcTemplate0.update(sql, fileId);
 	}
 	
 //	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {

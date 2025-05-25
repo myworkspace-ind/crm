@@ -17,7 +17,7 @@ public class JpaTransformer {
 			Object[] rowData = new Object[13];
 
 			rowData[0] = customer.getId();
-			rowData[1] = customer.getSiteId();
+			//rowData[1] = customer.getSiteId();
 			rowData[2] = customer.getCompanyName();
 			rowData[3] = customer.getContactPerson();
 			rowData[4] = customer.getEmail();

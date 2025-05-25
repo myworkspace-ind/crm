@@ -32,8 +32,8 @@ public class OrderStatus implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // system field
 
-	@Column(name = "site_id", length = 99)
-	private String siteId; // system field
+//	@Column(name = "site_id", length = 99)
+//	private String siteId;
 
 	@Column(name = "name", length = 255)
 	private String name;
@@ -44,10 +44,10 @@ public class OrderStatus implements Serializable {
 	@ManyToMany(mappedBy = "orderStatuses", fetch = FetchType.EAGER)
 	private Set<OrderCategory> orderCategories;
 
-	public OrderStatus(Long id, String siteId, String name, Set<OrderCategory> orderCategories) {
+	public OrderStatus(Long id, String name, Set<OrderCategory> orderCategories) {
 		super();
 		this.id = id;
-		this.siteId = siteId;
+		//this.siteId = siteId;
 		this.name = name;
 		this.orderCategories = orderCategories;
 	}

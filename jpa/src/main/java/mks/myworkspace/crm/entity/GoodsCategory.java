@@ -29,8 +29,8 @@ public class GoodsCategory implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // system field
 
-	@Column(name = "site_id", length = 99)
-	private String siteId; // system field
+//	@Column(name = "site_id", length = 99)
+//	private String siteId; 
 
 	@Column(name = "name", length = 255)
 	private String name;
@@ -45,10 +45,9 @@ public class GoodsCategory implements Serializable {
         this.id = id;
     }
     
-	public GoodsCategory(Long id, String siteId, String name) {
+	public GoodsCategory(Long id, String name) {
 		super();
 		this.id = id;
-		this.siteId = siteId;
 		this.name = name;
 	}
 

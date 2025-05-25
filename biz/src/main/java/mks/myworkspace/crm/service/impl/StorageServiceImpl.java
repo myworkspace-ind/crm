@@ -109,80 +109,122 @@ public class StorageServiceImpl implements StorageService {
 //		// TODO Auto-generated method stub
 //		return null;
 //	}
-
 	@Override
 	public Customer saveOrUpdate(Customer customer) {
-		Optional<Customer> existingCustomerByEmail = customerRepo.findByEmail(customer.getEmail());
-		Optional<Customer> existingCustomerByPhone = customerRepo.findByPhone(customer.getPhone());
-		/*
-		 * if (existingEmail.isPresent()) { throw new
-		 * IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!"
-		 * ); }
-		 * 
-		 * Optional<Customer> existingPhone =
-		 * customerRepo.findByPhone(customer.getPhone()); if (existingPhone.isPresent())
-		 * { throw new
-		 * IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!"
-		 * ); }
-		 * 
-		 * if (!isValidPhoneNumber(customer.getPhone())) { throw new
-		 * IllegalArgumentException("Số điện thoại không đúng định dạng. Vui lòng nhập lại!"
-		 * ); }
-		 */
+	    // Kiểm tra trùng SĐT nếu có nhập
+	    if (customer.getPhone() != null && !customer.getPhone().isBlank()) {
+	        Optional<Customer> existingCustomerByPhone = customerRepo.findByPhone(customer.getPhone());
 
-		// Kiểm tra nếu SDT đã có
-		if (existingCustomerByPhone.isPresent()) {
-			// throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó.
-			// Vui lòng thử lại!");
+	        if (existingCustomerByPhone.isPresent()) {
+	            Customer optCustomer = existingCustomerByPhone.get();
 
-			// Nếu SDT đã có, kiểm tra xem SDT này là của khách muốn chỉnh sủa thông tin,
-			// hay là của khách hàng khác
+	            if (customer.getId() == null) {
+	                throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+	            } else if (!customer.getId().equals(optCustomer.getId())) {
+	                throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+	            }
+	        }
 
-			// Lấy khách hàng cũ
-			Customer optCustomer = existingCustomerByPhone.get();
+	        if (customer.getPhone().length() != 10) {
+	            throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
+	        }
+	    }
 
-			// Nếu đây là thêm mới nhưng trùng sdt khách hàng cũ,
-			if (customer.getId() == null) {
-				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
-			}
-			// hoặc là khách hàng chỉnh sửa sdt trùng khách hàng cũ
-			else if (customer.getId() != optCustomer.getId()) {
-				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
-			}
-			if (customer.getPhone().length() != 10) {
-				throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
-			}
-		}
-		if (existingCustomerByEmail.isPresent()) {
-			// throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó.
-			// Vui lòng thử lại!");
+	    // Kiểm tra trùng email nếu có nhập
+	    if (customer.getEmail() != null && !customer.getEmail().isBlank()) {
+	        Optional<Customer> existingCustomerByEmail = customerRepo.findByEmail(customer.getEmail());
 
-			// Nếu SDT đã có, kiểm tra xem SDT này là của khách muốn chỉnh sủa thông tin,
-			// hay là của khách hàng khác
+	        if (existingCustomerByEmail.isPresent()) {
+	            Customer optCustomer = existingCustomerByEmail.get();
 
-			// Lấy khách hàng cũ
-			Customer optCustomer = existingCustomerByEmail.get();
+	            if (customer.getId() == null) {
+	                throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+	            } else if (!customer.getId().equals(optCustomer.getId())) {
+	                throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+	            }
+	        }
+	    }
 
-			// Nếu đây là thêm mới nhưng trùng email khách hàng cũ,
-			if (customer.getId() == null) {
-				throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
-			}
-			// hoặc là khách hàng chỉnh sửa email trùng khách hàng cũ
-			else if (customer.getId() != optCustomer.getId()) {
-				throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
-			}
-			/*
-			 * if (customer.getPhone().length() != 10) { throw new
-			 * IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!"
-			 * ); }
-			 */
-		}
-		Long id = appRepo.saveOrUpdate(customer);
-		if (id != null) {
-			customer.setId(id);
-		}
-		return customer;
+	    Long id = appRepo.saveOrUpdate(customer);
+	    if (id != null) {
+	        customer.setId(id);
+	    }
+	    return customer;
 	}
+
+//	@Override
+//	public Customer saveOrUpdate(Customer customer) {
+//		Optional<Customer> existingCustomerByEmail = customerRepo.findByEmail(customer.getEmail());
+//		Optional<Customer> existingCustomerByPhone = customerRepo.findByPhone(customer.getPhone());
+//		/*
+//		 * if (existingEmail.isPresent()) { throw new
+//		 * IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!"
+//		 * ); }
+//		 * 
+//		 * Optional<Customer> existingPhone =
+//		 * customerRepo.findByPhone(customer.getPhone()); if (existingPhone.isPresent())
+//		 * { throw new
+//		 * IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!"
+//		 * ); }
+//		 * 
+//		 * if (!isValidPhoneNumber(customer.getPhone())) { throw new
+//		 * IllegalArgumentException("Số điện thoại không đúng định dạng. Vui lòng nhập lại!"
+//		 * ); }
+//		 */
+//
+//		// Kiểm tra nếu SDT đã có
+//		if (existingCustomerByPhone.isPresent()) {
+//			// throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó.
+//			// Vui lòng thử lại!");
+//
+//			// Nếu SDT đã có, kiểm tra xem SDT này là của khách muốn chỉnh sủa thông tin,
+//			// hay là của khách hàng khác
+//
+//			// Lấy khách hàng cũ
+//			Customer optCustomer = existingCustomerByPhone.get();
+//
+//			// Nếu đây là thêm mới nhưng trùng sdt khách hàng cũ,
+//			if (customer.getId() == null) {
+//				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+//			}
+//			// hoặc là khách hàng chỉnh sửa sdt trùng khách hàng cũ
+//			else if (customer.getId() != optCustomer.getId()) {
+//				throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+//			}
+//			if (customer.getPhone().length() != 10) {
+//				throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
+//			}
+//		}
+//		if (existingCustomerByEmail.isPresent()) {
+//			// throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó.
+//			// Vui lòng thử lại!");
+//
+//			// Nếu SDT đã có, kiểm tra xem SDT này là của khách muốn chỉnh sủa thông tin,
+//			// hay là của khách hàng khác
+//
+//			// Lấy khách hàng cũ
+//			Customer optCustomer = existingCustomerByEmail.get();
+//
+//			// Nếu đây là thêm mới nhưng trùng email khách hàng cũ,
+//			if (customer.getId() == null) {
+//				throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+//			}
+//			// hoặc là khách hàng chỉnh sửa email trùng khách hàng cũ
+//			else if (customer.getId() != optCustomer.getId()) {
+//				throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+//			}
+//			/*
+//			 * if (customer.getPhone().length() != 10) { throw new
+//			 * IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!"
+//			 * ); }
+//			 */
+//		}
+//		Long id = appRepo.saveOrUpdate(customer);
+//		if (id != null) {
+//			customer.setId(id);
+//		}
+//		return customer;
+//	}
 
 	private boolean isValidPhoneNumber(String phoneNumber) {
 		String phoneRegex = "^[0-9]{10}$";
@@ -618,5 +660,10 @@ public class StorageServiceImpl implements StorageService {
 	@Override
 	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
 		appRepo.saveFilesUpload(interactionId, fileName, fileType, filePath);
+	}
+
+	@Override
+	public void deleteFileById(Long fileId) {
+	    appRepo.deleteFileById(fileId);
 	}
 }

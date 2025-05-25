@@ -31,11 +31,11 @@ public class CustomerCare implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; 
 	
-	@Column(name = "site_id", length = 99)
-	private String siteId;
+//	@Column(name = "site_id", length = 99)
+//	private String siteId;
 	
 	@ManyToOne
-	@JoinColumn(name = "customer_id", referencedColumnName = "id")
+	@JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
 	private Customer customer;
 	
 	@Column(name = "priority")
