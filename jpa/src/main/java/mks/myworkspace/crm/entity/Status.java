@@ -1,13 +1,16 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -39,6 +42,12 @@ public class Status implements Serializable {
 
 	@Column(name = "seqno")
 	private Long seqno;  // Trường seqno sẽ luôn bằng với id dùng để sắp xếp thứ tự
+	
+	@OneToMany(mappedBy = "mainStatus", fetch = FetchType.LAZY)
+	private List<Customer> customersWithMainStatus;
+
+	@OneToMany(mappedBy = "subStatus", fetch = FetchType.LAZY)
+	private List<Customer> customersWithSubStatus;
 
 //	// Many-to-Many relationship with Customer
 //	@ManyToMany(mappedBy = "statuses")

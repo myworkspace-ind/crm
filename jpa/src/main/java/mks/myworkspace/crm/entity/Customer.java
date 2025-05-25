@@ -97,8 +97,21 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<CustomerCare> customerCares;
     
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<EmailToCustomer> emails;
     
-
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<CustomerStatusHistory> customerStatusHistories;
+    
+    @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
+    private List<Order> ordersSender;
+    
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
+    private List<Order> ordersReceiver;
+    
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Appointment> appoinments;
+    
 	public Customer(Long id) {
 		super();
 		this.id = id;
