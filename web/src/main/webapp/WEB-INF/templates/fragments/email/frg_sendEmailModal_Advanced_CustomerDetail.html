@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<!-- Modal Gửi Email Nâng Cao -->
+<div class="modal fade" id="advancedEmailModal" tabindex="-1" role="dialog" aria-labelledby="advancedEmailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title" id="advancedEmailModalLabel" style="color: white">Gửi Email cho khách hàng</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Phần bạn đã viết bên dưới -->
+        <div th:if="${!credentialExists}">
+            <p>⚠️ Bạn cần đăng nhập Gmail để có thể gửi email.</p>
+            <a th:href="@{'/authorize?customerId=' + ${customerId}}"><button>Đăng nhập Gmail</button></a>
+        </div>
+
+        <div th:if="${credentialExists}">
+            <form th:action="@{/customer/send-email-using-gmail}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="customer" th:value="${customer.id}" />
+
+                <div class="mb-3">
+				  <label for="to" class="form-label text-start d-block">Người nhận:</label>
+				  <input type="text" class="form-control" name="to" id="to"
+				         th:value="${#strings.isEmpty(customer.email) ? 'Chưa cập nhật' : customer.email}" readonly />
+				</div>
+				
+				<div class="mb-3">
+				  <label for="cc" class="form-label text-start d-block">CC:</label>
+				  <input type="text" class="form-control" name="cc" id="cc" placeholder="cc@example.com" />
+				</div>
+				
+				<div class="mb-3">
+				  <label for="bcc" class="form-label text-start d-block">BCC:</label>
+				  <input type="text" class="form-control" name="bcc" id="bcc" placeholder="bcc@example.com" />
+				</div>
+				
+				<div class="mb-3">
+				  <label for="subject" class="form-label text-start d-block">Tiêu đề:</label>
+				  <input type="text" class="form-control" name="subject" id="subject" required />
+				</div>
+				
+				<div class="mb-3">
+				  <label for="editor" class="form-label text-start d-block">Nội dung:</label>
+				  <textarea class="form-control" id="editor" name="body" rows="8" required></textarea>
+				</div>
+				
+				<div class="mb-3">
+				  <label for="attachment" class="form-label text-start d-block">Đính kèm tệp:</label>
+				  <input type="file" class="form-control" name="attachments" id="attachment" multiple onchange="previewAttachments()" />
+				  <div id="preview-area" class="mt-2"></div>
+				</div>
+
+                <button type="submit" class="btn btn-primary">Gửi Email</button>
+            </form>
+            
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
