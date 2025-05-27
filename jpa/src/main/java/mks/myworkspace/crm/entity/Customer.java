@@ -94,8 +94,8 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Interaction> interactions;
     
-//    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-//    private List<CustomerCare> customerCares;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<CustomerCare> customerCares;
     
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<EmailToCustomer> emails;
