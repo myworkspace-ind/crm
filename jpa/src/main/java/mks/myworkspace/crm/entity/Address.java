@@ -17,8 +17,8 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "site_id", length = 99)
-	private String siteId;
+//    @Column(name = "site_id", length = 99)
+//	private String siteId;
 
     @Column(name = "street", length = 255)
     private String street;
@@ -43,7 +43,10 @@ public class Address {
 
     @Column(name = "longitude", precision = 10, scale = 7)
     private Double longitude;
-
+    
+    @OneToOne(mappedBy = "address")
+    private Customer customer;
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -1,12 +1,15 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -27,8 +30,8 @@ public class ResponsiblePerson implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  // ID tự động tăng
     
-    @Column(name = "site_id", length = 99)
-	private String siteId;
+//    @Column(name = "site_id", length = 99)
+//	private String siteId;
 
     @Column(name = "name", length = 99, nullable = false)
     private String name;  // Tên người phụ trách
@@ -38,6 +41,9 @@ public class ResponsiblePerson implements Serializable {
     
     @Column(name = "seqno")
     private Long seqno;  // Trường seqno sẽ luôn bằng với id dùng để sắp xếp thứ tự
+    
+    @OneToMany(mappedBy = "responsiblePerson", fetch = FetchType.LAZY)
+    private List<Customer> customers;
     
     public ResponsiblePerson(Long id, String name, String note) {
         super();

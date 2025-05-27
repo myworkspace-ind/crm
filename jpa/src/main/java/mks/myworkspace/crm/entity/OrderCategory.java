@@ -1,6 +1,7 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -35,8 +36,8 @@ public class OrderCategory implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // system field
 
-	@Column(name = "site_id", length = 99)
-	private String siteId; // system field
+//	@Column(name = "site_id", length = 99)
+//	private String siteId; 
 
 	@Column(name = "name", length = 255)
 	private String name;
@@ -45,7 +46,8 @@ public class OrderCategory implements Serializable {
 	private String note;
 
 	@OneToMany(mappedBy = "orderCategory", fetch = FetchType.EAGER)	
-	private Set<Order> orders;
+//	private Set<Order> orders;
+	private List<Order> orders;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
@@ -55,11 +57,10 @@ public class OrderCategory implements Serializable {
 	)
 	 private Set<OrderStatus> orderStatuses;
 
-	public OrderCategory(Long id, String siteId, String name, String note, Set<Order> orders,
+	public OrderCategory(Long id, String name, String note, List<Order> orders,
 			Set<OrderStatus> orderStatuses) {
 		super();
 		this.id = id;
-		this.siteId = siteId;
 		this.name = name;
 		this.note = note;
 		this.orders = orders;

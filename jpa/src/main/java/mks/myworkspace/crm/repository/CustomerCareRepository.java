@@ -28,7 +28,7 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 	//TODO: Lấy khách hàng "Mới"
     @Query("SELECT c FROM Customer c " +
             "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
-            "WHERE c.mainStatus.name = 'Mới' " +
+            "WHERE c.mainStatus.name = 'New' " +
             "AND NOT EXISTS ( " +
             "    SELECT 1 FROM Interaction iSub WHERE iSub.customer.id = c.id " +
             ") " +

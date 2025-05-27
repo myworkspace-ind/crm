@@ -82,5 +82,7 @@ public interface StorageService {
 	public boolean isFeatureEnabledByCode(String featureReminderCode);
 	
 	void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath);
+	
+	void deleteFileById(Long fileId);
 
 }

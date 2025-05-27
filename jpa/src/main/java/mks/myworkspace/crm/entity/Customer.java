@@ -37,8 +37,8 @@ public class Customer implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "site_id", length = 99)
-	private String siteId;
+//	@Column(name = "site_id", length = 99)
+//	private String siteId;
 
 	@Column(name = "company_name", length = 99)
 	private String companyName;
@@ -53,7 +53,7 @@ public class Customer implements Serializable {
 	private String phone;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "address_id", referencedColumnName = "id")
+	@JoinColumn(name = "address_id", referencedColumnName = "id", unique = true)
 	private Address address;
 	
 	@ManyToOne
@@ -93,12 +93,29 @@ public class Customer implements Serializable {
     
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Interaction> interactions;
-
+    
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<CustomerCare> customerCares;
+    
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<EmailToCustomer> emails;
+    
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<CustomerStatusHistory> customerStatusHistories;
+    
+    @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
+    private List<Order> ordersSender;
+    
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
+    private List<Order> ordersReceiver;
+    
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Appointment> appoinments;
+    
 	public Customer(Long id) {
 		super();
 		this.id = id;
 	}
-
 
 	public String getFormattedCreatedAt() {
 	    if (createdAt != null) {
@@ -107,14 +124,25 @@ public class Customer implements Serializable {
 	    return "";
 	}
 
+
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", siteId=" + siteId + ", companyName=" + companyName + ", contactPerson="
-				+ contactPerson + ", email=" + email + ", phone=" + phone + ", address=" + address + ", profession="
-				+ profession + ", mainStatus=" + mainStatus + ", subStatus=" + subStatus + ", responsiblePerson="
-				+ responsiblePerson + ", birthday=" + birthday + ", classification=" + classification + ", createdAt="
-				+ createdAt + ", note=" + note + ", accountStatus=" + accountStatus + ", interactions=" + interactions
-				+ "]";
+		return "Customer [id=" + id + ", companyName=" + companyName + ", contactPerson=" + contactPerson + ", email="
+				+ email + ", phone=" + phone + ", address=" + address + ", profession=" + profession + ", mainStatus="
+				+ mainStatus + ", subStatus=" + subStatus + ", responsiblePerson=" + responsiblePerson + ", birthday="
+				+ birthday + ", classification=" + classification + ", createdAt=" + createdAt + ", note=" + note
+				+ ", accountStatus=" + accountStatus + ", interactions=" + interactions + "]";
 	}
+	
+
+//	@Override
+//	public String toString() {
+//		return "Customer [id=" + id + ", siteId=" + siteId + ", companyName=" + companyName + ", contactPerson="
+//				+ contactPerson + ", email=" + email + ", phone=" + phone + ", address=" + address + ", profession="
+//				+ profession + ", mainStatus=" + mainStatus + ", subStatus=" + subStatus + ", responsiblePerson="
+//				+ responsiblePerson + ", birthday=" + birthday + ", classification=" + classification + ", createdAt="
+//				+ createdAt + ", note=" + note + ", accountStatus=" + accountStatus + ", interactions=" + interactions
+//				+ "]";
+//	}
 
 }

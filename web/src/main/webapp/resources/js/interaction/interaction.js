@@ -299,11 +299,12 @@ function initTable(colHeaders, colWidths, data) {
 					defaultDate: new Date(),
 					datePickerConfig: { format: 'YYYY-MM-DD' }
 				},
-//				{	
-//					renderer: fileUploadRenderer
-//				},
-				{ 	renderer: buttonRenderer 
-					
+				//				{	
+				//					renderer: fileUploadRenderer
+				//				},
+				{
+					renderer: buttonRenderer
+
 				},
 			],
 			height: 400,
@@ -319,12 +320,12 @@ function initTable(colHeaders, colWidths, data) {
 		});
 	} else {
 		console.error("Container tblInteraction không tồn tại.");
-	}	
+	}
 }
 
 function buttonRenderer(instance, td, row, col, prop, value, cellProperties) {
 	Handsontable.dom.empty(td);
-	
+
 	// Nút Xóa
 	const deleteButton = document.createElement('button');
 	deleteButton.type = 'button';
@@ -334,15 +335,23 @@ function buttonRenderer(instance, td, row, col, prop, value, cellProperties) {
 	};
 	deleteButton.style.marginRight = '5px';
 	td.appendChild(deleteButton);
-	
-	
+
+
 	// Nút Upload Files
 	const uploadButton = document.createElement('button');
 	uploadButton.type = 'button';
 	uploadButton.innerHTML = '<i class="fas fa-upload"></i>';
 	uploadButton.title = 'Upload Files';
 	uploadButton.onclick = function() {
-		//alert('đã bấm')
+		if (!value) {
+			Swal.fire({
+				icon: 'warning',
+				title: 'Chưa có Interaction ID',
+				text: 'Vui lòng lưu tương tác trước khi upload file bạn nhé!.',
+				confirmButtonText: 'OK'
+			});
+			return;
+		}
 		openUploadModal(row, value); // Hàm mở modal upload
 	};
 	td.appendChild(uploadButton);
@@ -359,134 +368,184 @@ function openUploadModal(row, interactionId) {
 		// Gán interaction ID vào biến toàn cục để dùng khi upload
 
 		currentInteractionId = interactionId;
-		
+
 		// Đặt interaction ID vào modal để sử dụng khi upload
 		modal.dataset.row = row;
 		modal.dataset.interactionId = interactionId;
-		
-		$('#uploadModal').modal('show'); 
+
+		$('#uploadModal').modal('show');
 		loadExistingFiles(interactionId);
 	}
 }
 let selectedFiles = [];
 
-document.getElementById('uploadInputFiles').addEventListener('change', function (e) {
-    const previewContainer = document.getElementById('previewFilesList');
-    
-    // Thêm file mới vào mảng
-    const newFiles = Array.from(e.target.files);
-    selectedFiles = selectedFiles.concat(newFiles);
+document.getElementById('uploadInputFiles').addEventListener('change', function(e) {
+	const previewContainer = document.getElementById('previewFilesList');
 
-    // Làm mới lại danh sách hiển thị từ mảng
-    renderFilePreview();
+	// Thêm file mới vào mảng
+	const newFiles = Array.from(e.target.files);
+	selectedFiles = selectedFiles.concat(newFiles);
+
+	// Làm mới lại danh sách hiển thị từ mảng
+	renderFilePreview();
 });
 
 function renderFilePreview() {
-    const previewContainer = document.getElementById('previewFilesList');
-    previewContainer.innerHTML = '';
+	const previewContainer = document.getElementById('previewFilesList');
+	previewContainer.innerHTML = '';
 
-    selectedFiles.forEach((file, index) => {
-        const fileDiv = document.createElement('div');
-        fileDiv.style.marginBottom = '10px';
+	selectedFiles.forEach((file, index) => {
+		const fileDiv = document.createElement('div');
+		fileDiv.style.marginBottom = '10px';
 
-        if (file.type.startsWith('image/')) {
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.style.width = '80px';
-            img.style.height = '80px';
-            img.style.objectFit = 'cover';
-            img.style.marginRight = '10px';
-            img.onload = () => URL.revokeObjectURL(img.src);
-            fileDiv.appendChild(img);
-        } else {
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(file);
-            link.textContent = file.name;
-            link.target = '_blank';
-            link.onclick = () => {
-                setTimeout(() => URL.revokeObjectURL(link.href), 5000);
-            };
-            fileDiv.appendChild(link);
-        }
+		if (file.type.startsWith('image/')) {
+			const img = document.createElement('img');
+			img.src = URL.createObjectURL(file);
+			img.style.width = '80px';
+			img.style.height = '80px';
+			img.style.objectFit = 'cover';
+			img.style.marginRight = '10px';
+			img.onload = () => URL.revokeObjectURL(img.src);
+			fileDiv.appendChild(img);
+		} else {
+			const link = document.createElement('a');
+			link.href = URL.createObjectURL(file);
+			link.textContent = file.name;
+			link.target = '_blank';
+			link.onclick = () => {
+				setTimeout(() => URL.revokeObjectURL(link.href), 5000);
+			};
+			fileDiv.appendChild(link);
+		}
 
-        // Thêm nút xoá file khỏi preview (nếu muốn)
-        const delBtn = document.createElement('button');
-        delBtn.textContent = 'X';
-        delBtn.style.marginLeft = '5px';
-        delBtn.onclick = () => {
-            selectedFiles.splice(index, 1); // Xoá khỏi mảng
-            renderFilePreview(); // Cập nhật lại giao diện
-        };
+		// Thêm nút xoá file khỏi preview (nếu muốn)
+		const delBtn = document.createElement('button');
+		delBtn.textContent = 'X';
+		delBtn.style.marginLeft = '5px';
+		delBtn.onclick = () => {
+			selectedFiles.splice(index, 1); // Xoá khỏi mảng
+			renderFilePreview(); // Cập nhật lại giao diện
+		};
 
-        fileDiv.appendChild(delBtn);
-        previewContainer.appendChild(fileDiv);
-    });
+		fileDiv.appendChild(delBtn);
+		previewContainer.appendChild(fileDiv);
+	});
 }
 
 
 function loadExistingFiles(interactionId) {
-    $.ajax({
-        url: `${_ctx}customer/interaction-files-upload/${interactionId}`,
-        type: 'GET',
-        success: function(files) {
-            const list = document.getElementById('existingFilesList'); // Đổi id
-            list.innerHTML = '';
-            files.forEach(function(file) {
-                const div = document.createElement('div');
-                const link = document.createElement('a');
-                link.href = file.filePath;
-                link.textContent = file.fileName || 'Tải tài liệu';
-                link.target = '_blank';
-                link.style.marginRight = '10px';
+	$.ajax({
+		url: `${_ctx}customer/interaction-files-upload/${interactionId}`,
+		type: 'GET',
+		success: function(files) {
+			const list = document.getElementById('existingFilesList'); // Đổi id
+			list.innerHTML = '';
+			files.forEach(function(file) {
+				const div = document.createElement('div');
+				const link = document.createElement('a');
+				link.href = file.filePath;
+				link.textContent = file.fileName || 'Tải tài liệu';
+				link.target = '_blank';
+				link.style.marginRight = '10px';
 
-                const delBtn = document.createElement('button');
-                delBtn.textContent = 'X';
-                delBtn.style.marginLeft = '5px';
-                delBtn.onclick = function() {
-                    deleteFile(file.id);
-                };
+				const delBtn = document.createElement('button');
+				delBtn.textContent = 'X';
+				delBtn.style.marginLeft = '5px';
+				delBtn.onclick = function() {
+					deleteFile(file.id);
+				};
 
-                div.appendChild(link);
-                div.appendChild(delBtn);
-                list.appendChild(div);
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error('Error loading files:', error);
-        }
-    });
+				div.appendChild(link);
+				div.appendChild(delBtn);
+				list.appendChild(div);
+			});
+		},
+		error: function(xhr, status, error) {
+			console.error('Error loading files:', error);
+		}
+	});
 }
 
 function uploadSelectedFiles() {
-    const files = document.getElementById('uploadInputFiles').files;
-    if (!files.length) return;
+	const files = document.getElementById('uploadInputFiles').files;
+	if (!files.length) return;
 
-    const formData = new FormData();
-    formData.append("interaction_id", currentInteractionId);
-    for (let i = 0; i < files.length; i++) {
-        formData.append("files", files[i]);
-    }
-	
+	const formData = new FormData();
+	formData.append("interaction_id", currentInteractionId);
+	for (let i = 0; i < files.length; i++) {
+		formData.append("files", files[i]);
+	}
+
+	// Hiển thị màn hình loading
+	$('#uploadModal').modal('hide');
+	Swal.fire({
+		title: 'Đang tải...',
+		text: 'Vui lòng chờ trong giây lát',
+		allowOutsideClick: false,
+		didOpen: () => {
+			Swal.showLoading();
+		}
+	});
+
 	$.ajax({
-	       url: `${_ctx}customer/upload-files`,
-	       type: 'POST',
-	       data: formData,
-	       processData: false,  // Không xử lý dữ liệu
-	       contentType: false,  // Không đặt Content-Type (để tự động là multipart/form-data)
-	       success: function (result) {
-	           alert(result);
-	           loadExistingFiles(currentInteractionId);
-	       },
-	       error: function (xhr, status, error) {
-	           alert("Lỗi upload: " + error);
-	       }
-	   });
+		url: `${_ctx}customer/interaction-files-upload/upload-files`,
+		type: 'POST',
+		data: formData,
+		processData: false,  // Không xử lý dữ liệu
+		contentType: false,  // Không đặt Content-Type (để tự động là multipart/form-data)
+		success: function(result) {
+			Swal.fire({
+				icon: 'success',
+				title: "✅ Thành công!",
+				text: result.message || "Upload file thành công!",
+			}).then(() => {
+				// Sau khi người dùng bấm OK
+				$('#uploadModal').modal('show');
+				document.getElementById('uploadInputFiles').value = '';
+				loadExistingFiles(currentInteractionId);
+			});
+		},
+		error: function(xhr, status, error) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Upload file không thành công!',
+				text: xhr.responseText || error
+			});
+		}
+	});
+}
+
+function deleteFile(fileId) {
+	$.ajax({
+		url: `${_ctx}customer/interaction-files-upload/${fileId}`,
+		type: 'DELETE',
+		contentType: false,  // Không đặt Content-Type (để tự động là multipart/form-data)
+		success: function(result) {
+		$('#uploadModal').modal('hide');
+			Swal.fire({
+				icon: 'success',
+				title: "✅ Thành công!",
+				text: result.message || "Xóa file thành công!",
+			}).then(() => {
+				// Sau khi người dùng bấm OK
+				$('#uploadModal').modal('show');
+				loadExistingFiles(currentInteractionId);
+			});
+		},
+		error: function(xhr, status, error) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Lỗi khi xóa file',
+				text: xhr.responseText || error
+			});
+		}
+	});
 }
 
 function closeUploadModal() {
-    $('#uploadModal').modal('hide');
-   // document.getElementById('uploadedFilesList').innerHTML = '';
-   // document.getElementById('uploadInputFiles').value = '';
+	$('#uploadModal').modal('hide');
+	// document.getElementById('uploadedFilesList').innerHTML = '';
+	// document.getElementById('uploadInputFiles').value = '';
 	const backdrop = document.querySelector('.modal-backdrop');
 	if (backdrop) backdrop.style.display = 'none';
 }
@@ -652,7 +711,7 @@ function fileUploadRenderer(instance, td, row, col, prop, value, cellProperties)
 		});
 
 		fileCache[key] = mergedFiles;
-	
+
 		//Cập nhật giá trị ô của Handsontable
 		instance.setDataAtCell(row, col, mergedFiles);
 	});

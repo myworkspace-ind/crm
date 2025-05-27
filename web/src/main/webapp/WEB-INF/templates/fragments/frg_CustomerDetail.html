@@ -51,7 +51,7 @@
 						    </button>
 						</a>
 						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer(' + ${customer.id} + ')'">Hide</button>
-						<button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Edit Interaction</button>
+						<!-- <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Edit Interaction</button> -->
 					</div>
 					<div class="person-in-charge">
 						<p>
@@ -68,31 +68,7 @@
 
 		</div>
 	</div>
-<!-- 	<input type="file" id="htFileInput" multiple /> -->
-	<div id="uploadModal" class="modal" style="display: none;">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<h2>Upload Files</h2>
-	
-<!-- 				<div id="uploadedFilesList" class="file-list"></div> -->
-
-				<!-- Các file đã upload trước đó -->
-				<div id="existingFilesList" class="file-list"></div>
-
-				<!-- File người dùng đang chọn để upload -->
-				<div id="previewFilesList" class="file-list"></div>
-
-				<input type="file" id="uploadInputFiles" multiple class="file-input" />
-	
-				<div class="modal-buttons">
-					<button onclick="uploadSelectedFiles()" class="btn btn-upload">Upload</button>
-					<button onclick="closeUploadModal()" class="btn btn-closeUpload">Đóng</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
+	<th:block th:include="~{fragments/interaction/files_upload.html}"></th:block>
 	<th:block th:include="fragments/frg_ModalConfirmation"></th:block>
 	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/deleteCustomer.js}" defer></script>
 

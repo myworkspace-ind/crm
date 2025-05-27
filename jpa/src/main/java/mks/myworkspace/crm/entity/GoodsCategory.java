@@ -1,12 +1,15 @@
 package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -29,8 +32,8 @@ public class GoodsCategory implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // system field
 
-	@Column(name = "site_id", length = 99)
-	private String siteId; // system field
+//	@Column(name = "site_id", length = 99)
+//	private String siteId; 
 
 	@Column(name = "name", length = 255)
 	private String name;
@@ -40,15 +43,18 @@ public class GoodsCategory implements Serializable {
 	
 	@Column(name = "seqno")
     private Long seqno;  // Trường seqno sẽ luôn bằng với id dùng để sắp xếp thứ tự
+	
+	@OneToMany(mappedBy = "goodsCategory", fetch = FetchType.LAZY)
+	private List<Order> orders;
+	
 	// Constructor nhận id
     public GoodsCategory(Long id) {
         this.id = id;
     }
     
-	public GoodsCategory(Long id, String siteId, String name) {
+	public GoodsCategory(Long id, String name) {
 		super();
 		this.id = id;
-		this.siteId = siteId;
 		this.name = name;
 	}
 
