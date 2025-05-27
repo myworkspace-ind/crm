@@ -516,6 +516,7 @@ public class CustomerController extends BaseController {
 			mav.addObject("userDisplayName", getCurrentUserDisplayName());
 	
 			List<Customer> customers = pageCustomer.getContent().size() > 0 ?  pageCustomer.getContent() : new ArrayList<Customer>();
+			log.debug("Tới đây!");
 			List<Status> statuses = statusService.getAllStatuses();
 			List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 			List<Profession> professions = professionService.getAllProfessions();

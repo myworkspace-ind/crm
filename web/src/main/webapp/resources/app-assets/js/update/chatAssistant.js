@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						.then(function(result) {
 							if (result.isConfirmed) {
 								$.ajax({
-									url: _ctx + 'customer-care/load-potential',
+									url: _ctx + 'customer-care/save-customer-care',
 									method: 'GET',
 									dataType: "text",
 									success: function(response) {

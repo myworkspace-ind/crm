@@ -210,7 +210,7 @@ $(document).ready(function() {
 			success: function(data) {
 				// Ví dụ data là object chứa info khách hàng
 				const html = `
-								<p><strong>Tên CTY:</strong> ${data.companyName}</p>
+								<p><strong>Tên công ty:</strong> ${data.companyName}</p>
 								<p><strong>Email:</strong> ${data.email}</p>
 								<p><strong>SĐT:</strong> ${data.phone}</p>
 								<p><strong>Trạng thái chính:</strong> ${data.mainStatus}</p>
@@ -270,7 +270,7 @@ $(document).ready(function() {
 		$(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Đang tải...');
 
 		$.ajax({
-			url: _ctx + 'customer-care/load-potential',
+			url: _ctx + 'customer-care/save-customer-care',
 			method: 'GET',
 			dataType: "text",
 			success: function(response) {

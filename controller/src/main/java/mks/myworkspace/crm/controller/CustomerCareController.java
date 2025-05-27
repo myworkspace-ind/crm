@@ -90,12 +90,20 @@ public class CustomerCareController extends BaseController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping(value = "/load-potential", produces = "application/json; charset=UTF-8")
+	@GetMapping(value = "/save-customer-care", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> loadPotentialCustomers() {
+		log.debug("Đã tới được đây");
 		try {
-			customerCareService.loadPotentialCustomersIntoCustomerCare();
+			if (customerCareService == null) {
+				log.error("customerCareService đang NULL. Kiểm tra @Autowired hoặc Bean configuration.");
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body("Lỗi nội bộ: customerCareService chưa được khởi tạo.");
+			}
+			//customerCareService.loadPotentialCustomersIntoCustomerCare();
+			customerCareService.saveCustomerCare();
 			return ResponseEntity.ok("Nạp khách hàng vào CustomerCare thành công!");
 		} catch (Exception e) {
+			log.error("Lỗi khi chạy loadPotentialCustomersIntoCustomerCare(): {}", e.getMessage(), e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Lỗi khi nạp khách hàng: " + e.getMessage());
 		}
@@ -263,6 +271,7 @@ public class CustomerCareController extends BaseController {
 
 	@GetMapping(value = "/load-customer-care", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> getPotentialCustomers() {
+		log.debug("Here!");
 		try {
 			List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();// Dành cho KH hiện đang có trạng Chưa chăm sóc
 			List<CustomerCare> customersWithCareData = customerCareService.findAll();// Danh sách đã có sẵn trong bảng

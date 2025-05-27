@@ -9,7 +9,8 @@ import mks.myworkspace.crm.repository.CustomerCareRepository;
 public interface CustomerCareService {
 	CustomerCareRepository getRepo();
 	
-	void loadPotentialCustomersIntoCustomerCare();
+//	void loadPotentialCustomersIntoCustomerCare();
+	void saveCustomerCare();
 	
 	void createRemindersForCustomer(Customer customer);
 	
