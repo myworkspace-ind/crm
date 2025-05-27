@@ -80,7 +80,7 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	@Getter
 	CustomerStatusHistoryRepository customerStatusHistoryRepository;
-	
+
 	@Autowired
 	@Getter
 	StatusRepository statusRepository;
@@ -90,6 +90,12 @@ public class StorageServiceImpl implements StorageService {
 
 	@Value("${customer.care.max-care-days-potential-case1}")
 	private int reminderDaysForPotential_Case1;
+
+	@Value("${customer.care.days-ago-case1}")
+	private int daysAgo_case1;
+
+	@Value("${customer.care.days-ago-case2}")
+	private int daysAgo_case2;
 
 	@Value("${customer.main-status}")
 	private String mainStatuses;
@@ -111,45 +117,86 @@ public class StorageServiceImpl implements StorageService {
 //	}
 	@Override
 	public Customer saveOrUpdate(Customer customer) {
-	    // Kiểm tra trùng SĐT nếu có nhập
-	    if (customer.getPhone() != null && !customer.getPhone().isBlank()) {
-	        Optional<Customer> existingCustomerByPhone = customerRepo.findByPhone(customer.getPhone());
+		// Kiểm tra trùng SĐT nếu có nhập
+		if (customer.getPhone() != null && !customer.getPhone().isBlank()) {
+			Optional<Customer> existingCustomerByPhone = customerRepo.findByPhone(customer.getPhone());
 
-	        if (existingCustomerByPhone.isPresent()) {
-	            Customer optCustomer = existingCustomerByPhone.get();
+			if (existingCustomerByPhone.isPresent()) {
+				Customer optCustomer = existingCustomerByPhone.get();
 
-	            if (customer.getId() == null) {
-	                throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
-	            } else if (!customer.getId().equals(optCustomer.getId())) {
-	                throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
-	            }
-	        }
+				if (customer.getId() == null) {
+					throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+				} else if (!customer.getId().equals(optCustomer.getId())) {
+					throw new IllegalArgumentException("Số điện thoại đã được đăng ký trước đó. Vui lòng thử lại!");
+				}
+			}
 
-	        if (customer.getPhone().length() != 10) {
-	            throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
-	        }
-	    }
+			if (customer.getPhone().length() != 10) {
+				throw new IllegalArgumentException("Số điện thoại chưa đúng định dạng. Vui lòng nhập lại!");
+			}
+		}
 
-	    // Kiểm tra trùng email nếu có nhập
-	    if (customer.getEmail() != null && !customer.getEmail().isBlank()) {
-	        Optional<Customer> existingCustomerByEmail = customerRepo.findByEmail(customer.getEmail());
+		// Kiểm tra trùng email nếu có nhập
+		if (customer.getEmail() != null && !customer.getEmail().isBlank()) {
+			Optional<Customer> existingCustomerByEmail = customerRepo.findByEmail(customer.getEmail());
 
-	        if (existingCustomerByEmail.isPresent()) {
-	            Customer optCustomer = existingCustomerByEmail.get();
+			if (existingCustomerByEmail.isPresent()) {
+				Customer optCustomer = existingCustomerByEmail.get();
 
-	            if (customer.getId() == null) {
-	                throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
-	            } else if (!customer.getId().equals(optCustomer.getId())) {
-	                throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
-	            }
-	        }
-	    }
+				if (customer.getId() == null) {
+					throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+				} else if (!customer.getId().equals(optCustomer.getId())) {
+					throw new IllegalArgumentException("Email đã được đăng ký trước đó. Vui lòng thử lại!");
+				}
+			}
+		}
+		
+		 // Lấy trạng thái mới từ DB
+	    Long newStatusId = customer.getMainStatus() != null ? customer.getMainStatus().getId() : null;
+	    Status newStatus = newStatusId != null ? statusRepository.findById(newStatusId).orElse(null) : null;
+	    customer.setMainStatus(newStatus);
+	    
+		boolean isNew = (customer.getId() == null);
+		Status oldMainStatus = null;
 
-	    Long id = appRepo.saveOrUpdate(customer);
-	    if (id != null) {
-	        customer.setId(id);
-	    }
-	    return customer;
+		if (!isNew) {
+			Optional<Customer> existingOpt = customerRepo.findById(customer.getId());
+			if (existingOpt.isPresent()) {
+				oldMainStatus = existingOpt.get().getMainStatus();
+			}
+		}
+		
+		Long id = appRepo.saveOrUpdate(customer);
+		if (id != null) {
+			customer.setId(id);
+		}
+		
+		List<CustomerStatusHistory> historyList = customerStatusHistoryRepository.findByCustomerOrderByChangeDateAsc(customer);
+		int currentStage = getCurrentStage(historyList, newStatus);
+		log.debug("Calculated current stage: {}", currentStage);
+
+		CustomerStatusHistory mainStatusHistory = new CustomerStatusHistory();
+		mainStatusHistory.setCustomer(customer);
+		mainStatusHistory.setMainStatus(newStatus);
+		mainStatusHistory.setChangeDate(LocalDate.now());
+		mainStatusHistory.setStage(currentStage);
+		appRepo.saveCustomerStatusHistory(mainStatusHistory);
+
+//		if (customer.getMainStatus() != null && (isNew || oldMainStatus == null
+//				|| !(customer.getMainStatus().getId().equals(oldMainStatus.getId())) )) {
+//		
+//			List<CustomerStatusHistory> historyList = customerStatusHistoryRepository.findByCustomerOrderByChangeDateAsc(customer);
+//			int currentStage = getCurrentStage(historyList, newStatus);
+//			log.debug("Calculated current stage: {}", currentStage);
+//
+//			CustomerStatusHistory mainStatusHistory = new CustomerStatusHistory();
+//			mainStatusHistory.setCustomer(customer);
+//			mainStatusHistory.setMainStatus(newStatus);
+//			mainStatusHistory.setChangeDate(LocalDate.now());
+//			mainStatusHistory.setStage(currentStage);
+//			appRepo.saveCustomerStatusHistory(mainStatusHistory);
+//		}
+		return customer;
 	}
 
 //	@Override
@@ -298,12 +345,12 @@ public class StorageServiceImpl implements StorageService {
 
 		return lstOrderCategories;
 	}
-	
+
 	@Override
 	public Customer updateCustomerStatus(Customer customerInput) {
 		log.debug("Processing Customer with ID: {}", customerInput.getId());
 		log.debug("Processing Customer with mainStatus: {}", customerInput.getMainStatus().getId());
-		
+
 		Set<String> mainStatuses = getMainStatuses();
 		// ===== GHI LỊCH SỬ TRẠNG THÁI =====
 //		Optional<Customer> optionalCustomer = customerRepo.findById(customerInput.getId());
@@ -312,24 +359,23 @@ public class StorageServiceImpl implements StorageService {
 //			return customerInput;
 //		}
 //		Customer customer = optionalCustomer.get();
-		 // Lấy trạng thái mới từ DB bằng ID
-		
-	    Long newStatusId = customerInput.getMainStatus() != null ? customerInput.getMainStatus().getId() : null;
-	    Status newStatus = newStatusId != null ? statusRepository.findById(newStatusId).orElse(null) : null;
-	    customerInput.setMainStatus(newStatus);
-		
-		Long id = appRepo.updateCustomerStatus(customerInput);
+		// Lấy trạng thái mới từ DB bằng ID
+
+		Long newStatusId = customerInput.getMainStatus() != null ? customerInput.getMainStatus().getId() : null;
+		Status newStatus = newStatusId != null ? statusRepository.findById(newStatusId).orElse(null) : null;
+		customerInput.setMainStatus(newStatus);
+
+		Long id = appRepo.updateCustomerStatus(customerInput, daysAgo_case1, daysAgo_case2);
 		if (id != null) {
 			customerInput.setId(id);
 		}
 		log.debug("Final Customer ID : {}", customerInput.getId());
-		
-		
-		if (newStatus != null  && mainStatuses.contains(newStatus.getName())) {
+
+		if (newStatus != null && mainStatuses.contains(newStatus.getName())) {
 			log.debug("Status has changed and is in allowed mainStatuses. Proceeding to update...");
 
 			customerInput.setMainStatus(newStatus);
-			//appRepo.saveOrUpdate(customerInput); // chỉ để lưu, không gán lại
+			// appRepo.saveOrUpdate(customerInput); // chỉ để lưu, không gán lại
 			log.debug("Updated main status for customer in DB.");
 
 			List<CustomerStatusHistory> historyList = customerStatusHistoryRepository
@@ -342,7 +388,7 @@ public class StorageServiceImpl implements StorageService {
 			mainStatusHistory.setMainStatus(newStatus);
 			mainStatusHistory.setChangeDate(LocalDate.now());
 			mainStatusHistory.setStage(currentStage);
-			appRepo.save(mainStatusHistory);
+			appRepo.saveCustomerStatusHistory(mainStatusHistory);
 			log.debug("Saved new CustomerStatusHistory: {}", mainStatusHistory);
 		} else {
 			log.debug(
@@ -417,7 +463,7 @@ public class StorageServiceImpl implements StorageService {
 		if (lastName.equals("Back")) {
 			return last.getStage() + 1;
 		}
-		
+
 		log.debug("Current stage: {}" + last.getStage());
 
 		return last.getStage();
@@ -664,6 +710,6 @@ public class StorageServiceImpl implements StorageService {
 
 	@Override
 	public void deleteFileById(Long fileId) {
-	    appRepo.deleteFileById(fileId);
+		appRepo.deleteFileById(fileId);
 	}
 }

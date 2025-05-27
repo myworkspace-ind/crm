@@ -72,7 +72,7 @@ function showMessageNotification(customer, backgroundColorClass) {
 	}
 
 	let currentTime = now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
-	
+
 	const reminderItem = document.createElement("li");
 	reminderItem.classList.add("mb-3");
 	reminderItem.setAttribute("data-id", customer.id);
@@ -148,7 +148,7 @@ function checkUncaredCustomers() {
 	}
 
 	rows.each(function(index) {
-		let status = $(this).find('td:nth-child(8)').text().trim();
+		let status = $(this).find('td:nth-child(9)').text().trim();
 		console.log(`📌 Hàng ${index + 1}: Tình trạng - '${status}'`);
 
 		if (status === "Chưa chăm sóc") {
@@ -546,6 +546,26 @@ $(document).ready(function() {
 								targets: 5,
 								data: null,
 								render: function(data, type, row, meta) {
+									let mainStatus = row[5];
+
+									if (mainStatus) {
+										switch (mainStatus) {
+											case "New":
+												return `<span class="badge badge-new">${mainStatus}</span>`;
+											case "Potential":
+												return `<span class="badge badge-potential">${mainStatus}</span>`;
+											case "Converted":
+												return `<span class="badge badge-stay">${mainStatus}</span>`;
+											default:
+												return `<span class="badge badge-default">${mainStatus || "Chưa có dữ liệu"}</span>`;
+										}
+									}
+								}
+							},
+							{
+								targets: 6,
+								data: null,
+								render: function(data, type, row, meta) {
 									return `
 							      <div class="interaction-btn-customer-care" style="cursor: pointer;">
 							        <button 
@@ -559,7 +579,7 @@ $(document).ready(function() {
 								}
 							},
 							{
-								targets: 6,
+								targets: 7,
 								data: null,
 								render: function(data, type, row, meta) {
 									let priority = row[6];
@@ -595,7 +615,7 @@ $(document).ready(function() {
 								}
 							},
 							{
-								targets: 7,
+								targets: 8,
 								render: function(data, type, row, meta) {
 									if (!data || data.trim() === "") {
 										data = "Chưa chăm sóc";
@@ -647,7 +667,7 @@ $(document).ready(function() {
 							},
 
 							{
-								targets: 8,
+								targets: 9,
 								data: null,
 								defaultContent: `
 															<div class="action-care">
@@ -662,6 +682,7 @@ $(document).ready(function() {
 																</button>
 															</div>`
 							},
+
 						],
 						createdRow: function(row, data, dataIndex) {
 							let priority = data[6];

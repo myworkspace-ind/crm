@@ -47,6 +47,14 @@ public class CustomerCare implements Serializable{
 	@Column(name = "remind_date")
     //@Temporal(TemporalType.DATE)
     private LocalDateTime remindDate;
+	
+	@ManyToOne
+	@JoinColumn(name = "previous_main_status_id")
+	private Status previousMainStatus;
+
+	@ManyToOne
+	@JoinColumn(name = "current_main_status_id")
+	private Status currentMainStatus;
 
 	public CustomerCare(Long id, Customer customer, String priority, String careStatus, LocalDateTime remindDate) {
 		super();

@@ -52,7 +52,7 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 //	);
 	
 	 @Query("SELECT c FROM Customer c " +
-	           "WHERE c.mainStatus.name = 'Tiềm năng' " +
+	           "WHERE c.mainStatus.name = 'Potential' " +
 	           "AND EXISTS ( " +
 	           "    SELECT 1 FROM Interaction iSub " +
 	           "    WHERE iSub.customer.id = c.id " +
@@ -135,4 +135,8 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 	
 	@Query("SELECT COUNT(c) > 0 FROM CustomerCare c WHERE c.id = :customerCareId")
 	boolean existsByCustomeCareId(@Param("customerCareId") Long customerCareId);
+	
+	@Query("SELECT cc FROM CustomerCare cc WHERE cc.customer.id = :customerId")
+	List<CustomerCare> findByCustomerId(@Param("customerId") Long customerId);
+
 }

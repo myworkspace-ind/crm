@@ -63,7 +63,9 @@ public class AppRepository {
 
 	@Autowired
 	OrderCategoryRepository orderCategoryRepository;
-
+	
+	@Autowired
+	CustomerCareRepository customerCareRepository;
 	
 //	public Long saveOrUpdate(Customer customer) {
 //		Long id;
@@ -916,12 +918,12 @@ public class AppRepository {
 		}
 	}
 
-	public Long updateCustomerStatus(Customer customer) {
+	public Long updateCustomerStatus(Customer customer, int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential) {
 		Long id = null;
 
 		if (customer.getId() != null) {
 			log.debug("Updating existing customer with ID: {}", customer.getId());
-			updateCustomerStatusFunction(customer);
+			updateCustomerStatusFunction(customer, reminderDaysForNewWithEmptyInteraction, reminderDaysForPotential);
 			id = customer.getId();
 		}
 
@@ -929,23 +931,136 @@ public class AppRepository {
 		return id;
 	}
 
-	private void updateCustomerStatusFunction(Customer customer) {
-		if (customer == null || customer.getMainStatus() == null || customer.getMainStatus().getId() == null
-				|| customer.getSubStatus() == null || customer.getSubStatus().getId() == null) {
-			throw new IllegalArgumentException("Customer or Statuses are invalid");
+//	private void updateCustomerStatusFunction(Customer customer) {
+//		if (customer == null || customer.getMainStatus() == null || customer.getMainStatus().getId() == null
+//				|| customer.getSubStatus() == null || customer.getSubStatus().getId() == null) {
+//			throw new IllegalArgumentException("Customer or Statuses are invalid");
+//		}
+//
+//		String updateSql = "UPDATE crm_customer SET main_status_id = ?, sub_status_id = ? WHERE id = ?";
+//
+//		int rowsUpdated = jdbcTemplate0.update(updateSql, customer.getMainStatus().getId(),
+//				customer.getSubStatus().getId(), customer.getId());
+//
+//		if (rowsUpdated > 0) {
+//			log.debug("Customer statuses updated successfully for customer ID: {}", customer.getId());
+//		} else {
+//			log.warn("No customer found with ID: {}", customer.getId());
+//		}
+//	}
+	
+	private void updateCustomerStatusFunction(Customer customer, int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential ) {
+		if (customer == null || customer.getId() == null) {
+			throw new IllegalArgumentException("Customer or Customer ID is invalid");
 		}
 
-		String updateSql = "UPDATE crm_customer SET main_status_id = ?, sub_status_id = ? WHERE id = ?";
+		// Lấy customer từ DB để biết trạng thái cũ
+		Customer existingCustomer = customerRepository.findById(customer.getId())
+			.orElseThrow(() -> new IllegalArgumentException("Customer not found"));
 
-		int rowsUpdated = jdbcTemplate0.update(updateSql, customer.getMainStatus().getId(),
-				customer.getSubStatus().getId(), customer.getId());
+		Status oldMainStatus = existingCustomer.getMainStatus(); // ✅ Trạng thái cũ
+		Status newMainStatus = customer.getMainStatus();         // ✅ Trạng thái mới
+
+		List<Object> params = new ArrayList<>();
+		StringBuilder sql = new StringBuilder("UPDATE crm_customer SET ");
+
+		boolean hasMainStatus = newMainStatus != null && newMainStatus.getId() != null;
+		boolean hasSubStatus = customer.getSubStatus() != null && customer.getSubStatus().getId() != null;
+
+		if (!hasMainStatus && !hasSubStatus) {
+			throw new IllegalArgumentException("At least one status must be provided");
+		}
+
+		if (hasMainStatus) {
+			sql.append("main_status_id = ?");
+			params.add(newMainStatus.getId());
+		}
+
+		if (hasSubStatus) {
+			if (hasMainStatus) {
+				sql.append(", ");
+			}
+			sql.append("sub_status_id = ?");
+			params.add(customer.getSubStatus().getId());
+		}
+
+		sql.append(" WHERE id = ?");
+		params.add(customer.getId());
+
+		int rowsUpdated = jdbcTemplate0.update(sql.toString(), params.toArray());
 
 		if (rowsUpdated > 0) {
 			log.debug("Customer statuses updated successfully for customer ID: {}", customer.getId());
+
+			// ✅ Gọi hàm cập nhật CustomerCare
+			updateCustomerCareStatus(customer.getId(), oldMainStatus, newMainStatus, reminderDaysForNewWithEmptyInteraction, reminderDaysForPotential);
+
 		} else {
 			log.warn("No customer found with ID: {}", customer.getId());
 		}
 	}
+
+	private void updateCustomerCareStatus(Long customerId, Status oldMainStatus, Status newMainStatus, int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential) {
+		List<CustomerCare> careList = customerCareRepository.findByCustomerId(customerId);
+
+		String sql = "UPDATE crm_customer_care SET previous_main_status_id = ?, current_main_status_id = ? WHERE id = ?";
+
+		List<Object[]> batchParams = new ArrayList<>();
+
+		for (CustomerCare care : careList) {
+			Object[] params = new Object[] {
+				oldMainStatus != null ? oldMainStatus.getId() : null,
+				newMainStatus != null ? newMainStatus.getId() : null,
+				care.getId()
+			};
+			batchParams.add(params);
+		}
+
+		if (!batchParams.isEmpty()) {
+			jdbcTemplate0.batchUpdate(sql, batchParams);
+		}
+	}
+	
+//	private void updateCustomerStatusFunction(Customer customer) {
+//		if (customer == null || customer.getId() == null) {
+//			throw new IllegalArgumentException("Customer or Customer ID is invalid");
+//		}
+//
+//		List<Object> params = new ArrayList<>();
+//		StringBuilder sql = new StringBuilder("UPDATE crm_customer SET ");
+//
+//		boolean hasMainStatus = customer.getMainStatus() != null && customer.getMainStatus().getId() != null;
+//		boolean hasSubStatus = customer.getSubStatus() != null && customer.getSubStatus().getId() != null;
+//
+//		if (!hasMainStatus && !hasSubStatus) {
+//			throw new IllegalArgumentException("At least one status must be provided");
+//		}
+//
+//		if (hasMainStatus) {
+//			sql.append("main_status_id = ?");
+//			params.add(customer.getMainStatus().getId());
+//		}
+//
+//		if (hasSubStatus) {
+//			if (hasMainStatus) {
+//				sql.append(", ");
+//			}
+//			sql.append("sub_status_id = ?");
+//			params.add(customer.getSubStatus().getId());
+//		}
+//
+//		sql.append(" WHERE id = ?");
+//		params.add(customer.getId());
+//
+//		int rowsUpdated = jdbcTemplate0.update(sql.toString(), params.toArray());
+//
+//		if (rowsUpdated > 0) {
+//			log.debug("Customer statuses updated successfully for customer ID: {}", customer.getId());
+//		} else {
+//			log.warn("No customer found with ID: {}", customer.getId());
+//		}
+//	}
+
 
 	public void saveHistory(HistoryOrder historyOrder) {
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_history_order")
@@ -1046,12 +1161,12 @@ public class AppRepository {
 //			}
 
 			reminderTime = null;
-			if ("Mới".equalsIgnoreCase(mainStatus)) {
+			if ("New".equalsIgnoreCase(mainStatus)) {
 				createdAt = care.getCustomer().getCreatedAt();
 				if (createdAt != null) {
 					reminderTime = createdAt.plusDays(reminderDaysForNewWithEmptyInteraction);
 				}
-			} else if ("Tiềm năng".equalsIgnoreCase(mainStatus)) {
+			} else if ("Potential".equalsIgnoreCase(mainStatus)) {
 				latestInteraction = jdbcTemplate0.queryForObject(maxInteractionSql, Timestamp.class, customerId);
 				if (latestInteraction != null) {
 					reminderTime = latestInteraction.toLocalDateTime().plusDays(reminderDaysForPotential);
@@ -1177,7 +1292,7 @@ public class AppRepository {
 	    );
 	}
 	
-	public void save(CustomerStatusHistory history) {
+	public void saveCustomerStatusHistory(CustomerStatusHistory history) {
 	    String sql = "INSERT INTO crm_customer_status_history (customer_id, status_id, change_date, stage) " +
 	                 "VALUES (?, ?, ?, ?)";
 

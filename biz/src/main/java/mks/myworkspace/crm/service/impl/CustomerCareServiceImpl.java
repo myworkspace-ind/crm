@@ -63,40 +63,40 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	 * @throws RuntimeException if there are no potential customers to insert,
 	 *                          or if an error occurs during insertion.
 	 */
-//	@Override
-//	public void loadPotentialCustomersIntoCustomerCare() {
-//		log.debug("Vào được đây");
-//	    try {
-//	        LocalDateTime case1DaysAgo = LocalDateTime.now().minusDays(daysAgo_case1);         
-//	        LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2); 
-//	        LocalDateTime now = LocalDateTime.now();                                  
-//
-//	        // Gọi 3 phương thức đã tách riêng
-//	        List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(case1DaysAgo);
-//	        List<Customer> potentialCustomers = repo.findPotentialCustomers(case2DaysAgo);
-//	        //List<Customer> remindCustomers = repo.findRemindCustomers(now);
-//
-//	        // Gộp lại, dùng Set để loại trùng nếu có
-//	        Set<Customer> allCustomersSet = new HashSet<>();
-//	        allCustomersSet.addAll(newCustomers);
-//	        allCustomersSet.addAll(potentialCustomers);
-//	        //allCustomersSet.addAll(remindCustomers);
-//
-//	        if (allCustomersSet.isEmpty()) {
-//	            throw new RuntimeException("Không có khách hàng nào đủ điều kiện để nạp vào CustomerCare.");
-//	        }
-//
-//	        // Tạo danh sách CustomerCare từ danh sách khách hàng
-//	        List<CustomerCare> customerCares = allCustomersSet.stream()
-//	            .map(customer -> new CustomerCare(null, customer, null, null, null)) // ID = null để auto, các field còn lại null
-//	            .collect(Collectors.toList());
-//
-//	        // Lưu vào DB
-//	        appRepository.insertCustomerCare(customerCares, daysAgo_case1, daysAgo_case2);
-//	    } catch (Exception e) {
-//	        throw new RuntimeException("Lỗi khi nạp khách hàng vào CustomerCare: " + e.getMessage(), e);
-//	    }
-//	}
+	@Override
+	public void loadPotentialCustomersIntoCustomerCare() {
+		log.debug("Vào được đây");
+	    try {
+	        LocalDateTime case1DaysAgo = LocalDateTime.now().minusDays(daysAgo_case1);         
+	        LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2); 
+	        LocalDateTime now = LocalDateTime.now();                                  
+
+	        // Gọi 3 phương thức đã tách riêng
+	        List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(case1DaysAgo);
+	        List<Customer> potentialCustomers = repo.findPotentialCustomers(case2DaysAgo);
+	        //List<Customer> remindCustomers = repo.findRemindCustomers(now);
+
+	        // Gộp lại, dùng Set để loại trùng nếu có
+	        Set<Customer> allCustomersSet = new HashSet<>();
+	        allCustomersSet.addAll(newCustomers);
+	        allCustomersSet.addAll(potentialCustomers);
+	        //allCustomersSet.addAll(remindCustomers);
+
+	        if (allCustomersSet.isEmpty()) {
+	            throw new RuntimeException("Không có khách hàng nào đủ điều kiện để nạp vào CustomerCare.");
+	        }
+
+	        // Tạo danh sách CustomerCare từ danh sách khách hàng
+	        List<CustomerCare> customerCares = allCustomersSet.stream()
+	            .map(customer -> new CustomerCare(null, customer, null, null, null)) // ID = null để auto, các field còn lại null
+	            .collect(Collectors.toList());
+
+	        // Lưu vào DB
+	        appRepository.insertCustomerCare(customerCares, daysAgo_case1, daysAgo_case2);
+	    } catch (Exception e) {
+	        throw new RuntimeException("Lỗi khi nfạp khách hàng vào CustomerCare: " + e.getMessage(), e);
+	    }
+	}
 
 //	@Override
 //	public void loadPotentialCustomersIntoCustomerCare() {
@@ -228,9 +228,9 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 		
 	}
 
-	@Override
-	public void saveCustomerCare() {
-		log.debug("Vào được đây");
-	}
+//	@Override
+//	public void saveCustomerCare() {
+//		log.debug("Vào được đây");
+//	}
 
 }
