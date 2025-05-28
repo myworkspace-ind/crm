@@ -1238,7 +1238,7 @@ public class AppRepository {
 		String updateSql = "UPDATE crm_customer_care c " + "LEFT JOIN ( "
 				+ "    SELECT i1.* FROM crm_customer_interaction i1 " + "    INNER JOIN ( "
 				+ "        SELECT customer_id, MAX(created_at) AS latest_created "
-				+ "        FROM crm_customer_interaction " + "        GROUP BY customer_id "
+				+ "        FROM crm_customer_interaction " + "     GROUP BY customer_id "
 				+ "    ) i2 ON i1.customer_id = i2.customer_id AND i1.created_at = i2.latest_created "
 				+ ") latest_interaction ON c.customer_id = latest_interaction.customer_id "
 				+ "JOIN crm_customer cu ON cu.id = c.customer_id " + "JOIN crm_status s ON s.id = cu.main_status_id "

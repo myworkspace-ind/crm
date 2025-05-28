@@ -34,7 +34,7 @@ public class Status implements Serializable {
 //	@Column(name = "site_id", length = 99)
 //	private String siteId;
 
-	@Column(name = "name", length = 99)
+	@Column(name = "name", length = 255)
 	private String name;
 
 	@Column(name = "backgroundColor", length = 99)

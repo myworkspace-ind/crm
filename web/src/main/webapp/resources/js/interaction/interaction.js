@@ -347,7 +347,7 @@ function buttonRenderer(instance, td, row, col, prop, value, cellProperties) {
 			Swal.fire({
 				icon: 'warning',
 				title: 'Chưa có Interaction ID',
-				text: 'Vui lòng lưu tương tác trước khi upload file bạn nhé!.',
+				text: 'Vui lòng LƯU TƯƠNG TÁC trước khi upload file hoặc TẢI LẠI TRANG bạn nhé!.',
 				confirmButtonText: 'OK'
 			});
 			return;

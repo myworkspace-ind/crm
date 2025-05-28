@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -41,10 +44,10 @@ public class Customer implements Serializable {
 //	@Column(name = "site_id", length = 99)
 //	private String siteId;
 
-	@Column(name = "company_name", length = 99)
+	@Column(name = "company_name", length = 255)
 	private String companyName;
 	
-	@Column(name = "contact_person", length = 99) 
+	@Column(name = "contact_person", length = 255) 
 	private String contactPerson;
 	
 	@Column(name = "email", length = 99)
@@ -112,6 +115,9 @@ public class Customer implements Serializable {
     
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Appointment> appoinments;
+    
+    @ManyToMany(mappedBy = "customers", fetch = FetchType.LAZY)
+    private Set<Task> tasks = new HashSet<>();
     
 	public Customer(Long id) {
 		super();

@@ -33,7 +33,7 @@ public class ResponsiblePerson implements Serializable {
 //    @Column(name = "site_id", length = 99)
 //	private String siteId;
 
-    @Column(name = "name", length = 99, nullable = false)
+    @Column(name = "name", length = 255, nullable = false)
     private String name;  // Tên người phụ trách
 
     @Column(name = "note", length = 255)

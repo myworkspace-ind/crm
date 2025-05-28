@@ -33,7 +33,7 @@ public class Profession implements Serializable {
 //    @Column(name = "site_id", length = 99)
 //	private String siteId;
 
-    @Column(name = "name", length = 99, nullable = false)
+    @Column(name = "name", length = 255, nullable = false)
     private String name;  // Tên ngành nghề
 
     @Column(name = "note", length = 255)

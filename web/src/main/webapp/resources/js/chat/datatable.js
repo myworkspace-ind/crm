@@ -380,7 +380,7 @@ $(document).ready(function() {
 
 
 	$('#tblDatatableCustomerCare tbody').on('click', '.care-button', function() {
-		alert("Đã click vào nút Chăm sóc");
+		//alert("Đã click vào nút Chăm sóc");
 		//		let rowData = $('#tblDatatableCustomerCare').DataTable().row($(this).parents('tr')).data();
 		//		console.log("Dữ liệu hàng:", rowData);
 		//
@@ -669,19 +669,26 @@ $(document).ready(function() {
 							{
 								targets: 9,
 								data: null,
-								defaultContent: `
-															<div class="action-care">
-																<button class="care-button">
-																	<span class="icon"></span>
-																	<span class="text">Chăm sóc</span>
-																</button>
-																
-																<button class="meet-button">
-																	<span class="icon"></span>
-																	<span class="text">Hẹn gặp mặt</span>
-																</button>
-															</div>`
-							},
+								render: function (data, type, row, meta) {
+									return `
+										<div class="action-care">
+											<button 
+												class="care-button" 
+												data-bs-toggle="modal" 
+												data-bs-target="#myInteractionCustomerCaresModal"
+												data-customer-id="${row[1]}"
+											>
+												<span class="icon"></span>
+												<span class="text">Chăm sóc</span>
+											</button>
+											
+											<button class="meet-button">
+												<span class="icon"></span>
+												<span class="text">Hẹn gặp mặt</span>
+											</button>
+										</div>`;
+								}
+							}
 
 						],
 						createdRow: function(row, data, dataIndex) {
