@@ -494,7 +494,7 @@ $(document).ready(function() {
 								targets: 3,
 								render: function(data, type, row, meta) {
 									let contactName = data || "Không có tên";
-									let statusData = row[7] || "";
+									let statusData = row[8] || "";
 
 									// Chuyển đổi status thành mảng
 									let statuses = statusData.split(",").map(s => s.trim());
@@ -582,7 +582,7 @@ $(document).ready(function() {
 								targets: 7,
 								data: null,
 								render: function(data, type, row, meta) {
-									let priority = row[6];
+									let priority = row[7];
 
 									if (priority) {
 										switch (priority) {

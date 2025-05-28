@@ -60,6 +60,17 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 	           "    HAVING MAX(iSub.createdAt) < :caseDaysAgo_2 " +
 	           ")")
 	 List<Customer> findPotentialCustomers(@Param("caseDaysAgo_2") LocalDateTime caseDaysAgo_2);
+	 
+	 @Query("SELECT c FROM Customer c " +
+		       "JOIN FETCH c.mainStatus " + // fetch luôn status nếu bạn cần
+		       "WHERE c.mainStatus.name = 'New' " +
+		       "AND EXISTS ( " +
+		       "    SELECT 1 FROM Interaction iSub " +
+		       "    WHERE iSub.customer.id = c.id " +
+		       "    GROUP BY iSub.customer.id " +
+		       "    HAVING MAX(iSub.createdAt) < :caseDaysAgo_3 " +
+		       ")")
+	List<Customer> findNewCustomersWithInteractionNotNull(@Param("caseDaysAgo_3") LocalDateTime caseDaysAgo_3);
 	
 //	@Query("SELECT c FROM Customer c " +
 //		       "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +

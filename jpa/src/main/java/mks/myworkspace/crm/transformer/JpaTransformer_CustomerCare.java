@@ -16,7 +16,7 @@ import mks.myworkspace.crm.entity.Status;
 @Slf4j
 public class JpaTransformer_CustomerCare {
 	
-	public static List<Object[]> convert2D_Customers(List<Customer> lstCustomers, int reminderDays, int reminderDaysCase2) {
+	public static List<Object[]> convert2D_Customers(List<Customer> lstCustomers, int reminderDays, int reminderDaysCase2, int reminderDaysCase3) {
 		if (lstCustomers == null || lstCustomers.isEmpty()) {
 			return null;
 		}
@@ -45,7 +45,7 @@ public class JpaTransformer_CustomerCare {
 	        String mainStatus = rowData[5].toString();
 
 			if ("New".equals(mainStatus)) {
-				// Nếu là khách hàng mới và chưa có interaction nào
+				// Nếu là khách hàng New và chưa có interaction nào
 				if (customerCare.getInteractions() == null || customerCare.getInteractions().isEmpty()) {
 					if (customerCare.getCreatedAt() != null) {
 						LocalDateTime reminderDate = customerCare.getCreatedAt().plusDays(reminderDays);
@@ -53,11 +53,22 @@ public class JpaTransformer_CustomerCare {
 					} else {
 						rowData[10] = "Không xác định";
 					}
-				} else {
+					// Nếu là New và có interaction, lấy interaction mới nhất
+				} else if (customerCare.getInteractions() != null && !customerCare.getInteractions().isEmpty()) {
+					Optional<Interaction> latestInteraction = customerCare.getInteractions().stream()
+							.filter(i -> i.getCreatedAt() != null).max(Comparator.comparing(Interaction::getCreatedAt));
+
+					if (latestInteraction.isPresent()) {
+						LocalDateTime reminderDate = latestInteraction.get().getCreatedAt().plusDays(reminderDaysCase3);
+						rowData[10] = reminderDate.format(formatter);
+					} else {
+						rowData[10] = "Không xác định";
+					}
+				}else {
 					rowData[10] = "Đã có interaction";
 				}
 			} else if ("Potential".equals(mainStatus)) {
-				// Nếu là Tiềm năng và có interaction, lấy interaction mới nhất
+				// Nếu là Potential và có interaction, lấy interaction mới nhất
 				if (customerCare.getInteractions() != null && !customerCare.getInteractions().isEmpty()) {
 					Optional<Interaction> latestInteraction = customerCare.getInteractions().stream()
 							.filter(i -> i.getCreatedAt() != null).max(Comparator.comparing(Interaction::getCreatedAt));
@@ -157,8 +168,8 @@ public class JpaTransformer_CustomerCare {
 	            rowData[5] = "Không xác định";
 	        }
 	        
-	        rowData[6] = customerCare.getPriority();
-	        rowData[7] = customerCare.getCareStatus(); 
+	        rowData[7] = customerCare.getPriority();
+	        rowData[8] = customerCare.getCareStatus(); 
 	        
 	        if (customerCare.getRemindDate() != null) {
                 LocalDateTime reminderDate = customerCare.getRemindDate();

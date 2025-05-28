@@ -59,6 +59,9 @@ public class CustomerCareController extends BaseController {
 
 	@Value("${customer.care.days-ago-case2}")
 	private int reminderDays_case2;
+	
+	@Value("${customer.care.days-ago-case3}")
+	private int reminderDays_case3;
 
 	@Value("${customer.care.max-care-days-new-case1}")
 	private int checkCareStatusDaysForNew_Case1;
@@ -232,7 +235,7 @@ public class CustomerCareController extends BaseController {
 						// TODO: Bổ sung logic: Nếu là khách hàng Potential & latestCreatedAtInteraction
 						// + reminderDays_case2 < thời gian hiện tại
 						// thì thêm vào customersWithoutData
-						if ("Potential".equalsIgnoreCase(c.getMainStatus().getName())) {
+						if ("Potential".equalsIgnoreCase(c.getMainStatus().getName()) ) {
 							LocalDateTime remindTime = interactionTime.plusDays(reminderDays_case2);
 
 							if (remindTime.isBefore(LocalDateTime.now())) {
@@ -243,6 +246,23 @@ public class CustomerCareController extends BaseController {
 								if (!isAlreadyReminded) {
 									log.debug(
 											"⚠️ Thêm khách hàng Potential cần chăm sóc (New thời điểm): ID {}, Name {}, RemindTime {}",
+											c.getId(), c.getCompanyName(), remindTime);
+									customersWithoutData.add(c);
+								}
+							}
+						}
+						
+						if ("New".equalsIgnoreCase(c.getMainStatus().getName()) ) {
+							LocalDateTime remindTime = interactionTime.plusDays(reminderDays_case3);
+
+							if (remindTime.isBefore(LocalDateTime.now())) {
+								boolean isAlreadyReminded = customersWithCareData.stream()
+										.anyMatch(cc -> cc.getCustomer().getId().equals(c.getId())
+												&& cc.getRemindDate() != null && cc.getRemindDate().equals(remindTime));
+
+								if (!isAlreadyReminded) {
+									log.debug(
+											"⚠️ Thêm khách hàng New cần chăm sóc (New thời điểm): ID {}, Name {}, RemindTime {}",
 											c.getId(), c.getCompanyName(), remindTime);
 									customersWithoutData.add(c);
 								}
@@ -261,7 +281,7 @@ public class CustomerCareController extends BaseController {
 			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
 					allCustomers, allStatuses);
 			List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData,
-					reminderDays, reminderDays_case2);
+					reminderDays, reminderDays_case2, reminderDays_case3);
 
 			// Gom tất cả lại và trả về response
 			Map<String, Object> response = new HashMap<>();
@@ -394,7 +414,7 @@ public class CustomerCareController extends BaseController {
 						// TODO: Bổ sung logic: Nếu là khách hàng Potential & latestCreatedAtInteraction
 						// + reminderDays_case2 < thời gian hiện tại
 						// thì thêm vào customersWithoutData
-						if ("Potential".equalsIgnoreCase(c.getMainStatus().getName())) {
+						if ( "Potential".equalsIgnoreCase(c.getMainStatus().getName()) ) {
 							LocalDateTime remindTime = interactionTime.plusDays(reminderDays_case2);
 
 							if (remindTime.isBefore(LocalDateTime.now())) {
@@ -405,6 +425,22 @@ public class CustomerCareController extends BaseController {
 								if (!isAlreadyReminded) {
 									log.debug(
 											"⚠️ Thêm khách hàng Potential cần chăm sóc (New thời điểm): ID {}, Name {}, RemindTime {}",
+											c.getId(), c.getCompanyName(), remindTime);
+									customersWithoutData.add(c);
+								}
+							}
+						}
+						if ("New".equalsIgnoreCase(c.getMainStatus().getName()) ) {
+							LocalDateTime remindTime = interactionTime.plusDays(reminderDays_case3);
+
+							if (remindTime.isBefore(LocalDateTime.now())) {
+								boolean isAlreadyReminded = customersWithCareData.stream()
+										.anyMatch(cc -> cc.getCustomer().getId().equals(c.getId())
+												&& cc.getRemindDate() != null && cc.getRemindDate().equals(remindTime));
+
+								if (!isAlreadyReminded) {
+									log.debug(
+											"⚠️ Thêm khách hàng New cần chăm sóc (New thời điểm): ID {}, Name {}, RemindTime {}",
 											c.getId(), c.getCompanyName(), remindTime);
 									customersWithoutData.add(c);
 								}
@@ -423,7 +459,7 @@ public class CustomerCareController extends BaseController {
 			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
 					allCustomers, allStatuses);
 			List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData,
-					reminderDays, reminderDays_case2);
+					reminderDays, reminderDays_case2, reminderDays_case3);
 
 			// Gom tất cả lại và trả về response
 			Map<String, Object> response = new HashMap<>();

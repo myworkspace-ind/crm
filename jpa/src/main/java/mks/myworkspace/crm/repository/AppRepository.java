@@ -25,18 +25,17 @@ import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 /**
- * This repository class is used for handling data operations such as insert, udpate, delete and 
- * hide releted to various entities in the application.
+ * This repository class is used for handling data operations such as insert,
+ * udpate, delete and hide releted to various entities in the application.
  * <p>
- * This class uses {@link JdbcTemplate} and {@link SimpleJdbcInsert} for executing
- * SQL operations directly on the database.
+ * This class uses {@link JdbcTemplate} and {@link SimpleJdbcInsert} for
+ * executing SQL operations directly on the database.
  * </p>
  * 
  * It also interacts with multiple repositories such as:
- * {@link CustomerRepository}, {@link OrderStatusRepository}, {@link GoodsCategoryRepository}, 
- * and {@link OrderCategoryRepository}.
+ * {@link CustomerRepository}, {@link OrderStatusRepository},
+ * {@link GoodsCategoryRepository}, and {@link OrderCategoryRepository}.
  * 
  * Logging is supported via Lombok's {@code @Slf4j}.
  * 
@@ -63,10 +62,10 @@ public class AppRepository {
 
 	@Autowired
 	OrderCategoryRepository orderCategoryRepository;
-	
+
 	@Autowired
 	CustomerCareRepository customerCareRepository;
-	
+
 //	public Long saveOrUpdate(Customer customer) {
 //		Long id;
 //		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_customer")
@@ -99,8 +98,7 @@ public class AppRepository {
 			Long id;
 
 			MapSqlParameterSource params = new MapSqlParameterSource()
-					.addValue("interaction_date", entity.getInteractionDate())
-					.addValue("content", entity.getContent())
+					.addValue("interaction_date", entity.getInteractionDate()).addValue("content", entity.getContent())
 					.addValue("next_plan", entity.getNextPlan())
 					.addValue("customer_id", entity.getCustomer() != null ? entity.getCustomer().getId() : null)
 					.addValue("contact_person", entity.getContactPerson())
@@ -136,7 +134,7 @@ public class AppRepository {
 			log.warn("No interaction found with ID {} to delete.", interactionId);
 		}
 	}
-	
+
 	public void deletePersonById(Long Id) {
 		// Tạo câu lệnh DELETE với ID duy nhất
 		String sql = "DELETE FROM crm_responsible_person WHERE id = ?";
@@ -151,6 +149,7 @@ public class AppRepository {
 			log.warn("No Responsible Person found with ID {} to delete.", Id);
 		}
 	}
+
 	public void deleteStatusById(Long Id) {
 		// Tạo câu lệnh DELETE với ID duy nhất
 		String sql = "DELETE FROM crm_status WHERE id = ?";
@@ -165,6 +164,7 @@ public class AppRepository {
 			log.warn("No Status found with ID {} to delete.", Id);
 		}
 	}
+
 	public void deleteProfessionById(Long Id) {
 		// Tạo câu lệnh DELETE với ID duy nhất
 		String sql = "DELETE FROM crm_profession WHERE id = ?";
@@ -206,7 +206,8 @@ public class AppRepository {
 		// Log the result
 		if (rowsUpdated > 0) {
 			log.info("✅ Interaction cập nhật thành công: ID={} | Date={} | Content={} | NextPlan={} | ContactPerson={}",
-	                 entity.getId(), entity.getInteractionDate(), entity.getContent(), entity.getNextPlan(), entity.getContactPerson());
+					entity.getId(), entity.getInteractionDate(), entity.getContent(), entity.getNextPlan(),
+					entity.getContactPerson());
 		} else {
 			log.warn("No interaction found with ID: {}", entity.getId());
 		}
@@ -241,6 +242,7 @@ public class AppRepository {
 
 		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getId());
 	}
+
 	public List<Long> saveOrUpdateProfession(List<Profession> entities) {
 		List<Long> ids = new ArrayList<Long>(); // Id of records after save or update.
 
@@ -269,6 +271,7 @@ public class AppRepository {
 		String sql = String.format("UPDATE %s SET seqno = ? WHERE id = ?", tableName);
 		jdbcTemplate0.update(sql, id, id); // Set seqno = id
 	}
+
 	private void updateProfession(Profession e) {
 		// TODO Auto-generated method stub
 		String updateSql = "UPDATE crm_profession SET name = ?, note = ?, seqno = ? WHERE id = ?";
@@ -299,7 +302,7 @@ public class AppRepository {
 
 		return ids;
 	}
-	
+
 	private void updateGoodsCategory(GoodsCategory e) {
 		// TODO Auto-generated method stub
 		String updateSql = "UPDATE crm_goodscategory SET name = ?, note = ?, seqno = ? WHERE id = ?";
@@ -368,6 +371,7 @@ public class AppRepository {
 
 		jdbcTemplate0.update(updateSql, e.getName(), e.getNote(), e.getSeqno(), e.getId());
 	}
+
 	public Long saveOrUpdate(Customer customer) {
 		Long id;
 		if (customer.getAccountStatus() == null) {
@@ -392,7 +396,7 @@ public class AppRepository {
 		id = createGmail(emailToCustomer);
 		return id;
 	}
-	
+
 	public Long saveEmailToCustomer(EmailToCustomer emailToCustomer) {
 		Long id;
 		id = createEmail(emailToCustomer);
@@ -403,17 +407,14 @@ public class AppRepository {
 		Map<String, Object> parameters = new HashMap<>();
 
 		String getAddressIdSql = "SELECT address_id FROM crm_customer WHERE id = ?";
-		Long addressId = jdbcTemplate0.queryForObject(getAddressIdSql, new Object[]{customer.getId()}, Long.class);
+		Long addressId = jdbcTemplate0.queryForObject(getAddressIdSql, new Object[] { customer.getId() }, Long.class);
 
 		if (customer.getAddress() != null) {
 			customer.getAddress().setId(addressId);
 			log.debug("Updating address with ID: {}", addressId);
-			log.debug("Street: {}, Ward: {}, District: {}, State: {}",
-					customer.getAddress().getStreet(),
-					customer.getAddress().getWard(),
-					customer.getAddress().getDistrict(),
-					customer.getAddress().getState()
-			);
+			log.debug("Street: {}, Ward: {}, District: {}, State: {}", customer.getAddress().getStreet(),
+					customer.getAddress().getWard(), customer.getAddress().getDistrict(),
+					customer.getAddress().getState());
 		}
 
 		// Các trường cố định
@@ -432,23 +433,13 @@ public class AppRepository {
 
 		parameters.put("id", customer.getId());
 		log.debug("Updating address with ID: {}", customer.getAddress().getId());
-		log.debug("Street: {}, Ward: {}, District: {}, State: {}",
-				customer.getAddress().getStreet(),
-				customer.getAddress().getWard(),
-				customer.getAddress().getDistrict(),
-				customer.getAddress().getState());
+		log.debug("Street: {}, Ward: {}, District: {}, State: {}", customer.getAddress().getStreet(),
+				customer.getAddress().getWard(), customer.getAddress().getDistrict(), customer.getAddress().getState());
 
-
-		String sql = "UPDATE crm_customer SET "
-				+ "company_name = :company_name, "
-				+ "contact_person = :contact_person, "
-				+ "email = :email, "
-				+ "note = :note, "
-				+ "phone = :phone, "
-				+ "main_status_id = :main_status_id, "
-				+ "sub_status_id = :sub_status_id, "
-				+ "profession_id = :profession_id, "
-				+ "responsible_person_id = :responsible_person_id "
+		String sql = "UPDATE crm_customer SET " + "company_name = :company_name, "
+				+ "contact_person = :contact_person, " + "email = :email, " + "note = :note, " + "phone = :phone, "
+				+ "main_status_id = :main_status_id, " + "sub_status_id = :sub_status_id, "
+				+ "profession_id = :profession_id, " + "responsible_person_id = :responsible_person_id "
 				+ "WHERE id = :id";
 
 		int rowsAffected = new NamedParameterJdbcTemplate(jdbcTemplate0).update(sql, parameters);
@@ -461,7 +452,7 @@ public class AppRepository {
 
 		return rowsAffected;
 	}
-	
+
 	private Long createCustomer(Customer customer) {
 		Long id;
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_customer")
@@ -570,24 +561,11 @@ public class AppRepository {
 		parameters.put("latitude", address.getLatitude());
 		parameters.put("longitude", address.getLongitude());
 
-		log.debug("Insert Address with details: \n" +
-		            "Street: {} \n" +
-		            "Ward: {} \n" +
-		            "District: {} \n" +
-		            "State: {} \n" +
-		            "Postcode: {} \n" +
-		            "Country: {} \n" +
-		            "Latitude: {} \n" +
-		            "Longitude: {}",
-		            address.getStreet(),
-		            address.getWard(),
-		            address.getDistrict(),
-		            address.getState(),
-		            address.getPostcode(),
-		            address.getCountry(),
-		            address.getLatitude(),
-		            address.getLongitude()
-		);
+		log.debug(
+				"Insert Address with details: \n" + "Street: {} \n" + "Ward: {} \n" + "District: {} \n" + "State: {} \n"
+						+ "Postcode: {} \n" + "Country: {} \n" + "Latitude: {} \n" + "Longitude: {}",
+				address.getStreet(), address.getWard(), address.getDistrict(), address.getState(),
+				address.getPostcode(), address.getCountry(), address.getLatitude(), address.getLongitude());
 		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 		log.debug("New ID Address: {}", id);
 		return id;
@@ -611,58 +589,56 @@ public class AppRepository {
 		// Check if the address exists and get the address ID
 		if (id != null) {
 			// Update the address if it exists in the database
-			String sql = "UPDATE crm_address SET " +
-					"street = :street, " +
-					"ward = :ward, " +
-					"district = :district, " +
-					"state = :state, " +
-					"postcode = :postcode, " +
-					"country = :country, " +
-					"latitude = :latitude, " +
-					"longitude = :longitude " +
-					"WHERE id = :id";
+			String sql = "UPDATE crm_address SET " + "street = :street, " + "ward = :ward, " + "district = :district, "
+					+ "state = :state, " + "postcode = :postcode, " + "country = :country, " + "latitude = :latitude, "
+					+ "longitude = :longitude " + "WHERE id = :id";
 			parameters.put("id", id);
 			log.debug("Executing UPDATE for address ID: {}", id);
 			// Execute the update query
 			int rowsAffected = new NamedParameterJdbcTemplate(jdbcTemplate0).update(sql, parameters);
 			// ✅ Log kết quả sau khi cập nhật
-	        log.debug("Address updated. ID: {}, Rows affected: {}, New values -> street: {}, ward: {}, district: {}, state: {}, postcode: {}, country: {}, latitude: {}, longitude: {}",
-	                id, rowsAffected,
-	                address.getStreet(), address.getWard(), address.getDistrict(),
-	                address.getState(), address.getPostcode(), address.getCountry(),
-	                address.getLatitude(), address.getLongitude());
+			log.debug(
+					"Address updated. ID: {}, Rows affected: {}, New values -> street: {}, ward: {}, district: {}, state: {}, postcode: {}, country: {}, latitude: {}, longitude: {}",
+					id, rowsAffected, address.getStreet(), address.getWard(), address.getDistrict(), address.getState(),
+					address.getPostcode(), address.getCountry(), address.getLatitude(), address.getLongitude());
 			log.debug("Updated rows for address: {}", rowsAffected);
 			return rowsAffected;
 		} else {
 			return Math.toIntExact(createAddress(address));
 		}
 	}
-	
+
 	private Long createGmail(EmailToCustomer emailToCustomer) {
 		Long id;
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_emailtocustomer")
 				.usingGeneratedKeyColumns("id");
 		Map<String, Object> parameters = new HashMap<>();
-		
-		// Thêm các trường cố định trong entity (không có liên kết bảng)
-		//String subjectUtf8 = new String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-		//String contentUtf8 = new String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
-		//parameters.put("subject", subjectUtf8);
-		//parameters.put("content", contentUtf8);
+		// Thêm các trường cố định trong entity (không có liên kết bảng)
+		// String subjectUtf8 = new
+		// String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1),
+		// StandardCharsets.UTF_8);
+		// String contentUtf8 = new
+		// String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1),
+		// StandardCharsets.UTF_8);
+
+		// parameters.put("subject", subjectUtf8);
+		// parameters.put("content", contentUtf8);
 		parameters.put("subject", emailToCustomer.getSubject());
 		parameters.put("content", emailToCustomer.getContent());
 		parameters.put("sender", emailToCustomer.getSender());
-		
+
 		// Thêm send_date và status
-	    parameters.put("send_date", emailToCustomer.getSendDate() != null ? emailToCustomer.getSendDate() : new Date());
-	    parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
+		parameters.put("send_date", emailToCustomer.getSendDate() != null ? emailToCustomer.getSendDate() : new Date());
+		parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
 
 		// Thêm các khóa ngoại
-		//parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
-		parameters.put("receiver_id", emailToCustomer.getCustomer() != null ? emailToCustomer.getCustomer().getId() : null);
+		// parameters.put("status", emailToCustomer.getStatus() != null ?
+		// emailToCustomer.getStatus().name() : "DRAFT");
+		parameters.put("receiver_id",
+				emailToCustomer.getCustomer() != null ? emailToCustomer.getCustomer().getId() : null);
 		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
-		
+
 		return id;
 	}
 
@@ -671,24 +647,28 @@ public class AppRepository {
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_emailtocustomer")
 				.usingGeneratedKeyColumns("id");
 		Map<String, Object> parameters = new HashMap<>();
-		
+
 		// Thêm các trường cố định trong entity (không có liên kết bảng)
-		String subjectUtf8 = new String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-		String contentUtf8 = new String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+		String subjectUtf8 = new String(emailToCustomer.getSubject().getBytes(StandardCharsets.ISO_8859_1),
+				StandardCharsets.UTF_8);
+		String contentUtf8 = new String(emailToCustomer.getContent().getBytes(StandardCharsets.ISO_8859_1),
+				StandardCharsets.UTF_8);
 
 		parameters.put("subject", subjectUtf8);
 		parameters.put("content", contentUtf8);
 		parameters.put("sender", emailToCustomer.getSender());
-		
+
 		// Thêm send_date và status
-	    parameters.put("send_date", emailToCustomer.getSendDate() != null ? emailToCustomer.getSendDate() : new Date());
-	    parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
+		parameters.put("send_date", emailToCustomer.getSendDate() != null ? emailToCustomer.getSendDate() : new Date());
+		parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
 
 		// Thêm các khóa ngoại
-		//parameters.put("status", emailToCustomer.getStatus() != null ? emailToCustomer.getStatus().name() : "DRAFT");
-		parameters.put("receiver_id", emailToCustomer.getCustomer() != null ? emailToCustomer.getCustomer().getId() : null);
+		// parameters.put("status", emailToCustomer.getStatus() != null ?
+		// emailToCustomer.getStatus().name() : "DRAFT");
+		parameters.put("receiver_id",
+				emailToCustomer.getCustomer() != null ? emailToCustomer.getCustomer().getId() : null);
 		id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
-		
+
 		return id;
 	}
 
@@ -833,7 +813,7 @@ public class AppRepository {
 					public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
 						Order ord = new Order();
 						ord.setId(rs.getLong("id"));
-						//ord.setSiteId(rs.getString("site_id"));
+						// ord.setSiteId(rs.getString("site_id"));
 						ord.setName(rs.getString("name"));
 						ord.setCode(rs.getString("code"));
 						ord.setCreateDate(rs.getDate("create_date"));
@@ -918,7 +898,8 @@ public class AppRepository {
 		}
 	}
 
-	public Long updateCustomerStatus(Customer customer, int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential) {
+	public Long updateCustomerStatus(Customer customer, int reminderDaysForNewWithEmptyInteraction,
+			int reminderDaysForPotential) {
 		Long id = null;
 
 		if (customer.getId() != null) {
@@ -948,18 +929,19 @@ public class AppRepository {
 //			log.warn("No customer found with ID: {}", customer.getId());
 //		}
 //	}
-	
-	private void updateCustomerStatusFunction(Customer customer, int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential ) {
+
+	private void updateCustomerStatusFunction(Customer customer, int reminderDaysForNewWithEmptyInteraction,
+			int reminderDaysForPotential) {
 		if (customer == null || customer.getId() == null) {
 			throw new IllegalArgumentException("Customer or Customer ID is invalid");
 		}
 
 		// Lấy customer từ DB để biết trạng thái cũ
 		Customer existingCustomer = customerRepository.findById(customer.getId())
-			.orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+				.orElseThrow(() -> new IllegalArgumentException("Customer not found"));
 
 		Status oldMainStatus = existingCustomer.getMainStatus(); // ✅ Trạng thái cũ
-		Status newMainStatus = customer.getMainStatus();         // ✅ Trạng thái mới
+		Status newMainStatus = customer.getMainStatus(); // ✅ Trạng thái mới
 
 		List<Object> params = new ArrayList<>();
 		StringBuilder sql = new StringBuilder("UPDATE crm_customer SET ");
@@ -993,14 +975,16 @@ public class AppRepository {
 			log.debug("Customer statuses updated successfully for customer ID: {}", customer.getId());
 
 			// ✅ Gọi hàm cập nhật CustomerCare
-			updateCustomerCareStatus(customer.getId(), oldMainStatus, newMainStatus, reminderDaysForNewWithEmptyInteraction, reminderDaysForPotential);
+			updateCustomerCareStatus(customer.getId(), oldMainStatus, newMainStatus,
+					reminderDaysForNewWithEmptyInteraction, reminderDaysForPotential);
 
 		} else {
 			log.warn("No customer found with ID: {}", customer.getId());
 		}
 	}
 
-	private void updateCustomerCareStatus(Long customerId, Status oldMainStatus, Status newMainStatus, int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential) {
+	private void updateCustomerCareStatus(Long customerId, Status oldMainStatus, Status newMainStatus,
+			int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential) {
 		List<CustomerCare> careList = customerCareRepository.findByCustomerId(customerId);
 
 		String sql = "UPDATE crm_customer_care SET previous_main_status_id = ?, current_main_status_id = ? WHERE id = ?";
@@ -1008,11 +992,8 @@ public class AppRepository {
 		List<Object[]> batchParams = new ArrayList<>();
 
 		for (CustomerCare care : careList) {
-			Object[] params = new Object[] {
-				oldMainStatus != null ? oldMainStatus.getId() : null,
-				newMainStatus != null ? newMainStatus.getId() : null,
-				care.getId()
-			};
+			Object[] params = new Object[] { oldMainStatus != null ? oldMainStatus.getId() : null,
+					newMainStatus != null ? newMainStatus.getId() : null, care.getId() };
 			batchParams.add(params);
 		}
 
@@ -1020,7 +1001,7 @@ public class AppRepository {
 			jdbcTemplate0.batchUpdate(sql, batchParams);
 		}
 	}
-	
+
 //	private void updateCustomerStatusFunction(Customer customer) {
 //		if (customer == null || customer.getId() == null) {
 //			throw new IllegalArgumentException("Customer or Customer ID is invalid");
@@ -1061,7 +1042,6 @@ public class AppRepository {
 //		}
 //	}
 
-
 	public void saveHistory(HistoryOrder historyOrder) {
 		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate0).withTableName("crm_history_order")
 				.usingGeneratedKeyColumns("id");
@@ -1080,66 +1060,65 @@ public class AppRepository {
 	}
 
 	public void swapRowOnHandsontable(Long rowId1, Long rowId2, String table) {
-		String sql = String.format("UPDATE %s t1 JOIN %s t2 ON t1.id != t2.id SET t1.seqno = t2.seqno, t2.seqno = t1.seqno WHERE t1.id = ? AND t2.id = ?", table, table);
+		String sql = String.format(
+				"UPDATE %s t1 JOIN %s t2 ON t1.id != t2.id SET t1.seqno = t2.seqno, t2.seqno = t1.seqno WHERE t1.id = ? AND t2.id = ?",
+				table, table);
 
 		jdbcTemplate0.update(sql, rowId1, rowId2);
 	}
 
-
 	public void createOrderStatus(String name) {
-		if(name == null || name == "") {
+		if (name == null || name == "") {
 			return;
-		}
-		else {
+		} else {
 			String sql = "Insert into crm_orderstatus (name) values (?)";
-			jdbcTemplate0.update(sql,name);
+			jdbcTemplate0.update(sql, name);
 			/* System.out.println("Them vao orderStatus thanh cong"); */
 		}
 	}
-	
+
 	public void deleteOrderCategoryStatus(Long idLoaiDonHang, Long idTrangThai) {
-		if(idLoaiDonHang == null || idTrangThai == null) {
+		if (idLoaiDonHang == null || idTrangThai == null) {
 			return;
-		}
-		else {
+		} else {
 			String sql = "Delete from order_category_status where order_category_id=? and order_status_id=?";
-			jdbcTemplate0.update(sql,idLoaiDonHang,idTrangThai);
+			jdbcTemplate0.update(sql, idLoaiDonHang, idTrangThai);
 			/* System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong"); */
 		}
 	}
-	
+
 	public void insertOrderCategoryStatus(Long idLoaiDonHang, Long idTrangThai) {
-		if(idLoaiDonHang == null || idTrangThai == null) {
+		if (idLoaiDonHang == null || idTrangThai == null) {
 			return;
-		}
-		else {
+		} else {
 			String sql = "Insert into order_category_status (order_category_id,order_status_id) values (?,?)";
-			jdbcTemplate0.update(sql,idLoaiDonHang,idTrangThai);
+			jdbcTemplate0.update(sql, idLoaiDonHang, idTrangThai);
 			/* System.out.println("Xoa khoi bang loai don hang,trang thai thanh cong"); */
 		}
 	}
-	
+
 	public void updateOrderCategory(Long idLoaiDonHang, String name) {
-		if(idLoaiDonHang == null || name == null || name.isEmpty()) {
+		if (idLoaiDonHang == null || name == null || name.isEmpty()) {
 			return;
-		}
-		else {
+		} else {
 			String sql = "update crm_ordercategory set name=? where id=?";
-			jdbcTemplate0.update(sql,name,idLoaiDonHang);
+			jdbcTemplate0.update(sql, name, idLoaiDonHang);
 			/* System.out.println("Cap Nhat loai don hang thanh cong"); */
 		}
 	}
-	
+
 	/**
-	 * Inserts a list of customer care records into the {@code crm_customer_care} table
-	 * if they do not already exist.
-	 * Sets the reminder date as customer creation date plus the given days.
+	 * Inserts a list of customer care records into the {@code crm_customer_care}
+	 * table if they do not already exist. Sets the reminder date as customer
+	 * creation date plus the given days.
 	 * 
-	 * @param customerCares List of {@link CustomerCare} objects representing customer care data.
+	 * @param customerCares List of {@link CustomerCare} objects representing
+	 *                      customer care data.
 	 * @param reminderDays  Days for setting the reminder date in customer_care.
 	 */
-	//Khong khai bao bien trong vong lap
-	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDaysForNewWithEmptyInteraction, int reminderDaysForPotential) {
+	// Khong khai bao bien trong vong lap
+	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDaysForNewWithEmptyInteraction,
+			int reminderDaysForPotential, int reminderDaysForNewWitNotNullInteraction) {
 		String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ? AND remind_date = ?)";
 		String maxInteractionSql = "SELECT MAX(created_at) FROM crm_customer_interaction WHERE customer_id = ?";
 		String insertSql = "INSERT INTO crm_customer_care (customer_id, remind_date) VALUES (?, ?)";
@@ -1150,44 +1129,43 @@ public class AppRepository {
 		LocalDateTime reminderTime = null;
 		Timestamp latestInteraction = null;
 		LocalDateTime createdAt = null;
+		
+		latestInteraction = jdbcTemplate0.queryForObject(maxInteractionSql, Timestamp.class, customerId);
+
 
 		for (CustomerCare care : customerCares) {
-			customerId = care.getCustomer().getId();
-			mainStatus = care.getCustomer().getMainStatus().getName();
-			//exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, customerId);
+	        // Gán dữ liệu
+	        customerId = care.getCustomer().getId();
+	        mainStatus = care.getCustomer().getMainStatus().getName();
+	        createdAt = care.getCustomer().getCreatedAt();
+	        reminderTime = null;
 
-//			if (Boolean.TRUE.equals(exists)) {
-//				continue;
-//			}
+	        latestInteraction = jdbcTemplate0.queryForObject(maxInteractionSql, Timestamp.class, customerId);
 
-			reminderTime = null;
-			if ("New".equalsIgnoreCase(mainStatus)) {
-				createdAt = care.getCustomer().getCreatedAt();
-				if (createdAt != null) {
-					reminderTime = createdAt.plusDays(reminderDaysForNewWithEmptyInteraction);
-				}
-			} else if ("Potential".equalsIgnoreCase(mainStatus)) {
-				latestInteraction = jdbcTemplate0.queryForObject(maxInteractionSql, Timestamp.class, customerId);
-				if (latestInteraction != null) {
-					reminderTime = latestInteraction.toLocalDateTime().plusDays(reminderDaysForPotential);
-				}
-			}
-
-			// Kiểm tra nếu reminderTime hợp lệ
+	        // Xử lý theo mainStatus
+	        if ("New".equalsIgnoreCase(mainStatus)) {
+	            if (latestInteraction != null) {
+	                reminderTime = latestInteraction.toLocalDateTime().plusDays(reminderDaysForNewWitNotNullInteraction);
+	            } else {
+	                reminderTime = createdAt.plusDays(reminderDaysForNewWithEmptyInteraction);
+	            }
+	            
+	        } else if ("Potential".equalsIgnoreCase(mainStatus)) {
+	            if (latestInteraction != null) {
+	                reminderTime = latestInteraction.toLocalDateTime().plusDays(reminderDaysForPotential);
+	            }
+	        }
+	        // Nếu có reminderTime thì kiểm tra và insert
 	        if (reminderTime != null) {
 	            exists = jdbcTemplate0.queryForObject(checkSql, Boolean.class, customerId, Timestamp.valueOf(reminderTime));
 	            if (Boolean.TRUE.equals(exists)) {
-	                continue; // Đã tồn tại bản ghi với customer_id + remind_date này
+	                continue;
 	            }
-
-	            // Insert bản ghi mới
 	            jdbcTemplate0.update(insertSql, customerId, Timestamp.valueOf(reminderTime));
 	        }
-
-		}
+	    }
 	}
 
-	
 //	public void insertCustomerCare(List<CustomerCare> customerCares, int reminderDays) {
 //		String checkSql = "SELECT EXISTS(SELECT 1 FROM crm_customer_care WHERE customer_id = ?)";
 //		String insertSql = "INSERT INTO crm_customer_care (customer_id, remind_date) VALUES (?, ?)";
@@ -1209,103 +1187,93 @@ public class AppRepository {
 //			}
 //		}
 //	}
-	
+
 	/**
 	 * Updates the priority of a specific customer care record.
 	 *
-	 * @param customerCare the {@link CustomerCare} object containing the ID and new priority value
+	 * @param customerCare the {@link CustomerCare} object containing the ID and new
+	 *                     priority value
 	 * 
-	 * This method updates the "priority" field of a customer care record in the "crm_customer_care" table
-	 * based on the provided {@code customerCare.getId()} and sets the new value from {@code customerCare.getPriority()}.
+	 *                     This method updates the "priority" field of a customer
+	 *                     care record in the "crm_customer_care" table based on the
+	 *                     provided {@code customerCare.getId()} and sets the new
+	 *                     value from {@code customerCare.getPriority()}.
 	 */
-	
+
 	public void updatePriorityCustomerCare(CustomerCare customerCare) {
-	    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
-	    int rowsUpdated = jdbcTemplate0.update(updateSql, customerCare.getPriority(), customerCare.getId());
-	    	    
-	    log.debug("✅ Cập nhật priority thành công cho ID: {}, rowsUpdated={}", customerCare.getId(), rowsUpdated);
+		String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
+		int rowsUpdated = jdbcTemplate0.update(updateSql, customerCare.getPriority(), customerCare.getId());
+
+		log.debug("✅ Cập nhật priority thành công cho ID: {}, rowsUpdated={}", customerCare.getId(), rowsUpdated);
 	}
-	
+
 	/**
-	 * Updates the care status of all customer care records based on the latest customer interactions.
+	 * Updates the care status of all customer care records based on the latest
+	 * customer interactions.
 	 *
-	 * <p>The method performs a bulk update on the "crm_customer_care" table using business rules
-	 * that depend on the customer's current status ("Mới" or "Tiềm năng") and the time difference
-	 * between their reminder date and the last interaction date.</p>
+	 * <p>
+	 * The method performs a bulk update on the "crm_customer_care" table using
+	 * business rules that depend on the customer's current status ("Mới" or "Tiềm
+	 * năng") and the time difference between their reminder date and the last
+	 * interaction date.
+	 * </p>
 	 *
-	 * <p>Status is updated to one of the following:</p>
+	 * <p>
+	 * Status is updated to one of the following:
+	 * </p>
 	 * <ul>
-	 *   <li>"Đã chăm sóc, Chăm sóc đúng hạn"</li>
-	 *   <li>"Đã chăm sóc, Chăm sóc trễ hạn"</li>
-	 *   <li>"Chưa chăm sóc"</li>
-	 *   <li>"Chưa chăm sóc, Chăm sóc trễ hạn"</li>
+	 * <li>"Đã chăm sóc, Chăm sóc đúng hạn"</li>
+	 * <li>"Đã chăm sóc, Chăm sóc trễ hạn"</li>
+	 * <li>"Chưa chăm sóc"</li>
+	 * <li>"Chưa chăm sóc, Chăm sóc trễ hạn"</li>
 	 * </ul>
 	 *
-	 * @param reminderDaysForNew_Case1 number of allowed reminder days for customers with status "Mới"
-	 * @param reminderDaysForPotential_Case1 number of allowed reminder days for customers with status "Tiềm năng"
+	 * @param reminderDaysForNew_Case1       number of allowed reminder days for
+	 *                                       customers with status "Mới"
+	 * @param reminderDaysForPotential_Case1 number of allowed reminder days for
+	 *                                       customers with status "Tiềm năng"
 	 * @return number of rows affected by the update
 	 */
 	public int updateCustomerCareStatus(int reminderDaysForNew_Case1, int reminderDaysForPotential_Case1) {
-	    String updateSql =
-	        "UPDATE crm_customer_care c " +
-	        "LEFT JOIN ( " +
-	        "    SELECT i1.* FROM crm_customer_interaction i1 " +
-	        "    INNER JOIN ( " +
-	        "        SELECT customer_id, MAX(created_at) AS latest_created " +
-	        "        FROM crm_customer_interaction " +
-	        "        GROUP BY customer_id " +
-	        "    ) i2 ON i1.customer_id = i2.customer_id AND i1.created_at = i2.latest_created " +
-	        ") latest_interaction ON c.customer_id = latest_interaction.customer_id " +
-	        "JOIN crm_customer cu ON cu.id = c.customer_id " +
-	        "JOIN crm_status s ON s.id = cu.main_status_id " +
-	        "SET c.care_status = " +
-	        "  CASE " +
-	        "    WHEN s.name = 'New' THEN ( " +
-	        "      CASE " +
-	        "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
-	        "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
-	        "        WHEN latest_interaction.created_at > DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
-	        "          THEN 'Đã chăm sóc, Chăm sóc trễ hạn' " +
-	        "        WHEN DATE_ADD(c.remind_date, INTERVAL ? DAY) >= NOW() " +
-	        "          THEN 'Chưa chăm sóc' " +
-	        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
-	        "      END " +
-	        "    ) " +
-	        "    WHEN s.name = 'Potential' THEN ( " +
-	        "      CASE " +
-	        "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
-	        "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' " +
-	        "        WHEN latest_interaction.created_at > DATE_ADD(c.remind_date, INTERVAL ? DAY) " +
-	        "          THEN 'Đã chăm sóc, Chăm sóc trễ hạn' " +
-	        "        WHEN DATE_ADD(c.remind_date, INTERVAL ? DAY) >= NOW() " +
-	        "          THEN 'Chưa chăm sóc' " +
-	        "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " +
-	        "      END " +
-	        "    ) " +
-	        "    ELSE c.care_status " +
-	        "  END " +
-	        "WHERE c.remind_date IS NOT NULL";
+		String updateSql = "UPDATE crm_customer_care c " + "LEFT JOIN ( "
+				+ "    SELECT i1.* FROM crm_customer_interaction i1 " + "    INNER JOIN ( "
+				+ "        SELECT customer_id, MAX(created_at) AS latest_created "
+				+ "        FROM crm_customer_interaction " + "        GROUP BY customer_id "
+				+ "    ) i2 ON i1.customer_id = i2.customer_id AND i1.created_at = i2.latest_created "
+				+ ") latest_interaction ON c.customer_id = latest_interaction.customer_id "
+				+ "JOIN crm_customer cu ON cu.id = c.customer_id " + "JOIN crm_status s ON s.id = cu.main_status_id "
+				+ "SET c.care_status = " + "  CASE " + "    WHEN s.name = 'New' THEN ( " + "      CASE "
+				+ "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) "
+				+ "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' "
+				+ "        WHEN latest_interaction.created_at > DATE_ADD(c.remind_date, INTERVAL ? DAY) "
+				+ "          THEN 'Đã chăm sóc, Chăm sóc trễ hạn' "
+				+ "        WHEN DATE_ADD(c.remind_date, INTERVAL ? DAY) >= NOW() " + "          THEN 'Chưa chăm sóc' "
+				+ "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " + "      END " + "    ) "
+				+ "    WHEN s.name = 'Potential' THEN ( " + "      CASE "
+				+ "        WHEN latest_interaction.created_at BETWEEN c.remind_date AND DATE_ADD(c.remind_date, INTERVAL ? DAY) "
+				+ "          THEN 'Đã chăm sóc, Chăm sóc đúng hạn' "
+				+ "        WHEN latest_interaction.created_at > DATE_ADD(c.remind_date, INTERVAL ? DAY) "
+				+ "          THEN 'Đã chăm sóc, Chăm sóc trễ hạn' "
+				+ "        WHEN DATE_ADD(c.remind_date, INTERVAL ? DAY) >= NOW() " + "          THEN 'Chưa chăm sóc' "
+				+ "        ELSE 'Chưa chăm sóc, Chăm sóc trễ hạn' " + "      END " + "    ) "
+				+ "    ELSE c.care_status " + "  END " + "WHERE c.remind_date IS NOT NULL";
 
-	    return jdbcTemplate0.update(updateSql,
-	        reminderDaysForNew_Case1, reminderDaysForNew_Case1, reminderDaysForNew_Case1,
-	        reminderDaysForPotential_Case1, reminderDaysForPotential_Case1, reminderDaysForPotential_Case1
-	    );
+		return jdbcTemplate0.update(updateSql, reminderDaysForNew_Case1, reminderDaysForNew_Case1,
+				reminderDaysForNew_Case1, reminderDaysForPotential_Case1, reminderDaysForPotential_Case1,
+				reminderDaysForPotential_Case1);
 	}
-	
+
 	public void saveCustomerStatusHistory(CustomerStatusHistory history) {
-	    String sql = "INSERT INTO crm_customer_status_history (customer_id, status_id, change_date, stage) " +
-	                 "VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO crm_customer_status_history (customer_id, status_id, change_date, stage) "
+				+ "VALUES (?, ?, ?, ?)";
 
-	    jdbcTemplate0.update(sql,
-	        history.getCustomer().getId(),
-	        history.getMainStatus().getId(),
-	        java.sql.Date.valueOf(history.getChangeDate()), // convert LocalDate to SQL Date
-	        history.getStage()
-	    );
+		jdbcTemplate0.update(sql, history.getCustomer().getId(), history.getMainStatus().getId(),
+				java.sql.Date.valueOf(history.getChangeDate()), // convert LocalDate to SQL Date
+				history.getStage());
 
-	    log.debug("Saved status history for customer ID {}", history.getCustomer().getId());
+		log.debug("Saved status history for customer ID {}", history.getCustomer().getId());
 	}
-	
+
 	public void toggleById(Long id) {
 		String sqlSelect = "SELECT enabled FROM crm_reminder_features WHERE id = ?";
 		Boolean current = jdbcTemplate0.queryForObject(sqlSelect, Boolean.class, id);
@@ -1316,37 +1284,37 @@ public class AppRepository {
 			jdbcTemplate0.update(sqlUpdate, newStatus, id);
 		}
 	}
-	
-	public boolean isFeatureEnabledByCode(String code) {
-	    String sql = "SELECT enabled FROM crm_reminder_features WHERE code = ?";
-	    Boolean enabled = jdbcTemplate0.queryForObject(sql, Boolean.class, code);
-	    return enabled != null && enabled;
-	}
-	
-	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
-	    String checkSql = "SELECT COUNT(*) FROM crm_files_upload WHERE interaction_id = ? AND file_name = ?";
-	    Integer count = jdbcTemplate0.queryForObject(checkSql, Integer.class, interactionId, fileName);
 
-	    if (count != null && count == 0) {
-	        String insertSql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) " +
-	                           "VALUES (?, ?, ?, ?)";
-	        jdbcTemplate0.update(insertSql, interactionId, fileName, fileType, filePath);
-	    } else {
-	        log.debug("File đã tồn tại, không insert: " + fileName);
-	    }
+	public boolean isFeatureEnabledByCode(String code) {
+		String sql = "SELECT enabled FROM crm_reminder_features WHERE code = ?";
+		Boolean enabled = jdbcTemplate0.queryForObject(sql, Boolean.class, code);
+		return enabled != null && enabled;
+	}
+
+	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
+		String checkSql = "SELECT COUNT(*) FROM crm_files_upload WHERE interaction_id = ? AND file_name = ?";
+		Integer count = jdbcTemplate0.queryForObject(checkSql, Integer.class, interactionId, fileName);
+
+		if (count != null && count == 0) {
+			String insertSql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) "
+					+ "VALUES (?, ?, ?, ?)";
+			jdbcTemplate0.update(insertSql, interactionId, fileName, fileType, filePath);
+		} else {
+			log.debug("File đã tồn tại, không insert: " + fileName);
+		}
 	}
 
 	public void deleteFileById(Long fileId) {
-	    String sql = "DELETE FROM crm_files_upload WHERE id = ?";
-	    jdbcTemplate0.update(sql, fileId);
+		String sql = "DELETE FROM crm_files_upload WHERE id = ?";
+		jdbcTemplate0.update(sql, fileId);
 	}
-	
+
 //	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
 //        String sql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) " +
 //                     "VALUES (?, ?, ?, ?)";
 //        jdbcTemplate0.update(sql, interactionId, fileName, fileType, filePath);
 //    }
-	
+
 //	public void updatePriorityCustomerCare(List<CustomerCare> customerCareList) {
 //    String updateSql = "UPDATE crm_customer_care SET priority = ? WHERE id = ?";
 //    
@@ -1369,7 +1337,7 @@ public class AppRepository {
 //    
 //    log.debug("Total {} records updated successfully.", totalUpdated);
 //}
-	
+
 //	public int updateCustomerCareStatus(int reminderDays) {
 //		String updateSql = 
 //		        "UPDATE crm_customer_care c " +
