@@ -53,7 +53,7 @@ public class HomeController extends BaseController {
 		
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
-		 mav.addObject("toggleCCEnabled", toggleCCEnabled);
+		mav.addObject("toggleCCEnabled", toggleCCEnabled);
 
 		return mav;
 	}

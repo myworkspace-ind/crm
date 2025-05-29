@@ -2,6 +2,7 @@ package mks.myworkspace.crm.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -36,8 +38,18 @@ public class Task implements Serializable {
 	@Column(name = "name", length = 255)
 	private String name;
 	
+	@Column(name = "description", length = 255)
+	private String description;
+	
+//	@Lob
+//	@Column(name = "description")
+//    private String description;
+	
 	@Column(name = "status")
 	private boolean status;
+	
+	@Column(name = "important")
+	private boolean important;
 	
 	@Column(name = "start_date")
 	private LocalDateTime start_date;
@@ -50,13 +62,23 @@ public class Task implements Serializable {
 	)
 	private List<Customer> customers = new ArrayList<>();
 
-	public Task(Long id, String name, boolean status, LocalDateTime start_date, List<Customer> customers) {
+	public Task(Long id, String name, String description, boolean status, boolean important, LocalDateTime start_date,
+			List<Customer> customers) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.description = description;
 		this.status = status;
+		this.important = important;
 		this.start_date = start_date;
 		this.customers = customers;
 	}
 	
+	public String getFormattedStartDate() {
+	    if (start_date != null) {
+	        return start_date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	    }
+	    return "";
+	}
+
 }

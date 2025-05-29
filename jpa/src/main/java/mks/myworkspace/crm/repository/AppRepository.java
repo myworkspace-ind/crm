@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import mks.myworkspace.crm.entity.*;
+import mks.myworkspace.crm.entity.dto.TaskDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -1308,6 +1310,51 @@ public class AppRepository {
 		String sql = "DELETE FROM crm_files_upload WHERE id = ?";
 		jdbcTemplate0.update(sql, fileId);
 	}
+	
+	public void addTask(TaskDTO dto) {
+        // Kiểm tra tên công việc là bắt buộc
+        if (dto.getName() == null || dto.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Bạn cần nhập Tên công việc.");
+        }
+
+        SimpleJdbcInsert taskInsert = new SimpleJdbcInsert(jdbcTemplate0)
+                .withTableName("crm_task")
+                .usingGeneratedKeyColumns("id");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", dto.getName());
+
+        // Các trường tùy chọn: chỉ thêm nếu không null
+        if (dto.getDescription() != null) {
+            params.put("description", dto.getDescription());
+        }
+
+        params.put("status", dto.isStatus()); // boolean primitive nên luôn có giá trị
+        params.put("important", dto.isImportant()); // boolean primitive
+
+        if (dto.getStartDate() != null) {
+            params.put("start_date", Timestamp.valueOf(dto.getStartDate()));
+        }
+
+        // Thực hiện insert
+        Long taskId = taskInsert.executeAndReturnKey(params).longValue();
+
+        // Gắn customer nếu có
+        if (dto.getCustomerIds() != null && !dto.getCustomerIds().isEmpty()) {
+            insertTaskCustomer(taskId, dto.getCustomerIds());
+        }
+    }
+
+    private void insertTaskCustomer(Long taskId, List<Long> customerIds) {
+        String sql = "INSERT INTO task_customer (task_id, customer_id) VALUES (?, ?)";
+
+        List<Object[]> batchArgs = new ArrayList<>();
+        for (Long customerId : customerIds) {
+            batchArgs.add(new Object[]{taskId, customerId});
+        }
+
+        jdbcTemplate0.batchUpdate(sql, batchArgs);
+    }
 
 //	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
 //        String sql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) " +

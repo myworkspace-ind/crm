@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+<!--     <title>Customer Relationship Management</title> -->
+    <!-- COMMON META AND TITLE -->
+	<th:block th:include="fragments/common_meta_title"></th:block>
+	
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	
+	<!-- HEAD FRAGMENT -->
+	<th:block th:include="fragments/head"></th:block>
+	<!-- COMMON CSS -->
+	<th:block th:include="fragments/common_css"></th:block>
+	
+	<link rel="stylesheet" type="text/css" href="/library/webjars/bootstrap/5.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/new_style.css}">
+	<link rel="stylesheet" th:href="@{/resources/css/status.css}" />
+	<link rel="stylesheet" th:href="@{/resources/css/buttonGroupFunction.css}" />
+	<link rel="stylesheet" th:href="@{/resources/css/buttonRestoreHidedCustomers.css}" />
+	<link rel="stylesheet" th:href="@{/resources/css/task.css}" />
+	   
+	<!-- Intro.js CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+	<!-- Intro.js JS -->
+	<script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+    <style>
+        .form-section {
+            margin-bottom: 24px;
+        }
+        .customer-block {
+            background-color: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .remove-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+        }
+    </style>
+</head>
+<body>
+	<!-- BEGIN HEADER  -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER  -->
+	
+	<div class="container mt-5 mb-5">
+	    <h4 class="mb-4">Tạo mới công việc</h4>
+	
+<!-- 	    <form th:action="@{/tasks/create}" method="post"> -->
+		<form>
+	        <!-- Tên công việc -->
+	        <div class="form-section">
+	            <label for="taskName" class="form-label">Tên công việc</label>
+	            <input type="text" class="form-control" id="taskName" name="taskName" required>
+	        </div>
+	
+	        <!-- Mô tả -->
+	        <div class="form-section">
+	            <label for="taskDescription" class="form-label">Mô tả công việc</label>
+	            <textarea class="form-control" id="taskDescription" name="taskDescription" rows="4"></textarea>
+	        </div>
+	
+	        <!-- Ngày bắt đầu -->
+	        <div class="form-section">
+	            <label for="startDate" class="form-label">Ngày bắt đầu</label>
+	            <input type="datetime-local" class="form-control" id="startDate" name="startDate">
+	        </div>
+	
+	        <!-- Khách hàng liên quan -->
+	        <div class="form-section">
+	            <label class="form-label">Khách hàng liên quan</label>
+	            <div id="customerContainer">
+	            
+	                <!-- Block khách hàng mẫu -->
+	                <div class="customer-block">
+					    <div class="row">
+					        <div class="col-md-6">
+					            <label class="form-label">Khách hàng</label>
+					            
+					            
+<!-- 					            <select class="form-control customer-select" name="customers[0].customerId" style="width: 100%"> -->
+<!-- 					                <option></option>  -->
+<!-- 					            </select> -->
+					            
+					            <select id="taskCustomerName" class="form-control select2" style="width: 100%; background-color: white; color: black;">
+				                        <!-- <option value="" disabled selected>Nhập hoặc chọn họ tên</option> -->
+				                        <th:block th:each="customer : ${listCustomers}">
+				                            <option th:value="${customer.id}" 
+				                                    th:data-phone="${customer.phone}" 
+				                                    th:data-email="${customer.email}">
+				                                <span th:text="${customer.companyName}"></span>
+				                            </option>
+				                        </th:block>
+				                </select>
+					            
+					        </div>
+					        <div class="col-md-6">
+					            <label class="form-label">Người liên hệ</label>
+<!-- 					            <input type="text" class="form-control contact-person-input" name="customers[0].contactPerson" readonly> -->
+					            <input type="text" id="taskCustomer_ContactPerson" class="form-control contact-person-input" readonly style="background-color: white; color: black; width: 100%;"/>
+					        </div>
+					    </div>
+					    <button type="button" class="btn btn-link text-danger remove-btn" onclick="removeCustomer(this)">🗑️</button>
+					</div>
+	                
+	            </div>
+	            <button type="button" class="btn btn-outline-primary mt-2" onclick="addCustomer()">+ Thêm khách hàng</button>
+	        </div>
+	
+	        <!-- Submit -->
+	        <div class="form-section">
+	            <button type="submit" class="btn btn-success">Tạo mới</button>
+	            <a th:href="@{/task/list}" class="btn btn-secondary">Hủy</a>
+	        </div>
+	    </form>
+	</div>
+	
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+
+	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/introTour.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/search.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/buttonGroupFunction.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/task.js}"></script>
+	
+	<script th:inline="javascript">
+	    /*<![CDATA[*/
+	    let shouldStartTour = /*[[${startTour}]]*/ false;
+	    if (shouldStartTour) {
+	        window.addEventListener('DOMContentLoaded', function () {
+	            startTourCustomer();
+	        });
+	    }
+	    /*]]>*/
+	</script>	
+	
+	<!-- JS để thêm/xóa khách hàng -->
+	<script>
+	    let customerIndex = 1;
+	
+	    function addCustomer() {
+	        const container = document.getElementById("customerContainer");
+	        const block = document.createElement("div");
+	        block.className = "customer-block";
+	        block.innerHTML = `
+	            <div class="row">
+	                <div class="col-md-6">
+	                    <label class="form-label">Khách hàng</label>
+	                    <input type="text" class="form-control" name="customers[${customerIndex}].companyName" placeholder="Nhập tên khách hàng">
+	                </div>
+	                <div class="col-md-6">
+	                    <label class="form-label">Người liên hệ</label>
+	                    <input type="text" class="form-control" name="customers[${customerIndex}].contactPerson" placeholder="Người liên hệ">
+	                </div>
+	            </div>
+	            <button type="button" class="btn btn-link text-danger remove-btn" onclick="removeCustomer(this)">🗑️</button>
+	        `;
+	        container.appendChild(block);
+	        customerIndex++;
+	    }
+	
+	    function removeCustomer(button) {
+	        button.parentElement.remove();
+	    }
+	</script>
+</body>
+</html>
