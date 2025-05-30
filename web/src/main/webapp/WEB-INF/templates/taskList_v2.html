@@ -46,12 +46,19 @@
 	            <em>Không có công việc nào.</em>
 	        </div>
 	        <div th:each="task : ${entry.value}" class="task-wrapper">
-	            <div class="task-item" th:classappend="${task.status} ? 'completed' : ''">
-	                <form th:action="@{/tasks/{taskId}/toggle-complete(id=${task.taskId})}" method="post">
+	            <div class="task-item" 
+	            	th:data-id="${task.taskId}"
+	            	th:data-name="${task.taskName}"
+	            	th:data-description="${task.taskDescription}"
+     				th:data-start="${task.formattedStartDate}"
+	            	th:data-customers="${taskCustomersMap[task.taskId]}"
+	            	th:classappend="${task.status} ? 'completed' : ''">
+	                <form th:action="@{/task/{taskId}/toggle-complete(taskId=${task.taskId})}" method="post">
 	                    <button class="circle-btn" type="submit"></button>
 	                </form>
+	                
 	                <div class="task-title" th:text="${task.taskName}"></div>
-	                <form th:action="@{/tasks/{taskId}/toggle-important(id=${task.taskId})}" method="post">
+	                <form th:action="@{/task/{taskId}/toggle-important(taskId=${task.taskId})}" method="post">
 	                    <button class="star-btn" type="submit">★</button>
 	                </form>
 	            </div>
@@ -83,6 +90,10 @@
 	        </div>
 	    </div>
 	</div>
+	
+	<!-- START TASK DETAIL FOR UPDATING  -->
+	<th:block th:include="fragments/frg_taskDetail"></th:block>
+	<!-- END TASK DETAIL FOR UPDATING -->
 		
 <!-- 	<h4 class="mb-4">Danh sách công việc</h4> -->
 <!-- 	<div class="task-container"> -->

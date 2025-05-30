@@ -712,4 +712,14 @@ public class StorageServiceImpl implements StorageService {
 	public void deleteFileById(Long fileId) {
 		appRepo.deleteFileById(fileId);
 	}
+
+	@Override
+	public void toggleTaskStatus(Long taskId) {
+		appRepo.toggleTaskStatus(taskId);
+	}
+
+	@Override
+	public void deleteTaskById(Long taskId) {
+		appRepo.deleteTaskById(taskId);
+	}
 }

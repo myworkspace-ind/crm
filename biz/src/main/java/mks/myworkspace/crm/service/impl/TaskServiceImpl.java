@@ -140,6 +140,48 @@ public class TaskServiceImpl implements TaskService {
 	        .filter(t -> t.getTaskStartDate() == null)
 	        .collect(Collectors.toList());
 	}
+	
+//	private List<TaskWithCustomersDTO> filterByToday(List<TaskWithCustomersDTO> tasks) {
+//	    LocalDate today = LocalDate.now();
+//	    return tasks.stream()
+//	        .filter(t -> t.getTaskStartDate() != null &&
+//	                     t.getTaskStartDate().toLocalDate().isEqual(today))
+//	        .collect(Collectors.toList());
+//	}
+//
+//	private List<TaskWithCustomersDTO> filterByOverdue(List<TaskWithCustomersDTO> tasks) {
+//	    LocalDate today = LocalDate.now();
+//	    return tasks.stream()
+//	        .filter(t -> t.getTaskStartDate() != null &&
+//	                     t.getTaskStartDate().toLocalDate().isBefore(today))
+//	        .collect(Collectors.toList());
+//	}
+//
+//	private List<TaskWithCustomersDTO> filterByUpcoming(List<TaskWithCustomersDTO> tasks) {
+//	    LocalDate today = LocalDate.now();
+//	    return tasks.stream()
+//	        .filter(t -> t.getTaskStartDate() != null &&
+//	                     t.getTaskStartDate().toLocalDate().isAfter(today))
+//	        .collect(Collectors.toList());
+//	}
+//
+//	private List<TaskWithCustomersDTO> filterByImportant(List<TaskWithCustomersDTO> tasks) {
+//	    return tasks.stream()
+//	        .filter(t -> t.isImportant())
+//	        .collect(Collectors.toList());
+//	}
+//
+//	private List<TaskWithCustomersDTO> filterByCompleted(List<TaskWithCustomersDTO> tasks) {
+//	    return tasks.stream()
+//	        .filter(TaskWithCustomersDTO::isStatus)
+//	        .collect(Collectors.toList());
+//	}
+//
+//	private List<TaskWithCustomersDTO> filterByNoStartDate(List<TaskWithCustomersDTO> tasks) {
+//	    return tasks.stream()
+//	        .filter(t -> t.getTaskStartDate() == null)
+//	        .collect(Collectors.toList());
+//	}
 
 
 }

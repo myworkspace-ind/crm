@@ -12,4 +12,5 @@ public interface TaskService {
 	List<Task> getAllTasksWithCustomers();
 	List<TaskWithCustomersDTO> getTasksWithCustomersAsDTOs();
 	Map<String, List<TaskWithCustomersDTO>> getGroupedTasks();
+	
 }

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- Task Detail Sidebar -->
+	<div id="taskDetailSidebar" class="task-sidebar" style="display: none;">
+	    <button class="close-btn" onclick="closeTaskSidebar()">✖</button>
+	    
+	    <form id="taskDetailForm" method="post">
+	        <input type="hidden" name="taskId" id="sidebarTaskId" />
+	
+	        <div class="mb-3">
+	            <label class="form-label">Tên công việc</label>
+	            <input type="text" class="form-control" id="sidebarTaskName" name="taskName" />
+	        </div>
+	
+	        <div class="mb-3">
+	            <label class="form-label">Mô tả</label>
+	            <textarea class="form-control" id="sidebarTaskDescription" name="taskDescription"></textarea>
+	        </div>
+	
+	        <div class="mb-3">
+	            <label class="form-label">Ngày bắt đầu</label>
+	            <input type="datetime-local" class="form-control" id="sidebarStartDate" name="taskStartDate" />
+	        </div>
+	        
+	        <div class="mb-3">
+			    <label class="form-label">Khách hàng liên quan</label>
+			    <div id="sidebarCustomerContainer"></div>
+			    <button type="button" class="btn btn-link" onclick="addSidebarCustomer()">+ Thêm khách hàng</button>
+			</div>
+	
+	        <button type="submit" class="btn btn-primary">Lưu</button>
+	        <button type="button" class="btn btn-danger" onclick="deleteTask()">🗑️ Xóa</button>
+	    </form>
+	</div>
+</body>
+
+<script>
+		function openTaskSidebar(taskId, taskName, description, startDate, customers) {
+		    document.getElementById('sidebarTaskId').value = taskId;
+		    document.getElementById('sidebarTaskName').value = taskName;
+		    document.getElementById('sidebarTaskDescription').value = description;
+		    document.getElementById('sidebarStartDate').value = startDate;
+
+		    const container = document.getElementById('sidebarCustomerContainer');
+		    container.innerHTML = "";
+
+		    customers.forEach((cust, index) => {
+		        const block = document.createElement("div");
+		        block.className = "customer-block mb-2";
+		        block.innerHTML = `
+		            <div class="row">
+		                <div class="col-7">
+		                    <input type="text" class="form-control" name="customers[${index}].companyName" value="${cust.companyName}" placeholder="Tên công ty" />
+		                </div>
+		                <div class="col-5">
+		                    <input type="text" class="form-control" name="customers[${index}].contactPerson" value="${cust.contactPerson}" placeholder="Người liên hệ" />
+		                </div>
+
+		            </div>
+		        `;
+		        container.appendChild(block);
+		    });
+
+		    document.getElementById('taskDetailSidebar').style.display = 'block';
+		}
+
+		function closeTaskSidebar() {
+		    document.getElementById('taskDetailSidebar').style.display = 'none';
+		}
+
+		function addSidebarCustomer() {
+		    const container = document.getElementById('sidebarCustomerContainer');
+		    const index = container.children.length;
+		    const block = document.createElement("div");
+		    block.className = "customer-block mb-2";
+		    block.innerHTML = `
+		        <div class="row">
+		            <div class="col-6">
+		                <input type="text" class="form-control" name="customers[${index}].companyName" placeholder="Tên công ty" />
+		            </div>
+		            <div class="col-3">
+		                <input type="text" class="form-control" name="customers[${index}].contactPerson" placeholder="Người liên hệ" />
+		            </div>
+		            <div class="col-3">
+		                <input type="text" class="form-control" name="customers[${index}].phone" placeholder="SĐT" />
+		            </div>
+		        </div>
+		    `;
+		    container.appendChild(block);
+		}
+
+		function deleteTask() {
+		    const taskId = document.getElementById('sidebarTaskId').value;
+
+		    if (!taskId) {
+		        Swal.fire("Không có ID công việc để xóa!", "", "warning");
+		        return;
+		    }
+
+		    Swal.fire({
+		        title: 'Bạn có chắc chắn muốn xóa?',
+		        text: "Thao tác này không thể hoàn tác!",
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#d33',
+		        cancelButtonColor: '#6c757d',
+		        confirmButtonText: 'Xóa',
+		        cancelButtonText: 'Hủy'
+		    }).then((result) => {
+		        if (result.isConfirmed) {
+		            $.ajax({
+		                url: _ctx + `task/${taskId}/delete`,
+		                type: 'DELETE',
+		                success: function() {
+		                    Swal.fire("Đã xóa!", "Công việc đã được xóa.", "success")
+		                        .then(() => {
+		                            closeTaskSidebar();
+		                            location.reload(); // hoặc gọi lại hàm load danh sách nếu có
+		                        });
+		                },
+		                error: function(xhr, status, error) {
+		                    console.error(error);
+		                    Swal.fire("Lỗi!", "Xảy ra lỗi khi xóa.", "error");
+		                }
+		            });
+		        }
+		    });
+		}
+
+		document.addEventListener("keydown", function(e) {
+		    if (e.key === "Escape") {
+		        closeTaskSidebar();
+		    }
+		});
+</script>
+
+</html>

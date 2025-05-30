@@ -74,6 +74,7 @@
 	transition: all 0.3s ease;
 	transition: max-height 0.3s ease, opacity 0.3s ease;
 	overflow-y: hidden;
+	margin-bottom: 15px;
 }
 
 .task-wrapper:hover .task-overview {
@@ -81,23 +82,57 @@
 	opacity: 1;
 	padding: 8px 12px;
 	overflow-y: auto;
+	margin-bottom: 15px;
 }
 
 .task-group-header {
-	background-color: #f1f3f4;
+	background-color: #88c4ff !important;
 	padding: 12px 16px;
-	font-size: 16px;
+	font-size: 20px;
 	border-radius: 6px;
-	margin-bottom: 8px;
+	margin-bottom: 10px;
 	transition: background-color 0.3s;
+	margin-top: 10px;
 }
 
 .task-group-header:hover {
-	background-color: #88c4ff !important;
+	background-color: #0055a0 !important;
+	color: white !important;
+}
+
+.task-group-header:hover .arrow-icon{
+	color: white !important;
 }
 
 .arrow-icon {
 	font-size: 16px;
 	color: #333;
 	transition: transform 0.2s ease;
+}
+
+.task-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 800px;
+    height: 100vh;
+    background: #fff;
+    border-left: 1px solid #ddd;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+}
+.task-item.completed .task-title {
+    text-decoration: line-through;
+    opacity: 0.6;
 }

@@ -84,5 +84,8 @@ public interface StorageService {
 	void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath);
 	
 	void deleteFileById(Long fileId);
-
+	
+	public void toggleTaskStatus(Long taskId);
+	
+	void deleteTaskById(Long taskId);
 }

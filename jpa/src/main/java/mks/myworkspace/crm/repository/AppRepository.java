@@ -1355,6 +1355,16 @@ public class AppRepository {
 
         jdbcTemplate0.batchUpdate(sql, batchArgs);
     }
+    
+    public void toggleTaskStatus(Long taskId) {
+        String sql = "UPDATE crm_task SET status = NOT status WHERE id = ?";
+        jdbcTemplate0.update(sql, taskId);
+    }
+    
+    public int deleteTaskById(Long taskId) {
+        String sql = "DELETE FROM crm_task WHERE id = ?";
+        return jdbcTemplate0.update(sql, taskId);
+    }
 
 //	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
 //        String sql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) " +
