@@ -73,11 +73,11 @@
 		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		
-<!-- 		<property name="location" value="file:///etc/myworkspace/crm/app-config.properties"/> -->
+		<property name="location" value="file:///etc/myworkspace/crm/app-config.properties"/>
 		
-		<property name="location">
-			<value>/WEB-INF/app-config.properties</value>
-		</property>
+<!-- 		<property name="location"> -->
+<!-- 			<value>/WEB-INF/app-config.properties</value> -->
+<!-- 		</property> -->
 	</bean>
 	
 	<!-- Quét các @Component, @Service, @Scheduled,... -->
@@ -148,6 +148,25 @@
 	<bean id="jdbcTemplate0" primary="true"
 		class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource0" />
+	</bean>
+	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	    <!-- Cấu hình SMTP -->
+	    <property name="host" value="smtp.gmail.com" /> <!-- Thay bằng SMTP host của bạn -->
+	    <property name="port" value="587" /> <!-- Cổng SMTP (587 cho TLS) -->
+	<!--     <property name="username" value="crm.mekongsolution@gmail.com" /> Tên người dùng (email gửi) -->
+	<!--     <property name="password" value="exfc mvlv ltbp qyfc" /> Mật khẩu của email gửi -->
+		<property name="username" value="crm.mekongsolution.email2@gmail.com" /> <!-- Tên người dùng (email gửi) -->
+	    <property name="password" value="xhgy jxvr vlrm pdgm" /> <!-- Mật khẩu của email gửi -->
+	
+	    <!-- Các thuộc tính thêm cho JavaMail -->
+	    <property name="javaMailProperties">
+	        <props>
+	            <prop key="mail.transport.protocol">smtp</prop>
+	            <prop key="mail.smtp.auth">true</prop>
+	            <prop key="mail.smtp.starttls.enable">true</prop>
+	        </props>
+	    </property>
 	</bean>
 	
 	
