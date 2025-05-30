@@ -1,4 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/interaction.css}">
+</head>
 <div class="app-content content m-0 p-0">
 	<form id="frmInteractionConfiguration" th:action="@{/customer/save-interaction}" class="w-100 ms-0" method="post">
 		<th:block th:include="fragments/interaction/frg_searchInteraction.html"></th:block>		

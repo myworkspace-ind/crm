@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 								document.getElementById("detailEmailID").textContent = email.id || "N/A";
 								document.getElementById("detailEmailFrom").textContent = email.sender || "Không có thông tin";
-								document.getElementById("detailEmailTo").textContent = email.customer ? email.customer.email : "Không có email";
+								document.getElementById("detailEmailTo").textContent = email.customerEmail || "Không có email";
 								
 								document.getElementById("detailEmailSubject").textContent = email.subject || "Không có chủ đề";
 								

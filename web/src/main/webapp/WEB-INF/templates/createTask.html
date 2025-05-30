@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+<!--     <title>Customer Relationship Management</title> -->
+    <!-- COMMON META AND TITLE -->
+	<th:block th:include="fragments/common_meta_title"></th:block>
+	<!-- HEAD FRAGMENT -->
+	<th:block th:include="fragments/head"></th:block>
+	<!-- COMMON CSS -->
+	<th:block th:include="fragments/common_css"></th:block>
+	
+	<link rel="stylesheet" type="text/css" href="/library/webjars/bootstrap/5.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}">
+	<link rel="stylesheet" th:href="@{/resources/css/status.css}" />
+	<link rel="stylesheet" th:href="@{/resources/css/buttonGroupFunction.css}" />
+	<link rel="stylesheet" th:href="@{/resources/css/buttonRestoreHidedCustomers.css}" />
+	<link rel="stylesheet" th:href="@{/resources/css/task.css}" />
+	   
+	<!-- Intro.js CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+	<!-- Intro.js JS -->
+	<script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+	
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+	
+    <style>
+        .form-section {
+            margin-bottom: 24px;
+        }
+        .customer-block {
+            background-color: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .remove-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+        }
+    </style>
+</head>
+<body>
+	<!-- BEGIN HEADER  -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER  -->
+	
+	<div class="container mt-5 mb-5">
+	    <h4 class="mb-4">Tạo mới công việc</h4>
+	    
+	    <th:block th:include="fragments/createTask_form"></th:block>
+		
+	</div>
+	
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
+	<!-- FILE JS BỔ SUNG -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/introTour.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/search.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/buttonGroupFunction.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/task.js}"></script>
+	
+	<script th:inline="javascript">
+	    /*<![CDATA[*/
+	    let shouldStartTour = /*[[${startTour}]]*/ false;
+	    if (shouldStartTour) {
+	        window.addEventListener('DOMContentLoaded', function () {
+	            startTourCustomer();
+	        });
+	    }
+	    /*]]>*/
+	</script>	
+	
+</body>
+</html>

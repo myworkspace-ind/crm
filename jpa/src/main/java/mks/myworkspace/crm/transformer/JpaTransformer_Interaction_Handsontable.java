@@ -30,7 +30,7 @@ public class JpaTransformer_Interaction_Handsontable {
             rowData[2] = interaction.getCreatedAt() != null ? formatter.format(interaction.getCreatedAt()) : "";
             rowData[3] = interaction.getNextPlan(); // Kế hoạch tiếp theo
             rowData[4] = interaction.getInteractionDate() != null ? sdf.format(interaction.getInteractionDate()) : ""; // Ngày
-            rowData[5] = interaction.getId(); // ID (để thực hiện các hành động như xóa)
+            rowData[6] = interaction.getId(); // ID (để thực hiện các hành động như xóa)
 
             lstObject.add(rowData);
         }

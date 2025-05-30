@@ -31,11 +31,11 @@ public class CustomerCare implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; 
 	
-	@Column(name = "site_id", length = 99)
-	private String siteId;
+//	@Column(name = "site_id", length = 99)
+//	private String siteId;
 	
 	@ManyToOne
-	@JoinColumn(name = "customer_id", referencedColumnName = "id")
+	@JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
 	private Customer customer;
 	
 	@Column(name = "priority")
@@ -47,6 +47,14 @@ public class CustomerCare implements Serializable{
 	@Column(name = "remind_date")
     //@Temporal(TemporalType.DATE)
     private LocalDateTime remindDate;
+	
+	@ManyToOne
+	@JoinColumn(name = "previous_main_status_id")
+	private Status previousMainStatus;
+
+	@ManyToOne
+	@JoinColumn(name = "current_main_status_id")
+	private Status currentMainStatus;
 
 	public CustomerCare(Long id, Customer customer, String priority, String careStatus, LocalDateTime remindDate) {
 		super();

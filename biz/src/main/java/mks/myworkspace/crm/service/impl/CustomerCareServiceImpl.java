@@ -41,10 +41,13 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	InteractionRepository interactionRepository;
 	
 	@Value("${customer.care.days-ago-case1}")
-	private int daysAgo;
+	private int daysAgo_case1;
 	
 	@Value("${customer.care.days-ago-case2}")
 	private int daysAgo_case2;
+	
+	@Value("${customer.care.days-ago-case3}")
+	private int daysAgo_case3;
 	
 
 	@Override
@@ -65,21 +68,27 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	 */
 	@Override
 	public void loadPotentialCustomersIntoCustomerCare() {
+		log.debug("Vào được đây");
 	    try {
-	        LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);         
-	        LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2); 
+	        LocalDateTime case1DaysAgo = LocalDateTime.now().minusDays(daysAgo_case1);         
+	        LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
+	        LocalDateTime case3DaysAgo = LocalDateTime.now().minusDays(daysAgo_case3);
+	        
 	        LocalDateTime now = LocalDateTime.now();                                  
 
 	        // Gọi 3 phương thức đã tách riêng
-	        List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(twoDaysAgo);
+	        List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(case1DaysAgo);
 	        List<Customer> potentialCustomers = repo.findPotentialCustomers(case2DaysAgo);
-	        //List<Customer> remindCustomers = repo.findRemindCustomers(now);
+	        List<Customer> newAndInteractionNotNullCustomers = repo.findNewCustomersWithInteractionNotNull(case3DaysAgo);
+	        log.debug("Danh sách new + interaction not null: {}", newAndInteractionNotNullCustomers.toString());
 
-	        // Gộp lại, dùng Set để loại trùng nếu có
+	        // Gộp lại
 	        Set<Customer> allCustomersSet = new HashSet<>();
 	        allCustomersSet.addAll(newCustomers);
 	        allCustomersSet.addAll(potentialCustomers);
-	        //allCustomersSet.addAll(remindCustomers);
+	        allCustomersSet.addAll(newAndInteractionNotNullCustomers);
+	        
+	        //log.debug("Danh sách new + interaction not null: {}", newAndInteractionNotNullCustomers.toString());
 
 	        if (allCustomersSet.isEmpty()) {
 	            throw new RuntimeException("Không có khách hàng nào đủ điều kiện để nạp vào CustomerCare.");
@@ -91,7 +100,12 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	            .collect(Collectors.toList());
 
 	        // Lưu vào DB
-	        appRepository.insertCustomerCare(customerCares, daysAgo, daysAgo_case2);
+	        appRepository.insertCustomerCare(customerCares, daysAgo_case1, daysAgo_case2, daysAgo_case3);
+	        log.debug("Danh sách CustomerCare sau khi insert: {}", 
+	        	    customerCares.stream()
+	        	        .map(c -> "CustomerCare{customerId=" + c.getCustomer().getId() + ", remindDate=" + c.getRemindDate() + "}")
+	        	        .collect(Collectors.joining(", ")));
+
 	    } catch (Exception e) {
 	        throw new RuntimeException("Lỗi khi nạp khách hàng vào CustomerCare: " + e.getMessage(), e);
 	    }
@@ -133,18 +147,21 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	@Override
 	@Transactional
 	public List<Customer> findAllCustomerCare() {
-	    LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(daysAgo);
+	    LocalDateTime case1DaysAgo = LocalDateTime.now().minusDays(daysAgo_case1);
 	    LocalDateTime case2DaysAgo = LocalDateTime.now().minusDays(daysAgo_case2);
+	    LocalDateTime case3DaysAgo = LocalDateTime.now().minusDays(daysAgo_case3);
 	    LocalDateTime now = LocalDateTime.now();
 	    
 	    // Gọi từng repo riêng biệt
-	    List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(twoDaysAgo);
+	    List<Customer> newCustomers = repo.findNewCustomersWithEmptyInteraction(case1DaysAgo);
 	    List<Customer> potentialCustomers = repo.findPotentialCustomers(case2DaysAgo);
+	    List<Customer> newAndInteractionNotNullCustomers = repo.findNewCustomersWithInteractionNotNull(case3DaysAgo);
 	    
 	    //Gộp danh sách lại
 	    Set<Customer> combinedSet = new HashSet<>();
 	    combinedSet.addAll(newCustomers);
 	    combinedSet.addAll(potentialCustomers);
+	    combinedSet.addAll(newAndInteractionNotNullCustomers);
 	    
 	    List<Customer> finalList = new ArrayList<>(combinedSet);
 
@@ -226,5 +243,10 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 	    }
 		
 	}
+
+//	@Override
+//	public void saveCustomerCare() {
+//		log.debug("Vào được đây");
+//	}
 
 }

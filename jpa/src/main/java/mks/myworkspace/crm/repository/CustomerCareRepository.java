@@ -28,7 +28,7 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 	//TODO: Lấy khách hàng "Mới"
     @Query("SELECT c FROM Customer c " +
             "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
-            "WHERE c.mainStatus.name = 'Mới' " +
+            "WHERE c.mainStatus.name = 'New' " +
             "AND NOT EXISTS ( " +
             "    SELECT 1 FROM Interaction iSub WHERE iSub.customer.id = c.id " +
             ") " +
@@ -52,7 +52,7 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 //	);
 	
 	 @Query("SELECT c FROM Customer c " +
-	           "WHERE c.mainStatus.name = 'Tiềm năng' " +
+	           "WHERE c.mainStatus.name = 'Potential' " +
 	           "AND EXISTS ( " +
 	           "    SELECT 1 FROM Interaction iSub " +
 	           "    WHERE iSub.customer.id = c.id " +
@@ -60,6 +60,17 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 	           "    HAVING MAX(iSub.createdAt) < :caseDaysAgo_2 " +
 	           ")")
 	 List<Customer> findPotentialCustomers(@Param("caseDaysAgo_2") LocalDateTime caseDaysAgo_2);
+	 
+	 @Query("SELECT c FROM Customer c " +
+		       "JOIN FETCH c.mainStatus " + // fetch luôn status nếu bạn cần
+		       "WHERE c.mainStatus.name = 'New' " +
+		       "AND EXISTS ( " +
+		       "    SELECT 1 FROM Interaction iSub " +
+		       "    WHERE iSub.customer.id = c.id " +
+		       "    GROUP BY iSub.customer.id " +
+		       "    HAVING MAX(iSub.createdAt) < :caseDaysAgo_3 " +
+		       ")")
+	List<Customer> findNewCustomersWithInteractionNotNull(@Param("caseDaysAgo_3") LocalDateTime caseDaysAgo_3);
 	
 //	@Query("SELECT c FROM Customer c " +
 //		       "LEFT JOIN CustomerCare cc ON c.id = cc.customer.id " +
@@ -135,4 +146,8 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 	
 	@Query("SELECT COUNT(c) > 0 FROM CustomerCare c WHERE c.id = :customerCareId")
 	boolean existsByCustomeCareId(@Param("customerCareId") Long customerCareId);
+	
+	@Query("SELECT cc FROM CustomerCare cc WHERE cc.customer.id = :customerId")
+	List<CustomerCare> findByCustomerId(@Param("customerId") Long customerId);
+
 }

@@ -72,7 +72,7 @@ function showMessageNotification(customer, backgroundColorClass) {
 	}
 
 	let currentTime = now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
-	
+
 	const reminderItem = document.createElement("li");
 	reminderItem.classList.add("mb-3");
 	reminderItem.setAttribute("data-id", customer.id);
@@ -148,7 +148,7 @@ function checkUncaredCustomers() {
 	}
 
 	rows.each(function(index) {
-		let status = $(this).find('td:nth-child(8)').text().trim();
+		let status = $(this).find('td:nth-child(9)').text().trim();
 		console.log(`📌 Hàng ${index + 1}: Tình trạng - '${status}'`);
 
 		if (status === "Chưa chăm sóc") {
@@ -210,7 +210,7 @@ $(document).ready(function() {
 			success: function(data) {
 				// Ví dụ data là object chứa info khách hàng
 				const html = `
-								<p><strong>Tên CTY:</strong> ${data.companyName}</p>
+								<p><strong>Tên công ty:</strong> ${data.companyName}</p>
 								<p><strong>Email:</strong> ${data.email}</p>
 								<p><strong>SĐT:</strong> ${data.phone}</p>
 								<p><strong>Trạng thái chính:</strong> ${data.mainStatus}</p>
@@ -270,7 +270,7 @@ $(document).ready(function() {
 		$(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Đang tải...');
 
 		$.ajax({
-			url: _ctx + 'customer-care/load-potential',
+			url: _ctx + 'customer-care/save-customer-care',
 			method: 'GET',
 			dataType: "text",
 			success: function(response) {
@@ -380,7 +380,7 @@ $(document).ready(function() {
 
 
 	$('#tblDatatableCustomerCare tbody').on('click', '.care-button', function() {
-		alert("Đã click vào nút Chăm sóc");
+		//alert("Đã click vào nút Chăm sóc");
 		//		let rowData = $('#tblDatatableCustomerCare').DataTable().row($(this).parents('tr')).data();
 		//		console.log("Dữ liệu hàng:", rowData);
 		//
@@ -494,7 +494,7 @@ $(document).ready(function() {
 								targets: 3,
 								render: function(data, type, row, meta) {
 									let contactName = data || "Không có tên";
-									let statusData = row[7] || "";
+									let statusData = row[8] || "";
 
 									// Chuyển đổi status thành mảng
 									let statuses = statusData.split(",").map(s => s.trim());
@@ -546,6 +546,26 @@ $(document).ready(function() {
 								targets: 5,
 								data: null,
 								render: function(data, type, row, meta) {
+									let mainStatus = row[5];
+
+									if (mainStatus) {
+										switch (mainStatus) {
+											case "New":
+												return `<span class="badge badge-new">${mainStatus}</span>`;
+											case "Potential":
+												return `<span class="badge badge-potential">${mainStatus}</span>`;
+											case "Converted":
+												return `<span class="badge badge-stay">${mainStatus}</span>`;
+											default:
+												return `<span class="badge badge-default">${mainStatus || "Chưa có dữ liệu"}</span>`;
+										}
+									}
+								}
+							},
+							{
+								targets: 6,
+								data: null,
+								render: function(data, type, row, meta) {
 									return `
 							      <div class="interaction-btn-customer-care" style="cursor: pointer;">
 							        <button 
@@ -559,10 +579,10 @@ $(document).ready(function() {
 								}
 							},
 							{
-								targets: 6,
+								targets: 7,
 								data: null,
 								render: function(data, type, row, meta) {
-									let priority = row[6];
+									let priority = row[7];
 
 									if (priority) {
 										switch (priority) {
@@ -595,7 +615,7 @@ $(document).ready(function() {
 								}
 							},
 							{
-								targets: 7,
+								targets: 8,
 								render: function(data, type, row, meta) {
 									if (!data || data.trim() === "") {
 										data = "Chưa chăm sóc";
@@ -647,21 +667,29 @@ $(document).ready(function() {
 							},
 
 							{
-								targets: 8,
+								targets: 9,
 								data: null,
-								defaultContent: `
-															<div class="action-care">
-																<button class="care-button">
-																	<span class="icon"></span>
-																	<span class="text">Chăm sóc</span>
-																</button>
-																
-																<button class="meet-button">
-																	<span class="icon"></span>
-																	<span class="text">Hẹn gặp mặt</span>
-																</button>
-															</div>`
-							},
+								render: function (data, type, row, meta) {
+									return `
+										<div class="action-care">
+											<button 
+												class="care-button" 
+												data-bs-toggle="modal" 
+												data-bs-target="#myInteractionCustomerCaresModal"
+												data-customer-id="${row[1]}"
+											>
+												<span class="icon"></span>
+												<span class="text">Chăm sóc</span>
+											</button>
+											
+											<button class="meet-button">
+												<span class="icon"></span>
+												<span class="text">Hẹn gặp mặt</span>
+											</button>
+										</div>`;
+								}
+							}
+
 						],
 						createdRow: function(row, data, dataIndex) {
 							let priority = data[6];

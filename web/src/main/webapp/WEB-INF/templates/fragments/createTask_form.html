@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+		<!--<form th:action="@{/tasks/create}" method="post"> -->
+		<form id="taskForm">
+	        <!-- Tên công việc -->
+	        <div class="form-section">
+	            <label for="taskName" class="form-label">Tên công việc</label>
+	            <input type="text" class="form-control" id="taskName" name="taskName" required>
+	        </div>
+	
+	        <!-- Mô tả -->
+	        <div class="form-section">
+	            <label for="taskDescription" class="form-label">Mô tả công việc</label>
+	            <textarea class="form-control" id="taskDescription" name="taskDescription" rows="4"></textarea>
+	        </div>
+	
+	        <!-- Ngày bắt đầu -->
+	        <div class="form-section">
+	            <label for="startDate" class="form-label">Ngày bắt đầu</label>
+	            <input type="datetime-local" class="form-control" id="startDate" name="startDate">
+	        </div>
+	
+	        <!-- Khách hàng liên quan -->
+	        <div class="form-section">
+	            <label class="form-label">Khách hàng liên quan</label>
+	            <div id="customerContainer">
+	            
+	                <!-- Block khách hàng mẫu -->
+	                <div class="customer-block">
+					    <div class="row">
+					        <div class="col-md-6">
+					            <label class="form-label">Khách hàng</label>
+					            <select class="form-control select2" name="customers[0].customerId" style="width: 100%;">
+					                <option></option>
+					                <th:block th:each="customer : ${listCustomers}">
+					                    <option th:value="${customer.id}" 
+					                            th:attr="data-contact-person=${customer.contactPerson}"
+					                            th:text="${customer.companyName}"></option>
+					                </th:block>
+					            </select>
+					        </div>
+					        <div class="col-md-6">
+					            <label class="form-label">Người liên hệ</label>
+					            <input type="text" class="form-control contact-person-input" readonly />
+					        </div>
+					    </div>
+					    <button type="button" class="btn btn-link text-danger remove-btn" onclick="removeCustomer(this)">🗑️</button>
+					</div>
+	                
+	            </div>
+	            <button type="button" class="btn btn-outline-primary mt-2" onclick="addCustomer()">+ Thêm khách hàng</button>
+	        </div>
+	
+	        <!-- Submit -->
+	        <div class="form-section">
+	            <button type="submit" class="btn btn-success">Tạo mới</button>
+	            <a th:href="@{/task/list}" class="btn btn-secondary">Hủy</a>
+	        </div>
+	    </form>
+	
+	<script>
+// 		$(window).on('load', function () {
+// 		    $('.select2').select2({
+// 		        tags: true,
+// 		        placeholder: "Nhập hoặc chọn tên",
+// 		        language: "vi",
+// 		        allowClear: true
+// 		    });
+	
+// 		    $('.select2').on('select2:open', function () {
+// 		        $('.select2-search__field').attr('placeholder', 'Tìm kiếm...');
+// 		    });
+// 		});
+		let customerOptionsHtml = "";
+
+		function initializeCustomerSelect(selectElement) {
+		    $(selectElement).select2({
+		        placeholder: "Nhập hoặc chọn tên công ty",
+		        tags: true,
+		        allowClear: true,
+		        language: "vi"
+		    });
+	
+		    $(selectElement).on('select2:select', function () {
+		        const contactPerson = $(this).find(':selected').attr('data-contact-person') || '';
+		        $(this).closest('.customer-block').find('.contact-person-input').val(contactPerson);
+		    });
+	
+		    $(selectElement).on('select2:unselect', function () {
+		        $(this).closest('.customer-block').find('.contact-person-input').val('');
+		    });
+		}
+	
+		$(document).ready(function () {
+		    // Lưu lại option HTML để dùng lại sau này
+		    customerOptionsHtml = $('#customerContainer .select2:first option').map(function () {
+		        const value = $(this).attr('value');
+		        const contactPerson = $(this).attr('data-contact-person') || '';
+		        const text = $(this).text();
+		        return `<option value="${value}" data-contact-person="${contactPerson}">${text}</option>`;
+		    }).get().join('');
+
+		    // Khởi tạo select2 cho block đầu tiên
+		    initializeCustomerSelect($('.select2').first());
+		});
+		
+		function addCustomer() {
+		    const container = document.getElementById("customerContainer");
+		    const index = document.querySelectorAll('.customer-block').length;
+
+		    const block = document.createElement("div");
+		    block.className = "customer-block";
+
+		    block.innerHTML = `
+		        <div class="row">
+		            <div class="col-md-6">
+		                <label class="form-label">Khách hàng</label>
+		                <select class="form-control select2" name="customers[${index}].customerId" style="width: 100%;">
+		                    <option></option>
+		                    ${customerOptionsHtml}
+		                </select>
+		            </div>
+		            <div class="col-md-6">
+		                <label class="form-label">Người liên hệ</label>
+		                <input type="text" class="form-control contact-person-input" readonly />
+		            </div>
+		        </div>
+		        <button type="button" class="btn btn-link text-danger remove-btn" onclick="removeCustomer(this)">🗑️</button>
+		    `;
+
+		    container.appendChild(block);
+
+		    const newSelect = block.querySelector('.select2');
+		    $(newSelect).select2({
+		        placeholder: "Nhập hoặc chọn tên công ty",
+		        width: "100%",
+		        tags: true,
+			    allowClear: true,
+			    language: "vi",
+			    allowClear: true
+		    });
+
+		    // Cập nhật trường người liên hệ khi chọn khách hàng
+		    $(newSelect).on("change", function () {
+		        const contactPerson = $(this).find(":selected").data("contact-person") || "";
+		        $(this).closest(".row").find(".contact-person-input").val(contactPerson);
+		    });
+		}
+
+		
+		function removeCustomer(button) {
+		    button.closest('.customer-block').remove();
+		}
+	</script>
+
+</body>
+</html>

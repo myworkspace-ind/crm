@@ -31,8 +31,8 @@ public class Order implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // system field
 
-	@Column(name = "site_id", length = 99)
-	private String siteId; // system field
+//	@Column(name = "site_id", length = 99)
+//	private String siteId;
 
 	@Column(name = "name", length = 255)
 	private String name;
@@ -59,33 +59,32 @@ public class Order implements Serializable {
 
 	// Relation with OrderCategoryRepository
 	@ManyToOne
-	@JoinColumn(name = "order_cate_id", referencedColumnName = "id")
+	@JoinColumn(name = "order_cate_id", referencedColumnName = "id", nullable = false)
 	private OrderCategory orderCategory;
 
 	// Relation with Customer
 	@ManyToOne
-	@JoinColumn(name = "sender_id", referencedColumnName = "id")
+	@JoinColumn(name = "sender_id", referencedColumnName = "id", nullable = false)
 	private Customer sender;
 	
 	@ManyToOne
-	@JoinColumn(name = "receiver_id", referencedColumnName = "id")
+	@JoinColumn(name = "receiver_id", referencedColumnName = "id", nullable = false)
 	private Customer receiver;
 
 	// Relation Many-to-One with OrderStatus
 	@ManyToOne
-	@JoinColumn(name = "order_status_id")
+	@JoinColumn(name = "order_status_id", nullable = false)
 	private OrderStatus orderStatus;
 	
 	@ManyToOne
-    @JoinColumn(name = "goods_category_id") 
+    @JoinColumn(name = "goods_category_id", nullable = false) 
     private GoodsCategory goodsCategory;
 
-	public Order(Long id, String siteId, String name, String code, Date createDate, Date deliveryDate,
+	public Order(Long id, String name, String code, Date createDate, Date deliveryDate,
 			String transportationMethod, String customerRequirement, OrderCategory orderCategory, Customer sender,
 			Customer receiver, OrderStatus orderStatus, GoodsCategory goodsCategory) {
 		super();
 		this.id = id;
-		this.siteId = siteId;
 		this.name = name;
 		this.code = code;
 		this.createDate = createDate;

@@ -30,6 +30,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +45,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.google.api.client.auth.oauth2.Credential;
 
 import lombok.extern.slf4j.Slf4j;
@@ -61,10 +64,12 @@ import mks.myworkspace.crm.entity.dto.CustomerCriteriaDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailDTO;
 import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
 import mks.myworkspace.crm.entity.dto.EmailToCustomerDTO;
+import mks.myworkspace.crm.entity.dto.FilesUploadDTO;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.CustomerStatusHistoryRepository;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.EmailToCustomerService;
+import mks.myworkspace.crm.service.FilesUploadService;
 import mks.myworkspace.crm.service.ProfessionService;
 import mks.myworkspace.crm.service.ResponsiblePersonService;
 import mks.myworkspace.crm.service.StatusService;
@@ -83,6 +88,7 @@ import mks.myworkspace.crm.validate.InteractionValidator;
 import mks.myworkspace.crm.validate.ProfessionValidator;
 import mks.myworkspace.crm.validate.ResponsiblePersonValidator;
 import mks.myworkspace.crm.validate.StatusValidator;
+
 
 /**
  * Handles requests for Tasks.
@@ -141,6 +147,12 @@ public class CustomerController extends BaseController {
 	
 	@Autowired
 	private CustomerStatusHistoryRepository customerStatusHistoryRepository;
+	
+	@Autowired
+	private FilesUploadService filesUploadService;
+	
+	@Autowired
+    private Cloudinary cloudinary;
 
 //	@GetMapping("/get-potential-customer")
 //	public ResponseEntity<?> getPotentialCustomers() {
@@ -158,6 +170,111 @@ public class CustomerController extends BaseController {
 //                    .body("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
 //		}
 //	}
+	
+//	@PostMapping("/upload-files")
+//	@ResponseBody
+//	public ResponseEntity<?> uploadFiles(@RequestParam("interaction_id") Long interactionId,
+//			@RequestParam("files") List<MultipartFile> files) {
+//		List<String> uploadedFileNames = new ArrayList<>();
+//
+//		for (MultipartFile file : files) {
+//			if (!file.isEmpty()) {
+//				try {
+//					String uploadDir = "uploads/interactions/" + interactionId;
+//					File dir = new File(uploadDir);
+//					if (!dir.exists())
+//						dir.mkdirs();
+//
+//					String filePath = uploadDir + "/" + file.getOriginalFilename();
+//					file.transferTo(new File(filePath));
+//
+//					// Gọi repo thay vì viết logic SQL trực tiếp
+//					storageService.saveFilesUpload(interactionId, file.getOriginalFilename(), file.getContentType(), filePath);
+//
+//					uploadedFileNames.add(file.getOriginalFilename());
+//
+//				} catch (IOException e) {
+//					return ResponseEntity.status(500).body("Lỗi khi upload file: " + file.getOriginalFilename());
+//				}
+//			}
+//		}
+//		String absolutePath = new File("uploads/interactions/" + interactionId).getAbsolutePath();
+//		log.debug("Đường dẫn tuyệt đối: {}", absolutePath);
+//		return ResponseEntity.ok("Uploaded: " + String.join(", ", uploadedFileNames));
+//	}
+	
+	@DeleteMapping("/interaction-files-upload/{fileId}")
+	@ResponseBody
+	public ResponseEntity<?> deleteFile(@PathVariable Long fileId) {
+	    try {
+	        storageService.deleteFileById(fileId);
+	        return ResponseEntity.ok("Xóa file thành công.");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(500).body("Lỗi khi xóa file: " + e.getMessage());
+	    }
+	}
+	
+	@GetMapping("/interaction-files-upload/{interactionId}")
+	@ResponseBody
+	public List<FilesUploadDTO> getFilesByInteraction(@PathVariable Long interactionId) {
+	    return filesUploadService.findFilesByInteractionId(interactionId);
+	}
+	
+	@PostMapping("interaction-files-upload/upload-files")
+	@ResponseBody
+	public ResponseEntity<?> uploadFilesEndpoint(@RequestParam("interaction_id") Long interactionId,
+	                                             @RequestParam("files") List<MultipartFile> files) {
+	    try {
+	        uploadFiles(interactionId, files);
+	        return ResponseEntity.ok("Uploaded successfully.");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(500).body("Lỗi khi upload file: " + e.getMessage());
+	    }
+	}
+	
+	public void uploadFiles(Long interactionId, List<MultipartFile> files) throws IOException {
+	    for (MultipartFile file : files) {
+	    	
+	        if (!file.isEmpty()) {
+	            String originalFilename = file.getOriginalFilename();
+	            
+	            if(filesUploadService.isFileExists(interactionId, originalFilename)) {
+	            	// Bỏ qua file đã tồn tại
+	            	continue;
+	            }
+	            
+	            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf('.') + 1).toLowerCase();
+
+	            String resourceType;
+	            switch (fileExtension) {
+	                case "jpg": case "jpeg": case "png": case "gif": case "bmp": case "webp":
+	                    resourceType = "image";
+	                    break;
+	                case "mp4": case "mov": case "avi": case "mkv": case "webm":
+	                    resourceType = "video";
+	                    break;
+	                default:
+	                    resourceType = "raw";
+	                    break;
+	            }
+
+	            // Upload Cloudinary
+	            Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(),
+	                    ObjectUtils.asMap(
+	                            "folder", "interactions/" + interactionId,
+	                            "public_id", originalFilename,
+	                            "resource_type", resourceType,
+	                            "use_filename", true,
+	                            "unique_filename", false
+	                    ));
+
+	            String fileUrl = (String) uploadResult.get("secure_url");
+
+	            // Lưu DB
+	            storageService.saveFilesUpload(interactionId, file.getOriginalFilename(), file.getContentType(), fileUrl);
+	        }
+	    }
+	}
 
 	@GetMapping("/customerDetailJson")
 	@ResponseBody
@@ -399,6 +516,7 @@ public class CustomerController extends BaseController {
 			mav.addObject("userDisplayName", getCurrentUserDisplayName());
 	
 			List<Customer> customers = pageCustomer.getContent().size() > 0 ?  pageCustomer.getContent() : new ArrayList<Customer>();
+			log.debug("Tới đây!");
 			List<Status> statuses = statusService.getAllStatuses();
 			List<ResponsiblePerson> responsiblePersons = responsiblePersonService.getAllResponsiblePersons();
 			List<Profession> professions = professionService.getAllProfessions();
@@ -536,7 +654,7 @@ public class CustomerController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> deleteCustomersByIds(@RequestBody List<Long> customerIds, HttpServletRequest request,
 			HttpSession httpSession) {
-		System.out.println(customerIds.size());
+		log.debug("Size: {}", customerIds.size());
 		try {
 			if (customerIds == null || customerIds.isEmpty()) {
 				return ResponseEntity.badRequest().body(Map.of("errorMessage", "Danh sách ID không được trống."));
@@ -563,7 +681,7 @@ public class CustomerController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> hideCustomersByIds(@RequestBody List<Long> customerIds, HttpServletRequest request,
 			HttpSession httpSession) {
-		System.out.println(customerIds.size());
+		log.debug("Size: {}", customerIds.size());
 		try {
 			if (customerIds == null || customerIds.isEmpty()) {
 				return ResponseEntity.badRequest().body(Map.of("errorMessage", "Danh sách ID không được trống."));
@@ -908,6 +1026,71 @@ public class CustomerController extends BaseController {
 
 		return mav;
 	}
+	
+//	@GetMapping("/load-interaction")
+//	@ResponseBody
+//	public Object getInteractionData(@RequestParam("id") Long customerId) {
+//	    log.debug("Get interaction data for customer with ID: " + customerId);
+//
+//	    List<InteractionDTO> interactions = customerService.getAllCustomerInteractionWithFiles(customerId);
+//
+//	    List<String> contactPersons = interactions.stream()
+//	            .map(InteractionDTO::getContactPerson)
+//	            .distinct()
+//	            .collect(Collectors.toList());
+//
+//	    // Tạo lambda để fetch files cho mỗi interaction
+//	    Function<Long, List<FilesUploadDTO>> filesFetcher = id ->
+//	            filesUploadService.findFilesByInteractionId(id);
+//
+//	    // Truyền filesFetcher vào convert function
+//	    List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions, filesFetcher);
+//
+//	    int[] colWidths = { 200, 300, 200, 300, 200, 200, 100 };
+//	    String[] colHeaders = {
+//	        "Người trao đổi",
+//	        "Nội dung trao đổi",
+//	        "Ngày tạo",
+//	        "Kế hoạch tiếp theo",
+//	        "Ngày tương tác (dự kiến)",
+//			"Tài liệu/Hình ảnh"
+//	        ""
+//	    };
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("colWidths", colWidths);
+//	    response.put("colHeaders", colHeaders);
+//	    response.put("data", tblData);
+//	    response.put("contactPersons", contactPersons);
+//
+//	    return response;
+//	}
+
+		
+//	@GetMapping("/load-interaction")
+//	@ResponseBody
+//	public Object getInteractionData(@RequestParam("id") Long customerId) {
+//	    log.debug("Get interaction data for customer with ID: " + customerId);
+//
+//	    List<InteractionDTO> interactions = customerService.getAllCustomerInteractionWithFiles(customerId);
+//
+//	    // Lấy danh sách contactPersons
+//	    List<String> contactPersons = interactions.stream()
+//	            .map(InteractionDTO::getContactPerson)
+//	            .distinct()
+//	            .collect(Collectors.toList());
+//	    
+//	    Map<String, Object> response = new HashMap<>();
+//		// Cấu trúc bảng
+//		int[] colWidths = { 200, 300, 200, 300, 200, 100 };
+//		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "" };
+//
+//		response.put("colWidths", colWidths);
+//		response.put("colHeaders", colHeaders);
+//	    response.put("data", interactions);
+//	    response.put("contactPersons", contactPersons);
+//	    return response;
+//	}
 
 	@GetMapping("/load-interaction")
 	@ResponseBody
@@ -918,10 +1101,7 @@ public class CustomerController extends BaseController {
 		List<Interaction> interactions = customerService.getAllCustomerInteraction(customerId);
 
 		// Lấy danh sách tất cả contactPerson từ các tương tác của khách hàng
-		List<String> contactPersons = interactions.stream().map(Interaction::getContactPerson) // Giả sử bạn có phương
-																								// thức
-																								// getContactPerson()
-																								// trong Interaction
+		List<String> contactPersons = interactions.stream().map(Interaction::getContactPerson) 
 				.distinct() // Loại bỏ các giá trị trùng lặp
 				.collect(Collectors.toList());
 
@@ -929,9 +1109,9 @@ public class CustomerController extends BaseController {
 		List<Object[]> tblData = InteractionValidator.convertInteractionsToTableData(interactions);
 
 		// Cấu trúc bảng
-		int[] colWidths = { 200, 300, 200, 300, 200, 30 };
+		int[] colWidths = { 200, 300, 200, 300, 200, 100 };
 		//String[] colHeaders = { "Người trao đổi", "Ngày tương tác (dự kiến)", "Nội dung trao đổi", "Kế hoạch tiếp theo", "Ngày tạo", "" };
-		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "" };
+		String[] colHeaders = { "Người trao đổi", "Nội dung trao đổi", "Ngày tạo", "Kế hoạch tiếp theo","Ngày tương tác (dự kiến)", "Thao tác"};
 
 		// Tạo đối tượng trả về chứa các dữ liệu bảng và contactPersons
 		Map<String, Object> response = new HashMap<>();
@@ -943,12 +1123,90 @@ public class CustomerController extends BaseController {
 		// Trả về đối tượng chứa các thông tin bảng và contactPersons
 		return response;
 	}
+	
+//	@PostMapping(value = "/save-interaction", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	public ResponseEntity<?> saveInteraction(@RequestParam("data") String jsonData,
+//	                                         @RequestParam("customer_id") Long customerId,
+//	                                         MultipartHttpServletRequest request) {
+//	    try {
+//	        // Parse JSON thành TableStructure (cần thư viện như Jackson hoặc Gson)
+//	        ObjectMapper objectMapper = new ObjectMapper();
+//	        TableStructure tableData = objectMapper.readValue(jsonData, TableStructure.class);
+//	        log.debug("Prepare Parsed tableData: {}", tableData.getData());
+//
+//	        // Validate và xử lý danh sách Interaction
+//	        List<Interaction> lstInteractions = InteractionValidator.validateAndCleasing(tableData.getData(), customerId);
+//	        log.debug("After Parsed tableData: {}", lstInteractions.toString());
+//	        lstInteractions = customerService.saveOrUpdateInteraction(lstInteractions);
+//
+//	        // Cập nhật lại tableData sau khi lưu
+//	        List<Object[]> tblData = JpaTransformer_Interaction_Handsontable.convert2D(lstInteractions);
+//	        tableData.setData(tblData);
+//
+//	        // Xử lý file upload
+//	        Iterator<String> fileKeys = request.getFileNames();
+//	        while (fileKeys.hasNext()) {
+//	            String key = fileKeys.next(); // key dạng files[0][5][]
+//	            List<MultipartFile> fileList = request.getFiles(key);
+//
+//	            for (MultipartFile file : fileList) {
+//	                System.out.println("Received file: " + file.getOriginalFilename() + " with key: " + key);
+//
+//	                // Tùy theo logic của bạn, bạn có thể map key về interactionId
+//	                // Ví dụ tạm thời: gán file cho interaction đầu tiên
+//	                if (!file.isEmpty()) {
+//	                    Long interactionId = lstInteractions.get(0).getId(); // Hoặc tìm từ key
+//	                    uploadFiles(interactionId, List.of(file)); // Phương thức xử lý file riêng
+//	                }
+//	            }
+//	        }
+//
+//	        return ResponseEntity.ok(tableData);
+//
+//	    } catch (Exception ex) {
+//	        log.error("Không thể lưu Interaction.", ex);
+//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//	                .body("Lỗi trong quá trình lưu dữ liệu.");
+//	    }
+//	}
+
+	
+//	@PostMapping(value = "/save-interaction", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	@ResponseBody
+//	public TableStructure saveInteraction(
+//	        @RequestPart("data") TableStructure tableData,
+//	        @RequestPart(value = "files", required = false) List<MultipartFile> files,
+//	        @RequestParam("customer_id") Long customerId) {
+//	    log.debug("saveInteraction...{}", tableData);
+//	    log.debug("tableData:{}", tableData.getData());
+//	    try {
+//	        List<Interaction> lstInteractions = InteractionValidator.validateAndCleasing(tableData.getData(), customerId);
+//
+//	        lstInteractions = customerService.saveOrUpdateInteraction(lstInteractions);
+//
+//	        // Chuyển dữ liệu về lại 2D
+//	        List<Object[]> tblData = JpaTransformer_Interaction_Handsontable.convert2D(lstInteractions);
+//	        tableData.setData(tblData);
+//
+//	        // Nếu có file đính kèm thì upload
+//	        if (files != null && !files.isEmpty()) {
+//	            Long latestInteractionId = lstInteractions.get(0).getId(); // hoặc lấy logic phù hợp hơn
+//	            uploadFiles(latestInteractionId, files);
+//	        }
+//
+//	    } catch (Exception ex) {
+//	        log.error("Không thể lưu Interaction.", ex);
+//	    }
+//
+//	    return tableData;
+//	}
+
 
 	@PostMapping(value = "/save-interaction")
 	@ResponseBody
 	public TableStructure saveInteraction(@RequestBody TableStructure tableData,
 			@RequestParam("customer_id") Long customerId) {
-		log.debug("saveInteraction...{}", tableData);
+		log.debug("saveInteraction...{}", tableData.getData());
 
 		try {
 			List<Interaction> lstInteractions = InteractionValidator.validateAndCleasing(tableData.getData(),
@@ -1064,7 +1322,7 @@ public class CustomerController extends BaseController {
 		}
 		else {
 			lstGoodsCategory = storageService.getGoodsCategoryRepo().findAllOrderBySeqno();
-			colHeaders = new String[]{"ID", "Tên hàng hóa", "Ghi chú","Thứ tự ưu tiên", "Hành động"};
+			colHeaders = new String[]{"ID", "Tên hàng hóa", "Ghi chú", "Thứ tự ưu tiên", "Hành động"};
 			List<String> fields = List.of("id", "name", "note", "seqno");
 			tblData = JpaTransformer_ResponsiblePerson_Handsontable.convert2DGeneric(lstGoodsCategory, fields);
 		}
@@ -1194,7 +1452,7 @@ public class CustomerController extends BaseController {
 	            updatedCustomer = storageService.saveOrUpdate(existingCustomer);
 	        } else {
 	            customer.setCreatedAt(LocalDateTime.now());
-	            customer.setSiteId(getCurrentSiteId());
+	            //customer.setSiteId(getCurrentSiteId());
 	            updatedCustomer = storageService.saveOrUpdate(customer);
 	        }
 
@@ -1213,7 +1471,7 @@ public class CustomerController extends BaseController {
 	        return ResponseEntity.badRequest().body(Map.of("errorMessage", e.getMessage()));
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage",
-	                "Có lỗi xảy ra khi cập nhật khách hàng. Vui lòng kiểm tra lại độ dài SDT! ID: " + customer.getId()));
+	                "Có lỗi xảy ra khi cập nhật khách hàng. ID: " + customer.getId()));
 	    }
 	}
 

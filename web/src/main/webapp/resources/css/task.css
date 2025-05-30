@@ -1,0 +1,138 @@
+.task-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.task-wrapper {
+	position: relative;
+}
+
+.task-item {
+	background-color: white;
+	border-radius: 8px;
+	padding: 12px 16px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: black;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease, border-color
+		0.3s ease;
+}
+
+.task-item:hover {
+	background-color: #808080;
+	color: white;
+	border-radius: 8px;
+}
+
+.task-title {
+	flex: 1;
+	margin: 0 12px;
+	font-size: 16px;
+}
+
+.circle-btn {
+	background: none;
+	border: 2px solid #ccc;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	padding: 0;
+	transition: border-color 0.1s ease;
+}
+
+.circle-btn:hover {
+	border-color: #fff;
+}
+
+.star-btn {
+	background: none;
+	border: none;
+	color: #ccc;
+	font-size: 30px;
+	cursor: pointer;
+	transition: color 0.3s ease;
+}
+
+.star-btn:hover {
+	color: gold;
+}
+
+.task-overview {
+	max-height: 0px;
+	opacity: 0;
+	overflow: hidden;
+	background-color: #1f1f1f;
+	color: #ccc;
+	padding: 0 12px;
+	font-size: 14px;
+	border-left: 4px solid #007bff;
+	border-radius: 0 0 8px 8px;
+	transition: all 0.3s ease;
+	transition: max-height 0.3s ease, opacity 0.3s ease;
+	overflow-y: hidden;
+	margin-bottom: 15px;
+}
+
+.task-wrapper:hover .task-overview {
+	max-height: 300px;
+	opacity: 1;
+	padding: 8px 12px;
+	overflow-y: auto;
+	margin-bottom: 15px;
+}
+
+.task-group-header {
+	background-color: #88c4ff !important;
+	padding: 12px 16px;
+	font-size: 20px;
+	border-radius: 6px;
+	margin-bottom: 10px;
+	transition: background-color 0.3s;
+	margin-top: 10px;
+}
+
+.task-group-header:hover {
+	background-color: #0055a0 !important;
+	color: white !important;
+}
+
+.task-group-header:hover .arrow-icon{
+	color: white !important;
+}
+
+.arrow-icon {
+	font-size: 16px;
+	color: #333;
+	transition: transform 0.2s ease;
+}
+
+.task-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 800px;
+    height: 100vh;
+    background: #fff;
+    border-left: 1px solid #ddd;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+}
+.task-item.completed .task-title {
+    text-decoration: line-through;
+    opacity: 0.6;
+}

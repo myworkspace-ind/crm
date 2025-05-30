@@ -10,6 +10,7 @@ public interface CustomerCareService {
 	CustomerCareRepository getRepo();
 	
 	void loadPotentialCustomersIntoCustomerCare();
+//	void saveCustomerCare();
 	
 	void createRemindersForCustomer(Customer customer);
 	

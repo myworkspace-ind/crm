@@ -33,11 +33,11 @@ public class CustomerStatusHistory implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = false)
     private Status mainStatus;
 
     @Column(name = "change_date")

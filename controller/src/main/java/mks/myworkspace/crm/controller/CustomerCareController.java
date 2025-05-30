@@ -30,8 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.CustomerCare;
 import mks.myworkspace.crm.entity.Interaction;
+import mks.myworkspace.crm.entity.Status;
 import mks.myworkspace.crm.service.CustomerCareService;
 import mks.myworkspace.crm.service.CustomerService;
+import mks.myworkspace.crm.service.StatusService;
 import mks.myworkspace.crm.service.StorageService;
 import mks.myworkspace.crm.transformer.JpaTransformer_CustomerCare;
 
@@ -48,12 +50,18 @@ public class CustomerCareController extends BaseController {
 
 	@Autowired
 	StorageService storageService;
+	
+	@Autowired
+	StatusService statusService;
 
 	@Value("${customer.care.days-ago-case1}")
 	private int reminderDays;
 
 	@Value("${customer.care.days-ago-case2}")
 	private int reminderDays_case2;
+	
+	@Value("${customer.care.days-ago-case3}")
+	private int reminderDays_case3;
 
 	@Value("${customer.care.max-care-days-new-case1}")
 	private int checkCareStatusDaysForNew_Case1;
@@ -90,12 +98,20 @@ public class CustomerCareController extends BaseController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping(value = "/load-potential", produces = "application/json; charset=UTF-8")
+	@GetMapping(value = "/save-customer-care", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> loadPotentialCustomers() {
+		log.debug("Đã tới được đây");
 		try {
+			if (customerCareService == null) {
+				log.error("customerCareService đang NULL. Kiểm tra @Autowired hoặc Bean configuration.");
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body("Lỗi nội bộ: customerCareService chưa được khởi tạo.");
+			}
 			customerCareService.loadPotentialCustomersIntoCustomerCare();
+			//customerCareService.saveCustomerCare();
 			return ResponseEntity.ok("Nạp khách hàng vào CustomerCare thành công!");
 		} catch (Exception e) {
+			log.error("Lỗi khi chạy loadPotentialCustomersIntoCustomerCare(): {}", e.getMessage(), e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Lỗi khi nạp khách hàng: " + e.getMessage());
 		}
@@ -104,6 +120,7 @@ public class CustomerCareController extends BaseController {
 	@GetMapping(value = "/check-unsaved-customercare", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> checkUnsavedCustomerCare() {
 		try {
+			List<Status> allStatuses = statusService.getAllStatuses();
 			List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();// Dành cho KH hiện đang có trạng Chưa chăm sóc
 			List<CustomerCare> customersWithCareData = customerCareService.findAll();// Danh sách đã có sẵn trong bảng
 																						// crm_customer_care
@@ -215,10 +232,10 @@ public class CustomerCareController extends BaseController {
 						LocalDateTime interactionTime = latestInteraction.get().getCreatedAt();
 						latestCreatedAtInteraction = interactionTime.toString();
 
-						// TODO: Bổ sung logic: Nếu là khách hàng Tiềm năng & latestCreatedAtInteraction
+						// TODO: Bổ sung logic: Nếu là khách hàng Potential & latestCreatedAtInteraction
 						// + reminderDays_case2 < thời gian hiện tại
 						// thì thêm vào customersWithoutData
-						if ("Tiềm năng".equalsIgnoreCase(c.getMainStatus().getName())) {
+						if ("Potential".equalsIgnoreCase(c.getMainStatus().getName()) ) {
 							LocalDateTime remindTime = interactionTime.plusDays(reminderDays_case2);
 
 							if (remindTime.isBefore(LocalDateTime.now())) {
@@ -228,7 +245,24 @@ public class CustomerCareController extends BaseController {
 
 								if (!isAlreadyReminded) {
 									log.debug(
-											"⚠️ Thêm khách hàng TIỀM NĂNG cần chăm sóc (mới thời điểm): ID {}, Name {}, RemindTime {}",
+											"⚠️ Thêm khách hàng Potential cần chăm sóc (New thời điểm): ID {}, Name {}, RemindTime {}",
+											c.getId(), c.getCompanyName(), remindTime);
+									customersWithoutData.add(c);
+								}
+							}
+						}
+						
+						if ("New".equalsIgnoreCase(c.getMainStatus().getName()) ) {
+							LocalDateTime remindTime = interactionTime.plusDays(reminderDays_case3);
+
+							if (remindTime.isBefore(LocalDateTime.now())) {
+								boolean isAlreadyReminded = customersWithCareData.stream()
+										.anyMatch(cc -> cc.getCustomer().getId().equals(c.getId())
+												&& cc.getRemindDate() != null && cc.getRemindDate().equals(remindTime));
+
+								if (!isAlreadyReminded) {
+									log.debug(
+											"⚠️ Thêm khách hàng New cần chăm sóc (New thời điểm): ID {}, Name {}, RemindTime {}",
 											c.getId(), c.getCompanyName(), remindTime);
 									customersWithoutData.add(c);
 								}
@@ -245,9 +279,9 @@ public class CustomerCareController extends BaseController {
 //			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
 //					customersNeedCares);
 			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
-					allCustomers);
+					allCustomers, allStatuses);
 			List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData,
-					reminderDays, reminderDays_case2);
+					reminderDays, reminderDays_case2, reminderDays_case3);
 
 			// Gom tất cả lại và trả về response
 			Map<String, Object> response = new HashMap<>();
@@ -263,7 +297,9 @@ public class CustomerCareController extends BaseController {
 
 	@GetMapping(value = "/load-customer-care", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> getPotentialCustomers() {
+		log.debug("Here!");
 		try {
+			List<Status> allStatuses = statusService.getAllStatuses();
 			List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();// Dành cho KH hiện đang có trạng Chưa chăm sóc
 			List<CustomerCare> customersWithCareData = customerCareService.findAll();// Danh sách đã có sẵn trong bảng
 																						// crm_customer_care
@@ -375,10 +411,10 @@ public class CustomerCareController extends BaseController {
 						LocalDateTime interactionTime = latestInteraction.get().getCreatedAt();
 						latestCreatedAtInteraction = interactionTime.toString();
 
-						// TODO: Bổ sung logic: Nếu là khách hàng Tiềm năng & latestCreatedAtInteraction
+						// TODO: Bổ sung logic: Nếu là khách hàng Potential & latestCreatedAtInteraction
 						// + reminderDays_case2 < thời gian hiện tại
 						// thì thêm vào customersWithoutData
-						if ("Tiềm năng".equalsIgnoreCase(c.getMainStatus().getName())) {
+						if ( "Potential".equalsIgnoreCase(c.getMainStatus().getName()) ) {
 							LocalDateTime remindTime = interactionTime.plusDays(reminderDays_case2);
 
 							if (remindTime.isBefore(LocalDateTime.now())) {
@@ -388,7 +424,23 @@ public class CustomerCareController extends BaseController {
 
 								if (!isAlreadyReminded) {
 									log.debug(
-											"⚠️ Thêm khách hàng TIỀM NĂNG cần chăm sóc (mới thời điểm): ID {}, Name {}, RemindTime {}",
+											"⚠️ Thêm khách hàng Potential cần chăm sóc (New thời điểm): ID {}, Name {}, RemindTime {}",
+											c.getId(), c.getCompanyName(), remindTime);
+									customersWithoutData.add(c);
+								}
+							}
+						}
+						if ("New".equalsIgnoreCase(c.getMainStatus().getName()) ) {
+							LocalDateTime remindTime = interactionTime.plusDays(reminderDays_case3);
+
+							if (remindTime.isBefore(LocalDateTime.now())) {
+								boolean isAlreadyReminded = customersWithCareData.stream()
+										.anyMatch(cc -> cc.getCustomer().getId().equals(c.getId())
+												&& cc.getRemindDate() != null && cc.getRemindDate().equals(remindTime));
+
+								if (!isAlreadyReminded) {
+									log.debug(
+											"⚠️ Thêm khách hàng New cần chăm sóc (New thời điểm): ID {}, Name {}, RemindTime {}",
 											c.getId(), c.getCompanyName(), remindTime);
 									customersWithoutData.add(c);
 								}
@@ -405,9 +457,9 @@ public class CustomerCareController extends BaseController {
 //			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
 //					customersNeedCares);
 			List<Object[]> convertedWithData = JpaTransformer_CustomerCare.convert2D_CustomerCares(customersWithData,
-					allCustomers);
+					allCustomers, allStatuses);
 			List<Object[]> convertedWithoutData = JpaTransformer_CustomerCare.convert2D_Customers(customersWithoutData,
-					reminderDays, reminderDays_case2);
+					reminderDays, reminderDays_case2, reminderDays_case3);
 
 			// Gom tất cả lại và trả về response
 			Map<String, Object> response = new HashMap<>();
@@ -507,7 +559,7 @@ public class CustomerCareController extends BaseController {
 //
 //	        if (customers.isEmpty()) {
 //	            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-//	                                 .body("Không có khách hàng tiềm năng nào.");
+//	                                 .body("Không có khách hàng Potential nào.");
 //	        }
 //
 //	        return ResponseEntity.ok(customers);

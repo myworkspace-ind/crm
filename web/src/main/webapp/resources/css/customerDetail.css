@@ -381,6 +381,15 @@ body {
 }
 
 .detail-email-modal-content {
+	border-radius: 8px;
+	max-height: 90vh;
+	width: 600px;
+	overflow-y: auto;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	position: relative;
+}
+
+.detail-email-modal-content {
 	background-color: white;
 	padding: 10px;
 	width: 100%;
@@ -401,10 +410,10 @@ body {
 }
 
 .table-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .status-history-table {
@@ -414,126 +423,129 @@ body {
 	box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
 }
 
-.status-history-table th,
-.status-history-table td {
-  padding: 12px 16px;
-  text-align: center;
-  border: 1px solid #ddd;
+.status-history-table th, .status-history-table td {
+	padding: 12px 16px;
+	text-align: center;
+	border: 1px solid #ddd;
 }
 
 /* Màu riêng cho từng trạng thái */
 .stage-header {
-  background-color: #1976d2;
-  color: #fff;
+	background-color: #1976d2;
+	color: #fff;
 }
 
 .new-header {
-  background-color: #e94b4b;
-  color: white;
+	background-color: #e94b4b;
+	color: white;
 }
 
 .potential-header {
-  background-color: #3f51b5;
-  color: white;
+	background-color: #3f51b5;
+	color: white;
 }
 
 .converted-header {
-  background-color: #38993c;
-  color: white;
+	background-color: #38993c;
+	color: white;
 }
 
 .leave-header {
-  background-color: #5c5c5c;
-  color: white;
+	background-color: #5c5c5c;
+	color: white;
 }
 
 .back-header {
-  background-color: #ee9020;
-  color: white;
+	background-color: #ee9020;
+	color: white;
 }
 
 .status-history-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+	background-color: #f9f9f9;
 }
 
 .status-history-table tbody tr:hover {
-  background-color: #eef6ff;
+	background-color: #eef6ff;
 }
 
 .profile-card {
-    transition: box-shadow 0.3s ease-in-out !important;
+	transition: box-shadow 0.3s ease-in-out !important;
 }
 
 .profile-card:hover {
-    box-shadow: 0 8px 24px rgba(0, 136, 209, 0.25) !important;
+	box-shadow: 0 8px 24px rgba(0, 136, 209, 0.25) !important;
 }
 
 .list-group-item {
-    font-size: 1rem;
-    border: none;
-    border-bottom: 1px solid #eee;
-    padding: 12px 20px;
-    transition: background-color 0.2s ease;
+	font-size: 1rem;
+	border: none;
+	border-bottom: 1px solid #eee;
+	padding: 12px 20px;
+	transition: background-color 0.2s ease;
 }
 
 .list-group-item:hover {
-    background-color: #f9f9f9;
+	background-color: #f9f9f9;
 }
 
 .list-group-item strong {
-    color: #333;
-    width: 150px;
-    display: inline-block;
+	color: #333;
+	width: 150px;
+	display: inline-block;
 }
 
-.card.shadow.profile-card, .card.shadow.progress-card{
+.card.shadow.profile-card, .card.shadow.progress-card {
 	width: 90%;
 	margin-left: 30px;
 	margin-top: 20px;
 }
 
 .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
 }
 
 .info-column p {
-    margin: 8px 0;
-    font-size: 1rem;
+	margin: 8px 0;
+	font-size: 1rem;
 }
 
 .info-column strong {
-    color: #333;
-    min-width: 150px;
-    display: inline-block;
+	color: #333;
+	min-width: 150px;
+	display: inline-block;
 }
 
 .progress-block {
-  margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .progress-block label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 500;
-  color: #333;
+	display: block;
+	margin-bottom: 6px;
+	font-weight: 500;
+	color: #333;
 }
 
 .progress-bar {
-  background-color: #e0e0e0;
-  border-radius: 20px;
-  overflow: hidden;
-  height: 26px;
+	background-color: #e0e0e0;
+	border-radius: 20px;
+	overflow: hidden;
+	height: 26px;
 }
 
 .progress-fill {
-  height: 100%;
-  background-color: #42a5f5;
-  color: white;
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-align: center;
-  line-height: 26px;
-  transition: width 0.3s ease;
+	height: 100%;
+	background-color: #42a5f5;
+	color: white;
+	font-size: 0.85rem;
+	font-weight: 500;
+	text-align: center;
+	line-height: 26px;
+	transition: width 0.3s ease;
+}
+
+#advancedEmailSection {
+	transition: all 0.3s ease;
 }

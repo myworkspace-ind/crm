@@ -6,17 +6,60 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.controller.CustomerController;
 import mks.myworkspace.crm.entity.Customer;
 import mks.myworkspace.crm.entity.Interaction;
+import mks.myworkspace.crm.entity.dto.FilesUploadDTO;
+import mks.myworkspace.crm.entity.dto.InteractionDTO;
 import mksgroup.java.common.CommonUtil;
 
 @Slf4j
 public class InteractionValidator {
+//	public static List<Object[]> convertInteractionsToTableData(List<InteractionDTO> interactions,
+//			Function<Long, List<FilesUploadDTO>> filesFetcher // truyền vào hàm lấy files
+//	) {
+//		List<Object[]> tableData = new ArrayList<>();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//
+//		for (InteractionDTO interaction : interactions) {
+//			if (interaction != null) {
+//				String formattedDate = interaction.getInteractionDate() != null
+//						? sdf.format(interaction.getInteractionDate())
+//						: "";
+//
+//				String createdAt = interaction.getCreatedAt() != null ? formatter.format(interaction.getCreatedAt())
+//						: "";
+//
+//				// Gọi hàm lấy files
+//				//List<FilesUploadDTO> files = filesFetcher.apply(interaction.getId());
+//
+//				Object[] rowData = new Object[] { 
+//						interaction.getContactPerson(), 
+//						interaction.getContent(), 
+//						createdAt,
+//						interaction.getNextPlan(), 
+//						formattedDate, 
+//						//files,
+//						interaction.getId(),
+//				};
+//
+//				tableData.add(rowData);
+//			}
+//		}
+//
+//		return tableData;
+//	}
+
 	public static List<Object[]> convertInteractionsToTableData(List<Interaction> interactions) {
 		List<Object[]> tableData = new ArrayList<>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày giờ
@@ -56,6 +99,7 @@ public class InteractionValidator {
 			if (CommonUtil.isNNNE(rowData)) {
 				try {
 					String contactPerson = (String) rowData[0];
+					log.debug("rowData[0]: {}",(String) rowData[0]);
 					String content = (String) rowData[1];
 					// Xử lý createdAt
 	                LocalDateTime createdAt = LocalDateTime.now(); 
@@ -69,12 +113,28 @@ public class InteractionValidator {
 	                    }
 	                }
 					String nextPlan = (String) rowData[3];
+					log.debug("rowData[3]: {}",(String) rowData[3]);
 
 					String dateString = (String) rowData[4];
 					Date date = dateFormat.parse(dateString);
+					
+					// Trong class
+					//ObjectMapper objectMapper = new ObjectMapper();
+
+					// Trong vòng lặp
+//					List<FilesUploadDTO> files = new ArrayList<>();
+//					if (rowData[5] != null) {
+//					    try {
+//					        files = objectMapper.convertValue(rowData[5], new TypeReference<List<FilesUploadDTO>>() {});
+//					        log.debug("✅ Converted FilesUploadDTO list: {}", files);
+//					    } catch (Exception e) {
+//					        log.error("❌ Lỗi khi parse files từ rowData[5]: {}", e.getMessage());
+//					    }
+//					}
 
 	                // Xử lý interactionId
 	                Long interactionId = null;
+	                
 	                if (rowData[5] != null) {
 	                    try {
 	                        interactionId = Long.valueOf(rowData[5].toString());

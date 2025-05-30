@@ -14,6 +14,7 @@
 
 	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/new_style.css}" />
 	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/customerDetail.css}" />
+
 	<link type="text/css" rel="stylesheet" href="/library/webjars/handsontable/handsontable.full.min.css" />
 	<script th:inline="javascript" src="/library/webjars/handsontable/handsontable.full.min.js"></script>
 	<script>
@@ -52,16 +53,36 @@
 				</div>
 				<div class="content-header-right col-md-6 col-12">
 					<!-- Outline buttons with Icons -->
+						<p th:if="${message}" th:text="${message}" style="color: green;"></p>
 					
 					<fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-						<button id="openEmailModal" data-customer-id="${customer.id}" data-customer-email="${customer.email}" type="button" class="mr-1 mb-1 btn btn-outline-primary btn-min-width"><i class="fa fa-envelope-o"></i> Gửi Email</button>
+						<button id="openEmailModal" 
+								data-customer-id="${customer.id}"
+								data-customer-email="${customer.email}" 
+								type="button" 
+								class="mr-1 mb-1 btn btn-outline-primary btn-min-width">
+							<i class="fa fa-envelope-o"></i> Gửi Email Cơ Bản
+						</button>
+					</fieldset>
+					
+					<fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
+					    <button id="toggleAdvancedEmail"
+					    		type="button"
+						        class="mb-1 btn btn-outline-success btn-min-width"
+						        data-toggle="modal"
+						        data-target="#advancedEmailModal">
+						    <i class="fa fa-envelope"></i> Gửi Email Nâng Cao
+						</button>
 					</fieldset>
 				</div>
 				
 				<div class="email-overlay" id="emailOverlay"></div>
 				
-				<!-- Modal Gửi Email -->
+				<!-- Modal Gửi Email Cơ Bản -->
 				<th:block th:include="fragments/email/frg_sendEmailModal_CustomerDetail"></th:block>
+				
+				<!-- Modal Gửi Email Nâng cao -->
+				<th:block th:include="fragments/email/frg_sendEmailModal_Advanced_CustomerDetail"></th:block>
 									    
 			  <div id="detailEmailModal" class="detail-email-modal">
 		        	<div class="detail-email-modal-content">
@@ -71,14 +92,14 @@
 	     						<p><strong>Từ:</strong> <span id="detailEmailFrom"></span></p>
 	     						<p><strong>Đến:</strong> <span id="detailEmailTo"></span></p>
 	     						<p><strong>Chủ đề:</strong> <span id="detailEmailSubject"></span></p>
-				        <p><strong>Thời gian:</strong> <span id="detailEmailTime"></span></p>
+				        <p><strong>Thời gian:</strong> <span id="detailEmailTime"></span></p> 
 				        <p><strong>Trạng thái:</strong> <span id="detailEmailStatus"></span></p>
 				        <hr>
 				        <p><strong>Nội dung:</strong></p>
 				        <div id="detailEmailContent"></div>
 				        <button id="closeDetailEmailModal">Đóng</button>
 		        	</div>
-			     </div>
+			   </div>
 			</div>
 
 			<div class="container">
@@ -89,21 +110,21 @@
 							<img th:src="@{/resources/app-assets/images/portrait/small/avatar-s-10.png}" alt="User Avatar">
 						</div>
 						<div class="user-details">
-							<h2 th:text="${customer.companyName}"></h2>
-							
+							<h2 th:text="${#strings.isEmpty(customer.companyName) ? 'Chưa cập nhật' : customer.companyName}"></h2>
 							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;">
 							  <i class="fa fa-map-marker"></i>
-							  <p th:text="${customer.address}" style="display: inline; margin: 0;"></p>
+							  <p th:text="${#strings.isEmpty(customer.address) ?  'Chưa cập nhật' : customer.address}" style="display: inline; margin: 0;"></p>
 							</div>
 							
 							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px;	">
 							  <i class="fa fa-volume-control-phone"></i>
-							  <p th:text="${customer.phone}" style="display: inline; margin: 0;"></p>
+							  <p th:text="${#strings.isEmpty(customer.phone) ? 'Chưa cập nhật' : customer.phone}" style="display: inline; margin: 0;"></p>
 							</div>
 							
 							<div class="overviewInformation" style="line-height: 2; margin-bottom: 10px; display: inline-flex; white-space: nowrap;">
-							  <i class="fa fa-envelope-open"></i>
-							  <p th:text="${customer.email}" style="display: inline-flex; margin-top: -6px; margin-left: 5px"></p>
+								<i class="fa fa-envelope-open"></i>
+								<p th:text="${#strings.isEmpty(customer.email) ? 'Chưa cập nhật' : customer.email}" 
+								   style="display: inline-flex; margin-top: -6px; margin-left: 5px;"></p>
 							</div>
 							
 						</div>
@@ -175,63 +196,47 @@
 						</div>
 						<div class="card shadow profile-card d-flex flex-row justify-content-between p-3" style="display: flex; gap: 20px; flex-wrap: wrap;">
 							<ul class="list-group list-group-flush" style="flex: 1;">
-								<li class="list-group-item"><strong>Tên công ty:</strong><span th:text="${customer.companyName}"></span></li>
-								<li class="list-group-item"><strong>Người liên hệ chính:</strong><span th:text="${customer.contactPerson}"></span></li>
-		                        <li class="list-group-item"><strong>Email:</strong><span th:text="${customer.email}"></span></li>
-		                        <li class="list-group-item"><strong>Số điện thoại:</strong><span th:text="${customer.phone}"></span></li>
-		                        <li class="list-group-item"><strong>Địa chỉ:</strong><span th:text="${customer.address}"></span></li>
-		                        <li class="list-group-item"><strong>Ngành nghề:</strong><span th:text="${customer.profession.name}"></span></li>
-		                        <li class="list-group-item"><strong>Trạng thái chính:</strong><span th:text="${customer.mainStatus.name}"></span></li>
-		                        <li class="list-group-item"><strong>Trạng thái phụ:</strong><span th:text="${customer.subStatus.name}"></span></li>
-		                        <li class="list-group-item"><strong>Người phụ trách:</strong><span th:text="${customer.responsiblePerson.name}"></span></li>
-		                        <li class="list-group-item"><strong>Ghi chú:</strong><span th:text="${customer.note}"></span></li>
-	                    	</ul>
-	                    	<h3>Gửi Email cho khách hàng</h3>
-	                    	<!-- Nếu chưa đăng nhập Gmail -->
-							<div th:if="${!credentialExists}">
-							    <p>⚠️ Bạn cần đăng nhập Gmail để có thể gửi email.</p>
-							    <a th:href="@{'/authorize?customerId=' + ${customerId}}">
-							        <button>Đăng nhập Gmail</button>
-							    </a>
-							</div>
-							<div th:if="${credentialExists}">
-								<form th:action="@{/customer/send-email-using-gmail}" method="post" enctype="multipart/form-data">
-									 <input type="hidden" name="customer" value="${customer.id}" />
-								    <!-- Người gửi (readonly) -->
-	<!-- 							    <label>Người gửi:</label> -->
-	<!-- 							    <input style="width: 50%" type="text" name="sender" th:value="${#request.userPrincipal.name}" readonly/><br/> -->
-								
-								    <!-- Người nhận (readonly) -->
-								    <label>Người nhận:</label>
-								    <input style="width: 50%" type="text" name="to" th:value="${customer.email}" readonly/><br/>
-								
-								    <!-- CC -->
-								    <label>CC:</label>
-								    <input style="width: 50%" type="text" name="cc" placeholder="cc@example.com" /><br/>
-								
-								    <!-- BCC -->
-								    <label>BCC:</label>
-								    <input style="width: 50%" type="text" name="bcc" placeholder="bcc@example.com" /><br/>
-								
-								    <!-- Tiêu đề -->
-								    <label>Tiêu đề:</label>
-								    <input style="width: 50%" type="text" name="subject" required /><br/>
-								
-								    <!-- Nội dung (rich text) -->
-								    <label>Nội dung:</label><br/>
-								    <textarea id="editor" name="body" rows="10" cols="60" required></textarea><br/>
-								
-								    <!-- Đính kèm -->
-								    <label>Đính kèm tệp:</label>
-								    <input type="file" name="attachments" id="attachment" multiple onchange="previewAttachments()" /><br/><br/>
-								    <div id="preview-area" style="margin-top: 10px;"></div>
-								
-								    <button type="submit">Gửi Email</button>
-								</form>
-								
-								<!-- Kết quả -->
-								<p th:if="${message}" th:text="${message}" style="color: green;"></p>
-							</div>
+								<li class="list-group-item">
+									<strong>Tên công ty:</strong>
+									<span th:text="${#strings.isEmpty(customer.companyName) ? 'Chưa cập nhật' : customer.companyName}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Người liên hệ chính:</strong>
+									<span th:text="${#strings.isEmpty(customer.contactPerson) ? 'Chưa cập nhật' : customer.contactPerson}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Email:</strong>
+									<span th:text="${#strings.isEmpty(customer.email) ? 'Chưa cập nhật' : customer.email}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Số điện thoại:</strong>
+									<span th:text="${#strings.isEmpty(customer.phone) ? 'Chưa cập nhật' : customer.phone}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Địa chỉ:</strong>
+									<span th:text="${customer.address != null and !#strings.isEmpty(customer.address) ? customer.address : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Ngành nghề:</strong>
+									<span th:text="${customer.profession != null and !#strings.isEmpty(customer.profession.name) ? customer.profession.name : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Trạng thái chính:</strong>
+									<span th:text="${customer.mainStatus != null and !#strings.isEmpty(customer.mainStatus.name) ? customer.mainStatus.name : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Trạng thái phụ:</strong>
+									<span th:text="${customer.subStatus != null and !#strings.isEmpty(customer.subStatus.name) ? customer.subStatus.name : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Người phụ trách:</strong>
+									<span th:text="${customer.responsiblePerson != null and !#strings.isEmpty(customer.responsiblePerson.name) ? customer.responsiblePerson.name : 'Chưa cập nhật'}"></span>
+								</li>
+								<li class="list-group-item">
+									<strong>Ghi chú:</strong>
+									<span th:text="${#strings.isEmpty(customer.note) ? 'Chưa cập nhật' : customer.note}"></span>
+								</li>
+							</ul>
 	                    </div>
 	                    
 	                     <!-- Progress bar bên phải -->
@@ -251,13 +256,7 @@
 					            <div class="progress-fill" style="width: 60%;">60%</div>
 					          </div>
 					        </div>
-					
-<!-- 					        <div class="progress-block"> -->
-<!-- 					          <label>Ký hợp đồng</label> -->
-<!-- 					          <div class="progress-bar"> -->
-<!-- 					            <div class="progress-fill" style="width: 90%;">90%</div> -->
-<!-- 					          </div> -->
-<!-- 					        </div> -->
+
 					      </div>
 					</div>
 					
@@ -336,32 +335,6 @@
 		                                <th>Password</th>
 		                            </tr>
 		                        </thead>
-		                        <tbody>
-		                            <tr>
-		                                <td>John</td>
-		                                <td>Doe</td>
-		                                <td>john@example.com</td>
-		                                <td>********</td>
-		                            </tr>
-		                            <tr>
-		                                <td>Mary</td>
-		                                <td>Moe</td>
-		                                <td>mary@example.com</td>
-		                                <td>*****</td>
-		                            </tr>
-		                            <tr>
-		                                <td>July</td>
-		                                <td>Dooley</td>
-		                                <td>july@example.com</td>
-		                                <td>**********</td>
-		                            </tr>
-		                            <tr>
-		                                <td>Piter</td>
-		                                <td>pan</td>
-		                                <td>july@example.com</td>
-		                                <td>********</td>
-		                            </tr>
-		                        </tbody>
 		                    </table>
 		                </div> 
 					</div>
@@ -412,6 +385,8 @@
 		</div>
 	</div>
 	
+
+	
 	<th:block th:replace="~{fragments/frg_Modal_Interaction :: modalFragment('myModal')}"></th:block>
 
 	<!-- END CONTENT -->
@@ -440,106 +415,107 @@
 	<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 	
 	<script>
-	    CKEDITOR.replace('editor');
-	    
-	    function previewAttachments() {
-	        const fileInput = document.getElementById('attachment');
-	        const previewArea = document.getElementById('preview-area');
-	        previewArea.innerHTML = ''; // Clear cũ
-
-	        const files = fileInput.files;
-	        if (!files.length) return;
-
-	        Array.from(files).forEach(file => {
-	            const container = document.createElement('div');
-	            container.style.border = '1px solid #ccc';
-	            container.style.padding = '10px';
-	            container.style.marginBottom = '15px';
-	            container.style.background = '#fafafa';
-
-	            const info = document.createElement('p');
-	            info.textContent = `📎 ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
-	            container.appendChild(info);
-
-	            const reader = new FileReader();
-
-	            if (file.type.startsWith('image/')) {
-	                reader.onload = function (e) {
-	                    const img = document.createElement('img');
-	                    img.src = e.target.result;
-	                    img.style.maxWidth = '300px';
-	                    container.appendChild(img);
-	                };
-	                reader.readAsDataURL(file);
-	            }
-	            else if (file.type === 'application/pdf') {
-	                reader.onload = function (e) {
-	                    const iframe = document.createElement('iframe');
-	                    iframe.src = e.target.result;
-	                    iframe.style.width = '100%';
-	                    iframe.style.height = '500px';
-	                    container.appendChild(iframe);
-	                };
-	                reader.readAsDataURL(file);
-	            }
-	            else if (file.type === 'text/plain') {
-	                reader.onload = function (e) {
-	                    const pre = document.createElement('pre');
-	                    pre.textContent = e.target.result;
-	                    pre.style.maxHeight = '400px';
-	                    pre.style.overflow = 'auto';
-	                    pre.style.background = '#f4f4f4';
-	                    pre.style.padding = '10px';
-	                    container.appendChild(pre);
-	                };
-	                reader.readAsText(file);
-	            }
-	            else if (file.name.endsWith(".docx") || file.name.endsWith(".doc")) {
-	                reader.onload = function (e) {
-	                    const arrayBuffer = e.target.result;
-	                    mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
-	                        .then(result => {
-	                            const docxDiv = document.createElement('div');
-	                            docxDiv.innerHTML = result.value;
-	                            docxDiv.style.border = '1px solid #eee';
-	                            docxDiv.style.padding = '10px';
-	                            docxDiv.style.maxHeight = '400px';
-	                            docxDiv.style.overflow = 'auto';
-	                            container.appendChild(docxDiv);
-	                        })
-	                        .catch(err => {
-	                            const errMsg = document.createElement('p');
-	                            errMsg.textContent = "❌ Không thể xem trước file DOCX.";
-	                            container.appendChild(errMsg);
-	                            console.error("DOCX Preview Error:", err);
-	                        });
-	                };
-	                reader.readAsArrayBuffer(file);
-	            }
-	            else if (fileName.endsWith(".xls") || fileName.endsWith(".xlsx")){
-	            	const reader = new FileReader();
-	                reader.onload = function (e) {
-	                    const data = new Uint8Array(e.target.result);
-	                    const workbook = XLSX.read(data, { type: "array" });
-	                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-	                    const html = XLSX.utils.sheet_to_html(firstSheet);
-
-	                    const section = document.createElement("div");
-	                    section.innerHTML = `<h4>${file.name}</h4>` + html;
-	                    preview.appendChild(section);
-	                };
-	                reader.readAsArrayBuffer(file);
-	            }
-	            else {
-	                const note = document.createElement('p');
-	                note.textContent = "❌ Không hỗ trợ xem trước định dạng tệp này.";
-	                container.appendChild(note);
-	            }
-
-	            previewArea.appendChild(container);
-	        });
-	    }
+		    CKEDITOR.replace('editor');
+		    
+		    function previewAttachments() {
+		        const fileInput = document.getElementById('attachment');
+		        const previewArea = document.getElementById('preview-area');
+		        previewArea.innerHTML = ''; // Clear cũ
+	
+		        const files = fileInput.files;
+		        if (!files.length) return;
+	
+		        Array.from(files).forEach(file => {
+		            const container = document.createElement('div');
+		            container.style.border = '1px solid #ccc';
+		            container.style.padding = '10px';
+		            container.style.marginBottom = '15px';
+		            container.style.background = '#fafafa';
+	
+		            const info = document.createElement('p');
+		            info.textContent = `📎 ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+		            container.appendChild(info);
+	
+		            const reader = new FileReader();
+	
+		            if (file.type.startsWith('image/')) {
+		                reader.onload = function (e) {
+		                    const img = document.createElement('img');
+		                    img.src = e.target.result;
+		                    img.style.maxWidth = '300px';
+		                    container.appendChild(img);
+		                };
+		                reader.readAsDataURL(file);
+		            }
+		            else if (file.type === 'application/pdf') {
+		                reader.onload = function (e) {
+		                    const iframe = document.createElement('iframe');
+		                    iframe.src = e.target.result;
+		                    iframe.style.width = '100%';
+		                    iframe.style.height = '500px';
+		                    container.appendChild(iframe);
+		                };
+		                reader.readAsDataURL(file);
+		            }
+		            else if (file.type === 'text/plain') {
+		                reader.onload = function (e) {
+		                    const pre = document.createElement('pre');
+		                    pre.textContent = e.target.result;
+		                    pre.style.maxHeight = '400px';
+		                    pre.style.overflow = 'auto';
+		                    pre.style.background = '#f4f4f4';
+		                    pre.style.padding = '10px';
+		                    container.appendChild(pre);
+		                };
+		                reader.readAsText(file);
+		            }
+		            else if (file.name.endsWith(".docx") || file.name.endsWith(".doc")) {
+		                reader.onload = function (e) {
+		                    const arrayBuffer = e.target.result;
+		                    mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+		                        .then(result => {
+		                            const docxDiv = document.createElement('div');
+		                            docxDiv.innerHTML = result.value;
+		                            docxDiv.style.border = '1px solid #eee';
+		                            docxDiv.style.padding = '10px';
+		                            docxDiv.style.maxHeight = '400px';
+		                            docxDiv.style.overflow = 'auto';
+		                            container.appendChild(docxDiv);
+		                        })
+		                        .catch(err => {
+		                            const errMsg = document.createElement('p');
+		                            errMsg.textContent = "❌ Không thể xem trước file DOCX.";
+		                            container.appendChild(errMsg);
+		                            console.error("DOCX Preview Error:", err);
+		                        });
+		                };
+		                reader.readAsArrayBuffer(file);
+		            }
+		            else if (fileName.endsWith(".xls") || fileName.endsWith(".xlsx")){
+		            	const reader = new FileReader();
+		                reader.onload = function (e) {
+		                    const data = new Uint8Array(e.target.result);
+		                    const workbook = XLSX.read(data, { type: "array" });
+		                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+		                    const html = XLSX.utils.sheet_to_html(firstSheet);
+	
+		                    const section = document.createElement("div");
+		                    section.innerHTML = `<h4>${file.name}</h4>` + html;
+		                    preview.appendChild(section);
+		                };
+		                reader.readAsArrayBuffer(file);
+		            }
+		            else {
+		                const note = document.createElement('p');
+		                note.textContent = "❌ Không hỗ trợ xem trước định dạng tệp này.";
+		                container.appendChild(note);
+		            }
+	
+		            previewArea.appendChild(container);
+		        });
+		    }
 	</script>
+	
 </body>
 
 </html>

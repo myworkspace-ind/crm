@@ -31,6 +31,7 @@
                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/contact}" data-toggle="dropdown">Liên hệ</a></li>
                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/feature-introduction}" data-toggle="dropdown">Đặc trưng</a></li>
                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/feedback}" data-toggle="dropdown">Phản hồi</a></li>
+                	<li class="active" data-menu=""><a class="dropdown-item" th:unless="${#request.userPrincipal}" th:href="@{/trial-registration}" data-toggle="dropdown">Đăng ký dùng thử</a></li>
                 </ul>
            	</li>
             
@@ -48,7 +49,7 @@
                   <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Công việc</a>
                     <ul class="dropdown-menu">
                       <li data-menu=""><a class="dropdown-item" th:href="@{/task/list}" data-toggle="dropdown">Danh sách công việc</a></li>
-                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Tạo mới công việc</a></li>
+                      <li data-menu=""><a class="dropdown-item" th:href="@{/task/create-task}" data-toggle="dropdown">Tạo mới công việc</a></li>
                      </ul>
                    </li>
                    
@@ -125,12 +126,12 @@
 			        </li>
 			   </li>
 			   
-			    <li class="dropdown nav-item" data-menu="dropdown" data-step="7" data-intro="Đăng ký tài khoản">
-			        <a th:unless="${#request.userPrincipal}" th:href="${session.loginUrl}" class="dropdown-toggle nav-link" data-i18n="nav.templates.main">
-				        <i class="icon-pencil"></i>
-				        <span data-i18n="nav.templates.main">Đăng ký</span>
-				    </a>
-				</li>
+<!-- 			    <li class="dropdown nav-item" data-menu="dropdown" data-step="7" data-intro="Đăng ký tài khoản"> -->
+<!-- 			        <a th:unless="${#request.userPrincipal}" th:href="${session.loginUrl}" class="dropdown-toggle nav-link" data-i18n="nav.templates.main"> -->
+<!-- 				        <i class="icon-pencil"></i> -->
+<!-- 				        <span data-i18n="nav.templates.main">Đăng ký</span> -->
+<!-- 				    </a> -->
+<!-- 				</li> -->
 
 			
 <!-- 			        Kiểm tra nếu chưa đăng nhập -->

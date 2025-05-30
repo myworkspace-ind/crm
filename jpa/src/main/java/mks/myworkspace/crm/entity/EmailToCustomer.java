@@ -51,7 +51,7 @@ public class EmailToCustomer implements Serializable{
 //	--> Chạy 4 dòng lệnh này trong mysql
 	
 	@ManyToOne
-    @JoinColumn(name = "receiver_id", referencedColumnName = "id")
+    @JoinColumn(name = "receiver_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
     
     @Column(name = "sender", length = 99) 

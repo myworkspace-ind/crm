@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<!-- <link rel="stylesheet" type="text/css" th:href="@{/resources/css/interaction.css}"> -->
 </head>
 <body>
 	 <div th:fragment="modalFragment(modalId)" class="w-100">
@@ -13,6 +14,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                    	<th:block th:include="~{fragments/interaction/files_upload.html}"></th:block>
                         <th:block th:include="~{fragments/interaction/frg_interaction.html}"></th:block>
                     </div>
                 </div>

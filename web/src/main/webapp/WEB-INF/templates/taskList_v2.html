@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Customer Relationship Management</title>
+	<!-- COMMON META AND TITLE -->
+	<th:block th:include="fragments/common_meta_title"></th:block>
+	
+	<!-- HEAD FRAGMENT -->
+	<th:block th:include="fragments/head"></th:block>
+	<!-- COMMON CSS -->
+	<th:block th:include="fragments/common_css"></th:block>
+	
+	<link rel="stylesheet" type="text/css" href="/library/webjars/bootstrap/5.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{resources/css/new_style.css}">
+	<link rel="stylesheet" th:href="@{/resources/css/status.css}" />
+	<link rel="stylesheet" th:href="@{/resources/css/buttonGroupFunction.css}" />
+	<link rel="stylesheet" th:href="@{/resources/css/buttonRestoreHidedCustomers.css}" />
+	<link rel="stylesheet" th:href="@{/resources/css/task.css}" />
+	   
+	<!-- Intro.js CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+	<!-- Intro.js JS -->
+	<script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+
+</head>
+<body>
+	<!-- BEGIN HEADER  -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER  -->
+	
+	<h4 class="mb-4" style = "padding:20px" >Danh sách công việc</h4>
+
+	<div class="task-container" th:each="entry, iterStat : ${taskGroups}">
+	    
+	    <!-- Header nhóm -->
+	    <div class="task-group-header"
+		     th:attr="data-toggle-target=${'group-' + iterStat.index}"
+		     style="cursor: pointer; font-weight: bold; padding: 10px; border-bottom: 1px solid #ddd; background-color: #f9f9f9;">
+		    <span th:text="|${entry.key} (${entry.value.size()})|"></span>
+		    <span class="arrow-icon">▼</span>
+		</div>
+	
+	    <!-- Nội dung danh sách task trong nhóm -->
+	    <div th:attr="id=${'group-' + iterStat.index}" class="task-group-content" style="display: none; padding: 10px 15px;">
+	        <div th:if="${entry.value.isEmpty()}">
+	            <em>Không có công việc nào.</em>
+	        </div>
+	        <div th:each="task : ${entry.value}" class="task-wrapper">
+	            <div class="task-item" 
+	            	th:data-id="${task.taskId}"
+	            	th:data-name="${task.taskName}"
+	            	th:data-description="${task.taskDescription}"
+     				th:data-start="${task.formattedStartDate}"
+	            	th:data-customers="${taskCustomersMap[task.taskId]}"
+	            	th:classappend="${task.status} ? 'completed' : ''">
+	                <form th:action="@{/task/{taskId}/toggle-complete(taskId=${task.taskId})}" method="post">
+	                    <button class="circle-btn" type="submit"></button>
+	                </form>
+	                
+	                <div class="task-title" th:text="${task.taskName}"></div>
+	                <form th:action="@{/task/{taskId}/toggle-important(taskId=${task.taskId})}" method="post">
+	                    <button class="star-btn" type="submit">★</button>
+	                </form>
+	            </div>
+	
+	            <div class="task-overview">
+	                <p><strong>Mô tả công việc:</strong> <span th:text="${task.taskDescription}">...</span></p>
+	                <p><strong>Ngày bắt đầu:</strong> <span th:text="${task.formattedStartDate}">...</span></p>
+	
+	                <div th:if="${task.customers != null and !task.customers.isEmpty()}">
+	                    <p><strong>Khách hàng liên quan:</strong></p>
+	                    <table class="table table-sm">
+	                        <thead>
+	                            <tr>
+		                            <th style="color: #ccc">Tên công ty</th>
+		                            <th style="color: #ccc">Người liên hệ</th>
+		                            <th style="color: #ccc">SĐT</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                            <tr th:each="cust : ${task.customers}">
+	                                <td style="color: #ccc" th:text="${cust.companyName}"></td>
+	                                <td style="color: #ccc" th:text="${cust.contactPerson}"></td>
+	                                <td style="color: #ccc" th:text="${cust.phone}"></td>
+	                            </tr>
+	                        </tbody>
+	                    </table>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- START TASK DETAIL FOR UPDATING  -->
+	<th:block th:include="fragments/frg_taskDetail"></th:block>
+	<!-- END TASK DETAIL FOR UPDATING -->
+		
+<!-- 	<h4 class="mb-4">Danh sách công việc</h4> -->
+<!-- 	<div class="task-container"> -->
+<!-- 	    <div th:each="task : ${tasks}" class="task-wrapper"> -->
+	
+<!-- 	        Task row -->
+<!-- 	        <div class="task-item" -->
+<!-- 	             th:classappend="${task.status} ? 'completed' : ''"> -->
+	
+<!-- 	            Hoàn thành -->
+<!-- 	            <form th:action="@{/tasks/{taskId}/toggle-complete(id=${task.taskId})}" method="post"> -->
+<!-- 	                <button class="circle-btn" type="submit"></button> -->
+<!-- 	            </form> -->
+	            
+<!-- <!-- 	            Tiêu đề --> 
+<!-- <!-- 	            <div class="task-title" th:text="${task.name}"></div> --> 
+	
+<!-- 	            Tiêu đề -->
+<!-- 	            <div class="task-title" th:text="${task.taskName}"></div> -->
+	
+<!-- 	            Quan trọng -->
+<!-- 	            <form th:action="@{/tasks/{taskId}/toggle-important(id=${task.taskId})}" method="post"> -->
+<!-- 	                <button class="star-btn" type="submit">★</button> -->
+<!-- 	            </form> -->
+<!-- 	        </div> -->
+	
+<!-- 	        Phần mô tả dưới task -->
+<!-- 	        <div class="task-overview"> -->
+<!-- 			    <p><strong>Mô tả công việc:</strong> <span th:text="${task.taskDescription != null ? task.taskDescription : ''}"></span></p> -->
+<!-- 			    <p><strong>Ngày bắt đầu:</strong> <span th:text="${task.taskStartDate != null ? task.formattedStartDate : ''}"></span></p> -->
+			    
+<!-- 			    <div th:if="${task.customers != null and !task.customers.isEmpty()}"> -->
+<!-- 			        <p><strong>Khách hàng / Công ty liên quan:</strong></p> -->
+<!-- 			        <table class="table table-sm"> -->
+<!-- 			            <thead> -->
+<!-- 			                <tr> -->
+<!-- 			                    <th style="color: #ccc">Tên công ty</th> -->
+<!-- 			                    <th style="color: #ccc">Người liên hệ</th> -->
+<!-- 			                    <th style="color: #ccc">SĐT</th> -->
+<!-- 			                </tr> -->
+<!-- 			            </thead> -->
+<!-- 			            <tbody> -->
+<!-- 			                <tr th:each="cust : ${task.customers}"> -->
+<!-- 			                    <td style="color: #ccc" th:text="${cust.companyName}">Tên công ty</td> -->
+<!-- 			                    <td style="color: #ccc" th:text="${cust.contactPerson}">Người liên hệ</td> -->
+<!-- 			                    <td style="color: #ccc" th:text="${cust.phone}">SĐT</td> -->
+<!-- 			                </tr> -->
+<!-- 			            </tbody> -->
+<!-- 			        </table> -->
+<!-- 			    </div> -->
+<!-- 			</div> -->
+<!-- 	    </div> -->
+<!-- 	</div> -->
+	
+	<!-- START CUSTOMIZE BUTTON -->
+	<th:block th:include="fragments/customizeButton"></th:block>
+	<!-- END CUSTOMIZE BUTTON -->
+
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+
+	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
+	<!-- FILE JS BỔ SUNG -->
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/introTour.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/navigate.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/search.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/buttonGroupFunction.js}"></script>
+	<script type="text/javascript" th:src="@{/resources/app-assets/js/update/task.js}"></script>
+	
+	<script th:inline="javascript">
+	    /*<![CDATA[*/
+	    let shouldStartTour = /*[[${startTour}]]*/ false;
+	    if (shouldStartTour) {
+	        window.addEventListener('DOMContentLoaded', function () {
+	            startTourCustomer();
+	        });
+	    }
+	    /*]]>*/
+	</script>	
+</body>
+</html>
