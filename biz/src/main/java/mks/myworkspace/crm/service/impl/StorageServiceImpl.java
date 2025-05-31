@@ -151,52 +151,46 @@ public class StorageServiceImpl implements StorageService {
 			}
 		}
 		
-		 // Lấy trạng thái mới từ DB
-	    Long newStatusId = customer.getMainStatus() != null ? customer.getMainStatus().getId() : null;
+		Long newStatusId = customer.getMainStatus() != null ? customer.getMainStatus().getId() : null;
 	    Status newStatus = newStatusId != null ? statusRepository.findById(newStatusId).orElse(null) : null;
-	    customer.setMainStatus(newStatus);
+		
+	    boolean isNew = (customer.getId() == null);
+	    Status oldMainStatus = null;
+
+	    if (!isNew) {
+	        Optional<Customer> existingOpt = customerRepo.findById(customer.getId());
+	        if (existingOpt.isPresent()) {
+	            oldMainStatus = existingOpt.get().getMainStatus();
+	        }
+	    }
 	    
-		boolean isNew = (customer.getId() == null);
-		Status oldMainStatus = null;
+	    
+	    customer.setMainStatus(newStatus);
 
-		if (!isNew) {
-			Optional<Customer> existingOpt = customerRepo.findById(customer.getId());
-			if (existingOpt.isPresent()) {
-				oldMainStatus = existingOpt.get().getMainStatus();
-			}
-		}
-		
-		Long id = appRepo.saveOrUpdate(customer);
-		if (id != null) {
-			customer.setId(id);
-		}
-		
-		List<CustomerStatusHistory> historyList = customerStatusHistoryRepository.findByCustomerOrderByChangeDateAsc(customer);
-		int currentStage = getCurrentStage(historyList, newStatus);
-		log.debug("Calculated current stage: {}", currentStage);
+	    Long id = appRepo.saveOrUpdate(customer);
+	    if (id != null) {
+	        customer.setId(id);
+	    }
 
-		CustomerStatusHistory mainStatusHistory = new CustomerStatusHistory();
-		mainStatusHistory.setCustomer(customer);
-		mainStatusHistory.setMainStatus(newStatus);
-		mainStatusHistory.setChangeDate(LocalDate.now());
-		mainStatusHistory.setStage(currentStage);
-		appRepo.saveCustomerStatusHistory(mainStatusHistory);
+	    // Chỉ tạo CustomerStatusHistory khi:
+	    // 1. mainStatus không null
+	    // 2. Nếu tạo mới khách hàng thì chỉ tạo nếu mainStatus != null
+	    // 3. Nếu update khách hàng thì chỉ tạo nếu mainStatus thay đổi
+	    //if (newStatus != null && (isNew || (oldMainStatus == null) || !newStatus.getId().equals(oldMainStatus.getId()))) {
+	    if(newStatus != null) {
+	        List<CustomerStatusHistory> historyList = customerStatusHistoryRepository.findByCustomerOrderByChangeDateAsc(customer);
+	        int currentStage = getCurrentStage(historyList, newStatus);
+	        log.debug("Calculated current stage: {}", currentStage);
 
-//		if (customer.getMainStatus() != null && (isNew || oldMainStatus == null
-//				|| !(customer.getMainStatus().getId().equals(oldMainStatus.getId())) )) {
-//		
-//			List<CustomerStatusHistory> historyList = customerStatusHistoryRepository.findByCustomerOrderByChangeDateAsc(customer);
-//			int currentStage = getCurrentStage(historyList, newStatus);
-//			log.debug("Calculated current stage: {}", currentStage);
-//
-//			CustomerStatusHistory mainStatusHistory = new CustomerStatusHistory();
-//			mainStatusHistory.setCustomer(customer);
-//			mainStatusHistory.setMainStatus(newStatus);
-//			mainStatusHistory.setChangeDate(LocalDate.now());
-//			mainStatusHistory.setStage(currentStage);
-//			appRepo.saveCustomerStatusHistory(mainStatusHistory);
-//		}
-		return customer;
+	        CustomerStatusHistory mainStatusHistory = new CustomerStatusHistory();
+	        mainStatusHistory.setCustomer(customer);
+	        mainStatusHistory.setMainStatus(newStatus);
+	        mainStatusHistory.setChangeDate(LocalDate.now());
+	        mainStatusHistory.setStage(currentStage);
+	        appRepo.saveCustomerStatusHistory(mainStatusHistory);
+	    }
+
+	    return customer;
 	}
 
 //	@Override

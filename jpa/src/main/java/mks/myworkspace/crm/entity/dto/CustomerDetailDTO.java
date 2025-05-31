@@ -29,7 +29,7 @@ public class CustomerDetailDTO implements Serializable{
 //	private String note;
 //	private Long profession;
 	private Long id;
-	private String siteId;
+	//private String siteId;
     private String companyName;
     private String email;
     private String phone;
