@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -38,8 +39,8 @@ public class OrderStatus implements Serializable {
 	@Column(name = "name", length = 255)
 	private String name;
 
-//	@OneToMany(mappedBy = "orderStatus", fetch = FetchType.EAGER)
-//	private Set<Order> orders;
+	@OneToMany(mappedBy = "orderStatus", fetch = FetchType.EAGER)
+	private Set<Order> orders;
 	
 	@ManyToMany(mappedBy = "orderStatuses", fetch = FetchType.EAGER)
 	private Set<OrderCategory> orderCategories;

@@ -60,6 +60,8 @@ import mks.myworkspace.crm.entity.HistoryOrder;
 import mks.myworkspace.crm.entity.Order;
 import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.OrderStatus;
+import mks.myworkspace.crm.entity.dto.CustomerDetailJsonDTO;
+import mks.myworkspace.crm.entity.dto.CustomerOrderDTO;
 import mks.myworkspace.crm.service.CustomerService;
 import mks.myworkspace.crm.service.GoodsCategoryService;
 import mks.myworkspace.crm.service.HistoryOrderService;
@@ -207,10 +209,17 @@ public class OrderController_Datatable extends BaseController {
 		 
 		JSONArray jsonArray = new JSONArray();
 		
-	    for (Customer customer : listCustomers) {
-	        JSONObject json = new JSONObject(customer);	        
-	        jsonArray.put(json);
-	    }
+//	    for (Customer customer : listCustomers) {
+//	        JSONObject json = new JSONObject(customer);	        
+//	        jsonArray.put(json);
+//	    }
+		
+		for (Customer customer : listCustomers) {
+			CustomerOrderDTO dto = new CustomerOrderDTO(customer);
+		    JSONObject json = new JSONObject(dto);
+		    jsonArray.put(json);
+		}
+		
 	    List<OrderCategory> listOrderCategoryTransJson = orderCategories.stream()
 	    	    .map(category -> new OrderCategory(category.getId(), category.getName(), category.getNote()))
 	    	    .collect(Collectors.toList());

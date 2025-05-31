@@ -44,8 +44,8 @@ public class GoodsCategory implements Serializable {
 	@Column(name = "seqno")
     private Long seqno;  // Trường seqno sẽ luôn bằng với id dùng để sắp xếp thứ tự
 	
-	@OneToMany(mappedBy = "goodsCategory", fetch = FetchType.LAZY)
-	private List<Order> orders;
+//	@OneToMany(mappedBy = "goodsCategory", fetch = FetchType.LAZY)
+//	private List<Order> orders;
 	
 	// Constructor nhận id
     public GoodsCategory(Long id) {
