@@ -31,8 +31,8 @@ public class EmailToCustomer implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "site_id", length = 99)
-	private String siteId;
+//	@Column(name = "site_id", length = 99)
+//	private String siteId;
 	
 	@Column(name = "send_date")
     //@Temporal(TemporalType.DATE)

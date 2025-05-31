@@ -6,7 +6,7 @@ import mks.myworkspace.crm.entity.EmailToCustomer;
 
 public class EmailToCustomerDTO {
 	private Long id;
-    private String siteId;
+    //private String siteId;
     private Date sendDate;
     private String subject;
     private String content;
@@ -15,11 +15,10 @@ public class EmailToCustomerDTO {
     private String sender;
     private String status;
     
-	public EmailToCustomerDTO(Long id, String siteId, Date sendDate, String subject, String content, Long customerId,
+	public EmailToCustomerDTO(Long id, Date sendDate, String subject, String content, Long customerId,
 			String customerEmail, String sender, String status) {
 		super();
 		this.id = id;
-		this.siteId = siteId;
 		this.sendDate = sendDate;
 		this.subject = subject;
 		this.content = content;
@@ -31,7 +30,6 @@ public class EmailToCustomerDTO {
 	
 	public EmailToCustomerDTO(EmailToCustomer email) {
         this.id = email.getId();
-        this.siteId = email.getSiteId();
         this.sendDate = email.getSendDate();
         this.subject = email.getSubject();
         this.content = email.getContent();
@@ -51,14 +49,6 @@ public class EmailToCustomerDTO {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(String siteId) {
-		this.siteId = siteId;
 	}
 
 	public Date getSendDate() {
