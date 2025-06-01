@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
 </head>
 <body>
 	<!-- Task Detail Sidebar -->
@@ -37,106 +41,207 @@
 	        <button type="button" class="btn btn-danger" onclick="deleteTask()">🗑️ Xóa</button>
 	    </form>
 	</div>
+	
+	<select id="customerOptionsTemplate" style="width: 100%; display:none;">
+    <option value="" disabled selected>-- Chọn khách hàng --</option>
+    <option th:each="cust : ${listCustomers}"
+            th:value="${cust.id}"
+            th:text="${cust.companyName}"
+            th:attr="data-contact-person=${cust.contactPerson}">
+    </option>
+</select>
 </body>
+<script>
+    let customerOptionsHtml = "";
+
+    $(document).ready(function () {
+        customerOptionsHtml = $('#customerOptionsTemplate option').map(function () {
+            const value = $(this).attr('value');
+            const contactPerson = $(this).attr('data-contact-person') || '';
+            const text = $(this).text();
+            return `<option value="${value}" data-contact-person="${contactPerson}">${text}</option>`;
+        }).get().join('');
+    });
+</script>
 
 <script>
-		function openTaskSidebar(taskId, taskName, description, startDate, customers) {
-		    document.getElementById('sidebarTaskId').value = taskId;
-		    document.getElementById('sidebarTaskName').value = taskName;
-		    document.getElementById('sidebarTaskDescription').value = description;
-		    document.getElementById('sidebarStartDate').value = startDate;
+	function openTaskSidebar(taskId, taskName, description, startDate, customers) {
+	    document.getElementById('sidebarTaskId').value = taskId;
+	    document.getElementById('sidebarTaskName').value = taskName;
+	    document.getElementById('sidebarTaskDescription').value = description;
+	    document.getElementById('sidebarStartDate').value = startDate;
+	
+	    const container = document.getElementById('sidebarCustomerContainer');
+	    container.innerHTML = "";
+	
+	    customers.forEach((cust, index) => {
+	        const block = document.createElement("div");
+	        block.className = "customer-block mb-2";
+	        block.innerHTML = `
+	            <div class="row align-items-center">
+	                <div class="col-6">
+	                    <input type="text" class="form-control" name="customers[${index}].companyName" value="${cust.companyName}" placeholder="Tên công ty" />
+	                </div>
+	                <div class="col-5">
+	                    <input type="text" class="form-control" name="customers[${index}].contactPerson" value="${cust.contactPerson}" placeholder="Người liên hệ" />
+	                </div>
+	                <div class="col-1 text-end">
+	                    <button type="button" class="btn btn-sm btn-outline-danger remove-customer" title="Xóa khách hàng">
+	                        &times;
+	                    </button>
+	                </div>
+	            </div>
+	        `;
+	
+	        // Gán sự kiện xóa khi nhấn nút "×"
+	        block.querySelector(".remove-customer").addEventListener("click", function () {
+	            block.remove();
+	        });
+	
+	        container.appendChild(block);
+	    });
+	
+	    document.getElementById('taskDetailSidebar').style.display = 'block';
+	}
 
-		    const container = document.getElementById('sidebarCustomerContainer');
-		    container.innerHTML = "";
+	function closeTaskSidebar() {
+	    document.getElementById('taskDetailSidebar').style.display = 'none';
+	}
 
-		    customers.forEach((cust, index) => {
-		        const block = document.createElement("div");
-		        block.className = "customer-block mb-2";
-		        block.innerHTML = `
-		            <div class="row">
-		                <div class="col-7">
-		                    <input type="text" class="form-control" name="customers[${index}].companyName" value="${cust.companyName}" placeholder="Tên công ty" />
-		                </div>
-		                <div class="col-5">
-		                    <input type="text" class="form-control" name="customers[${index}].contactPerson" value="${cust.contactPerson}" placeholder="Người liên hệ" />
-		                </div>
+	function addSidebarCustomer() {
+	    const container = document.getElementById('sidebarCustomerContainer');
+	    const index = container.children.length;
 
-		            </div>
-		        `;
-		        container.appendChild(block);
-		    });
+	    const block = document.createElement("div");
+	    block.className = "customer-block mb-2";
+	    block.innerHTML = `
+	        <div class="row align-items-center">
+	            <div class="col-6">
+	                <select class="form-control select2" name="customers[${index}].customerId">
+	                    <option></option>
+	                    ${customerOptionsHtml}
+	                </select>
+	            </div>
+	            <div class="col-5">
+	                <input type="text" class="form-control contact-person-input" name="customers[${index}].contactPerson" placeholder="Người liên hệ" readonly />
+	            </div>
+	            <div class="col-1 text-end">
+	                <button type="button" class="btn btn-sm btn-outline-danger remove-customer" title="Xóa khách hàng">
+	                    &times;
+	                </button>
+	            </div>
+	        </div>
+	    `;
 
-		    document.getElementById('taskDetailSidebar').style.display = 'block';
-		}
+	    container.appendChild(block);
 
-		function closeTaskSidebar() {
-		    document.getElementById('taskDetailSidebar').style.display = 'none';
-		}
+	    // Khởi tạo select2
+	    const select = block.querySelector(".select2");
+	    $(select).select2({
+	        placeholder: "Nhập hoặc chọn tên công ty",
+	        width: "100%",
+	        allowClear: true,
+	        language: "vi"
+	    });
 
-		function addSidebarCustomer() {
-		    const container = document.getElementById('sidebarCustomerContainer');
-		    const index = container.children.length;
-		    const block = document.createElement("div");
-		    block.className = "customer-block mb-2";
-		    block.innerHTML = `
-		        <div class="row">
-		            <div class="col-6">
-		                <input type="text" class="form-control" name="customers[${index}].companyName" placeholder="Tên công ty" />
-		            </div>
-		            <div class="col-3">
-		                <input type="text" class="form-control" name="customers[${index}].contactPerson" placeholder="Người liên hệ" />
-		            </div>
-		            <div class="col-3">
-		                <input type="text" class="form-control" name="customers[${index}].phone" placeholder="SĐT" />
-		            </div>
-		        </div>
-		    `;
-		    container.appendChild(block);
-		}
+	    // Khi chọn công ty → điền người liên hệ
+	    $(select).on("change", function () {
+	        const contact = $(this).find(':selected').data('contact-person') || "";
+	        $(this).closest('.row').find('.contact-person-input').val(contact);
+	    });
 
-		function deleteTask() {
-		    const taskId = document.getElementById('sidebarTaskId').value;
+	    // Xóa
+	    block.querySelector(".remove-customer").addEventListener("click", function () {
+	        block.remove();
+	    });
+	}
 
-		    if (!taskId) {
-		        Swal.fire("Không có ID công việc để xóa!", "", "warning");
-		        return;
-		    }
+	function deleteTask() {
+	    const taskId = document.getElementById('sidebarTaskId').value;
 
-		    Swal.fire({
-		        title: 'Bạn có chắc chắn muốn xóa?',
-		        text: "Thao tác này không thể hoàn tác!",
-		        icon: 'warning',
-		        showCancelButton: true,
-		        confirmButtonColor: '#d33',
-		        cancelButtonColor: '#6c757d',
-		        confirmButtonText: 'Xóa',
-		        cancelButtonText: 'Hủy'
-		    }).then((result) => {
-		        if (result.isConfirmed) {
-		            $.ajax({
-		                url: _ctx + `task/${taskId}/delete`,
-		                type: 'DELETE',
-		                success: function() {
-		                    Swal.fire("Đã xóa!", "Công việc đã được xóa.", "success")
-		                        .then(() => {
-		                            closeTaskSidebar();
-		                            location.reload(); // hoặc gọi lại hàm load danh sách nếu có
-		                        });
-		                },
-		                error: function(xhr, status, error) {
-		                    console.error(error);
-		                    Swal.fire("Lỗi!", "Xảy ra lỗi khi xóa.", "error");
-		                }
-		            });
-		        }
-		    });
-		}
+	    if (!taskId) {
+	        Swal.fire("Không có ID công việc để xóa!", "", "warning");
+	        return;
+	    }
 
-		document.addEventListener("keydown", function(e) {
-		    if (e.key === "Escape") {
-		        closeTaskSidebar();
-		    }
-		});
+	    Swal.fire({
+	        title: 'Bạn có chắc chắn muốn xóa?',
+	        text: "Thao tác này không thể hoàn tác!",
+	        icon: 'warning',
+	        showCancelButton: true,
+	        confirmButtonColor: '#d33',
+	        cancelButtonColor: '#6c757d',
+	        confirmButtonText: 'Xóa',
+	        cancelButtonText: 'Hủy'
+	    }).then((result) => {
+	        if (result.isConfirmed) {
+	            $.ajax({
+	                url: _ctx + `task/${taskId}/delete`,
+	                type: 'DELETE',
+	                success: function() {
+	                    Swal.fire("Đã xóa!", "Công việc đã được xóa.", "success")
+	                        .then(() => {
+	                            closeTaskSidebar();
+	                            location.reload(); // hoặc gọi lại hàm load danh sách nếu có
+	                        });
+	                },
+	                error: function(xhr, status, error) {
+	                    console.error(error);
+	                    Swal.fire("Lỗi!", "Xảy ra lỗi khi xóa.", "error");
+	                }
+	            });
+	        }
+	    });
+	}
+
+	document.addEventListener("keydown", function(e) {
+	    if (e.key === "Escape") {
+	        closeTaskSidebar();
+	    }
+	});
+	
+	$('#taskDetailForm').on('submit', function (e) {
+	    e.preventDefault();
+
+	    const taskId = $('#sidebarTaskId').val();
+	    const name = $('#sidebarTaskName').val();
+	    const description = $('#sidebarTaskDescription').val();
+	    const startDate = $('#sidebarStartDate').val();
+
+	    const customerIds = [];
+	    $('#sidebarCustomerContainer .customer-block').each(function () {
+	        const customerId = $(this).find('.select2').val(); // nếu dùng select2
+	        if (customerId) {
+	            customerIds.push(Number(customerId));
+	        }
+	    });
+
+	    const data = {
+	        taskId,
+	        name,
+	        description,
+	        startDate,
+	        customerIds
+	    };
+
+	    $.ajax({
+	        url: _ctx + 'task/update-task',
+	        type: 'POST',
+	        contentType: 'application/json',
+	        data: JSON.stringify(data),
+	        success: function () {
+	            Swal.fire("Thành công", "Cập nhật công việc thành công", "success")
+	                .then(() => {
+	                    closeTaskSidebar();
+	                    location.reload();
+	                });
+	        },
+	        error: function () {
+	            Swal.fire("Lỗi", "Không thể cập nhật công việc", "error");
+	        }
+	    });
+	});
+
 </script>
 
 </html>

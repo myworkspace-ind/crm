@@ -12,6 +12,7 @@ import mks.myworkspace.crm.entity.OrderCategory;
 import mks.myworkspace.crm.entity.Profession;
 import mks.myworkspace.crm.entity.ResponsiblePerson;
 import mks.myworkspace.crm.entity.Status;
+import mks.myworkspace.crm.entity.dto.TaskDTO;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
 import mks.myworkspace.crm.repository.GoodsCategoryRepository;
@@ -88,4 +89,6 @@ public interface StorageService {
 	public void toggleTaskStatus(Long taskId);
 	
 	void deleteTaskById(Long taskId);
+	
+	void updateTask(TaskDTO dto);
 }

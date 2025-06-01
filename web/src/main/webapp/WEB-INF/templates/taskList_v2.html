@@ -21,6 +21,10 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
 	<!-- Intro.js JS -->
 	<script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+	
+	<!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
 
 </head>
 <body>
@@ -151,10 +155,6 @@
 	<!-- START CUSTOMIZE BUTTON -->
 	<th:block th:include="fragments/customizeButton"></th:block>
 	<!-- END CUSTOMIZE BUTTON -->
-
-	<!-- START COMMON JAVASCRIPT -->
-	<th:block th:include="fragments/common_javascript"></th:block>
-	<!-- END COMMON JAVASCRIPT -->
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->

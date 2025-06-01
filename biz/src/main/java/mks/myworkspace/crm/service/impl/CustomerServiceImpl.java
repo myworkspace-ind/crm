@@ -248,28 +248,50 @@ public class CustomerServiceImpl implements CustomerService {
     	{
     		combinedSpec = combinedSpec.and(CustomerSpecs.matchEmail(customerCriteriaDTO.getEmail().get()));
     	}
-    	combinedSpec = combinedSpec.and(CustomerSpecs.matchaccountStatusTrue());
+    	//combinedSpec = combinedSpec.and(CustomerSpecs.matchaccountStatusTrue());
+    	combinedSpec = combinedSpec.and(CustomerSpecs.matchAccountStatusTrue());
     	return repo.findAll(combinedSpec, pageable);
     }
-    public Page<Customer> findAllKeyword(Pageable pageable, String keyword)
-    {
-    	Specification<Customer> combinedSpec = CustomerSpecs.matchaccountStatusTrue();
-        
+    
+    public Page<Customer> findAllKeyword(Pageable pageable, String keyword) {
+        Specification<Customer> combinedSpec = CustomerSpecs.matchAccountStatusTrue();
+
         Specification<Customer> keywordSpec = Specification.where(
-                CustomerSpecs.matchReponsiblePersonName(keyword)
-            ).or(CustomerSpecs.matchNameCompany(keyword))
-             .or(CustomerSpecs.matchContactPerson(keyword))
-             .or(CustomerSpecs.matchEmail(keyword))
-             .or(CustomerSpecs.matchAddress(keyword))
-             .or(CustomerSpecs.matchPhone(keyword))
-             .or(CustomerSpecs.matchProfession(keyword))
-             .or(CustomerSpecs.matchMainStatusName(keyword))
-             .or(CustomerSpecs.matchSubStatusName(keyword))
-             .or(CustomerSpecs.matchNote(keyword));
+            CustomerSpecs.matchReponsiblePersonName(keyword)
+        ).or(CustomerSpecs.matchNameCompany(keyword))
+         .or(CustomerSpecs.matchContactPerson(keyword))
+         .or(CustomerSpecs.matchEmail(keyword))
+         .or(CustomerSpecs.matchAddress(keyword))
+         .or(CustomerSpecs.matchPhone(keyword))
+         .or(CustomerSpecs.matchProfessionByName(keyword))
+         .or(CustomerSpecs.matchMainStatusName(keyword))
+         .or(CustomerSpecs.matchSubStatusName(keyword))
+         .or(CustomerSpecs.matchNote(keyword));
+
         combinedSpec = combinedSpec.and(keywordSpec);
-        
+
         return repo.findAll(combinedSpec, pageable);
     }
+
+//    public Page<Customer> findAllKeyword(Pageable pageable, String keyword)
+//    {
+//    	Specification<Customer> combinedSpec = CustomerSpecs.matchaccountStatusTrue();
+//        
+//        Specification<Customer> keywordSpec = Specification.where(
+//                CustomerSpecs.matchReponsiblePersonName(keyword)
+//            ).or(CustomerSpecs.matchNameCompany(keyword))
+//             .or(CustomerSpecs.matchContactPerson(keyword))
+//             .or(CustomerSpecs.matchEmail(keyword))
+//             .or(CustomerSpecs.matchAddress(keyword))
+//             .or(CustomerSpecs.matchPhone(keyword))
+//             .or(CustomerSpecs.matchProfession(keyword))
+//             .or(CustomerSpecs.matchMainStatusName(keyword))
+//             .or(CustomerSpecs.matchSubStatusName(keyword))
+//             .or(CustomerSpecs.matchNote(keyword));
+//        combinedSpec = combinedSpec.and(keywordSpec);
+//        
+//        return repo.findAll(combinedSpec, pageable);
+//    }
 
 	@Override
 	public Optional<Customer> findById_ForCustomerCare(Long customerId) {

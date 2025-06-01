@@ -45,6 +45,29 @@ public class TaskController extends BaseController{
 	@Autowired
 	StorageService storageService;
 	
+	@PostMapping("/update-task")
+	@ResponseBody
+	public ResponseEntity<String> updateTask(@RequestBody TaskDTO taskDTO) {
+	    try {
+	        storageService.updateTask(taskDTO);
+	        return ResponseEntity
+	                .ok()
+	                .contentType(MediaType.valueOf("text/plain; charset=UTF-8"))
+	                .body("Cập nhật công việc thành công.");
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity
+	                .badRequest()
+	                .contentType(MediaType.valueOf("text/plain; charset=UTF-8"))
+	                .body("Lỗi dữ liệu: " + e.getMessage());
+	    } catch (Exception e) {
+	        return ResponseEntity
+	                .status(500)
+	                .contentType(MediaType.valueOf("text/plain; charset=UTF-8"))
+	                .body("Lỗi hệ thống: " + e.getMessage());
+	    }
+	}
+
+	
 	@DeleteMapping("/{taskId}/delete")
 	@ResponseBody
 	public ResponseEntity<String> deleteTask(@PathVariable("taskId") Long taskId, HttpServletRequest request, HttpSession session) {
@@ -78,6 +101,11 @@ public class TaskController extends BaseController{
 		
 		Map<String, List<TaskWithCustomersDTO>> taskGroups = taskService.getGroupedTasks();
 	    mav.addObject("taskGroups", taskGroups);
+	    
+	    List<Customer> listCustomers;
+		listCustomers = customerService.getAllCustomers();
+		
+		mav.addObject("listCustomers", listCustomers);
 	    
 	 // Tạo map: taskId -> customersJson
 		ObjectMapper mapper = new ObjectMapper();

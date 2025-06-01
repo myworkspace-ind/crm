@@ -130,16 +130,20 @@ public class Customer implements Serializable {
 	    }
 	    return "";
 	}
-
-
+	
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", companyName=" + companyName + ", contactPerson=" + contactPerson + ", email="
-				+ email + ", phone=" + phone + ", address=" + address + ", profession=" + profession + ", mainStatus="
-				+ mainStatus + ", subStatus=" + subStatus + ", responsiblePerson=" + responsiblePerson + ", birthday="
-				+ birthday + ", classification=" + classification + ", createdAt=" + createdAt + ", note=" + note
-				+ ", accountStatus=" + accountStatus + ", interactions=" + interactions + "]";
+	    return "Customer [id=" + id + ", companyName=" + companyName + "]";
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Customer [id=" + id + ", companyName=" + companyName + ", contactPerson=" + contactPerson + ", email="
+//				+ email + ", phone=" + phone + ", address=" + address + ", profession=" + profession + ", mainStatus="
+//				+ mainStatus + ", subStatus=" + subStatus + ", responsiblePerson=" + responsiblePerson + ", birthday="
+//				+ birthday + ", classification=" + classification + ", createdAt=" + createdAt + ", note=" + note
+//				+ ", accountStatus=" + accountStatus + ", interactions=" + interactions + "]";
+//	}
 	
 	@Override
 	public boolean equals(Object o) {

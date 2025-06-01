@@ -1362,9 +1362,34 @@ public class AppRepository {
     }
     
     public int deleteTaskById(Long taskId) {
-        String sql = "DELETE FROM crm_task WHERE id = ?";
-        return jdbcTemplate0.update(sql, taskId);
+    	// Xóa liên kết với customer trước
+        String deleteLinksSql = "DELETE FROM task_customer WHERE task_id = ?";
+        jdbcTemplate0.update(deleteLinksSql, taskId);
+
+        // Sau đó mới xóa task
+        String deleteTaskSql = "DELETE FROM crm_task WHERE id = ?";
+        return jdbcTemplate0.update(deleteTaskSql, taskId);
     }
+    
+    public void updateTask(TaskDTO dto) {
+        if (dto.getId()== null) {
+            throw new IllegalArgumentException("Task ID không được null");
+        }
+
+        // 1. Cập nhật bảng crm_task
+        String updateSql = "UPDATE crm_task SET name = ?, description = ?, start_date = ? WHERE id = ?";
+        jdbcTemplate0.update(updateSql, dto.getName(), dto.getDescription(), dto.getStartDate(), dto.getId());
+
+        // 2. Xóa liên kết khách hàng cũ
+        String deleteLinkSql = "DELETE FROM task_customer WHERE task_id = ?";
+        jdbcTemplate0.update(deleteLinkSql, dto.getId());
+
+        // 3. Thêm lại liên kết khách hàng mới (nếu có)
+        if (dto.getCustomerIds() != null && !dto.getCustomerIds().isEmpty()) {
+            insertTaskCustomer(dto.getId(), dto.getCustomerIds());
+        }
+    }
+
 
 //	public void saveFilesUpload(Long interactionId, String fileName, String fileType, String filePath) {
 //        String sql = "INSERT INTO crm_files_upload (interaction_id, file_name, file_type, file_path) " +

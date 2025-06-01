@@ -57,21 +57,20 @@ public class OrderCategory implements Serializable {
 	)
 	 private Set<OrderStatus> orderStatuses;
 
-	public OrderCategory(Long id, String name, String note, List<Order> orders,
-			Set<OrderStatus> orderStatuses) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.note = note;
-		this.orders = orders;
-		this.orderStatuses = orderStatuses;
-	}
 
 	public OrderCategory(Long id, String name, String note) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.note = note;
+	}
+
+	public OrderCategory(Long id, String name, String note, Set<OrderStatus> orderStatuses) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.note = note;
+		this.orderStatuses = orderStatuses;
 	}
 
 	

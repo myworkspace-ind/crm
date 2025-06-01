@@ -476,7 +476,7 @@ public class CustomerController extends BaseController {
 	@Value("classpath:responsible-person/responsible-person-demo.json")
 	private Resource resResponsiblePersonDemo;
 	
-	@GetMapping("list")
+	@GetMapping("/list")
 	public ModelAndView displayCustomerListCRMScreen(CustomerCriteriaDTO customerCriteriaDTO, HttpServletRequest request, HttpSession httpSession, 
 			@RequestParam(name = "startTour", required = false) Boolean startTour) {
 
