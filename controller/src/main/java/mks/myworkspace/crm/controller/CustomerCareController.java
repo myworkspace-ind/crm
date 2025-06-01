@@ -430,6 +430,9 @@ public class CustomerCareController extends BaseController {
 								}
 							}
 						}
+						// TODO: Bổ sung logic: Nếu là khách hàng New & latestCreatedAtInteraction
+						// + reminderDays_case3 < thời gian hiện tại
+						// thì thêm vào customersWithoutData
 						if ("New".equalsIgnoreCase(c.getMainStatus().getName()) ) {
 							LocalDateTime remindTime = interactionTime.plusDays(reminderDays_case3);
 

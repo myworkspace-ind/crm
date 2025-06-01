@@ -62,7 +62,7 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 	 List<Customer> findPotentialCustomers(@Param("caseDaysAgo_2") LocalDateTime caseDaysAgo_2);
 	 
 	 @Query("SELECT c FROM Customer c " +
-		       "JOIN FETCH c.mainStatus " + // fetch luôn status nếu bạn cần
+		       "JOIN FETCH c.mainStatus " +
 		       "WHERE c.mainStatus.name = 'New' " +
 		       "AND EXISTS ( " +
 		       "    SELECT 1 FROM Interaction iSub " +
