@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			//	        }
 				if (unSavedCustomers.length > 0) {
 					const customerList = unSavedCustomers.map(c => {
-						const reminderDate = new Date(c[9]);
+						const reminderDate = new Date(c[10]);
 						const formattedDate = reminderDate.toLocaleDateString('vi-VN');
 						return `<li> - ${c[2]} - Ngày nhắc nhở: ${formattedDate} </li>`
 					})

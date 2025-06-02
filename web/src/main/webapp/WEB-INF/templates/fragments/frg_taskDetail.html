@@ -1,55 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<meta charset="UTF-8">
-	<title>Insert title here</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+	rel="stylesheet" />
+<script
+	src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<meta charset="UTF-8">
+<title>Insert title here</title>
 </head>
 <body>
 	<!-- Task Detail Sidebar -->
 	<div id="taskDetailSidebar" class="task-sidebar" style="display: none;">
-	    <button class="close-btn" onclick="closeTaskSidebar()">✖</button>
-	    
-	    <form id="taskDetailForm" method="post">
-	        <input type="hidden" name="taskId" id="sidebarTaskId" />
-	
-	        <div class="mb-3">
-	            <label class="form-label">Tên công việc</label>
-	            <input type="text" class="form-control" id="sidebarTaskName" name="taskName" />
-	        </div>
-	
-	        <div class="mb-3">
-	            <label class="form-label">Mô tả</label>
-	            <textarea class="form-control" id="sidebarTaskDescription" name="taskDescription"></textarea>
-	        </div>
-	
-	        <div class="mb-3">
-	            <label class="form-label">Ngày bắt đầu</label>
-	            <input type="datetime-local" class="form-control" id="sidebarStartDate" name="taskStartDate" />
-	        </div>
-	        
-	        <div class="mb-3">
-			    <label class="form-label">Khách hàng liên quan</label>
-			    <div id="sidebarCustomerContainer"></div>
-			    <button type="button" class="btn btn-link" onclick="addSidebarCustomer()">+ Thêm khách hàng</button>
+		<button class="close-btn" onclick="closeTaskSidebar()">✖</button>
+
+		<form id="taskDetailForm" method="post">
+			<input type="hidden" name="taskId" id="sidebarTaskId" />
+
+			<div class="mb-3">
+				<label class="form-label">Tên công việc</label> <input type="text"
+					class="form-control" id="sidebarTaskName" name="taskName" />
 			</div>
-	
-	        <button type="submit" class="btn btn-primary">Lưu</button>
-	        <button type="button" class="btn btn-danger" onclick="deleteTask()">🗑️ Xóa</button>
-	    </form>
+
+			<div class="mb-3">
+				<label class="form-label">Mô tả</label>
+				<textarea class="form-control" id="sidebarTaskDescription"
+					name="taskDescription"></textarea>
+			</div>
+
+			<div class="mb-3">
+				<label class="form-label">Ngày bắt đầu</label> <input
+					type="datetime-local" class="form-control" id="sidebarStartDate"
+					name="taskStartDate" />
+			</div>
+
+			<div class="mb-3">
+				<label class="form-label">Khách hàng liên quan</label>
+				<div id="sidebarCustomerContainer"></div>
+				<button type="button" class="btn btn-link"
+					onclick="addSidebarCustomer()">+ Thêm khách hàng</button>
+			</div>
+
+			<button type="submit" class="btn btn-primary">Lưu</button>
+			<button type="button" class="btn btn-danger" onclick="deleteTask()">🗑️
+				Xóa</button>
+		</form>
 	</div>
-	
-	<select id="customerOptionsTemplate" style="width: 100%; display:none;">
-    <option value="" disabled selected>-- Chọn khách hàng --</option>
-    <option th:each="cust : ${listCustomers}"
-            th:value="${cust.id}"
-            th:text="${cust.companyName}"
-            th:attr="data-contact-person=${cust.contactPerson}">
-    </option>
-</select>
+
+	<select class="form-control select2" id="customerOptionsTemplate"
+		style="width: 100%; display: none;">
+		<option value="" disabled selected>-- Chọn khách hàng --</option>
+		<option th:each="cust : ${listCustomers}" th:value="${cust.id}"
+			th:text="${cust.companyName}"
+			th:attr="data-contact-person=${cust.contactPerson}"></option>
+	</select>
 </body>
 <script>
     let customerOptionsHtml = "";
@@ -77,13 +84,17 @@
 	    customers.forEach((cust, index) => {
 	        const block = document.createElement("div");
 	        block.className = "customer-block mb-2";
+	
 	        block.innerHTML = `
 	            <div class="row align-items-center">
 	                <div class="col-6">
-	                    <input type="text" class="form-control" name="customers[${index}].companyName" value="${cust.companyName}" placeholder="Tên công ty" />
+	                    <select class="form-control select2" name="customers[${index}].customerId">
+	                        <option></option>
+	                        ${customerOptionsHtml}
+	                    </select>
 	                </div>
 	                <div class="col-5">
-	                    <input type="text" class="form-control" name="customers[${index}].contactPerson" value="${cust.contactPerson}" placeholder="Người liên hệ" />
+	                    <input type="text" class="form-control contact-person-input" name="customers[${index}].contactPerson" placeholder="Người liên hệ" value="${cust.contactPerson || ''}" readonly />
 	                </div>
 	                <div class="col-1 text-end">
 	                    <button type="button" class="btn btn-sm btn-outline-danger remove-customer" title="Xóa khách hàng">
@@ -93,12 +104,39 @@
 	            </div>
 	        `;
 	
-	        // Gán sự kiện xóa khi nhấn nút "×"
+	        container.appendChild(block);
+	
+	        const select = block.querySelector(".select2");
+	        
+	        console.log("cust.id:", cust.customerId);
+	        console.log("customerOptionsHtml:", customerOptionsHtml);
+	
+	        // Khởi tạo select2
+	        $(select).select2({
+	            placeholder: "Nhập hoặc chọn tên công ty",
+	            width: "100%",
+	            allowClear: true,
+	            language: "vi"
+	        });
+	        
+	     // Gán giá trị customerId (cần tồn tại trong `cust.id`)
+	       	if (cust.customerId) {
+			    $(select).val(String(cust.customerId)).trigger("change");
+			}
+	
+	        // Khi chọn công ty → điền người liên hệ
+	        $(select).on("change", function () {
+	            const contact = $(this).find(':selected').data('contact-person') || "";
+	            $(this).closest('.row').find('.contact-person-input').val(contact);
+	        });
+	
+	        // Nếu đã có giá trị → trigger change để hiện contactPerson đúng
+	        $(select).trigger("change");
+	
+	        // Nút xóa
 	        block.querySelector(".remove-customer").addEventListener("click", function () {
 	            block.remove();
 	        });
-	
-	        container.appendChild(block);
 	    });
 	
 	    document.getElementById('taskDetailSidebar').style.display = 'block';
@@ -137,6 +175,15 @@
 
 	    // Khởi tạo select2
 	    const select = block.querySelector(".select2");
+	    
+	 // Thêm option tương ứng với khách hàng đang có trong task
+	    const option = document.createElement("option");
+	    option.value = cust.id;
+	    option.text = cust.companyName;
+	    option.selected = true;
+	    option.dataset.contactPerson = cust.contactPerson || "";
+	    select.appendChild(option);
+	    
 	    $(select).select2({
 	        placeholder: "Nhập hoặc chọn tên công ty",
 	        width: "100%",
@@ -144,7 +191,7 @@
 	        language: "vi"
 	    });
 
-	    // Khi chọn công ty → điền người liên hệ
+	    // Khi chọn công ty thì tự động điền người liên hệ
 	    $(select).on("change", function () {
 	        const contact = $(this).find(':selected').data('contact-person') || "";
 	        $(this).closest('.row').find('.contact-person-input').val(contact);
@@ -203,7 +250,7 @@
 	$('#taskDetailForm').on('submit', function (e) {
 	    e.preventDefault();
 
-	    const taskId = $('#sidebarTaskId').val();
+	    const id = $('#sidebarTaskId').val();
 	    const name = $('#sidebarTaskName').val();
 	    const description = $('#sidebarTaskDescription').val();
 	    const startDate = $('#sidebarStartDate').val();
@@ -217,12 +264,14 @@
 	    });
 
 	    const data = {
-	        taskId,
+	        id,
 	        name,
 	        description,
 	        startDate,
 	        customerIds
 	    };
+	    
+	    console.log("Dữ liệu gửi lên:", data);
 
 	    $.ajax({
 	        url: _ctx + 'task/update-task',
