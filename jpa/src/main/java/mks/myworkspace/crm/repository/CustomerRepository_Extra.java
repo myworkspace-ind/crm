@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import mks.myworkspace.crm.entity.Customer;
 
 @Repository
-public interface CustomerRepository_Son extends JpaRepository<Customer, Long> {
+public interface CustomerRepository_Extra extends JpaRepository<Customer, Long> {
 
     List<Customer> findAll();
 

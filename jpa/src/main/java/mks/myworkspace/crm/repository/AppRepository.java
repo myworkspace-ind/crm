@@ -1375,6 +1375,10 @@ public class AppRepository {
         if (dto.getId()== null) {
             throw new IllegalArgumentException("Task ID không được null");
         }
+        
+        if (dto.getName() == null || dto.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Bạn cần nhập Tên công việc.");
+        }
 
         // 1. Cập nhật bảng crm_task
         String updateSql = "UPDATE crm_task SET name = ?, description = ?, start_date = ? WHERE id = ?";

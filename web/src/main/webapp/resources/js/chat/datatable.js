@@ -333,7 +333,7 @@ $(document).ready(function() {
 			success: function(response) {
 				if (!response.exists) {
 					Swal.fire({
-						title: "⚠ Khách hàng chưa có trong hệ thống!",
+						title: "⚠ Khách hàng chưa có trong danh sách cần chăm sóc!",
 						html: `Vui lòng nhấn nút LƯU DANH SÁCH để cập nhật danh sách khách hàng cần chăm sóc.`,
 						icon: "warning",
 						confirmButtonText: "OK",

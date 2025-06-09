@@ -26,7 +26,7 @@ import mks.myworkspace.crm.entity.dto.FilesUploadDTO;
 import mks.myworkspace.crm.entity.dto.InteractionDTO;
 import mks.myworkspace.crm.repository.AppRepository;
 import mks.myworkspace.crm.repository.CustomerRepository;
-import mks.myworkspace.crm.repository.CustomerRepository_Son;
+import mks.myworkspace.crm.repository.CustomerRepository_Extra;
 import mks.myworkspace.crm.repository.FilesUploadRepository;
 import mks.myworkspace.crm.repository.StatusRepository;
 import mks.myworkspace.crm.service.CustomerService;
@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository repo;
 	
 	@Autowired
-	    private CustomerRepository_Son sonRepo;
+	private CustomerRepository_Extra extraCustomerRepo;
     
     @Autowired
     private StatusRepository statusRepo;
@@ -301,14 +301,14 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public List<Customer> findCustomersAdvanced(String nameCompany, String phone, List<Long> selectedCareers,
 			String contactPerson, String address, String email) {
-        return sonRepo.advancedSearchCustomers(nameCompany, phone, selectedCareers, contactPerson, address, email);
+        return extraCustomerRepo.advancedSearchCustomers(nameCompany, phone, selectedCareers, contactPerson, address, email);
 
 	}
 
 	@Override
 	public List<Customer> advancedSearchCustomersNotCareer(String nameCompany, String phone, List<Long> selectedCareers,
 			String contactPerson, String address, String email) {
-        return sonRepo.advancedSearchCustomersNotCareer(nameCompany, phone, selectedCareers, contactPerson, address, email);
+        return extraCustomerRepo.advancedSearchCustomersNotCareer(nameCompany, phone, selectedCareers, contactPerson, address, email);
 
 	}
 
@@ -317,7 +317,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if (selectedCareers == null || selectedCareers.isEmpty()) {
             return new ArrayList<>();
         }
-    	return sonRepo.findByselectedCareers(selectedCareers);
+    	return extraCustomerRepo.findByselectedCareers(selectedCareers);
 	}
 
 //	@Override

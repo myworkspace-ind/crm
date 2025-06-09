@@ -79,8 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
 						return `<li> - ${c[2]} - Ngày nhắc nhở: ${formattedDate} </li>`
 					})
 					Swal.fire({
-						title: "⚠ Khách hàng chưa được lưu!",
-						html: `<p>Các khách hàng sau chưa được lưu vào hệ thống:</p>
+						title: "⚠ Khách hàng chưa được lưu vào danh sách chăm sóc!",
+						html: `<p>Các khách hàng sau chưa được lưu vào danh sách chăm sóc:</p>
 					                   <ul style="text-align: left; list-style-type: none;">${customerList.join('')}</ul>`,
 						icon: "warning",	
 						showCancelButton: true,

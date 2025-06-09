@@ -99,7 +99,7 @@ public class CustomerCareController extends BaseController {
 	}
 
 	@GetMapping(value = "/save-customer-care", produces = "application/json; charset=UTF-8")
-	public ResponseEntity<?> loadPotentialCustomers() {
+	public ResponseEntity<?> saveCustomerCare() {
 		log.debug("Đã tới được đây");
 		try {
 			if (customerCareService == null) {
@@ -296,7 +296,7 @@ public class CustomerCareController extends BaseController {
 	}
 
 	@GetMapping(value = "/load-customer-care", produces = "application/json; charset=UTF-8")
-	public ResponseEntity<?> getPotentialCustomers() {
+	public ResponseEntity<?> displayCustomerCareList() {
 		log.debug("Here!");
 		try {
 			List<Status> allStatuses = statusService.getAllStatuses();
