@@ -578,8 +578,9 @@ public class StorageServiceImpl implements StorageService {
 
 			return true;
 		} catch (Exception e) {
-			System.err.println("Đã xảy ra lỗi: " + e.getMessage());
-			e.printStackTrace();
+			//System.err.println("Đã xảy ra lỗi: " + e.getMessage());
+			//e.printStackTrace();
+			log.debug("Đã xảy ra lỗi: {}", e.getMessage());
 			return false;
 		}
 	}
@@ -623,7 +624,8 @@ public class StorageServiceImpl implements StorageService {
 					try {
 						appRepo.updateOrderCategory(idLoaiDonHang, newValue);
 					} catch (Exception e) {
-						System.err.println("Lỗi khi cập nhật hoặc tạo mới loại đơn hàng: " + e.getMessage());
+						//System.err.println("Lỗi khi cập nhật hoặc tạo mới loại đơn hàng: " + e.getMessage());
+						log.debug("Lỗi khi cập nhật hoặc tạo mới loại đơn hàng: {}", e.getMessage());					
 					}
 				}
 			}
