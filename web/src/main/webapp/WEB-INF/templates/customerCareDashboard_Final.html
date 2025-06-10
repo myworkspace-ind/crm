@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- COMMON META AND TITLE -->
+    <th:block th:include="fragments/common_meta_title"></th:block>
+
+    <!-- HEAD FRAGMENT -->
+    <th:block th:include="fragments/head"></th:block>
+
+    <!-- COMMON CSS -->
+    <th:block th:include="fragments/common_css"></th:block>
+    
+    <!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .kpi-card {
+            text-align: center;
+            padding: 15px;
+        }
+        .kpi-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .kpi-label {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+    
+</head>
+<body>
+	<!-- BEGIN HEADER  -->
+	<th:block th:include="fragments/hmenu"></th:block>
+	<!-- END HEADER  -->
+	
+	<div class="container-fluid mt-4" id="dashboard-content">
+	    <div class="row mb-4">
+	        <div class="col-md-3">
+	            <div class="card kpi-card">
+	                <div class="kpi-value" th:text="${stats != null ? stats.totalCustomerCares : 0}">0</div>
+	                <div class="kpi-label">Tổng số bản ghi chăm sóc</div>
+	            </div>
+	        </div>
+	        <div class="col-md-3">
+	            <div class="card kpi-card">
+	                <div class="kpi-value" th:text="${stats != null ? stats.notCaredCount : 0}">0</div>
+	                <div class="kpi-label">Khách hàng CHƯA được CHĂM SÓC</div>
+	            </div>
+	        </div>
+	        <div class="col-md-3">
+	            <div class="card kpi-card">
+	                <div class="kpi-value" th:text="${stats != null ? stats.caredOnTimeCount : 0}">0</div>
+	                <div class="kpi-label">Khách hàng được CHĂM SÓC ĐÚNG HẠN</div>
+	            </div>
+	        </div>
+	        <div class="col-md-3">
+	            <div class="card kpi-card">
+	                <div class="kpi-value" id="caredLateCount">0</div>
+	                <div class="kpi-label">Khách hàng bị CHĂM SÓC TRỄ HẠN</div>
+	            </div>
+	        </div>
+	    </div>
+
+    	<!-- Biểu đồ -->
+	    <div class="row">
+	        <div class="col-md-6">
+	            <div class="card">
+	                <div class="card-header">Phân bổ KH theo trạng thái chính</div>
+	                <div class="card-body">
+	                    <div class="chart-container">
+	                        <canvas id="statusChart"></canvas>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col-md-6">
+	            <div class="card">
+	                <div class="card-header">Tỷ lệ hoàn thành chăm sóc</div>
+	                <div class="card-body">
+	                    <div class="chart-container">
+	                        <canvas id="completionChart"></canvas>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+
+	    <div class="row mt-4">
+	        <div class="col-md-6">
+	            <div class="card">
+	                <div class="card-header">Tỷ lệ chăm sóc đúng hạn</div>
+	                <div class="card-body">
+	                    <div class="chart-container">
+	                        <canvas id="timelinessChart"></canvas>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col-md-6">
+	            <div class="card">
+	                <div class="card-header">Xu hướng chăm sóc theo thời gian</div>
+	                <div class="card-body">
+	                    <div class="chart-container">
+	                        <canvas id="trendChart"></canvas>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	
+	    <div class="row mt-4">
+	        <div class="col-md-6">
+	            <div class="card">
+	                <div class="card-header">Top nhân viên chăm sóc hiệu quả</div>
+	                <div class="card-body">
+	                    <div class="chart-container">
+	                        <canvas id="employeeChart"></canvas>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col-md-6">
+	            <div class="card">
+	                <div class="card-header">Phân bổ KH theo độ ưu tiên</div>
+	                <div class="card-body">
+	                    <div class="chart-container">
+	                        <canvas id="priorityChart"></canvas>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+		   
+</body>
+</html>

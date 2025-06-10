@@ -23,6 +23,9 @@ import mks.myworkspace.crm.entity.CustomerCare;
  */
 @Repository
 public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long>, JpaSpecificationExecutor<CustomerCare> {
+	@Query("SELECT cc.careStatus, COUNT(cc) FROM CustomerCare cc GROUP BY cc.careStatus")
+	List<Object[]> countByCareStatus();	
+	
 	//Chỉ mới xét trường hợp khách hàng Mới và chưa có Interaction hoặc có thời gian tạo mới interaction > thời gian nhắc nhở trong customer care
 	
 	//TODO: Lấy khách hàng "Mới"

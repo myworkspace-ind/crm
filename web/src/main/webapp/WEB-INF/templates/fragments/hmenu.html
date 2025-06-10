@@ -87,17 +87,18 @@
             <li th:if="${#request.userPrincipal}" class="dropdown nav-item" data-menu="dropdown" data-step="6" data-intro="Danh mục này đang phát triển.">
             	<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">Báo cáo</span></a>
                 <ul class="dropdown-menu">
-                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Khách hàng</a></li>
-                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Đơn hàng</a></li>
-                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Nhiệm vụ</a></li>
-                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Dự án</a></li>
-                   <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Sản phẩm</a></li>
+                	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/dashboard}" data-toggle="dropdown">Dashboard</a></li>
+					<li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Khách hàng</a></li>
+					<li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Đơn hàng</a></li>
+					<li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Nhiệm vụ</a></li>
+					<li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Dự án</a></li>
+					<li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Sản phẩm</a></li>
                                    <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/contact}" data-toggle="dropdown">Hợp đồng</a></li>
                    <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">MKT</a>
                     <ul class="dropdown-menu">
-                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Chiến dịch</a></li>
-                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Affiliate</a></li>
-                      <li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Telesales</a></li>
+						<li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Chiến dịch</a></li>
+						<li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Affiliate</a></li>
+						<li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Telesales</a></li>
                      </ul>
                    </li>
                 </ul>

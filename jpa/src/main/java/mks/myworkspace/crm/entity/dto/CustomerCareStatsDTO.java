@@ -6,7 +6,7 @@ import java.util.Map;
 import lombok.Data;
 
 @Data
-public class DashboardCustomerCareDTO {
+public class CustomerCareStatsDTO {
 	private Long totalCustomerCares;
     private Long notCaredCount; //Chua cham soc
     private Long caredOnTimeCount; //Cham soc dung han
