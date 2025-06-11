@@ -68,6 +68,15 @@ public class CustomerCareController extends BaseController {
 
 	@Value("${customer.care.max-care-days-potential-case1}")
 	private int checkCareStatusDaysForPotential_Case1;
+	
+	@GetMapping(value = "/dashboard")
+	public ModelAndView displayDashboard (HttpServletRequest httpRequest, HttpSession httpSession ) {
+		ModelAndView mav = new ModelAndView("customerCareDashboard_Draft");
+		initSession(httpRequest, httpSession);
+		mav.addObject("currentSiteId", getCurrentSiteId());
+		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		return mav;
+	}
 
 	@GetMapping("/calendar")
 	public ModelAndView displayCalendar(HttpServletRequest request, HttpSession httpSession) {
