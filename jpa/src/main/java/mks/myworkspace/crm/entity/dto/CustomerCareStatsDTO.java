@@ -17,6 +17,7 @@ public class CustomerCareStatsDTO {
     private List<TimeSeriesData> careTrend; //xu huong cham soc theo thoi gian
     //private List<EmployeePerformance> topPerformers;
     private Double averageResponseTime;
+    private Map<String, Double> radarData; // key: responsiblePersonName, value: avg care delay (in hours)
 }
 
 @Data

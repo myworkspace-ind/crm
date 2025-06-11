@@ -68,7 +68,7 @@
 	        </div>
 	        <div class="col-md-3">
 	            <div class="card kpi-card">
-	                <div class="kpi-value" id="caredLateCount">0</div>
+	                <div class="kpi-value" th:text="${stats != null ? stats.caredLateCount : 0}">0</div>
 	                <div class="kpi-label">Khách hàng bị CHĂM SÓC TRỄ HẠN</div>
 	            </div>
 	        </div>
@@ -78,7 +78,7 @@
 	    <div class="row">
 	        <div class="col-md-6">
 	            <div class="card">
-	                <div class="card-header">Phân bổ KH theo trạng thái chính</div>
+	                <div class="card-header">Phân bổ khách hàng theo trạng thái chính</div>
 	                <div class="card-body">
 	                    <div class="chart-container">
 	                        <canvas id="statusChart"></canvas>
@@ -109,41 +109,202 @@
 	                </div>
 	            </div>
 	        </div>
+	        
 	        <div class="col-md-6">
 	            <div class="card">
-	                <div class="card-header">Xu hướng chăm sóc theo thời gian</div>
+	                <div class="card-header">Thời gian trung bình từ lúc nhắc đến lúc chăm sóc</div>
 	                <div class="card-body">
 	                    <div class="chart-container">
-	                        <canvas id="trendChart"></canvas>
+	                        <canvas id="avgDelayChart"></canvas>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
+<!-- 	        <div class="col-md-6"> -->
+<!-- 	            <div class="card"> -->
+<!-- 	                <div class="card-header">Xu hướng chăm sóc theo thời gian</div> -->
+<!-- 	                <div class="card-body"> -->
+<!-- 	                    <div class="chart-container"> -->
+<!-- 	                        <canvas id="trendChart"></canvas> -->
+<!-- 	                    </div> -->
+<!-- 	                </div> -->
+<!-- 	            </div> -->
+<!-- 	        </div> -->
 	    </div>
 	
 	    <div class="row mt-4">
-	        <div class="col-md-6">
+	    	<div class="col-md-6">
 	            <div class="card">
 	                <div class="card-header">Top nhân viên chăm sóc hiệu quả</div>
 	                <div class="card-body">
 	                    <div class="chart-container">
-	                        <canvas id="employeeChart"></canvas>
+	                        <canvas id="radarChart"></canvas>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <div class="col-md-6">
-	            <div class="card">
-	                <div class="card-header">Phân bổ KH theo độ ưu tiên</div>
-	                <div class="card-body">
-	                    <div class="chart-container">
-	                        <canvas id="priorityChart"></canvas>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
+	    
+<!-- 	        <div class="col-md-6"> -->
+<!-- 	            <div class="card"> -->
+<!-- 	                <div class="card-header">Top nhân viên chăm sóc hiệu quả</div> -->
+<!-- 	                <div class="card-body"> -->
+<!-- 	                    <div class="chart-container"> -->
+<!-- 	                        <canvas id="employeeChart"></canvas> -->
+<!-- 	                    </div> -->
+<!-- 	                </div> -->
+<!-- 	            </div> -->
+<!-- 	        </div> -->
+	        
+<!-- 	        <div class="col-md-6"> -->
+<!-- 	            <div class="card"> -->
+<!-- 	                <div class="card-header">Thời gian trung bình từ lúc nhắc đến lúc chăm sóc</div> -->
+<!-- 	                <div class="card-body"> -->
+<!-- 	                    <div class="chart-container"> -->
+<!-- 	                        <canvas id="avgDelayChart"></canvas> -->
+<!-- 	                    </div> -->
+<!-- 	                </div> -->
+<!-- 	            </div> -->
+<!-- 	        </div> -->
 	    </div>
 	</div>
 		   
+	<script th:inline="javascript">
+	 /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        // Status Distribution Chart
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        const statusLabels = /*[[${stats.statusDistribution.keySet()}]]*/ [];
+        const statusData = /*[[${stats.statusDistribution.values()}]]*/ [];
+        
+        const radarLabels = /*[[${stats.radarData.keySet().toArray()}]]*/ [];
+        const radarValues = /*[[${stats.radarData.values().toArray()}]]*/ [];
+        
+        new Chart(statusCtx, {
+            type: 'pie',
+            data: {
+                labels: statusLabels,
+                datasets: [{
+                    data: statusData,
+                    backgroundColor: [
+                        '#FF6384', '#9966FF', '#FFCE56', '#4BC0C0', '#FA91F1', '#36A2EB'
+                    ]
+                }]
+            }
+        });
+        
+     // Completion Chart--> Ty le hoan thanh cham soc
+        const completionCtx = document.getElementById('completionChart').getContext('2d');
+        new Chart(completionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Đã chăm sóc', 'Chưa chăm sóc'],
+                datasets: [{
+                    data: [
+                        /*[[${stats.totalCustomerCares - stats.notCaredCount}]]*/,
+                        /*[[${stats.notCaredCount}]]*/
+                    ],
+                    backgroundColor: [
+                        '#36A2EB', '#FF6384'
+                    ]
+                }]
+            },
+            options: {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const value = context.raw;
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${context.label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        //Ty le cham soc dung han
+        const timelinessCtx = document.getElementById('timelinessChart').getContext('2d');
+        new Chart(timelinessCtx, {
+        	type: 'bar',
+        	data: {
+        		labels: ['Đúng hạn', 'Trễ hạn'],
+        		datasets: [{
+        			label: 'Khách hàng (Số lượng & %)',
+        			data: [
+						/*[[${stats.caredOnTimeCount}]]*/,
+						/*[[${stats.caredLateCount}]]*/
+           			],
+          		 	backgroundColor: [
+                       '#4BC0C0', '#FF6384'
+                  	]
+        		}]
+        	},
+	        options: {
+	            plugins: {
+	                tooltip: {
+	                    callbacks: {
+	                        label: function(context) {
+	                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+	                            const value = context.raw;
+	                            const percentage = ((value / total) * 100).toFixed(1);
+	                            return `${context.label}: ${value} (${percentage}%)`;
+	                        }
+	                    }
+	                }
+	            }
+	        }
+        });
+	
+        const ctx = document.getElementById('avgDelayChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: radarLabels,
+                datasets: [{
+                    label: 'Avg Delay (hrs)',
+                    data: radarValues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y', // bar ngang
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.x.toFixed(2) + ' hrs';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Delay (hours)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+    /*]]>*/
+	</script>
 </body>
 </html>

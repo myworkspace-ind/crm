@@ -26,6 +26,9 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 	@Query("SELECT cc.careStatus, COUNT(cc) FROM CustomerCare cc GROUP BY cc.careStatus")
 	List<Object[]> countByCareStatus();	
 	
+	@Query("SELECT c.mainStatus.name, COUNT(cc) FROM CustomerCare cc JOIN cc.customer c GROUP BY c.mainStatus.name")
+    List<Object[]> countByMainStatus();
+	
 	//Chỉ mới xét trường hợp khách hàng Mới và chưa có Interaction hoặc có thời gian tạo mới interaction > thời gian nhắc nhở trong customer care
 	
 	//TODO: Lấy khách hàng "Mới"
@@ -126,6 +129,12 @@ public interface CustomerCareRepository extends JpaRepository<CustomerCare, Long
 
 	@Query("SELECT cc FROM CustomerCare cc JOIN FETCH cc.customer")
     List<CustomerCare> findAllCustomerCares();
+	
+	@Query("SELECT cc FROM CustomerCare cc " +
+		       "JOIN FETCH cc.customer c " +
+		       "JOIN FETCH c.responsiblePerson rp " +
+		       "LEFT JOIN FETCH c.interactions i")
+	List<CustomerCare> findAllCustomerCaresWithInteraction();
 	
 //	@Query("SELECT cc FROM CustomerCare cc " +
 //		       "JOIN FETCH cc.customer c " +
