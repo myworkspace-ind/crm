@@ -53,27 +53,37 @@
 				</div>
 				<div class="content-header-right col-md-6 col-12">
 					<!-- Outline buttons with Icons -->
-						<p th:if="${message}" th:text="${message}" style="color: green;"></p>
+					<p th:if="${message}" th:text="${message}" style="color: green;"></p>
 					
-					<fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-						<button id="openEmailModal" 
-								data-customer-id="${customer.id}"
-								data-customer-email="${customer.email}" 
-								type="button" 
-								class="mr-1 mb-1 btn btn-outline-primary btn-min-width">
-							<i class="fa fa-envelope-o"></i> Gửi Email Cơ Bản
-						</button>
-					</fieldset>
+					<th:block th:with="isCreator=${customer.createdBy == currentUsername}">
+
+						<fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
+							<button id="openEmailModal"
+									data-customer-id="${customer.id}"
+									data-customer-email="${customer.email}" 
+									type="button" 
+									class="mr-1 mb-1 btn btn-outline-primary btn-min-width"
+									style="border: 2px solid #003a6b;"
+									th:disabled="${!isCreator}"
+									th:style="${!isCreator} ? '; background-color: #ccc; cursor: not-allowed; !important' : 'border: 2px solid #003a6b;'">
+								<i class="fa fa-envelope-o"></i> Gửi Email Cơ Bản
+							</button>
+						</fieldset>
 					
-					<fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
-					    <button id="toggleAdvancedEmail"
-					    		type="button"
-						        class="mb-1 btn btn-outline-success btn-min-width"
-						        data-toggle="modal"
-						        data-target="#advancedEmailModal">
-						    <i class="fa fa-envelope"></i> Gửi Email Nâng Cao
-						</button>
-					</fieldset>
+						<fieldset class="form-group relative has-icon-left col-md-5 col-12 float-right p-0">
+							<button id="toggleAdvancedEmail"
+									type="button"
+									class="mb-1 btn btn-outline-success btn-min-width"
+									data-toggle="modal"
+									data-target="#advancedEmailModal"
+									style="border: 2px solid #7952b3;"
+									th:disabled="${!isCreator}"
+									th:style="${!isCreator} ? '; background-color: #ccc; cursor: not-allowed; !important' : 'border: 2px solid #7952b3;'">
+								<i class="fa fa-envelope"></i> Gửi Email Nâng Cao
+							</button>
+						</fieldset>
+					
+					</th:block>
 				</div>
 				
 				<div class="email-overlay" id="emailOverlay"></div>
@@ -131,14 +141,34 @@
 					</div>
 
 					<div class="actions">
-						<a th:href="@{newEditCustomer(id=${customer.id})}" >
-						    <button type="button"
-						    	style="cursor: pointer;">
-						    <i class="icon-pencil"></i> Edit
-						    </button>
-						</a>
-						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer(' + ${customer.id} + ')'">Hide</button>
-						<button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Edit Interaction</button>
+						<!-- Biến cờ kiểm tra có quyền sửa hay không -->
+						<th:block th:with="isCreator=${customer.createdBy == currentUsername}">
+					
+							<a th:href="@{newEditCustomer(id=${customer.id})}" th:attr="disabled=${!isCreator}" 
+							   th:classappend="${!isCreator} ? ' disabled-link'">
+								<button type="button"
+										style="cursor: pointer;"
+										th:disabled="${!isCreator}"
+										th:style="${!isCreator} ? 'background-color: #ccc; cursor: not-allowed;' : ''">
+									<i class="icon-pencil"></i> Edit
+								</button>
+							</a>
+					
+							<button style="cursor: pointer;" th:onclick="'hideCustomer(' + ${customer.id} + ')'"
+									th:disabled="${!isCreator}"
+									th:style="${!isCreator} ? 'background-color: #ccc; cursor: not-allowed;' : 'background: #DA4453;'">
+								Hide
+							</button>
+					
+							<button type="button"
+									data-bs-toggle="modal"
+									data-bs-target="#myModal"
+									th:disabled="${!isCreator}"
+									th:style="${!isCreator} ? 'background-color: #ccc; cursor: not-allowed;' : ''">
+								Edit Interaction
+							</button>
+					
+						</th:block>
 					</div>
 <!-- 					<div class="relationship-section"> -->
 <!-- 						<label for="relationship">Trạng thái:</label> -->
@@ -420,24 +450,42 @@
 		    function previewAttachments() {
 		        const fileInput = document.getElementById('attachment');
 		        const previewArea = document.getElementById('preview-area');
-		        previewArea.innerHTML = ''; // Clear cũ
-	
-		        const files = fileInput.files;
+		        previewArea.innerHTML = ''; // Xoá nội dung cũ
+
+		        const files = Array.from(fileInput.files);
 		        if (!files.length) return;
-	
-		        Array.from(files).forEach(file => {
+
+		        files.forEach((file, index) => {
 		            const container = document.createElement('div');
 		            container.style.border = '1px solid #ccc';
 		            container.style.padding = '10px';
 		            container.style.marginBottom = '15px';
 		            container.style.background = '#fafafa';
-	
+		            container.style.position = 'relative';
+
+		            // Nút x xoá
+		            const removeBtn = document.createElement('span');
+		            removeBtn.textContent = '✖';
+		            removeBtn.title = 'Xoá file này';
+		            removeBtn.style.position = 'absolute';
+		            removeBtn.style.top = '5px';
+		            removeBtn.style.right = '10px';
+		            removeBtn.style.cursor = 'pointer';
+		            removeBtn.style.color = '#d33';
+		            removeBtn.style.fontWeight = 'bold';
+		            removeBtn.onclick = function () {
+		                container.remove();
+		                // Optional: reset file input nếu muốn xoá khỏi input
+		                // Lưu ý: JavaScript không cho phép xoá 1 file cụ thể khỏi input.files vì nó là read-only
+		            };
+
 		            const info = document.createElement('p');
 		            info.textContent = `📎 ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
 		            container.appendChild(info);
-	
+		            container.appendChild(removeBtn);
+
 		            const reader = new FileReader();
-	
+
 		            if (file.type.startsWith('image/')) {
 		                reader.onload = function (e) {
 		                    const img = document.createElement('img');
@@ -446,8 +494,7 @@
 		                    container.appendChild(img);
 		                };
 		                reader.readAsDataURL(file);
-		            }
-		            else if (file.type === 'application/pdf') {
+		            } else if (file.type === 'application/pdf') {
 		                reader.onload = function (e) {
 		                    const iframe = document.createElement('iframe');
 		                    iframe.src = e.target.result;
@@ -456,8 +503,7 @@
 		                    container.appendChild(iframe);
 		                };
 		                reader.readAsDataURL(file);
-		            }
-		            else if (file.type === 'text/plain') {
+		            } else if (file.type === 'text/plain') {
 		                reader.onload = function (e) {
 		                    const pre = document.createElement('pre');
 		                    pre.textContent = e.target.result;
@@ -468,8 +514,7 @@
 		                    container.appendChild(pre);
 		                };
 		                reader.readAsText(file);
-		            }
-		            else if (file.name.endsWith(".docx") || file.name.endsWith(".doc")) {
+		            } else if (file.name.endsWith(".docx") || file.name.endsWith(".doc")) {
 		                reader.onload = function (e) {
 		                    const arrayBuffer = e.target.result;
 		                    mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
@@ -490,30 +535,28 @@
 		                        });
 		                };
 		                reader.readAsArrayBuffer(file);
-		            }
-		            else if (fileName.endsWith(".xls") || fileName.endsWith(".xlsx")){
-		            	const reader = new FileReader();
+		            } else if (file.name.endsWith(".xls") || file.name.endsWith(".xlsx")) {
 		                reader.onload = function (e) {
 		                    const data = new Uint8Array(e.target.result);
 		                    const workbook = XLSX.read(data, { type: "array" });
 		                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
 		                    const html = XLSX.utils.sheet_to_html(firstSheet);
-	
+
 		                    const section = document.createElement("div");
 		                    section.innerHTML = `<h4>${file.name}</h4>` + html;
-		                    preview.appendChild(section);
+		                    container.appendChild(section);
 		                };
 		                reader.readAsArrayBuffer(file);
-		            }
-		            else {
+		            } else {
 		                const note = document.createElement('p');
 		                note.textContent = "❌ Không hỗ trợ xem trước định dạng tệp này.";
 		                container.appendChild(note);
 		            }
-	
+
 		            previewArea.appendChild(container);
 		        });
 		    }
+
 	</script>
 	
 </body>

@@ -478,6 +478,11 @@ public class AppRepository {
 		if (customer.getCreatedAt() != null) {
 			parameters.put("created_at", customer.getCreatedAt());
 		}
+		
+		if (customer.getCreatedBy() != null) {
+		    parameters.put("created_by", customer.getCreatedBy());
+		}
+		
 		if (customer.getEmail() != null) {
 			parameters.put("email", customer.getEmail());
 		}

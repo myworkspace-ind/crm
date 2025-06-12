@@ -55,42 +55,57 @@
 		<div class="table-container">
 			<div class="table-responsive">
 				<table id="table"
-					class="table table-bordered table-striped table-hover">
+					class="table table-bordered table-striped table-hover"
+					style="table-layout: fixed; width: 100%">
 					<thead class="thead">
 						<tr class="bg">
-							<th class="col-stt th1">STT</th>
-							<th class="col-name th2">Tên khách hàng</th>
-							<th class="col-email th3">Email</th>
-							<th class="col-phone th4">Số điện thoại</th>
-							<th class="col-contact th5">Người liên hệ chính</th>
-							<th class="col-action th6">Hành động</th>
+							<th class="col-stt th1" style="width: 50px;">STT</th>
+							<th class="col-name th2" style="width: 250px;">Tên khách hàng</th>
+							<th class="col-email th3" style="width: 350px; white-space: normal; word-wrap: break-word;">Email</th>
+							<th class="col-phone th4" style="width: 150px;">Số điện thoại</th>
+							<th class="col-contact th5" style="width: 200px;">Người liên hệ chính</th>
+							<th class="col-action th6" style="width: 200px;">Hành động</th>
 						</tr>
 					</thead>
 					<tbody class="bg-transparent">
 						<tr th:each="customer, iterStat : ${customers}">
-							<td th:text="${iterStat.index + 1}"></td>
-							<td
-								th:text="${customer.companyName != null ? customer.companyName : ''}"></td>
-							<td th:text="${customer.email != null ? customer.email : ''}"></td>
-							<td th:text="${customer.phone != null ? customer.phone : ''}"></td>
-							<td
-								th:text="${customer.contactPerson != null ? customer.contactPerson : ''}"></td>
+							<td th:text="${iterStat.index + 1}" style="width: 50px;"></td>
+							<td th:text="${customer.companyName != null ? customer.companyName : ''}" style="width: 250px;"></td>
+							<td th:text="${customer.email != null ? customer.email : ''}" style="width: 350px; white-space: normal; word-wrap: break-word;"></td>
+							<td th:text="${customer.phone != null ? customer.phone : ''}" style="width: 150px;"></td>
+							<td th:text="${customer.contactPerson != null ? customer.contactPerson : ''}" style="width: 200px;">Người liên hệ chính></td>
+							
 							<td>
-								<div class="d-flex justify-content-center">
-									<a th:href="@{/customer/interact-edit(id=${customer.id})}"
-										class="text-info mr-1 bg-transparent" style="font-size: 20px;">
-										<i class="fas fa-edit w-100"></i>
-									</a>
-									<a th:href="@{/customer/interact-edit(id=${customer.id})}"
-										class="text-info mr-1 bg-transparent" style="font-size: 20px;">
-										<i class="fas fa-envelope w-100"></i>
-									</a>
-									<a th:href="@{/customer/interact-edit(id=${customer.id})}"
-										class="text-info mr-1 bg-transparent" style="font-size: 20px;">
-										<i class="fas fa-comment-sms w-100"></i>
-									</a>
-								</div>
+								<th:block th:with="isCreator=${customer.createdBy == currentUsername}">
+									
+									<div class="d-flex justify-content-center">
+										<a th:href="@{/customer/interact-edit(id=${customer.id})}" th:attr="disabled=${!isCreator}"
+											th:classappend="${!isCreator} ? ' disabled-link'"
+											th:disabled="${!isCreator}"
+											th:style="${!isCreator} ? 'color: #ccc !important; cursor: not-allowed;' : ''"
+											class="text-info mr-1 bg-transparent">
+											<i class="fas fa-edit w-100" style="font-size: 25px;"></i>
+										</a>
+										<a th:href="@{/customer/interact-edit(id=${customer.id})}" th:attr="disabled=${!isCreator}"
+											th:classappend="${!isCreator} ? ' disabled-link'"
+											th:disabled="${!isCreator}"
+											th:style="${!isCreator} ? 'color: #ccc !important; cursor: not-allowed;' : ''"
+											class="text-info mr-1 bg-transparent">
+											<i class="fas fa-envelope w-100" style="font-size: 25px;"></i>
+										</a>
+										<a th:href="@{/customer/interact-edit(id=${customer.id})}" th:attr="disabled=${!isCreator}"
+											th:classappend="${!isCreator} ? ' disabled-link'"
+											th:disabled="${!isCreator}"
+											th:style="${!isCreator} ? 'color: #ccc !important; cursor: not-allowed;' : ''"
+											class="text-info mr-1 bg-transparent">
+											<i class="fas fa-comment-sms w-100" style="font-size: 25px;"></i>
+										</a>
+									</div>
+									
+								</th:block>
+								
 							</td>
+							
 						</tr>
 					</tbody>
 				</table>

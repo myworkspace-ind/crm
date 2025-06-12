@@ -44,15 +44,27 @@
 						</div>
 					</div>
 					<div class="actions">
-						<a th:href="@{newEditCustomer(id=${customer.id})}" >
-						    <button type="button"
-						    	style="cursor: pointer;">
-						    <i class="icon-pencil"></i> Edit
-						    </button>
-						</a>
-						<button style="cursor: pointer; background: #DA4453" th:onclick="'hideCustomer(' + ${customer.id} + ')'">Hide</button>
-						<!-- <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Edit Interaction</button> -->
+						<!-- Biến cờ kiểm tra có quyền sửa hay không -->
+						<th:block th:with="isCreator=${customer.createdBy == currentUsername}">
+							<a th:href="@{newEditCustomer(id=${customer.id})}" th:attr="disabled=${!isCreator}" 
+								th:classappend="${!isCreator} ? ' disabled-link'">
+							    <button type="button"
+							    		style="cursor: pointer;"
+							    		th:disabled="${!isCreator}"
+										th:style="${!isCreator} ? 'background-color: #ccc; cursor: not-allowed;' : ''">
+							    <i class="icon-pencil"></i> Edit
+							    </button>
+							</a>
+							<button style="cursor: pointer; background: #DA4453" 
+									th:disabled="${!isCreator}"
+									th:onclick="'hideCustomer(' + ${customer.id} + ')'"
+									th:style="${!isCreator} ? 'background-color: #ccc; cursor: not-allowed;' : 'background: #DA4453;'">
+								Hide
+							</button>
+							<!-- <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Edit Interaction</button> -->
+						</th:block>
 					</div>
+					
 					<div class="person-in-charge">
 						<p>
 					        <span class="label-bold">Nhân viên phụ trách:</span>
@@ -61,9 +73,12 @@
 					</div>
 				</div>
 
-				<div class="right-panel p-0 m-0 w-100">
-					<th:block th:include="fragments/interaction/frg_interaction.html"></th:block>
-				</div>
+				<th:block th:with="isCreator=${customer.createdBy == currentUsername}">
+				    <div class="right-panel p-0 m-0 w-100"
+				         th:style="${!isCreator} ? 'pointer-events: none; opacity: 0.6;' : ''">
+				        <th:block th:include="fragments/interaction/frg_interaction.html"></th:block>
+				    </div>
+				</th:block>
 			</div>
 
 		</div>

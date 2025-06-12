@@ -549,3 +549,7 @@ body {
 #advancedEmailSection {
 	transition: all 0.3s ease;
 }
+
+.disabled-link {
+  pointer-events: none;
+}

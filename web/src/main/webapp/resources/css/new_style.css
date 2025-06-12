@@ -74,6 +74,7 @@ span {
 	margin-bottom: 10px;
 	background-color: bisque;
 	border: solid;
+	margin-right: 60px;
 }
 
 #filter-box span {
@@ -168,9 +169,10 @@ tr:nth-child(even) td:nth-child(3) {
 .table-container {
 	flex: 4;
 	min-width: 0;
-	margin-left: 20px;
+	margin-left: -40px;
 	overflow-x: auto;
 	overflow-y: hidden;
+	width: fit-content;
 }
 
 .table-responsive {
@@ -554,4 +556,8 @@ nav-link-expand i.fa-compress:before {
 .addCustomerbtn:hover {
 	background-color: #8451C1;
 	color: #ffffff;
+}
+
+.disabled-link {
+  pointer-events: none;
 }

@@ -72,6 +72,9 @@ public class Customer implements Serializable {
     @JoinColumn(name = "sub_status_id")
     private Status subStatus;
     
+    @Column(name = "created_by")
+    private String createdBy;
+    
     @ManyToOne
     @JoinColumn(name = "responsible_person_id")
     private ResponsiblePerson responsiblePerson;

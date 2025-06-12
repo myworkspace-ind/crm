@@ -27,6 +27,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
@@ -481,6 +483,19 @@ public class CustomerController extends BaseController {
 			@RequestParam(name = "startTour", required = false) Boolean startTour) {
 
 		ModelAndView mav = new ModelAndView("customer_list_v2");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		String currentUsername = null;
+		if (authentication != null && authentication.isAuthenticated()) {
+		    Object principal = authentication.getPrincipal();
+		    if (principal instanceof UserDetails) {
+		        UserDetails userDetails = (UserDetails) principal;
+		        currentUsername = userDetails.getUsername();
+		    } else {
+		        currentUsername = principal.toString(); // fallback
+		    }
+		}
+		
 		try {
 			initSession(request, httpSession);
 			int page = 1;
@@ -539,6 +554,7 @@ public class CustomerController extends BaseController {
 			mav.addObject("statusCounts", statusCounts);
 			mav.addObject("totalCustomerCount", totalCustomerCount);
 			mav.addObject("numberOfElementsInCurrentPage", pageCustomer.getNumberOfElements());
+			mav.addObject("currentUsername", currentUsername);
 		} catch (Exception ex){
 			mav.addObject("errorMessage", "Đã xảy ra lỗi trong quá trình tải danh sách khách hàng. Vui lòng thử lại sau hoặc liên hệ quản trị hệ thống.");
 		}
@@ -556,10 +572,25 @@ public class CustomerController extends BaseController {
 	    ModelAndView mav = new ModelAndView("customerDetail");
 
 	    initSession(request, httpSession);
+	    
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+	    String currentUsername = null;
+	    if (authentication != null && authentication.isAuthenticated()) {
+	        Object principal = authentication.getPrincipal();
+	        if (principal instanceof UserDetails) {
+	            UserDetails userDetails = (UserDetails) principal;
+	            currentUsername = userDetails.getUsername();
+	        } else {
+	            currentUsername = principal.toString(); // fallback
+	        }
+	    }
 
 	    mav.addObject("currentSiteId", getCurrentSiteId());
 	    mav.addObject("userDisplayName", getCurrentUserDisplayName());
 	    mav.addObject("customerId", customerId);
+	    mav.addObject("currentUsername", currentUsername);
+	    
 	    httpSession.setAttribute("customerId", customerId);
 	    
 	    // Kiểm tra credential có tồn tại không
@@ -946,6 +977,20 @@ public class CustomerController extends BaseController {
 
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		String currentUsername = null;
+		if (authentication != null && authentication.isAuthenticated()) {
+		    Object principal = authentication.getPrincipal();
+		    if (principal instanceof UserDetails) {
+		        UserDetails userDetails = (UserDetails) principal;
+		        currentUsername = userDetails.getUsername();
+		    } else {
+		        currentUsername = principal.toString(); // fallback
+		    }
+		}
+
 		List<Customer> customers;
 
 		if (statusId != null) {
@@ -995,6 +1040,7 @@ public class CustomerController extends BaseController {
 		mav.addObject("professions", professions);
 		mav.addObject("statusCounts", statusCounts);
 		mav.addObject("totalCustomerCount", totalCustomerCount);
+		mav.addObject("currentUsername", currentUsername);
 
 		return mav;
 	}
@@ -1014,6 +1060,19 @@ public class CustomerController extends BaseController {
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 		log.debug("Customer Detail is running....");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		String currentUsername = null;
+		if (authentication != null && authentication.isAuthenticated()) {
+		    Object principal = authentication.getPrincipal();
+		    if (principal instanceof UserDetails) {
+		        UserDetails userDetails = (UserDetails) principal;
+		        currentUsername = userDetails.getUsername();
+		    } else {
+		        currentUsername = principal.toString(); // fallback
+		    }
+		}
+		mav.addObject("currentUsername", currentUsername);
 
 		Optional<Customer> customerOpt = customerService.findById(customerId);
 
@@ -1253,7 +1312,7 @@ public class CustomerController extends BaseController {
 	@ResponseBody
 	public ModelAndView newEditCustomer(@RequestParam(value = "id", required = false) Long customerId,
 			HttpServletRequest request, HttpSession httpSession) {
-
+		
 		ModelAndView mav = new ModelAndView("newEditCustomer");
 
 		// Nếu customerId không tồn tại hoặc không tìm thấy, tạo mới một Customer
@@ -1276,7 +1335,7 @@ public class CustomerController extends BaseController {
 
 		List<Profession> professions = professionService.getRepo().findAllOrderBySeqno();
 		mav.addObject("professions", professions);
-
+		
 		// Thiết lập các thuộc tính của session
 		initSession(request, httpSession);
 		mav.addObject("currentSiteId", getCurrentSiteId());

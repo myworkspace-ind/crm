@@ -126,6 +126,13 @@ public class CustomerSpecs {
             return cb.like(cb.lower(root.get("note")), "%" + keyword.toLowerCase() + "%");
         };
     }
+    
+    public static Specification<Customer> matchCreatedBy(String keyword) {
+        return (root, query, cb) -> {
+            if (isBlank(keyword)) return cb.conjunction();
+            return cb.like(cb.lower(root.get("createdBy")), "%" + keyword.toLowerCase() + "%");
+        };
+    }
 //	public static Specification<Customer> matchMainStatusName(String keyword) {
 //        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("mainStatus").get("name"),"%" +keyword +"%");
 //    }

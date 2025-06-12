@@ -3,6 +3,9 @@
 <head>
 <!-- 	<script src="https://cdn.jsdelivr.net/npm/shepherd.js@13.0.0/dist/js/shepherd.min.js"></script> -->
 <!-- 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@13.0.0/dist/css/shepherd.css" /> -->
+	
+	<!-- colResizable plugin -->
+	<script src="https://cdn.jsdelivr.net/npm/colresizable/colResizable-1.6.min.js"></script>
 </head>
 
 <body>
@@ -261,75 +264,81 @@
 											<div class="table-container">
 												<div data-tour data-step="6" data-intro="Danh sách khách hàng của người dùng" class="table-responsive">
 													<div class="scrollable-table">
-														<table id="table" class="table table-bordered">
+														<table id="table" class="table table-bordered" style="table-layout: fixed;">
 															<thead class="thead">
 																<tr class="bg">
-																	<th style="width: 2%" data-field="select" class="th1">
+																	<th style="width: 50px" data-field="select" class="th1">
 																		<input type="checkbox" id="select-all"
 																		class="d-flex align-items-center justify-content-center" />
 																	</th>
-																	<th data-field="number" class="th2">STT</th>
-																	<th data-field="company_name" class="th3">Tên công
-																		ty</th>
-																	<th data-field="contact_person" class="th4">Người
-																		liên hệ chính</th>
-																	<th data-field="email" class="th5">Email</th>
-																	<th data-field="phone" class="th6">Số điện thoại</th>
+																	<th data-field="number" class="th2" style="width: 50px;">STT</th>
+																	<th data-field="company_name" class="th3" style="width: 250px;" >Tên công ty</th>
+																	<th data-field="contact_person" class="th4" style="width: 200px;">Người liên hệ chính</th>
+																	<th data-field="email" class="th5" style="width: 320px;">Email</th>
+																	<th data-field="phone" class="th6" style="width: 150px;">Số điện thoại</th>
 																	<!-- <th data-field="phone" class="th7">Sinh nhật/Ngày thành lập CTY</th> -->
 <!-- 																	<th data-field="address" class="th8">Địa chỉ khách -->
 <!-- 																		hàng</th> -->
-																	<th data-field="profession" class="th9">Ngành nghề</th>
-																	<th data-field="main_status" class="th10">Trạng
-																		thái chính</th>
+																	<th data-field="profession" class="th9" style="width: 250px;">Ngành nghề</th>
+																	<th data-field="main_status" class="th10" style="width: 150px;">Trạng thái chính</th>
 <!-- 																	<th data-field="sub_status" class="th11">Trạng -->
 <!-- 																		thái phụ</th> -->
 <!-- 																	<th data-field="responsible_person" class="th12">Người -->
 <!-- 																		phụ trách</th> -->
-																	<th data-field="created_at" class="th13">Thời gian
-																		tạo</th>
+																	<th data-field="created_at" class="th13" style="width: 200px;">Thời gian tạo</th>
+																	<th data-field="created_by" class="th14" style="width: 250px;">Nhân viên tạo</th>
 																	<!-- <th data-field="note" class="th14">Ghi chú</th> -->
-																	<th class="th15">Hành động</th>
+																	<!-- <th class="th15">Hành động</th> -->
 																</tr>
 															</thead>
 															<tbody>
-																<tr th:each="customer, iterStat : ${customers}">
-																	<td class="th1"><input type="checkbox"
-																		name="customer" th:value="${customer.id}"
-																		class="customer-checkbox" /></td>
-																	<td th:text="${iterStat.index + 1 + (currentPage-1) * 10}"></td>
-																	<td><a
-																		th:href="@{customerDetail(id=${customer.id})}"
-																		th:text="${customer.companyName != null ? customer.companyName : ''}"></a></td>
-																	<td th:text="${customer.contactPerson != null ? customer.contactPerson : ''}"></td>
-																	<td th:text="${customer.email != null ? customer.email : ''}"></td>
-																	<td th:text="${customer.phone != null ? customer.phone : ''}"></td>
-																	
-																	<!-- <td th:text="${customer.birthday != null ? customer.birthday : ''}"></td> -->
-																	
-																	<!-- <td th:text="${customer.address != null ? customer.address : ''}"></td> -->
-																	<td th:text="${customer.profession != null ? customer.profession.name : ''}"></td>
-																	<td th:class="'status-cell main-status'"
-																		th:style="${customer.mainStatus != null ? 'background-color: ' + customer.mainStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
-																		<span
-																		th:text="${customer.mainStatus != null ? customer.mainStatus.name : ''}"></span>
-																	</td>
-																	<!-- <td th:class="'status-cell sub-status'"
-																		th:style="${customer.subStatus != null ? 'background-color: ' + customer.subStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
-																		<span
-																		th:text="${customer.subStatus != null ? customer.subStatus.name : ''}"></span>
-																	</td> -->
-																	<!-- <td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : ''}"></td> -->
-
-																	<!-- <td th:text="${customer.createdAt != null ? #temporals.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td> -->
-																	<td th:text="${customer.createdAt != null ? customer.formattedCreatedAt : ''}"></td>
-																	<!-- <td th:text="${customer.note != null ? customer.note : ''}"></td> -->
-																	<td> 
-																		<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><span data-i18n="nav.dash.main">Hành động</span></a>
-														                <ul class="dropdown-menu">
-														                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/new(customerId=${customer.id})}" data-toggle="dropdown">Đơn hàng mới</a></li>
-														                </ul>
-																	</td>
-																</tr>
+																<th:block th:each="customer, iterStat : ${customers}">
+																	<th:block th:with="isCreator=${customer.createdBy == currentUsername}">
+																		<tr>
+																			<td class="th1">
+																			<input type="checkbox"
+																                 name="customer" 
+																                 th:value="${customer.id}"
+																                 class="customer-checkbox" 
+																                 th:attr="disabled=${!isCreator}" />
+																			</td>
+																			
+																			<td th:text="${iterStat.index + 1 + (currentPage-1) * 10}" style="width: 50px;"></td>
+																			<td><a
+																				th:href="@{customerDetail(id=${customer.id})}"
+																				th:text="${customer.companyName != null ? customer.companyName : ''}" style="width: 250px;"></a></td>
+																			<td th:text="${customer.contactPerson != null ? customer.contactPerson : ''}"></td>
+																			<td th:text="${customer.email != null ? customer.email : ''}"></td>
+																			<td th:text="${customer.phone != null ? customer.phone : ''}"></td>
+																			
+																			<!-- <td th:text="${customer.birthday != null ? customer.birthday : ''}"></td> -->
+																			
+																			<!-- <td th:text="${customer.address != null ? customer.address : ''}"></td> -->
+																			<td th:text="${customer.profession != null ? customer.profession.name : ''}"></td>
+																			<td th:class="'status-cell main-status'"
+																				th:style="${customer.mainStatus != null ? 'background-color: ' + customer.mainStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
+																				<span th:text="${customer.mainStatus != null ? customer.mainStatus.name : ''}"></span>
+																			</td>
+																			<!-- <td th:class="'status-cell sub-status'"
+																				th:style="${customer.subStatus != null ? 'background-color: ' + customer.subStatus.backgroundColor + '; color: white; text-align: center; vertical-align: middle;' : ''}">
+																				<span
+																				th:text="${customer.subStatus != null ? customer.subStatus.name : ''}"></span>
+																			</td> -->
+																			<!-- <td th:text="${customer.responsiblePerson != null ? customer.responsiblePerson.name : ''}"></td> -->
+		
+																			<!-- <td th:text="${customer.createdAt != null ? #temporals.format(customer.createdAt, 'yyyy-MM-dd HH:mm:ss') : ''}"></td> -->
+																			<td th:text="${customer.createdAt != null ? customer.formattedCreatedAt : ''}"></td>
+																			<td th:text="${customer.createdBy != null ? customer.createdBy : ''}" style="width: 250px;"></td>
+																			<!-- <td th:text="${customer.note != null ? customer.note : ''}"></td> -->
+																			<!-- <td> 
+																				<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><span data-i18n="nav.dash.main">Hành động</span></a>
+																                <ul class="dropdown-menu">
+																                  <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders/new(customerId=${customer.id})}" data-toggle="dropdown">Đơn hàng mới</a></li>
+																                </ul>
+																			</td> -->
+																		</tr>
+																	</th:block>
+																</th:block>
 															</tbody>
 														</table>
 													</div>
@@ -432,6 +441,14 @@
 	</div>
 
 	<!-- END CONTENT -->
+	
+<!-- 	<script th:inline="javascript"> -->
+// 	    $("#table").colResizable({
+// 	        liveDrag: true,
+// 	        fixed: false,
+// 	        minWidth: 50
+// 	    });
+<!-- 	</script> -->
 </body>
 
 </html>

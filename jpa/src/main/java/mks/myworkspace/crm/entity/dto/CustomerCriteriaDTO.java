@@ -16,6 +16,15 @@ public class CustomerCriteriaDTO {
 	private Optional<String> address;
 	
 	private Optional<String> email;
+	
+	private Optional<String> createdBy;
+	
+	public Optional<String> getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(Optional<String> createdBy) {
+		this.createdBy = createdBy;
+	}
 	private Optional<List<Long>> careers;
 	
 	public Optional<String> getKeyword() {

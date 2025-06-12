@@ -10,6 +10,10 @@
 
     <!-- COMMON CSS -->
     <th:block th:include="fragments/common_css"></th:block>
+    
+    <!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
 
     <!-- PAGE-SPECIFIC CSS -->
     <link rel="stylesheet" th:href="@{/resources/css/new_style.css}" />
@@ -19,8 +23,10 @@
 
 	<!-- Intro.js CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+	
 	<!-- Intro.js JS -->
 	<script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+
 </head>
 <!-- class="vertical-layout vertical-compact-menu menu-expanded fixed-navbar" Bỏ khoảng trống ở dòng bên trái, dòng này đặt ngay dưới "<body" -->
 <body>
@@ -45,10 +51,6 @@
 	<!-- START CUSTOMIZE BUTTON -->
 	<th:block th:include="fragments/customizeButton"></th:block>
 	<!-- END CUSTOMIZE BUTTON -->
-
-	<!-- START COMMON JAVASCRIPT -->
-	<th:block th:include="fragments/common_javascript"></th:block>
-	<!-- END COMMON JAVASCRIPT -->
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->

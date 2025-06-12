@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import lombok.Getter;
@@ -162,6 +165,19 @@ public class StorageServiceImpl implements StorageService {
 	        Optional<Customer> existingOpt = customerRepo.findById(customer.getId());
 	        if (existingOpt.isPresent()) {
 	            oldMainStatus = existingOpt.get().getMainStatus();
+	        }
+	    }
+	    
+	    //Set createdBy neu customer la NEW (Tao moi)
+	    if(isNew) {
+	    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    	if (authentication != null && authentication.isAuthenticated()) {
+	            Object principal = authentication.getPrincipal();
+	            String currentUsername = (principal instanceof UserDetails)
+	                    ? ((UserDetails) principal).getUsername()
+	                    : principal.toString();
+	            log.debug("current username: {}", currentUsername);
+	            customer.setCreatedBy(currentUsername);
 	        }
 	    }
 	    

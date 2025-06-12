@@ -259,14 +259,15 @@ public class CustomerServiceImpl implements CustomerService {
         Specification<Customer> keywordSpec = Specification.where(
             CustomerSpecs.matchReponsiblePersonName(keyword)
         ).or(CustomerSpecs.matchNameCompany(keyword))
-         .or(CustomerSpecs.matchContactPerson(keyword))
-         .or(CustomerSpecs.matchEmail(keyword))
-         .or(CustomerSpecs.matchAddress(keyword))
-         .or(CustomerSpecs.matchPhone(keyword))
-         .or(CustomerSpecs.matchProfessionByName(keyword))
-         .or(CustomerSpecs.matchMainStatusName(keyword))
-         .or(CustomerSpecs.matchSubStatusName(keyword))
-         .or(CustomerSpecs.matchNote(keyword));
+        		.or(CustomerSpecs.matchContactPerson(keyword))
+        		.or(CustomerSpecs.matchEmail(keyword))
+        		.or(CustomerSpecs.matchAddress(keyword))
+        		.or(CustomerSpecs.matchPhone(keyword))
+        		.or(CustomerSpecs.matchProfessionByName(keyword))
+        		.or(CustomerSpecs.matchMainStatusName(keyword))
+        		.or(CustomerSpecs.matchSubStatusName(keyword))
+        		.or(CustomerSpecs.matchNote(keyword))
+        		.or(CustomerSpecs.matchCreatedBy(keyword));
 
         combinedSpec = combinedSpec.and(keywordSpec);
 
