@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- COMMON META AND TITLE -->
+    <th:block th:include="fragments/common_meta_title"></th:block>
+
+    <!-- HEAD FRAGMENT -->
+    <th:block th:include="fragments/head"></th:block>
+
+    <!-- COMMON CSS -->
+    <th:block th:include="fragments/common_css"></th:block>
+    
+    <!-- START COMMON JAVASCRIPT -->
+	<th:block th:include="fragments/common_javascript"></th:block>
+	<!-- END COMMON JAVASCRIPT -->
+</head>
+<body>
+	<!-- Modal đăng ký mã PIN -->
+	<div class="modal" id="pinModal" th:if="${needsPin}" style="display:block;">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <form th:action="@{/register-pin}" method="post">
+	                <div class="modal-header">
+	                    <h5 class="modal-title">Đăng ký mã PIN</h5>
+	                </div>
+	                <div class="modal-body">
+	                    <label>Mã PIN (4 chữ số):</label>
+	                    <input type="password" name="pin" maxlength="4" required class="form-control"/>
+	                </div>
+	                <div class="modal-footer">
+	                    <button type="submit" class="btn btn-primary">Lưu mã PIN</button>
+	                </div>
+	            </form>
+	        </div>
+	    </div>
+	</div>
+</body>
+</html>

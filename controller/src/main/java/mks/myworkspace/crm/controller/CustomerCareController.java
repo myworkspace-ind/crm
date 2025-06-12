@@ -18,7 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -307,6 +311,21 @@ public class CustomerCareController extends BaseController {
 	@GetMapping(value = "/load-customer-care", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<?> displayCustomerCareList() {
 		log.debug("Here!");
+		
+		// Lay ten user dang nhap
+		String currentUsername = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.isAuthenticated()) {
+		    Object principal = authentication.getPrincipal();
+		    if (principal instanceof UserDetails) {
+		        currentUsername = ((UserDetails) principal).getUsername();
+		    } else {
+		        currentUsername = principal.toString();
+		    }
+		}
+		log.debug("Current logged-in user: {}", currentUsername);
+		
+		
 		try {
 			List<Status> allStatuses = statusService.getAllStatuses();
 			List<Customer> customersNeedCares = customerCareService.findAllCustomerCare();// Dành cho KH hiện đang có trạng Chưa chăm sóc
@@ -477,6 +496,7 @@ public class CustomerCareController extends BaseController {
 			Map<String, Object> response = new HashMap<>();
 			response.put("customersWithData", convertedWithData);
 			response.put("customersWithoutData", convertedWithoutData);
+			response.put("currentUsername", currentUsername);
 
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
