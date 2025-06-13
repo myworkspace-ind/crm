@@ -8,14 +8,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer{
 	@Autowired
-    private PinSetupInterceptor pinSetupInterceptor;
-	
-	@Autowired
 	private PinRedirectInterceptor pinRedirectInterceptor;
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(pinSetupInterceptor).addPathPatterns("/**");
-		registry.addInterceptor(pinRedirectInterceptor).addPathPatterns("/**");
+		registry.addInterceptor(pinRedirectInterceptor)
+				.addPathPatterns("/**");
 	}
 }

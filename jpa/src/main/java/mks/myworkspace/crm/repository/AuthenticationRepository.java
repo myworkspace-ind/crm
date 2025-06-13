@@ -16,6 +16,10 @@ public class AuthenticationRepository {
 	@Autowired
 	@Qualifier("jdbcTemplate0")
 	private JdbcTemplate jdbcTemplate0;
+	
+	public void setJdbcTemplate0(JdbcTemplate jdbcTemplate0) {
+		this.jdbcTemplate0 = jdbcTemplate0;
+	}
 		
 	public boolean existsByUsername(String username) {
         String sql = "SELECT COUNT(*) FROM crm_employee WHERE username = ?";
