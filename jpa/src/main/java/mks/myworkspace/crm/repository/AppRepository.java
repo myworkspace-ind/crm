@@ -1386,8 +1386,8 @@ public class AppRepository {
         }
 
         // 1. Cập nhật bảng crm_task
-        String updateSql = "UPDATE crm_task SET name = ?, description = ?, start_date = ? WHERE id = ?";
-        jdbcTemplate0.update(updateSql, dto.getName(), dto.getDescription(), dto.getStartDate(), dto.getId());
+        String updateSql = "UPDATE crm_task SET name = ?, description = ?, start_date = ?, due_date = ?, remind_date = ?  WHERE id = ?";
+        jdbcTemplate0.update(updateSql, dto.getName(), dto.getDescription(), dto.getStartDate(), dto.getDueDate(), dto.getRemindDate(), dto.getId());
 
         // 2. Xóa liên kết khách hàng cũ
         String deleteLinkSql = "DELETE FROM task_customer WHERE task_id = ?";

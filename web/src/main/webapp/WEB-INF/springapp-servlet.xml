@@ -168,14 +168,7 @@
 	        </props>
 	    </property>
 	</bean>
-	
-<!-- 	<bean id="authenticationRepository" class="mks.myworkspace.crm.repository.AuthenticationRepository"> -->
-<!--     	<property name="jdbcTemplate0" ref="jdbcTemplate0"/> -->
-<!-- 	</bean> -->
-	
-<!-- 	<bean id="customAuthenticationSuccessHandler" class="mks.myworkspace.crm.config.CustomAuthenticationSuccessHandler"> -->
-<!-- 	    <constructor-arg ref="authenticationRepository"/> -->
-<!-- 	</bean> -->
+
 	
 	
 	

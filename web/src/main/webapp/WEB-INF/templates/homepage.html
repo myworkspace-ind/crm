@@ -33,6 +33,9 @@
 	<!-- Thumbnail Carousel Section -->
 	<th:block th:include="fragments/home/content"></th:block>
 	
+	<!-- Verify Pin to continue -->
+	<th:block th:if="${#request.userPrincipal}" th:include="fragments/verifyPin"></th:block>
+	
 	<!-- New Section After Thumbnail Carousel -->
 	<section class="container my-5">
 		<div class="row text-center">

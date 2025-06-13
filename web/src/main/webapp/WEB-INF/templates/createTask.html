@@ -59,6 +59,9 @@
 	<!-- START CUSTOMIZE BUTTON -->
 	<th:block th:include="fragments/customizeButton"></th:block>
 	<!-- END CUSTOMIZE BUTTON -->
+	
+	<!-- Verify Pin to continue -->
+	<th:block th:if="${#request.userPrincipal}" th:include="fragments/verifyPin"></th:block>
 
 	<!-- PHẦN CHỈNH SỬA KHI HỆ THỐNG ASSETS TRÊN INTERNET BỊ LỖI -->
 	<!-- FILE JS BỔ SUNG -->

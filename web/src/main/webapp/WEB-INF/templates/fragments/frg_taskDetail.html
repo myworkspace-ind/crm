@@ -12,6 +12,46 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<style>
+  .reminder-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #1f1f1f;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    width: 240px;
+    z-index: 999;
+    margin-top: 5px;
+    padding: 8px 0;
+  }
+
+  .reminder-option {
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .reminder-option:hover {
+    background-color: #333;
+  }
+
+  .reminder-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .reminder-divider {
+    border-top: 1px solid #444;
+    margin: 8px 0;
+  }
+
+  .reminder-wrapper {
+    position: relative;
+  }
+</style>
 <body>
 	<!-- Task Detail Sidebar -->
 	<div id="taskDetailSidebar" class="task-sidebar" style="display: none;">
@@ -21,20 +61,42 @@
 			<input type="hidden" name="taskId" id="sidebarTaskId" />
 
 			<div class="mb-3">
-				<label class="form-label">Tên công việc</label> <input type="text"
+				<label class="form-label"><i class="fa fa-tag"></i> Tên công việc</label> <input type="text"
 					class="form-control" id="sidebarTaskName" name="taskName" />
 			</div>
 
 			<div class="mb-3">
-				<label class="form-label">Mô tả</label>
+				<label class="form-label"><i class="fa fa-list-alt"></i> Mô tả</label>
 				<textarea class="form-control" id="sidebarTaskDescription"
-					name="taskDescription"></textarea>
+					name="taskDescription" style="height: auto;"></textarea>
 			</div>
 
 			<div class="mb-3">
 				<label class="form-label">Ngày bắt đầu</label> <input
 					type="datetime-local" class="form-control" id="sidebarStartDate"
 					name="taskStartDate" />
+			</div>
+			
+			<div class="mb-3">
+				<label class="form-label"><i class="fa fa-calendar"></i> Ngày kết thúc</label> <input
+					type="datetime-local" class="form-control" id="sidebarDueDate"
+					name="taskEndDate" />
+			</div>
+			
+			<div class="mb-3 reminder-wrapper">
+				<label class="form-label">Nhắc nhở tôi</label>
+				<button type="button" class="btn btn-secondary btn-sm" onclick="toggleReminderDropdown()">🔔 Chọn thời gian nhắc nhở</button>
+				
+				<div class="reminder-dropdown" id="reminderDropdown">
+					<div class="reminder-option" onclick="selectReminderOption('laterToday')">⏰ Later today</div>
+					<div class="reminder-option" onclick="selectReminderOption('tomorrow')">➡️ Tomorrow <span id="tomorrow-time">Sat, 9:00 AM</span></div>
+					<div class="reminder-option" onclick="selectReminderOption('nextWeek')">⏭️ Next week <span id="next-week-time">Sun, 9:00 AM</span></div>
+					<div class="reminder-divider"></div>
+					<div class="reminder-option" onclick="selectReminderOption('custom')">📅 Pick a date & time</div>
+				</div>
+				
+				<!-- Input ẩn để lưu giá trị nhắc nhở -->
+				<input type="datetime-local" class="form-control mt-2" id="reminderInput" name="reminderDateTime" style="display: none;" />
 			</div>
 
 			<div class="mb-3">
@@ -72,12 +134,17 @@
 </script>
 
 <script>
-	function openTaskSidebar(taskId, taskName, description, startDate, customers) {
+	function openTaskSidebar(taskId, taskName, description, startDate, dueDate, remindDate, customers) {
 	    document.getElementById('sidebarTaskId').value = taskId;
 	    document.getElementById('sidebarTaskName').value = taskName;
 	    document.getElementById('sidebarTaskDescription').value = description;
 	    document.getElementById('sidebarStartDate').value = startDate;
-	
+	    document.getElementById('sidebarDueDate').value = dueDate;
+	    
+	    const reminderInput = document.getElementById('reminderInput');
+	    reminderInput.value = remindDate || '';
+	    reminderInput.style.display = remindDate ? 'block' : 'none';
+	    
 	    const container = document.getElementById('sidebarCustomerContainer');
 	    container.innerHTML = "";
 	
@@ -254,6 +321,8 @@
 	    const name = $('#sidebarTaskName').val();
 	    const description = $('#sidebarTaskDescription').val();
 	    const startDate = $('#sidebarStartDate').val();
+	    const dueDate = $('#sidebarDueDate').val();
+	    const remindDate = $('#reminderInput').val();
 
 	    const customerIds = [];
 	    $('#sidebarCustomerContainer .customer-block').each(function () {
@@ -268,6 +337,8 @@
 	        name,
 	        description,
 	        startDate,
+	        dueDate,
+	        remindDate,
 	        customerIds
 	    };
 	    
@@ -292,5 +363,81 @@
 	});
 
 </script>
+
+<script>
+  function toggleReminderDropdown() {
+    const dropdown = document.getElementById('reminderDropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+
+    const now = new Date();
+
+    // Tính thời gian "Tomorrow"
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    tomorrow.setHours(9, 0, 0, 0);
+
+    // Tính thời gian "Next week"
+    const nextWeek = new Date(now);
+    nextWeek.setDate(now.getDate() + (7 - now.getDay()) % 7 + 1); // Chủ nhật tới
+    nextWeek.setHours(9, 0, 0, 0);
+
+    // Cập nhật text
+    document.getElementById('tomorrow-time').innerText = formatDate(tomorrow);
+    document.getElementById('next-week-time').innerText = formatDate(nextWeek);
+
+    // Xử lý "Later today"
+    const laterTodayOption = document.querySelector('.reminder-option[onclick*="laterToday"]');
+    if (now.getHours() >= 18) {
+      laterTodayOption.classList.add('disabled');
+      laterTodayOption.onclick = null;
+    } else {
+      laterTodayOption.classList.remove('disabled');
+      laterTodayOption.setAttribute('onclick', "selectReminderOption('laterToday')");
+    }
+  }
+
+  function formatDate(date) {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  function selectReminderOption(option) {
+    const input = document.getElementById('reminderInput');
+    input.style.display = 'block';
+    let selectedDate = new Date();
+
+    if (option === 'tomorrow') {
+      selectedDate.setDate(selectedDate.getDate() + 1);
+      selectedDate.setHours(9, 0, 0, 0);
+    } else if (option === 'nextWeek') {
+      selectedDate.setDate(selectedDate.getDate() + (7 - selectedDate.getDay()) % 7 + 1);
+      selectedDate.setHours(9, 0, 0, 0);
+    } else if (option === 'laterToday') {
+      selectedDate.setHours(17, 0, 0, 0); // Nhắc lúc 5 giờ chiều
+    } else if (option === 'custom') {
+      input.value = '';
+      input.focus();
+      document.getElementById('reminderDropdown').style.display = 'none';
+      return;
+    }
+
+    input.value = selectedDate.toISOString().slice(0, 16); // format for datetime-local
+    document.getElementById('reminderDropdown').style.display = 'none';
+  }
+
+  // Đóng dropdown nếu click bên ngoài
+  document.addEventListener('click', function (e) {
+    const dropdown = document.getElementById('reminderDropdown');
+    const button = e.target.closest('button');
+    if (!dropdown.contains(e.target) && (!button || button.getAttribute('onclick') !== 'toggleReminderDropdown()')) {
+      dropdown.style.display = 'none';
+    }
+  });
+</script>
+
 
 </html>

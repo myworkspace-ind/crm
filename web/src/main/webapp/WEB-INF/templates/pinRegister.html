@@ -16,12 +16,12 @@
 </head>
 <body>
 	<!-- Modal đăng ký mã PIN -->
-	<div class="modal" id="pinModal" th:if="${needsPin}" style="display:block;">
+	<div class="modal" id="pinModal" style="display:block;">
 	    <div class="modal-dialog">
 	        <div class="modal-content">
-	            <form th:action="@{/register-pin}" method="post">
+	            <form th:action="@{/auth/register-pin}" method="post">
 	                <div class="modal-header">
-	                    <h5 class="modal-title">Đăng ký mã PIN</h5>
+	                    <h5 class="modal-title" style="color: white">Đăng ký mã PIN</h5>
 	                </div>
 	                <div class="modal-body">
 	                    <label>Mã PIN (4 chữ số):</label>

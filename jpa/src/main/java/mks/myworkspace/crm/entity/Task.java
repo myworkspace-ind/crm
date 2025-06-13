@@ -54,6 +54,15 @@ public class Task implements Serializable {
 	@Column(name = "start_date")
 	private LocalDateTime start_date;
 	
+	@Column(name = "due_date")
+	private LocalDateTime due_date;
+	
+	@Column(name = "remind_date")
+	private LocalDateTime remind_date;
+	
+	@Column(name = "remind")
+	private boolean remind;
+	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 	    name = "task_customer",
@@ -63,7 +72,7 @@ public class Task implements Serializable {
 	private List<Customer> customers = new ArrayList<>();
 
 	public Task(Long id, String name, String description, boolean status, boolean important, LocalDateTime start_date,
-			List<Customer> customers) {
+			LocalDateTime due_date, LocalDateTime remind_date, boolean remind, List<Customer> customers) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -71,6 +80,9 @@ public class Task implements Serializable {
 		this.status = status;
 		this.important = important;
 		this.start_date = start_date;
+		this.due_date = due_date;
+		this.remind_date = remind_date;
+		this.remind = remind;
 		this.customers = customers;
 	}
 	
@@ -80,5 +92,20 @@ public class Task implements Serializable {
 	    }
 	    return "";
 	}
-
+	
+	public String getFormattedDueDate() {
+	    if (due_date != null) {
+	        return due_date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	    }
+	    return "";
+	}
+	
+	public String getFormattedRemindDate() {
+	    if (remind_date != null) {
+	        return remind_date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	    }
+	    return "";
+	}
 }
+
+

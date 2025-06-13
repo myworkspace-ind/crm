@@ -56,17 +56,20 @@ public class TaskServiceImpl implements TaskService {
 	            dto.setTaskName(handleNull(row[1]));
 	            dto.setTaskDescription(handleNull(row[2]));
 	            dto.setTaskStartDate(row[3] != null ? ((Timestamp) row[3]).toLocalDateTime() : null);
-	            dto.setStatus(row[4] != null && ((Boolean) row[4]));
-	            dto.setImportant(row[5] != null && ((Boolean) row[5]));
+	            dto.setTaskDueDate(row[4] != null ? ((Timestamp) row[4]).toLocalDateTime() : null);
+	            dto.setTaskRemindDate(row[5] != null ? ((Timestamp) row[5]).toLocalDateTime() : null);
+	            dto.setRemind(row[6] != null && ((Boolean) row[6]));
+	            dto.setStatus(row[7] != null && ((Boolean) row[7]));
+	            dto.setImportant(row[8] != null && ((Boolean) row[8]));
 	            return dto;
 	        });
 
-	        if (row[6] != null) {
+	        if (row[9] != null) {
 	            CustomerSimpleForTaskDTO customer = new CustomerSimpleForTaskDTO(
-	                ((Number) row[6]).longValue(),
-	                handleNull(row[7]),
-	                handleNull(row[8]),
-	                handleNull(row[9])
+	                ((Number) row[9]).longValue(),
+	                handleNull(row[10]),
+	                handleNull(row[11]),
+	                handleNull(row[12])
 	            );
 	            task.getCustomers().add(customer);
 	        }

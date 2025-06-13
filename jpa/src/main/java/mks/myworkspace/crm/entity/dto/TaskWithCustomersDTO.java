@@ -17,6 +17,9 @@ public class TaskWithCustomersDTO {
     private String taskName;
     private String taskDescription;
     private LocalDateTime taskStartDate;
+    private LocalDateTime taskDueDate;
+    private LocalDateTime taskRemindDate;
+    private boolean remind;
     private boolean status;
     private boolean important;
     private List<CustomerSimpleForTaskDTO> customers = new ArrayList<>();
@@ -24,6 +27,20 @@ public class TaskWithCustomersDTO {
     public String getFormattedStartDate() {
 	    if (taskStartDate != null) {
 	        return taskStartDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	    }
+	    return "";
+	}
+    
+    public String getFormattedDueDate() {
+	    if (taskDueDate != null) {
+	        return taskDueDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	    }
+	    return "";
+	}
+	
+	public String getFormattedRemindDate() {
+	    if (taskRemindDate != null) {
+	        return taskRemindDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	    }
 	    return "";
 	}

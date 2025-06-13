@@ -14,6 +14,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	 Optional<Employee> findByUsername(String username);
 	 boolean existsByUsername(String username);
 	 
-	 @Query("SELECT e.pinCodeHash FROM Employee e WHERE e.username = :username")
-	 String findPinCodeHashByUsername(@Param("username") String username);
+	 @Query("SELECT e.pinCodeHash FROM Employee e WHERE e.username = :currentUsername")
+	 Optional<String> findPinCodeHashByUsername(@Param("currentUsername") String currentUsername);
 }

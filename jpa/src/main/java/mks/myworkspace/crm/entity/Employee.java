@@ -31,7 +31,7 @@ public class Employee implements Serializable {
 	@Column(name = "username", nullable = false, unique = true)
     private String username;
 	
-	@Column(name = "pin_code_hash", nullable = false)
+	@Column(name = "pin_code_hash")
     private String pinCodeHash;
 	
 	@Column(name = "created_at")

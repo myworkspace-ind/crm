@@ -55,6 +55,8 @@
 	            	th:data-name="${task.taskName}"
 	            	th:data-description="${task.taskDescription}"
      				th:data-start="${task.formattedStartDate}"
+     				th:data-due="${task.formattedDueDate}"
+     				th:data-remindme="${task.formattedRemindDate}"
 	            	th:data-customers="${taskCustomersMap[task.taskId]}"
 	            	th:classappend="${task.status} ? 'completed' : ''">
 	                <form th:action="@{/task/{taskId}/toggle-complete(taskId=${task.taskId})}" method="post">
@@ -70,6 +72,8 @@
 	            <div class="task-overview">
 	                <p><strong>Mô tả công việc:</strong> <span th:text="${task.taskDescription}">...</span></p>
 	                <p><strong>Ngày bắt đầu:</strong> <span th:text="${task.formattedStartDate}">...</span></p>
+	                <p><strong>Ngày kết thúc</strong> <span th:text="${task.formattedDueDate}">...</span></p>
+	                <p><strong>Nhắc nhở vào lúc:</strong> <span th:text="${task.formattedRemindDate}">...</span></p>
 	
 	                <div th:if="${task.customers != null and !task.customers.isEmpty()}">
 	                    <p><strong>Khách hàng liên quan:</strong></p>

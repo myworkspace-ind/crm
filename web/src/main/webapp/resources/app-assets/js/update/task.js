@@ -71,8 +71,10 @@ document.querySelectorAll(".task-item").forEach(item => {
 		const taskName = this.dataset.name;
 		const description = this.dataset.description;
 		const startDate = this.dataset.start;
+		const dueDate = this.dataset.due;
+		const remindDate = this.dataset.remindme;
 		const customers = JSON.parse(this.dataset.customers || "[]");
 
-		openTaskSidebar(taskId, taskName, description, startDate, customers);
+		openTaskSidebar(taskId, taskName, description, startDate, dueDate, remindDate, customers);
 	});
 });

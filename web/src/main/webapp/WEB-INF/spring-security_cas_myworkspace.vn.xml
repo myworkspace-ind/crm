@@ -97,7 +97,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
         <intercept-url pattern="/library" access="permitAll" />
        <!--  <intercept-url pattern="/email-to-customer/**" access="permitAll()" /> -->
         
-        <intercept-url pattern="/auth/**" access="isAuthenticated()" />
         <intercept-url pattern="/orders/**" access="isAuthenticated()" />
 		<intercept-url pattern="/customer/**" access="isAuthenticated()" />
 		<intercept-url pattern="/orders-configuration-ky/**" access="isAuthenticated()" />
@@ -106,6 +105,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 		<intercept-url pattern="/task/**" access="isAuthenticated()" />
 		<intercept-url pattern="/reminder/**" access="isAuthenticated()" />
 		<intercept-url pattern="/dashboard/**" access="isAuthenticated()" />
+		<intercept-url pattern="/auth/**" access="isAuthenticated()" />
 		<!-- <intercept-url pattern="/send-email-to-customer/**" access="isAuthenticated()" /> -->
 		
 
@@ -140,23 +140,11 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
         <beans:property name="loginUrl" value="https://myworkspace.vn/cas/login"></beans:property>
         <beans:property name="serviceProperties" ref="serviceProperties"></beans:property>
     </beans:bean>
-    
-    
-    <beans:bean id="authenticationRepository" class="mks.myworkspace.crm.repository.AuthenticationRepository">
-    	<beans:property name="jdbcTemplate0" ref="jdbcTemplate0"/>
-	</beans:bean>
-	   
-	<!-- Success handler -->
-	<beans:bean id="customAuthenticationSuccessHandler" 
-		class="mks.myworkspace.crm.config.CustomAuthenticationSuccessHandler">
-		<beans:constructor-arg ref="authenticationRepository" />
-	</beans:bean>
-	
+
     <!-- The CAS filter handles the redirect from the CAS server and starts the ticket validation. -->
     <beans:bean id="casAuthenticationFilter"
         class="org.springframework.security.cas.web.CasAuthenticationFilter">
-        <beans:property name="authenticationManager" ref="authenticationManager"/>
-        <beans:property name="authenticationSuccessHandler" ref="customAuthenticationSuccessHandler" />
+        <beans:property name="authenticationManager" ref="authenticationManager"></beans:property>
     </beans:bean>
 
     <!-- Handles the CAS ticket processing. -->
@@ -176,10 +164,10 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
         <beans:property name="key" value="cas"></beans:property>
     </beans:bean>
 
-    <beans:bean id="userService" 
-    	class="mks.myworkspace.crm.service.impl.CustomCasUserDetailsService">
+
+    <beans:bean id="userService" class="mks.myworkspace.crm.service.impl.CustomCasUserDetailsService">
     </beans:bean>
-    
+
     <!-- Using local LDAP.START -->
     <!-- <ldap-user-service id="userService" -->
     <!-- server-ref="ldapServer" -->
