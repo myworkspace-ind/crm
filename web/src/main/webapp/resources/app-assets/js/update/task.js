@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 $(document).ready(function () {
     $('#taskForm').on('submit', function (e) {
-        e.preventDefault(); // Ngăn form submit mặc định
+        e.preventDefault(); // Ngăn việc submit mặc định của form
 
-        // Lấy dữ liệu từ form
+        // Lay du lieu tu form tao task
         const taskDTO = {
             name: $('#taskName').val(),
             description: $('#taskDescription').val(),
@@ -35,7 +35,6 @@ $(document).ready(function () {
             }
         });
 
-        // Gửi dữ liệu bằng AJAX
 		$.ajax({
 		    url: _ctx + 'task/add-task',
 		    method: 'POST',

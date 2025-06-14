@@ -49,12 +49,12 @@
 	  margin-left: 6px;
 	}
 	
-	.task-starting-soon {
+	.task-start-soon {
 		color: #e67e22; /* cam */
 		font-weight: 500;
 	}
 	
-	.task-ending-soon {
+	.task-end-soon {
 		color: #3498db; /* xanh dương */
 		font-weight: 500;
 	}
@@ -180,19 +180,19 @@
 	
 		    icons.forEach(icon => {
 		        const remindTimeStr = icon.getAttribute("data-remind");
-		        const status = icon.getAttribute("data-status") === "true"; // true = đã hoàn thành
+		        const status = icon.getAttribute("data-status") === "true"; // true = da hoan thanh
 	
 		        if (!remindTimeStr || status) return;
 	
-		        // Tách remindTime thủ công (fix lỗi định dạng date)
+		        // Tach remindTime (fix lỗi định dạng date)
 		        const parts = remindTimeStr.split(/[- :]/);
 		        const remindTime = new Date(
-		            parts[0],                // year
-		            parts[1] - 1,            // month
-		            parts[2],                // day
-		            parts[3],                // hour
-		            parts[4],                // minute
-		            parts[5] || 0            // second
+		            parts[0],                // nam
+		            parts[1] - 1,            // thang
+		            parts[2],                // ngay
+		            parts[3],                // gio
+		            parts[4],                // phut
+		            parts[5] || 0            // giay
 		        );
 	
 		        const now = new Date();
@@ -212,9 +212,9 @@
 			taskItems.forEach(item => {
 				const startStr = item.getAttribute("data-start");
 				const dueStr = item.getAttribute("data-due");
-				const statusMsg = document.getElementById("status-msg-" + item.getAttribute("data-id"));
+				const statusMessage = document.getElementById("status-msg-" + item.getAttribute("data-id"));
 				
-				if (!startStr || !dueStr || !statusMsg) return;
+				if (!startStr || !dueStr || !statusMessage) return;
 	
 				const startParts = startStr.split(/[- :]/);
 				const dueParts = dueStr.split(/[- :]/);
@@ -227,13 +227,13 @@
 				if (today.getTime() === startDate.getTime()) {
 					// Task bắt đầu hôm nay
 					const daysLeft = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
-					statusMsg.textContent = `Còn ${daysLeft} ngày nữa KẾT THÚC`;
-					statusMsg.classList.add("task-ending-soon");
+					statusMessage.textContent = `Còn ${daysLeft} ngày nữa KẾT THÚC`;
+					statusMessage.classList.add("task-end-soon");
 				} else if (today < startDate) {
 					// Task chưa bắt đầu
 					const daysUntilStart = Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
-					statusMsg.textContent = `Còn ${daysUntilStart} ngày nữa BẮT ĐẦU`;
-					statusMsg.classList.add("task-starting-soon");
+					statusMessage.textContent = `Còn ${daysUntilStart} ngày nữa BẮT ĐẦU`;
+					statusMessage.classList.add("task-start-soon");
 				}
 			});
 		});
