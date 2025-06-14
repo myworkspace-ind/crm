@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<style>
+	@keyframes ring {
+	    0% { transform: rotate(0); }
+	    10% { transform: rotate(15deg); }
+	    20% { transform: rotate(-10deg); }
+	    30% { transform: rotate(15deg); }
+	    40% { transform: rotate(-10deg); }
+	    50% { transform: rotate(7deg); }
+	    60% { transform: rotate(-7deg); }
+	    70% { transform: rotate(5deg); }
+	    80% { transform: rotate(-5deg); }
+	    90% { transform: rotate(2deg); }
+	    100% { transform: rotate(0); }
+	}
+	
+	.bell-icon {
+	    width: 30px;
+	    height: 30px;
+	    animation: ring 2s infinite;
+	}
+	
+	.modal-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .modal-content-reminder {
+        background: white;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.3s ease;
+        position: fixed;
+        
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    
+    .modal-body ul {
+	    list-style: none;
+	    padding: 0;
+	}
+	
+	.modal-body li {
+	    margin-bottom: 8px;
+	    text-align: justify;
+	}
+    
+</style>
+<body>
+	<!-- Chỉ hiển thị modal nếu có thông báo -->
+	<div th:if="${hasTaskNotification}" id="reminderModal" class="modal-overlay show">
+	    <audio id="reminderSound" autoplay>
+	        <source src="resources/audio/new-notification-09-352705.mp3" type="audio/mpeg">
+	    </audio>
+	
+	    <div class="modal-content-reminder">
+	        <div class="modal-header" style="border-radius: 16px; background-color: #a283fc; ">
+			    <h2 style="color: yellow; position: relative;">
+			        <span style="position: relative; display: inline-block;">
+			            <img src="resources/Image/bell.png" class="bell-icon" />
+			            <span style="
+			                position: absolute;
+			                top: -8px;
+			                right: -8px;
+			                background: red;
+			                color: white;
+			                border-radius: 50%;
+			                padding: 3px 6px;
+			                font-size: 12px;
+			                font-weight: bold;
+			            ">
+			                <span th:text="${taskNotificationCount + customerCareNotificationCount}"></span>
+			            </span>
+			        </span>
+			        &nbsp;REMINDER
+			    </h2>
+			</div>
+	
+	        <div class="modal-body">
+	            <ul>
+	            	<li style="font-weight: bold;">🔔 Công việc</li>
+	                <li th:each="noti : ${notifications}" th:text="${noti}"></li>
+	                
+	                <li style="margin-top: 10px; font-weight: bold;">💼 Chăm sóc khách hàng</li>
+        			<li th:each="noti : ${customerCareNotifications}" th:text="${noti}"></li>
+	            </ul>
+	        </div>
+	
+	        <div class="modal-footer" style="margin-bottom: 10px; margin-right: 5px">
+	            <button class="btn btn-success" onclick="hideReminder()">ĐÃ HIỂU</button>
+	            <button class="btn btn-danger" onclick="hideReminder()">ĐÓNG</button>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- Chuông + số lượng hiển thị ở góc -->
+<!-- 	<div th:if="${hasTaskNotification}" style="text-align: center; position: relative; margin-top: 10px;"> -->
+<!-- 	    <img src="resources/Image/bell.png" class="bell-icon" /> -->
+<!-- 	    <span style="position: absolute; top: -10px; right: 0; background: red; color: white; border-radius: 50%; padding: 4px 7px; font-size: 20px;"> -->
+<!-- 	        <span th:text="${taskNotificationCount}"></span> -->
+<!-- 	    </span> -->
+<!-- 	</div> -->
+	
+	<script>
+	    function hideReminder() {
+	        const modal = document.getElementById("reminderModal");
+	        if (modal) {
+	            modal.style.display = "none";
+	        }
+	    }
+	
+	    // Nếu bạn muốn đảm bảo âm thanh luôn chạy sau khi DOM load
+	    window.addEventListener("DOMContentLoaded", () => {
+	        const sound = document.getElementById("reminderSound");
+	        if (sound) {
+	            // Một số trình duyệt yêu cầu tương tác người dùng để phát âm thanh
+	            try {
+	                sound.play();
+	            } catch (e) {
+	                console.warn("Trình duyệt chặn tự động phát âm thanh:", e);
+	            }
+	        }
+	    });
+	</script>
+		
+</body>
+</html>

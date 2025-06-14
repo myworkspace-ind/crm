@@ -45,6 +45,16 @@ public class TaskController extends BaseController{
 	@Autowired
 	StorageService storageService;
 	
+	@GetMapping("/task-notifications")
+	@ResponseBody
+	public Map<String, Object> getAllTaskNotifications() {
+	    List<String> notifications = taskService.getAllTaskNotifications();
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("count", notifications.size());
+	    response.put("notifications", notifications);
+	    return response;
+	}
+	
 	@PostMapping("/update-task")
 	@ResponseBody
 	public ResponseEntity<String> updateTask(@RequestBody TaskDTO taskDTO) {

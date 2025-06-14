@@ -19,7 +19,6 @@ public class TaskWithCustomersDTO {
     private LocalDateTime taskStartDate;
     private LocalDateTime taskDueDate;
     private LocalDateTime taskRemindDate;
-    private boolean remind;
     private boolean status;
     private boolean important;
     private List<CustomerSimpleForTaskDTO> customers = new ArrayList<>();

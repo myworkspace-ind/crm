@@ -8,9 +8,11 @@ import mks.myworkspace.crm.entity.dto.TaskDTO;
 import mks.myworkspace.crm.entity.dto.TaskWithCustomersDTO;
 
 public interface TaskService {	
-	void addTask(TaskDTO dto);
-	List<Task> getAllTasksWithCustomers();
-	List<TaskWithCustomersDTO> getTasksWithCustomersAsDTOs();
-	Map<String, List<TaskWithCustomersDTO>> getGroupedTasks();
+	public void addTask(TaskDTO dto);
+	public List<Task> getAllTasksWithCustomers();
+	public List<TaskWithCustomersDTO> getTasksWithCustomersAsDTOs();
+	public Map<String, List<TaskWithCustomersDTO>> getGroupedTasks();
+	
+	public List<String> getAllTaskNotifications();
 	
 }

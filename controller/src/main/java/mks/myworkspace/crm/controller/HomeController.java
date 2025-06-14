@@ -19,6 +19,8 @@
 
 package mks.myworkspace.crm.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -29,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.service.StorageService;
+import mks.myworkspace.crm.service.TaskService;
 
 /**
  * Handles requests for the application home page.
@@ -43,10 +46,13 @@ public class HomeController extends BaseController {
 	@Autowired
 	StorageService storageService;
 	
+	@Autowired
+	TaskService taskService;
+	
 	@GetMapping("/")
 	public ModelAndView displayHome(HttpServletRequest request, HttpSession httpSession) {
 		ModelAndView mav = new ModelAndView("homepage");
-		
+		//List<String> notifications = taskService.getAllTaskNotifications();
 		initSession(request, httpSession);
 		
 		Boolean toggleCCEnabled = storageService.isFeatureEnabledByCode("CC_REMINDER");
@@ -54,6 +60,9 @@ public class HomeController extends BaseController {
 		mav.addObject("currentSiteId", getCurrentSiteId());
 		mav.addObject("userDisplayName", getCurrentUserDisplayName());
 		mav.addObject("toggleCCEnabled", toggleCCEnabled);
+//		mav.addObject("notifications", notifications);
+//		mav.addObject("hasTaskNotification", !notifications.isEmpty());
+//		mav.addObject("taskNotificationCount", notifications.size());
 
 		return mav;
 	}

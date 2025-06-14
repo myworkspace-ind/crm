@@ -23,6 +23,5 @@ public class TaskDTO {
     private LocalDateTime startDate;
     private LocalDateTime dueDate;
     private LocalDateTime remindDate;
-    private boolean remind;
     private List<Long> customerIds;
 }

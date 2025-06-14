@@ -406,27 +406,27 @@
   }
 
   function selectReminderOption(option) {
-    const input = document.getElementById('reminderInput');
-    input.style.display = 'block';
-    let selectedDate = new Date();
-
-    if (option === 'tomorrow') {
-      selectedDate.setDate(selectedDate.getDate() + 1);
-      selectedDate.setHours(9, 0, 0, 0);
-    } else if (option === 'nextWeek') {
-      selectedDate.setDate(selectedDate.getDate() + (7 - selectedDate.getDay()) % 7 + 1);
-      selectedDate.setHours(9, 0, 0, 0);
+	  const input = document.getElementById('reminderInput');
+	  input.style.display = 'block';
+	  let selectedDate = new Date();
+	
+	if (option === 'tomorrow') {
+		selectedDate.setDate(selectedDate.getDate() + 1);
+		selectedDate.setHours(9, 0, 0, 0);
+	} else if (option === 'nextWeek') {
+		selectedDate.setDate(selectedDate.getDate() + (7 - selectedDate.getDay()) % 7 + 1);
+		selectedDate.setHours(9, 0, 0, 0);
     } else if (option === 'laterToday') {
-      selectedDate.setHours(17, 0, 0, 0); // Nhắc lúc 5 giờ chiều
+    	selectedDate.setHours(17, 0, 0, 0); // Nhac luc 5h chieu
     } else if (option === 'custom') {
-      input.value = '';
-      input.focus();
-      document.getElementById('reminderDropdown').style.display = 'none';
-      return;
+    	input.value = '';
+    	input.focus();
+    	document.getElementById('reminderDropdown').style.display = 'none';
+    	return;
     }
 
-    input.value = selectedDate.toISOString().slice(0, 16); // format for datetime-local
-    document.getElementById('reminderDropdown').style.display = 'none';
+	input.value = selectedDate.toISOString().slice(0, 16); // format for datetime-local
+	document.getElementById('reminderDropdown').style.display = 'none';
   }
 
   // Đóng dropdown nếu click bên ngoài

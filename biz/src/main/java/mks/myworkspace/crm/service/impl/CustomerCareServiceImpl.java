@@ -141,6 +141,21 @@ public class CustomerCareServiceImpl implements CustomerCareService{
 		return repo.findAllCustomerCares();
 	}
 	
+	@Override
+	public List<String> getCustomerCareNotifications() {
+		List<Customer> customers = findAllCustomerCare();
+		List<String> notifications = new ArrayList<String>();
+		
+		if(!customers.isEmpty()) {
+			notifications.add("Bạn có " + customers.size() + " khách hàng New và Potential đang cần chăm sóc.");
+			for(Customer customer: customers) {
+				String status = customer.getMainStatus() != null ? customer.getMainStatus().getName() : "Chưa xác định";
+				notifications.add("- " + customer.getCompanyName() + " - " + status);
+			}
+		}
+		return notifications;
+	}
+	
 	/**
 	 * Find/Fetch all customers' data in table crm_customer who need care (data from customer)
 	 */

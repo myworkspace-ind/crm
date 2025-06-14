@@ -60,8 +60,8 @@ public class Task implements Serializable {
 	@Column(name = "remind_date")
 	private LocalDateTime remind_date;
 	
-	@Column(name = "remind")
-	private boolean remind;
+//	@Column(name = "remind")
+//	private boolean remind;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
@@ -72,7 +72,7 @@ public class Task implements Serializable {
 	private List<Customer> customers = new ArrayList<>();
 
 	public Task(Long id, String name, String description, boolean status, boolean important, LocalDateTime start_date,
-			LocalDateTime due_date, LocalDateTime remind_date, boolean remind, List<Customer> customers) {
+			LocalDateTime due_date, LocalDateTime remind_date, List<Customer> customers) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -82,7 +82,6 @@ public class Task implements Serializable {
 		this.start_date = start_date;
 		this.due_date = due_date;
 		this.remind_date = remind_date;
-		this.remind = remind;
 		this.customers = customers;
 	}
 	

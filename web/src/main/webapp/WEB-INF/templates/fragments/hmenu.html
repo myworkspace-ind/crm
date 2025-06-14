@@ -75,7 +75,25 @@
                   </li>
                 </ul>
             </li>
-            <li th:if="${#request.userPrincipal}" class="dropdown nav-item" data-menu="dropdown" data-step="5" data-intro="Cấu hình loại đơn hàng, loại hàng hóa và trạng thái hàng hóa">
+            <li th:if="${#request.userPrincipal}" class="dropdown nav-item" data-step="5" data-menu="dropdown">
+				<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">
+					<i class="icon-bell"></i>
+					<span>Thông báo</span>
+	        		<span th:if="${taskNotificationCount + customerCareNotificationCount > 0}" class="badge badge-danger"
+      						th:text="${taskNotificationCount + customerCareNotificationCount}"></span>
+	    		</a>
+			    <ul class="dropdown-menu">
+			    	<li><strong>🔔 CÔNG VIỆC</strong></li>
+			        <li th:each="noti : ${notifications}">
+			            <a class="dropdown-item" th:text="${noti}"></a>
+			        </li>
+			        <li style="margin-top: 10px"><strong>💼 CHĂM SÓC KHÁCH HÀNG </strong></li>
+			        <li th:each="noti : ${customerCareNotifications}">
+			            <a class="dropdown-item" th:text="${noti}"></a>
+			        </li>
+			    </ul>
+			</li>
+            <li th:if="${#request.userPrincipal}" class="dropdown nav-item" data-menu="dropdown" data-step="6" data-intro="Cấu hình loại đơn hàng, loại hàng hóa và trạng thái hàng hóa">
                 <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-settings"></i><span data-i18n="nav.dash.main">Cài đặt</span></a>
                    <ul class="dropdown-menu">
                       <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/orders-configuration/status}" data-toggle="dropdown">Cấu hình đơn hàng</a></li>
@@ -84,7 +102,7 @@
                       <li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Chung</a></li>
                   </ul>
             </li>
-            <li th:if="${#request.userPrincipal}" class="dropdown nav-item" data-menu="dropdown" data-step="6" data-intro="Danh mục này đang phát triển.">
+            <li th:if="${#request.userPrincipal}" class="dropdown nav-item" data-menu="dropdown" data-step="7" data-intro="Danh mục này đang phát triển.">
             	<a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">Báo cáo</span></a>
                 <ul class="dropdown-menu">
                 	<li class="active" data-menu=""><a class="dropdown-item" th:href="@{/dashboard}" data-toggle="dropdown">Dashboard</a></li>
@@ -94,19 +112,13 @@
 					<li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Dự án</a></li>
 					<li class="active" data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Sản phẩm</a></li>
                                    <li class="active" data-menu=""><a class="dropdown-item" th:href="@{/contact}" data-toggle="dropdown">Hợp đồng</a></li>
-                   <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">MKT</a>
-                    <ul class="dropdown-menu">
-						<li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Chiến dịch</a></li>
-						<li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Affiliate</a></li>
-						<li data-menu=""><a class="dropdown-item" href="#" data-toggle="dropdown">Telesales</a></li>
-                     </ul>
-                   </li>
+
                 </ul>
              </li>
              <!-- <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">About</span></a> -->
              
             <!--  <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" th:href="'https://myworkspace.vn/cas/login?service=http://localhost:8080/crm-web/j_spring_cas_security_check'" data-toggle="dropdown"><i class="icon-note"></i><span data-i18n="nav.templates.main">LOG IN</span></a> -->
-        	 <li class="dropdown nav-item" data-menu="dropdown" data-step="7" data-intro="Hãy đăng nhập tại đây để sử dụng tại khoản">
+        	 <li class="dropdown nav-item" data-menu="dropdown" data-step="8" data-intro="Hãy đăng nhập tại đây để sử dụng tại khoản">
 			   
 			        <!-- Kiểm tra trạng thái đăng nhập -->
 					<a th:if="${#request.userPrincipal}" style="color: green; font-weight: bold;" href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">

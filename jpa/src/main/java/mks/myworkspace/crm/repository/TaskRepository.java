@@ -19,9 +19,12 @@ public interface TaskRepository extends JpaRepository<Task, Long>, JpaSpecificat
     List<Task> findAllWithCustomers();
 	
 	@Query(value = "SELECT t.id AS task_id, t.name AS task_name, t.description, "
-			+ "t.start_date, t.due_date, t.remind_date, t.remind, t.status, t.important, "
+			+ "t.start_date, t.due_date, t.remind_date, t.status, t.important, "
 			+ "c.id AS customer_id, c.company_name, c.contact_person, c.phone " + "FROM crm_task t "
 			+ "LEFT JOIN task_customer tc ON t.id = tc.task_id " + "LEFT JOIN crm_customer c ON tc.customer_id = c.id "
 			+ "ORDER BY t.id", nativeQuery = true)
 	List<Object[]> fetchTaskWithCustomersRaw();
+	
+	@Query("SELECT DISTINCT t FROM Task t LEFT JOIN FETCH t.customers WHERE t.status = 0")
+	List<Task> findAllTaskNotCompletedWithCustomers();
 }

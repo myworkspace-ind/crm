@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,6 +43,46 @@ public class TaskServiceImpl implements TaskService {
 		return repo.findAllWithCustomers();
 	}
 	
+
+	@Override
+	public List<String> getAllTaskNotifications() {
+		List<Task> tasks = repo.findAllTaskNotCompletedWithCustomers();
+	    LocalDateTime now = LocalDateTime.now();
+	    List<String> notifications = new ArrayList<>();
+
+	    for (Task task : tasks) {
+	        if (task == null) continue;//Chi hien thi task chua hoan thanh
+
+	        // Remind Date đã đến
+	        if (task.getRemind_date() != null && !task.getRemind_date().isAfter(now)) {
+	            notifications.add("- Bạn có công việc \"" + task.getName() + "\" cần hoàn thành.");
+	        }
+
+	        // Sắp đến Start Date
+	        if (task.getStart_date() != null) {
+	            long daysToStart = ChronoUnit.DAYS.between(now.toLocalDate(), task.getStart_date().toLocalDate());
+	            if (daysToStart == 2 || daysToStart == 1) {
+	                notifications.add("- Bạn có công việc \"" + task.getName() + "\" sắp bắt đầu.");
+	            } else if (daysToStart == 0) {
+	                notifications.add("- Bạn có công việc \"" + task.getName() + "\" bắt đầu.");
+	            }
+	        }
+
+	        // Sắp đến Due Date hoặc quá hạn
+	        if (task.getDue_date() != null) {
+	            long daysToDue = ChronoUnit.DAYS.between(now.toLocalDate(), task.getDue_date().toLocalDate());
+	            if (daysToDue == 2 || daysToDue == 1) {
+	                notifications.add("- Bạn có công việc \"" + task.getName() + "\" sắp hết hạn.");
+	            } else if (daysToDue <= 0) {
+	                notifications.add("- Bạn có công việc \"" + task.getName() + "\" bị quá hạn.");
+	            }
+	        }
+	    }
+
+	    return notifications;
+		
+	}
+	
 	@Override
 	public List<TaskWithCustomersDTO> getTasksWithCustomersAsDTOs() {
 		List<Object[]> rawData = repo.fetchTaskWithCustomersRaw();
@@ -58,18 +99,18 @@ public class TaskServiceImpl implements TaskService {
 	            dto.setTaskStartDate(row[3] != null ? ((Timestamp) row[3]).toLocalDateTime() : null);
 	            dto.setTaskDueDate(row[4] != null ? ((Timestamp) row[4]).toLocalDateTime() : null);
 	            dto.setTaskRemindDate(row[5] != null ? ((Timestamp) row[5]).toLocalDateTime() : null);
-	            dto.setRemind(row[6] != null && ((Boolean) row[6]));
-	            dto.setStatus(row[7] != null && ((Boolean) row[7]));
-	            dto.setImportant(row[8] != null && ((Boolean) row[8]));
+	            //dto.setRemind(row[6] != null && ((Boolean) row[6]));
+	            dto.setStatus(row[6] != null && ((Boolean) row[6]));
+	            dto.setImportant(row[7] != null && ((Boolean) row[7]));
 	            return dto;
 	        });
 
-	        if (row[9] != null) {
+	        if (row[8] != null) {
 	            CustomerSimpleForTaskDTO customer = new CustomerSimpleForTaskDTO(
-	                ((Number) row[9]).longValue(),
+	                ((Number) row[8]).longValue(),
+	                handleNull(row[9]),
 	                handleNull(row[10]),
-	                handleNull(row[11]),
-	                handleNull(row[12])
+	                handleNull(row[11])
 	            );
 	            task.getCustomers().add(customer);
 	        }

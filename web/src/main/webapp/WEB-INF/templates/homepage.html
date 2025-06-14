@@ -36,6 +36,9 @@
 	<!-- Verify Pin to continue -->
 	<th:block th:if="${#request.userPrincipal}" th:include="fragments/verifyPin"></th:block>
 	
+	<!-- Notification -->
+	<th:block th:if="${#request.userPrincipal}" th:include="fragments/frg_notification"></th:block>
+	
 	<!-- New Section After Thumbnail Carousel -->
 	<section class="container my-5">
 		<div class="row text-center">

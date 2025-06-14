@@ -27,6 +27,38 @@
 	<!-- END COMMON JAVASCRIPT -->
 
 </head>
+<style>
+	@keyframes shake {
+	    0% { transform: rotate(0); }
+	    10% { transform: rotate(15deg); }
+	    20% { transform: rotate(-10deg); }
+	    30% { transform: rotate(15deg); }
+	    40% { transform: rotate(-10deg); }
+	    50% { transform: rotate(7deg); }
+	    60% { transform: rotate(-7deg); }
+	    70% { transform: rotate(5deg); }
+	    80% { transform: rotate(-5deg); }
+	    90% { transform: rotate(2deg); }
+	    100% { transform: rotate(0); }
+	}
+	
+	.shake-icon {
+	  display: inline-block;
+	  animation: shake 2s infinite;
+	  color: #e67e22;
+	  margin-left: 6px;
+	}
+	
+	.task-starting-soon {
+		color: #e67e22; /* cam */
+		font-weight: 500;
+	}
+	
+	.task-ending-soon {
+		color: #3498db; /* xanh dương */
+		font-weight: 500;
+	}
+</style>
 <body>
 	<!-- BEGIN HEADER  -->
 	<th:block th:include="fragments/hmenu"></th:block>
@@ -63,7 +95,24 @@
 	                    <button class="circle-btn" type="submit"></button>
 	                </form>
 	                
-	                <div class="task-title" th:text="${task.taskName}"></div>
+	                <!-- <div class="task-title" th:text="${task.taskName}"></div> -->
+	                	
+					    <div class="task-title">
+						    <span th:text="${task.taskName}"></span>
+							
+							<!-- Nếu có remind date -->
+						    <span th:if="${task.formattedRemindDate != null}"
+						          class="remind-me-icon"
+						          th:data-remind="${task.formattedRemindDate}"
+						          th:data-status="${task.status}">
+						        <i class="fa fa-bell-o" style="color: #3246a8"></i><span style="font-size: 12px; color: #3246a8" th:text="${task.formattedRemindDate}">...</span>
+						    </span>
+						</div>
+						<p>
+						    <span th:id="'status-msg-' + ${task.taskId}" class="task-status-msg"></span>
+						</p>
+						
+					    
 	                <form th:action="@{/task/{taskId}/toggle-important(taskId=${task.taskId})}" method="post">
 	                    <button class="star-btn" type="submit">★</button>
 	                </form>
@@ -101,60 +150,6 @@
 	
 	<!-- START TASK DETAIL FOR UPDATING  -->
 	<th:block th:include="fragments/frg_taskDetail"></th:block>
-	<!-- END TASK DETAIL FOR UPDATING -->
-		
-<!-- 	<h4 class="mb-4">Danh sách công việc</h4> -->
-<!-- 	<div class="task-container"> -->
-<!-- 	    <div th:each="task : ${tasks}" class="task-wrapper"> -->
-	
-<!-- 	        Task row -->
-<!-- 	        <div class="task-item" -->
-<!-- 	             th:classappend="${task.status} ? 'completed' : ''"> -->
-	
-<!-- 	            Hoàn thành -->
-<!-- 	            <form th:action="@{/tasks/{taskId}/toggle-complete(id=${task.taskId})}" method="post"> -->
-<!-- 	                <button class="circle-btn" type="submit"></button> -->
-<!-- 	            </form> -->
-	            
-<!-- <!-- 	            Tiêu đề --> 
-<!-- <!-- 	            <div class="task-title" th:text="${task.name}"></div> --> 
-	
-<!-- 	            Tiêu đề -->
-<!-- 	            <div class="task-title" th:text="${task.taskName}"></div> -->
-	
-<!-- 	            Quan trọng -->
-<!-- 	            <form th:action="@{/tasks/{taskId}/toggle-important(id=${task.taskId})}" method="post"> -->
-<!-- 	                <button class="star-btn" type="submit">★</button> -->
-<!-- 	            </form> -->
-<!-- 	        </div> -->
-	
-<!-- 	        Phần mô tả dưới task -->
-<!-- 	        <div class="task-overview"> -->
-<!-- 			    <p><strong>Mô tả công việc:</strong> <span th:text="${task.taskDescription != null ? task.taskDescription : ''}"></span></p> -->
-<!-- 			    <p><strong>Ngày bắt đầu:</strong> <span th:text="${task.taskStartDate != null ? task.formattedStartDate : ''}"></span></p> -->
-			    
-<!-- 			    <div th:if="${task.customers != null and !task.customers.isEmpty()}"> -->
-<!-- 			        <p><strong>Khách hàng / Công ty liên quan:</strong></p> -->
-<!-- 			        <table class="table table-sm"> -->
-<!-- 			            <thead> -->
-<!-- 			                <tr> -->
-<!-- 			                    <th style="color: #ccc">Tên công ty</th> -->
-<!-- 			                    <th style="color: #ccc">Người liên hệ</th> -->
-<!-- 			                    <th style="color: #ccc">SĐT</th> -->
-<!-- 			                </tr> -->
-<!-- 			            </thead> -->
-<!-- 			            <tbody> -->
-<!-- 			                <tr th:each="cust : ${task.customers}"> -->
-<!-- 			                    <td style="color: #ccc" th:text="${cust.companyName}">Tên công ty</td> -->
-<!-- 			                    <td style="color: #ccc" th:text="${cust.contactPerson}">Người liên hệ</td> -->
-<!-- 			                    <td style="color: #ccc" th:text="${cust.phone}">SĐT</td> -->
-<!-- 			                </tr> -->
-<!-- 			            </tbody> -->
-<!-- 			        </table> -->
-<!-- 			    </div> -->
-<!-- 			</div> -->
-<!-- 	    </div> -->
-<!-- 	</div> -->
 	
 	<!-- START CUSTOMIZE BUTTON -->
 	<th:block th:include="fragments/customizeButton"></th:block>
@@ -178,5 +173,71 @@
 	    }
 	    /*]]>*/
 	</script>	
+	
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		    const icons = document.querySelectorAll(".remind-me-icon");
+	
+		    icons.forEach(icon => {
+		        const remindTimeStr = icon.getAttribute("data-remind");
+		        const status = icon.getAttribute("data-status") === "true"; // true = đã hoàn thành
+	
+		        if (!remindTimeStr || status) return;
+	
+		        // Tách remindTime thủ công (fix lỗi định dạng date)
+		        const parts = remindTimeStr.split(/[- :]/);
+		        const remindTime = new Date(
+		            parts[0],                // year
+		            parts[1] - 1,            // month
+		            parts[2],                // day
+		            parts[3],                // hour
+		            parts[4],                // minute
+		            parts[5] || 0            // second
+		        );
+	
+		        const now = new Date();
+	
+		        if (now >= remindTime) {
+		            //icon.classList.add("shake-icon");
+		        	icon.querySelector("i").classList.add("shake-icon");
+		        }
+		    });
+		});
+	</script>
+	
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const taskItems = document.querySelectorAll(".task-item");
+	
+			taskItems.forEach(item => {
+				const startStr = item.getAttribute("data-start");
+				const dueStr = item.getAttribute("data-due");
+				const statusMsg = document.getElementById("status-msg-" + item.getAttribute("data-id"));
+				
+				if (!startStr || !dueStr || !statusMsg) return;
+	
+				const startParts = startStr.split(/[- :]/);
+				const dueParts = dueStr.split(/[- :]/);
+	
+				const startDate = new Date(startParts[0], startParts[1] - 1, startParts[2]);
+				const dueDate = new Date(dueParts[0], dueParts[1] - 1, dueParts[2]);
+				const today = new Date();
+				today.setHours(0, 0, 0, 0); // reset giờ để so sánh chính xác
+	
+				if (today.getTime() === startDate.getTime()) {
+					// Task bắt đầu hôm nay
+					const daysLeft = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+					statusMsg.textContent = `Còn ${daysLeft} ngày nữa KẾT THÚC`;
+					statusMsg.classList.add("task-ending-soon");
+				} else if (today < startDate) {
+					// Task chưa bắt đầu
+					const daysUntilStart = Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
+					statusMsg.textContent = `Còn ${daysUntilStart} ngày nữa BẮT ĐẦU`;
+					statusMsg.classList.add("task-starting-soon");
+				}
+			});
+		});
+	</script>
+			
 </body>
 </html>

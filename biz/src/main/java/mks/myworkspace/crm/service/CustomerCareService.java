@@ -24,4 +24,6 @@ public interface CustomerCareService {
 	boolean existsInCustomerCares(Long customerId);
 	
 	boolean checkCustomerCareIDExists(Long customerCareId);
+	
+	List<String> getCustomerCareNotifications();
 }
