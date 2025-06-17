@@ -72,7 +72,7 @@
 			</div>
 
 			<div class="mb-3">
-				<label class="form-label">Ngày bắt đầu</label> <input
+				<label class="form-label"><i class="fa fa-calendar"></i> Ngày bắt đầu</label> <input
 					type="datetime-local" class="form-control" id="sidebarStartDate"
 					name="taskStartDate" />
 			</div>
@@ -168,6 +168,14 @@
 	                        &times;
 	                    </button>
 	                </div>
+	                
+	                <div class="col-12 mt-2">
+	                    <label class="form-label">Tương tác gần đây</label>
+	                    <select class="form-control interaction-select2" name="customers[${index}].interactionId" style="width: 100%;">
+	                        <option value="">Đang tải...</option>
+	                    </select>
+ 	                    <small class="text-muted created-at-label">${cust.formattedInteractionCreatedAt || ''}</small>
+	                </div>
 	            </div>
 	        `;
 	
@@ -235,6 +243,14 @@
 	                    &times;
 	                </button>
 	            </div>
+	            
+	            <div class="col-12 mt-2">
+		            <label class="form-label">Tương tác gần đây</label>
+		            <select class="form-control interaction-select2" name="customers[${index}].interactionId" style="width: 100%;">
+		                <option value="">Đang tải...</option>
+		            </select>
+		            <small class="text-muted created-at-label"></small>
+		        </div>
 	        </div>
 	    `;
 
@@ -242,14 +258,17 @@
 
 	    // Khởi tạo select2
 	    const select = block.querySelector(".select2");
+	    const interactionSelect = block.querySelector(".interaction-select2");
+	    const contactInput = block.querySelector(".contact-person-input");
+	    const createdAtLabel = block.querySelector(".created-at-label");
 	    
-	 // Thêm option tương ứng với khách hàng đang có trong task
-	    const option = document.createElement("option");
-	    option.value = cust.id;
-	    option.text = cust.companyName;
-	    option.selected = true;
-	    option.dataset.contactPerson = cust.contactPerson || "";
-	    select.appendChild(option);
+// 	 // Thêm option tương ứng với khách hàng đang có trong task
+// 	    const option = document.createElement("option");
+// 	    option.value = cust.id;
+// 	    option.text = cust.companyName;
+// 	    option.selected = true;
+// 	    option.dataset.contactPerson = cust.contactPerson || "";
+// 	    select.appendChild(option);
 	    
 	    $(select).select2({
 	        placeholder: "Nhập hoặc chọn tên công ty",
@@ -258,10 +277,44 @@
 	        language: "vi"
 	    });
 
-	    // Khi chọn công ty thì tự động điền người liên hệ
+	    // Khi chọn công ty
 	    $(select).on("change", function () {
-	        const contact = $(this).find(':selected').data('contact-person') || "";
-	        $(this).closest('.row').find('.contact-person-input').val(contact);
+	        const selectedOption = $(this).find(':selected');
+	        const contact = selectedOption.data('contact-person') || "";
+	        const customerId = $(this).val();
+
+	        contactInput.value = contact;
+
+	        // Load danh sách tương tác
+	        $(interactionSelect).empty().append('<option value="">Đang tải...</option>');
+
+	        if (customerId) {
+	            $.ajax({
+	                url: _ctx + 'task/interactions/' + customerId,
+	                method: 'GET',
+	                success: function (data) {
+	                    $(interactionSelect).empty().append('<option value="">Chọn tương tác...</option>');
+	                    data.forEach(interaction => {
+	                        $(interactionSelect).append(
+	                            $('<option>', {
+	                                value: interaction.id,
+	                                text: interaction.content,
+	                                'data-created-at': interaction.createdAt
+	                            })
+	                        );
+	                    });
+	                },
+	                error: function () {
+	                    $(interactionSelect).empty().append('<option>Lỗi khi tải tương tác</option>');
+	                }
+	            });
+	        }
+	    });
+
+	    // Khi chọn tương tác → hiện ngày tạo
+	    $(interactionSelect).on("change", function () {
+	        const createdAt = $(this).find('option:selected').data('created-at') || '';
+	        createdAtLabel.textContent = createdAt ? `Ngày tạo: ${createdAt}` : '';
 	    });
 
 	    // Xóa

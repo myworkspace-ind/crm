@@ -24,4 +24,5 @@ public class TaskDTO {
     private LocalDateTime dueDate;
     private LocalDateTime remindDate;
     private List<Long> customerIds;
+    private List<Long> interactionIds;
 }

@@ -1,9 +1,11 @@
 package mks.myworkspace.crm.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 import mks.myworkspace.crm.entity.Customer;
+import mks.myworkspace.crm.entity.Interaction;
 import mks.myworkspace.crm.entity.dto.TaskDTO;
 import mks.myworkspace.crm.entity.dto.TaskWithCustomersDTO;
 import mks.myworkspace.crm.service.CustomerService;
@@ -147,10 +150,28 @@ public class TaskController extends BaseController{
 		
 		List<Customer> listCustomers;
 		listCustomers = customerService.getAllCustomers();
-		
+				
 		mav.addObject("listCustomers", listCustomers);
 
 		return mav;
+	}
+	
+	@GetMapping("/interactions/{customerId}")
+	@ResponseBody
+	public List<Map<String, Object>> getInteractionsByCustomer(@PathVariable Long customerId){
+		List<Interaction> interactions = customerService.getAllCustomerInteraction(customerId);
+		
+		return interactions.stream().map(i -> {
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", i.getId());
+			String content = i.getContent();
+			if(content != null && content.split("\\s+").length > 10) {
+				content = String.join(" ", Arrays.copyOf(content.split("\\s+"), 10) + "...");
+			}
+			map.put("content", content);
+			map.put("createdAt", i.getCreatedAt() != null ? i.getCreatedAt().toString() : "");
+			return map;
+		}).collect(Collectors.toList());
 	}
 	
 	@PostMapping("/add-task")

@@ -25,14 +25,22 @@ $(document).ready(function () {
             name: $('#taskName').val(),
             description: $('#taskDescription').val(),
             startDate: $('#startDate').val(),
-            customerIds: []
+			dueDate: $('#dueDate').val(),
+            customerIds: [],
+			interactionIds: []
+			//customers:[] //chua ca danh sach {customerId, interactionId}
         };
-
+		
         $('.customer-block').each(function () {
             const customerId = $(this).find('.select2').val();
-            if (customerId) {
+			const interactionId = $(this).find('.interaction-select2').val();
+			
+			if (customerId) {
 				taskDTO.customerIds.push(Number(customerId));
-            }
+				if (interactionId) {
+					taskDTO.interactionIds.push(Number(interactionId));
+				}
+			}
         });
 
 		$.ajax({
@@ -73,7 +81,10 @@ document.querySelectorAll(".task-item").forEach(item => {
 		const dueDate = this.dataset.due;
 		const remindDate = this.dataset.remindme;
 		const customers = JSON.parse(this.dataset.customers || "[]");
-
+		
+		console.log("JSON string:", customers);
 		openTaskSidebar(taskId, taskName, description, startDate, dueDate, remindDate, customers);
+		
+
 	});
 });

@@ -57,6 +57,14 @@
 					            <input type="text" class="form-control contact-person-input" readonly />
 					        </div>
 					    </div>
+					    
+					    <div class="col-md-12 mt-2 interaction-group">
+						    <label class="form-label">Tương tác gần đây</label>
+						    <select class="form-control interaction-select2" name="customers[0].interactionId" style="width: 100%;">
+						        <option value="">Chọn tương tác...</option>
+						    </select>
+						    <small class="text-muted created-at-label"></small>
+						</div>
 					    <button type="button" class="btn btn-link text-danger remove-btn" onclick="removeCustomer(this)">🗑️</button>
 					</div>
 	                
@@ -117,6 +125,43 @@
 		    initializeCustomerSelect($('.select2').first());
 		});
 		
+		$(document).on('change',  '.select2', function () {
+	        const customerId = $(this).val();
+	        const $block = $(this).closest('.customer-block');
+	        const $interactionSelect = $block.find('.interaction-select2');
+	        const $createdAtLabel = $block.find('.created-at-label');
+
+	        $interactionSelect.empty().append('<option value="">Đang tải...</option>');
+
+	        if (customerId) {
+	            $.ajax({
+	                url: _ctx + 'task/interactions/' + customerId,
+	                method: 'GET',
+	                success: function (data) {
+	                    $interactionSelect.empty().append('<option value="">Chọn tương tác...</option>');
+	                    data.forEach(interaction => {
+	                        $interactionSelect.append(
+	                            $('<option>', {
+	                                value: interaction.id,
+	                                text: interaction.content,
+	                                'data-created-at': interaction.createdAt
+	                            })
+	                        );
+	                    });
+	                },
+	                error: function () {
+	                    $interactionSelect.empty().append('<option>Lỗi khi tải tương tác</option>');
+	                }
+	            });
+	        }
+	    });
+
+	    $(document).on('change', '.interaction-select2', function () {
+	        const $block = $(this).closest('.customer-block');
+	        const createdAt = $(this).find('option:selected').data('created-at') || '';
+	        $block.find('.created-at-label').text(createdAt ? `Ngày tạo: ${createdAt}` : '');
+	    });
+	    
 		function addCustomer() {
 		    const container = document.getElementById("customerContainer");
 		    const index = document.querySelectorAll('.customer-block').length;
@@ -138,6 +183,15 @@
 		                <input type="text" class="form-control contact-person-input" readonly />
 		            </div>
 		        </div>
+		        
+		        <div class="col-md-12 mt-2 interaction-group">
+		            <label class="form-label">Tương tác gần đây</label>
+		            <select class="form-control interaction-select2" style="width: 100%;">
+		                <option value="">Chọn tương tác...</option>
+		            </select>
+		            <small class="text-muted created-at-label"></small>
+		        </div>
+	        
 		        <button type="button" class="btn btn-link text-danger remove-btn" onclick="removeCustomer(this)">🗑️</button>
 		    `;
 

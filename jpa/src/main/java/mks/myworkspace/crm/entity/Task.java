@@ -70,9 +70,18 @@ public class Task implements Serializable {
 	    inverseJoinColumns = @JoinColumn(name = "customer_id")
 	)
 	private List<Customer> customers = new ArrayList<>();
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+	    name = "task_interaction",
+	    joinColumns = @JoinColumn(name = "task_id"),
+	    inverseJoinColumns = @JoinColumn(name = "interaction_id")
+	)
+	private List<Interaction> interactions = new ArrayList<>();
 
 	public Task(Long id, String name, String description, boolean status, boolean important, LocalDateTime start_date,
-			LocalDateTime due_date, LocalDateTime remind_date, List<Customer> customers) {
+			LocalDateTime due_date, LocalDateTime remind_date, List<Customer> customers,
+			List<Interaction> interactions) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -83,6 +92,7 @@ public class Task implements Serializable {
 		this.due_date = due_date;
 		this.remind_date = remind_date;
 		this.customers = customers;
+		this.interactions = interactions;
 	}
 	
 	public String getFormattedStartDate() {

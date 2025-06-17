@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,13 +105,20 @@ public class TaskServiceImpl implements TaskService {
 	            dto.setImportant(row[7] != null && ((Boolean) row[7]));
 	            return dto;
 	        });
+	        
+	     // Tránh thêm trùng customer khi có nhiều interaction
+	        boolean customerExists = task.getCustomers().stream()
+	            .anyMatch(c -> Objects.equals(c.getCustomerId(), getLong(row[8])));
 
-	        if (row[8] != null) {
+	        if (!customerExists && row[8] != null) {
 	            CustomerSimpleForTaskDTO customer = new CustomerSimpleForTaskDTO(
-	                ((Number) row[8]).longValue(),
+	                getLong(row[8]),
 	                handleNull(row[9]),
 	                handleNull(row[10]),
-	                handleNull(row[11])
+	                handleNull(row[11]),
+	                getLong(row[12]),
+	                handleNull(row[13]),
+	                getDateTime(row[14])
 	            );
 	            task.getCustomers().add(customer);
 	        }
@@ -123,6 +131,14 @@ public class TaskServiceImpl implements TaskService {
 	private String handleNull(Object value) {
 	    String str = value != null ? value.toString().trim() : "";
 	    return str.isEmpty() ? "Không xác định" : str;
+	}
+	
+	private LocalDateTime getDateTime(Object value) {
+	    return value instanceof Timestamp ? ((Timestamp) value).toLocalDateTime() : null;
+	}
+
+	private Long getLong(Object value) {
+	    return value instanceof Number ? ((Number) value).longValue() : null;
 	}
 
 	@Override

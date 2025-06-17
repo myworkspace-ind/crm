@@ -132,6 +132,8 @@
 		                            <th style="color: #ccc">Tên công ty</th>
 		                            <th style="color: #ccc">Người liên hệ</th>
 		                            <th style="color: #ccc">SĐT</th>
+		                            <th style="color: #ccc">Tương tác liên quan</th>
+		                            <th style="color: #ccc">Thời gian tạo</th>
 	                            </tr>
 	                        </thead>
 	                        <tbody>
@@ -139,6 +141,14 @@
 	                                <td style="color: #ccc" th:text="${cust.companyName}"></td>
 	                                <td style="color: #ccc" th:text="${cust.contactPerson}"></td>
 	                                <td style="color: #ccc" th:text="${cust.phone}"></td>
+	                                <td style="color: #ccc">
+									    <span th:if="${cust.interactionId != null}" th:text="${cust.interactionContent}"></span>
+									    <span th:if="${cust.interactionId == null}">Không có</span>
+									</td>
+									<td style="color: #ccc">
+									    <span th:if="${cust.interactionId != null}" th:text="${cust.formattedInteractionCreatedAt}"></span>
+									    <span th:if="${cust.interactionId == null}">Không có</span>
+									</td>
 	                            </tr>
 	                        </tbody>
 	                    </table>

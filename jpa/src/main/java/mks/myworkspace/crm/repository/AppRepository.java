@@ -1340,6 +1340,14 @@ public class AppRepository {
         if (dto.getStartDate() != null) {
             params.put("start_date", Timestamp.valueOf(dto.getStartDate()));
         }
+        
+        if (dto.getDueDate() != null) {
+            params.put("due_date", Timestamp.valueOf(dto.getDueDate()));
+        }
+        
+        if (dto.getRemindDate() != null) {
+            params.put("remind_date", Timestamp.valueOf(dto.getRemindDate()));
+        }
 
         // Thực hiện insert
         Long taskId = taskInsert.executeAndReturnKey(params).longValue();
@@ -1347,6 +1355,11 @@ public class AppRepository {
         // Gắn customer nếu có
         if (dto.getCustomerIds() != null && !dto.getCustomerIds().isEmpty()) {
             insertTaskCustomer(taskId, dto.getCustomerIds());
+        }
+        
+        //Gan Interaction theo tung customer neu co
+        if (dto.getInteractionIds() != null && !dto.getInteractionIds().isEmpty()) {
+            insertTaskInteraction(taskId, dto.getInteractionIds());
         }
     }
 
@@ -1356,6 +1369,17 @@ public class AppRepository {
         List<Object[]> batchArgs = new ArrayList<>();
         for (Long customerId : customerIds) {
             batchArgs.add(new Object[]{taskId, customerId});
+        }
+
+        jdbcTemplate0.batchUpdate(sql, batchArgs);
+    }
+    
+    private void insertTaskInteraction(Long taskId, List<Long> interactionIds) {
+        String sql = "INSERT INTO task_interaction (task_id, interaction_id) VALUES (?, ?)";
+
+        List<Object[]> batchArgs = new ArrayList<>();
+        for (Long interactionId : interactionIds) {
+            batchArgs.add(new Object[]{taskId, interactionId});
         }
 
         jdbcTemplate0.batchUpdate(sql, batchArgs);
