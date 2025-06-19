@@ -117,6 +117,16 @@
 <!-- 	        <span th:text="${taskNotificationCount}"></span> -->
 <!-- 	    </span> -->
 <!-- 	</div> -->
+	<script th:inline="javascript">
+	    let hasNotification = /*[[${hasTaskNotification}]]*/ false || /*[[${hasCustomerCareNotification}]]*/ false;
+	
+	    if (hasNotification) {
+	    	console.log("Có thông báo mới");
+	        notifyUser("🔔 Có thông báo mới", "Vui lòng kiểm tra công việc hoặc chăm sóc khách hàng.");
+	        startFlashingTitle("🔔 THÔNG BÁO MỚI!");
+	    }
+	</script>
+
 	
 	<script>
 	    function hideReminder() {
@@ -124,20 +134,60 @@
 	        if (modal) {
 	            modal.style.display = "none";
 	        }
+	        stopFlashingTitle();
 	    }
-	
-	    // Nếu bạn muốn đảm bảo âm thanh luôn chạy sau khi DOM load
+		
+	    
 	    window.addEventListener("DOMContentLoaded", () => {
 	        const sound = document.getElementById("reminderSound");
 	        if (sound) {
-	            // Một số trình duyệt yêu cầu tương tác người dùng để phát âm thanh
 	            try {
 	                sound.play();
 	            } catch (e) {
 	                console.warn("Trình duyệt chặn tự động phát âm thanh:", e);
 	            }
 	        }
+	        
+// 	        const hasNotification = /*[[${hasTaskNotification}]]*/ false || /*[[${hasCustomerCareNotification}]]*/ false;
+	        
+// 	        if(hasNotification){
+// 	        	notifyUser("🔔 Có thông báo mới", "Vui lòng kiểm tra công việc hoặc chăm sóc khách hàng.");
+// 	        	startFlashingTitle("🔔 THÔNG BÁO MỚI!");
+// 	        }
 	    });
+	    
+	    function notifyUser(title, message){
+	    	if(!("Notification" in window)){
+	    		console.warn("Trình duyệt không hỗ trợ Web Notification");
+	    		return;
+	    	}
+	    	if (Notification.permission === "granted") {
+	            new Notification(title, { body: message });
+	        } else if (Notification.permission !== "denied") {
+	            Notification.requestPermission().then(permission => {
+	                if (permission === "granted") {
+	                    new Notification(title, { body: message });
+	                }
+	            });
+	        }
+	    }
+	    
+	    //Flash tab title
+	    let originalTitle = document.title;
+	    let flashTitleInterval = null;
+	    
+	    function startFlashingTitle(flashText = "🔔 Có thông báo!"){
+	    	if(flashTitleInterval) return;
+	    	flashTitleInterval = setInterval(() => {
+	    		document.title = document.title === flashText ? originalTitle : flashText;
+	    	}, 1000);
+	    }
+	    
+	    function stopFlashingTitle() {
+	    	clearInterval(flashTitleInterval);
+	    	flashTitleInterval = null;
+	    	document.title = originalTitle;
+	    }
 	</script>
 		
 </body>

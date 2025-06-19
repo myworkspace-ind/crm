@@ -102,11 +102,12 @@
 							
 							<!-- Nếu có remind date -->
 						    <span th:if="${task.formattedRemindDate != null}"
-						          class="remind-me-icon"
-						          th:data-remind="${task.formattedRemindDate}"
-						          th:data-status="${task.status}">
-						        <i class="fa fa-bell-o" style="color: #3246a8"></i><span style="font-size: 12px; color: #3246a8" th:text="${task.formattedRemindDate}">...</span>
-						    </span>
+							      class="remind-me-icon"
+							      th:data-remind="${task.formattedRemindDate}"
+							      th:data-status="${task.status}">
+							    <i class="fa fa-bell-o" style="color: #3246a8"></i>
+							    <span style="font-size: 12px; color: #3246a8" th:text="${task.formattedRemindDate}">...</span>
+							</span>
 						</div>
 						<p>
 						    <span th:id="'status-msg-' + ${task.taskId}" class="task-status-msg"></span>

@@ -166,7 +166,8 @@ public class TaskController extends BaseController{
 			map.put("id", i.getId());
 			String content = i.getContent();
 			if(content != null && content.split("\\s+").length > 10) {
-				content = String.join(" ", Arrays.copyOf(content.split("\\s+"), 10) + "...");
+			    String[] words = content.split("\\s+");
+			    content = String.join(" ", Arrays.copyOf(words, 10)) + " ...";
 			}
 			map.put("content", content);
 			map.put("createdAt", i.getCreatedAt() != null ? i.getCreatedAt().toString() : "");
